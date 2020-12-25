@@ -15,8 +15,6 @@ import {findMat,findDim} from '../../helper/apiPath';
 export const ModalCard = (props) => {
   const [pop, popup] = useState(false);
 
-
-
   const blabla = () => {
     let selected = {Material: {one: false, two: false, three: false}, Dimension: {one: false, two: false, three: false}};
 
@@ -31,7 +29,6 @@ export const ModalCard = (props) => {
         selected.Material = {one: false, two:false, three:true};
       }
       props.setMatDim(prev=> {
-        //props.addToCart(p=>{return{Dimension:{...p.Dimension}, Material:{...selected.Material}}});
         return {Dimension:{...prev.Dimension}, Material:{...selected.Material}};
       });
     }

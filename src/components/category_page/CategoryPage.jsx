@@ -8,9 +8,8 @@ import GetBPoster from "../../images/GetBiPoster.svg";
 import PosterNow from "../../images/PosterNow.svg";
 import Upto50 from "../../images/Upto50Offer.svg";
 import Card2 from "./Card2";
-import BestSeller from "../../images/BestSeller.svg";
+// import BestSeller from "../../images/BestSeller.svg";
 import { connect } from "react-redux";
-import { setLoginResponse } from "../../redux/actions/index.js";
 import { getPoster, config } from "../../helper/apiPath";
 import Axios from "axios";
 import $ from "jquery";
@@ -48,48 +47,48 @@ const CategoryPage = (props) => {
 
   const twoPosters = [GetBPoster, PosterNow];
 
-  const bestSellers = [
-    {
-      src: BestSeller,
-      title: "Floor Graphics | Printable Catalog | PRD-FG009",
-      by: "By Pankaj Jadhav",
-      isInStock: true,
-      rate: 4.6,
-      bought: "473",
-    },
-    {
-      src: BestSeller,
-      title: "Floor Graphics | Printable Catalog | PRD-FG009",
-      by: "By Pankaj Jadhav",
-      isInStock: true,
-      rate: 4.6,
-      bought: "473",
-    },
-    {
-      src: BestSeller,
-      title: "Floor Graphics | Printable Catalog | PRD-FG009",
-      by: "By Pankaj Jadhav",
-      isInStock: true,
-      rate: 4.6,
-      bought: "473",
-    },
-    {
-      src: BestSeller,
-      title: "Floor Graphics | Printable Catalog | PRD-FG009",
-      by: "By Pankaj Jadhav",
-      isInStock: true,
-      rate: 4.6,
-      bought: "473",
-    },
-    {
-      src: BestSeller,
-      title: "Floor Graphics | Printable Catalog | PRD-FG009",
-      by: "By Pankaj Jadhav",
-      isInStock: true,
-      rate: 4.6,
-      bought: "473",
-    },
-  ];
+  // const bestSellers = [
+  //   {
+  //     src: BestSeller,
+  //     title: "Floor Graphics | Printable Catalog | PRD-FG009",
+  //     by: "By Pankaj Jadhav",
+  //     isInStock: true,
+  //     rate: 4.6,
+  //     bought: "473",
+  //   },
+  //   {
+  //     src: BestSeller,
+  //     title: "Floor Graphics | Printable Catalog | PRD-FG009",
+  //     by: "By Pankaj Jadhav",
+  //     isInStock: true,
+  //     rate: 4.6,
+  //     bought: "473",
+  //   },
+  //   {
+  //     src: BestSeller,
+  //     title: "Floor Graphics | Printable Catalog | PRD-FG009",
+  //     by: "By Pankaj Jadhav",
+  //     isInStock: true,
+  //     rate: 4.6,
+  //     bought: "473",
+  //   },
+  //   {
+  //     src: BestSeller,
+  //     title: "Floor Graphics | Printable Catalog | PRD-FG009",
+  //     by: "By Pankaj Jadhav",
+  //     isInStock: true,
+  //     rate: 4.6,
+  //     bought: "473",
+  //   },
+  //   {
+  //     src: BestSeller,
+  //     title: "Floor Graphics | Printable Catalog | PRD-FG009",
+  //     by: "By Pankaj Jadhav",
+  //     isInStock: true,
+  //     rate: 4.6,
+  //     bought: "473",
+  //   },
+  // ];
 
   const [bottomDet, setBottomDet] = useState({});
 
