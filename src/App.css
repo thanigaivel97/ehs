@@ -1,0 +1,869 @@
+body {
+  margin: 0px;
+  padding: 0px;
+  overflow-x: hidden;
+}
+
+.floorBox {
+  background: #ffffff;
+  border: 1px solid #d2d2d2;
+  border-radius: 7px;
+}
+
+.secondText {
+  font-family: Bebas Neue;
+  font-style: normal;
+  font-weight: bolder;
+  font-size: 36px;
+  line-height: 40px;
+  color: #003459;
+}
+
+.artistHead {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 30px;
+  text-align: center;
+
+  color: #000000;
+}
+
+.videoTitle {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 18px;
+  letter-spacing: 0.2px;
+  color: #000000;
+}
+
+.animateCard:hover {
+  border-radius: 10px;
+  transform: scale(1.3);
+  z-index: 1;
+  transition: all 0.8s ease;
+}
+
+.card2InCat {
+  width: 230px;
+}
+
+.card2Title {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+
+  color: #000000;
+}
+
+.card2By {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  color: #000000;
+}
+
+.card2Stock {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  color: #0962a2;
+}
+
+.card2Rating,
+.card2Bought {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  color: #757575;
+  float: right;
+}
+
+.card2AddStock {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 18px;
+  /* identical to box height */
+
+  text-decoration-line: underline;
+
+  /* Orange */
+
+  color: #f2994a;
+}
+
+.leftProduct {
+  background: #ffffff;
+  /* light grey */
+
+  border: 1px solid #d2d2d2;
+  box-sizing: border-box;
+  border-radius: 0px 6px 6px 0px;
+}
+
+.accorditionRoot {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 25px;
+
+  /* dark grey */
+
+  color: #757575;
+}
+
+.accorditionRoot:hover {
+  color: #757575;
+}
+
+.accorditionRootChild {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 22px;
+  /* identical to box height */
+
+  color: #000000;
+}
+.accorditionRootChild:hover {
+  color: #000000;
+}
+
+.accordionDirectChild:hover {
+  background-color: #f2f2f2;
+}
+
+.breadLink {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  /* identical to box height */
+
+  color: #000000;
+}
+
+.breadLink:hover {
+  color: #000000;
+}
+
+.cardInProduct1 {
+  width: 230px;
+}
+
+.productCardBtn {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 10px;
+  color: #ffffff;
+}
+
+.pageLink,
+.page {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  /* identical to box height */
+
+  letter-spacing: 0.015em;
+
+  color: #000000;
+}
+
+.activePage {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  color: white;
+  background: #003459;
+}
+
+.qtySelector {
+  border: 1px solid #ddd;
+  width: 107px;
+  height: 35px;
+}
+.qtySelector .fa {
+  padding: 10px 5px;
+  width: 35px;
+  height: 100%;
+  float: left;
+  cursor: pointer;
+}
+.qtySelector .fa.clicked {
+  font-size: 12px;
+}
+.qtySelector .fa-minus {
+  border-right: 1px solid #ddd;
+}
+.qtySelector .fa-plus {
+  border-left: 1px solid #ddd;
+}
+.qtySelector .qtyValue {
+  border: none;
+  padding: 5px;
+  width: 35px;
+  height: 100%;
+  float: left;
+  text-align: center;
+}
+
+.des {
+  display: inline;
+}
+.header {
+  padding-bottom: 15px;
+}
+.dow {
+  padding-top: 15px;
+}
+body .ui.cards > .card {
+  box-shadow: none;
+}
+.ui.button {
+  padding: 10px 9px 10px 15px !important;
+}
+
+/* Added to cart bottom  */
+
+.addedToCartBot {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 19px;
+
+  /* blue */
+
+  color: #003459;
+}
+
+.botTitle {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 17px;
+  margin-top: -10px;
+
+  color: #000000;
+}
+
+.quant {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 16px;
+  /* identical to box height */
+  margin-top: -10px;
+
+  color: #000000;
+}
+
+.bottomViewCart {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 22px;
+  /* identical to box height */
+
+  text-decoration-line: underline;
+
+  /* blue */
+  float: right;
+  color: #003459;
+  position: fixed;
+  cursor: pointer;
+  bottom: 40px;
+  right: 50px;
+}
+
+.coll {
+  font-family: Source Sans Pro;
+  line-height: 28px;
+  /* identical to box height */
+
+  text-align: center !important;
+}
+
+.bydes {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 23px;
+  /* identical to box height */
+
+  color: #000000;
+}
+
+.bybelow {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 23px;
+  /* identical to box height */
+
+  color: #000000;
+}
+.destitle {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 25px;
+  line-height: 35px;
+
+  color: #000000;
+}
+.instock {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 18px;
+  /* identical to box height */
+
+  /* Green 2 */
+
+  color: #27ae60;
+}
+
+.boughtthis {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  /* identical to box height */
+
+  /* dark grey */
+
+  color: #757575;
+}
+
+.select {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  margin-left: 1px;
+
+  color: #000000;
+}
+.blabla {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 20px;
+
+  /* dark grey */
+
+  color: #757575;
+}
+.blablabla {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  /* identical to box height */
+
+  color: #000000;
+}
+
+.matdim {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 30px;
+
+  /* dark grey */
+
+  color: #757575;
+}
+
+.quantdes {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 19px;
+
+  color: #000000;
+}
+
+.shipping {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  /* identical to box height */
+
+  color: #000000;
+}
+.ulListStyle {
+  list-style: none;
+  position: relative;
+  padding: 0;
+  margin: 0;
+}
+
+.listStyle {
+  margin-top: 10px;
+  padding-left: 1.5em;
+}
+
+.listStyle:before {
+  position: absolute;
+  content: "•";
+  color: #c4c4c4;
+  width: 12px;
+  height: 12px;
+  left: 0;
+}
+.MuiCircularProgress-colorPrimary {
+  color: #f2994a !important;
+}
+.ratingin {
+  font-family: Lato !important ;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-size: 16px !important;
+  line-height: 19px !important;
+
+  color: #000000 !important;
+}
+
+.ratinglist {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px !important;
+  line-height: 17px;
+  /* identical to box height */
+
+  color: #000000;
+}
+
+.linearprog {
+  height: 6px !important;
+  border-radius: 4px !important;
+}
+
+.MuiLinearProgress-barColorPrimary {
+  color: orange !important;
+}
+.MuiLinearProgress-dashedColorSecondary {
+  color: #d2d2d2 !important;
+}
+
+.oneone:hover {
+  display: block;
+}
+
+.popcard {
+  background: #ffffff;
+  /* light grey */
+
+  border: 1px solid #d2d2d2;
+  box-sizing: border-box;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+}
+
+.loginbtn {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 19px;
+  text-align: center;
+
+  /* primary blue */
+
+  color: #003459;
+}
+.tablecart {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 25px;
+
+  color: #000000;
+}
+
+.tablehead {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 23px;
+  /* identical to box height */
+
+  color: #000000;
+}
+.table th {
+  border-top: none !important;
+}
+.tabletitle {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 23px;
+  /* identical to box height */
+
+  color: #000000;
+}
+.tabledata {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  /* identical to box height */
+
+  /* dark grey */
+
+  color: #757575;
+}
+.pay {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
+
+  /* dark grey */
+
+  color: #757575;
+}
+
+.orderDet {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 19px;
+  line-height: 25px;
+
+  color: #000000;
+  text-align: start !important;
+  padding-left: 31px !important;
+  padding-top: 7px;
+}
+.bnk {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 16px;
+  /* identical to box height */
+
+  /* Blue 1 */
+
+  color: #2f80ed;
+}
+.abc {
+  text-align: start !important;
+  padding-left: 31px;
+}
+.pri {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+
+  color: #000000;
+}
+.shi {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: lighter;
+  font-size: 16px;
+  line-height: 20px;
+
+  color: #000000;
+}
+.left {
+  text-align: start !important;
+}
+.right {
+  text-align: end !important;
+}
+.promo {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 20px;
+
+  color: #000000;
+}
+.apply {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  /* identical to box height */
+
+  text-decoration-line: underline;
+
+  /* dark grey */
+
+  color: #757575;
+}
+.carddiv {
+  border: 2px solid #f2994a;
+  box-sizing: border-box;
+  border-radius: 4px;
+  width: 230px;
+  height: 36px;
+  padding: 5px;
+}
+.pee {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  /* identical to box height */
+  width: 220px;
+
+  text-align: center;
+
+  /* black */
+
+  color: #000000;
+}
+.listanchor {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  /* identical to box height */
+
+  /* blue */
+  color: #003459;
+  height: 50px;
+  width: 100%;
+  padding-left: 50px;
+  padding-top: 15px;
+  cursor: pointer;
+}
+
+.perbut {
+  width: 76px !important;
+  height: 37px !important;
+  /* Orange */
+
+  background: #f2994a !important;
+  border-radius: 4px !important;
+}
+.perhead {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 25px;
+
+  color: #000000;
+}
+.perside {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  /* identical to box height */
+
+  /* dark grey */
+  margin-top: -5px;
+
+  color: #757575;
+}
+.forget {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+  /* identical to box height */
+
+  text-align: right;
+  text-decoration-line: underline;
+
+  /* Blue 1 */
+
+  color: #2f80ed;
+}
+.formd {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: 500;
+
+  line-height: 16px;
+  /* identical to box height */
+
+  /* blue */
+  color: #003459;
+}
+#MOBILE,
+#Name,
+#NEWPASSWORD,
+#EMAIL,
+#CONFIRMPASSWORD {
+  border: 1px solid #d2d2d2;
+  box-sizing: border-box;
+  border-radius: 5px;
+  width: 235px;
+}
+.perbut2 {
+  width: 125px !important;
+  height: 37px !important;
+  /* Orange */
+
+  background: #f2994a !important;
+  border-radius: 4px !important;
+}
+.def {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 13px;
+  line-height: 16px;
+  /* identical to box height */
+
+  text-decoration-line: underline;
+
+  /* Orange */
+
+  color: #f2994a;
+}
+.perbut3 {
+  width: 185px !important;
+  height: 37px !important;
+  /* Orange */
+
+  background: #f2994a !important;
+  border-radius: 4px !important;
+}
+.address {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  /* identical to box height */
+
+  margin-top: -5px;
+  color: #000000;
+}
+.steplabel {
+  font-family: Lato !important;
+  font-style: normal !important;
+  font-weight: 500;
+  font-size: 14px !important;
+  line-height: 17px !important;
+  /* identical to box height */
+
+  text-align: center !important;
+
+  /* blue */
+
+  color: #003459 !important;
+}
+
+.perbut1 {
+  width: 150px !important;
+  height: 37px !important;
+  /* Orange */
+
+  background: #f2994a !important;
+  border-radius: 4px !important;
+}
+
+.perbut2 {
+  width: 180px !important;
+  height: 37px !important;
+  /* Orange */
+
+  background: #f2994a !important;
+  border-radius: 4px !important;
+}
+
+.search {
+  width: 100%;
+  position: relative;
+  display: flex;
+}
+
+.searchTerm {
+  width: 100%;
+  border: 3px solid #00b4cc;
+  padding: 5px;
+  height: 36px;
+  border-radius: 5px;
+  outline: none;
+  color: #9dbfaf;
+}
+
+.searchTerm:focus {
+  color: black;
+}
+
+/*Resize the wrap to see the search bar change!*/
+.wrap {
+  margin: 20px auto;
+  width: 30%;
+  height: 50px;
+}
+
+.my-custom-scrollbar {
+  position: relative;
+  height: 500px;
+  overflow: auto;
+}
+.table-wrapper-scroll-y {
+  display: block;
+}
+
+.tableHead .tableRow th {
+  background-color: #404040;
+  position: sticky;
+  top: 0;
+}
+
+.hi li{
+  list-style-type:none;
+}

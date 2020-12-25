@@ -1,0 +1,115 @@
+{
+    "posterData": [
+        {
+            "subCategory": [
+                {
+                    "_id": "5fcce824eeaf779d887e49b3",
+                    "title": "Quality"
+                },
+                {
+                    "_id": "5fcce838eeaf779d887e49b4",
+                    "title": "PPE"
+                },
+                {
+                    "_id": "5fcce84feeaf779d887e49b5",
+                    "title": "PICTOGRAM"
+                },
+                {
+                    "_id": "5fcce865eeaf779d887e49b6",
+                    "title": "MATERIAL LANDING"
+                },
+                {
+                    "_id": "5fcce87feeaf779d887e49b7",
+                    "title": "HOUSEKEEPING"
+                },
+                {
+                    "_id": "5fcce894eeaf779d887e49b8",
+                    "title": "HINDI AND ENGLISH BILINGUAL"
+                },
+                {
+                    "_id": "5fcce89deeaf779d887e49b9",
+                    "title": "HINDI"
+                },
+                {
+                    "_id": "5fcce8a5eeaf779d887e49ba",
+                    "title": "FIRE"
+                },
+                {
+                    "_id": "5fcce8b0eeaf779d887e49bb",
+                    "title": "ENVIRONMENT"
+                },
+                {
+                    "_id": "5fcce8bdeeaf779d887e49bc",
+                    "title": "ELECTRICAL HAZARD"
+                },
+                {
+                    "_id": "5fcce8c9eeaf779d887e49bd",
+                    "title": "CHEMICAL HAZARDS"
+                }
+            ],
+            "language": [
+                "English"
+            ],
+            "bought": 0,
+            "material": [
+                {
+                    "_id": "5fccdb9de1bfcd2748e310fb",
+                    "title": "125 Micron (non-tearable)",
+                    "imgUrl": "https://ehsdirectus.cloudns.cl/first_project/assets/j6yyo0hmo1wg8g04?key=directus-large-crop"
+                },
+                {
+                    "_id": "5fccdde6f98cde94fc5405a5",
+                    "title": "19in by 27in",
+                    "imgUrl": "https://ehsdirectus.cloudns.cl/first_project/assets/j6yyo0hmo1wg8g04?key=directus-large-crop"
+                },
+                {
+                    "_id": "5fccdba6e1bfcd2748e310fc",
+                    "title": "Self-adhesive (premium)",
+                    "imgUrl": "https://ehsdirectus.cloudns.cl/first_project/assets/j6yyo0hmo1wg8g04?key=directus-large-crop"
+                }
+            ],
+            "dimension": [
+                {
+                    "_id": "5fccddd8f98cde94fc5405a4",
+                    "title": "16in by 24in",
+                    "imgUrl": "https://ehsdirectus.cloudns.cl/first_project/assets/j6yyo0hmo1wg8g04?key=directus-large-crop"
+                },
+                {
+                    "_id": "5fccdde6f98cde94fc5405a5",
+                    "title": "19in by 27in",
+                    "imgUrl": "https://ehsdirectus.cloudns.cl/first_project/assets/j6yyo0hmo1wg8g04?key=directus-large-crop"
+                },
+                {
+                    "_id": "5fccddf1f98cde94fc5405a6",
+                    "title": "24in by 36in",
+                    "imgUrl": "https://ehsdirectus.cloudns.cl/first_project/assets/j6yyo0hmo1wg8g04?key=directus-large-crop"
+                }
+            ],
+            "isActive": true,
+            "_id": "5fccd2c9b6ce5b7440913e27",
+            "name": "PPE | PRD-CH001GS",
+            "creator": "",
+            "imgUrl": "https://ehsdirectus.cloudns.cl/first_project/assets/j6yyo0hmo1wg8g04?key=directus-large-crop",
+            "priceGroup": "Pankaj jadhav",
+            "description": "Printing material variant 125 micron non tear. Posters Paper is premium quality with PET Mat finish Laminate. Posters include 3M double side mounting tape on top and bottom. Interior warranty is of th",
+            "originalPrice": "400",
+            "discountPercentage": "0",
+            "stocks": 10,
+            "tags": "Tags: Using Safety Gloves .. is all in Your Hands.",
+            "sku": "posters-chemical-hazard-sku-1114021234-prd-ch001g",
+            "weight": "100g",
+            "additionalDetails": "Both Interior and Exterior warranty is of three years,Prices are inclusive of G.S.T,Performa Invoice can be generated at checkout.",
+            "sale": "",
+            "rating": [],
+            "reviews": [],
+            "created_at": "2020-12-06T12:47:05.480Z",
+            "updated_at": "2020-12-06T14:35:57.061Z",
+            "__v": 0,
+            "category": {
+                "_id": "5fcce7a562fc829ad8932a19",
+                "title": "poster"
+            }
+        }
+    ],
+    "message": "succesfully loaded"
+}

@@ -1,0 +1,21 @@
+#navBarTop {
+  padding: 0px;
+  background: #003459;
+  box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.2);
+}
+#ehsLogoImg {
+  width: 100px;
+  height: 35px;
+}
+
+.textColorAndWeight {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 14px;
+}
+
+.searchCategory:hover {
+  background-color: #003459;
+  color: #ffffff;
+}

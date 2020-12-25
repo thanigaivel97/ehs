@@ -1,0 +1,62 @@
+/*jshint esversion: 6 */
+import React from "react";
+import "./Collections.css";
+import PosterImg from "../../../images/Posters.svg";
+import Signages from "../../../images/Signages.svg";
+import FloorImg from "../../../images/FloorGraphics.svg";
+import AssetImg from "../../../images/AssetMarking.svg";
+import {Link} from "react-router-dom";
+
+const Card = (props) => {
+  return (
+    <div
+      className="mr-5 p-4  coll"
+      style={{
+        border: "1px solid #D2D2D2",
+        borderRadius: "25px",
+        height: "140px",
+        width: "180px",
+      }}
+    >
+      <div className="mx-auto d-block ">
+        <img
+          className="animateCard mx-auto d-block mb-3"
+          style={{
+            width: "55px",
+            height: "55px",
+          }}
+          src={props.src}
+          alt={props.alt}
+        />
+        <Link to="/posters"
+          style={{ fontFamily: "Source Sans Pro"  , color:"#000000 "}}
+          className="text-center mt-3"
+        >
+          {props.title}
+        </Link>
+      </div>
+    </div>
+  );
+};
+
+const Collections = () => {
+  return (
+    <div className="row p-3 pl-5">
+      <div className="col-sm-3 pl-4">
+        <p id="getQText">
+          Get High Quality <br />
+          Prints for your <br /> Workplace
+        </p>
+      </div>
+      <div className="col pl-5">
+        <div className="row pl-3">
+          <Card src={PosterImg} alt="Posters" title="Posters" />
+          <Card src={Signages} alt="Signages" title="Signages" />
+          <Card src={FloorImg} alt="Floor Graphics" title="Floor Graphics" />
+          <Card src={AssetImg} alt="Asset Markings" title="Asset Markings" />
+        </div>
+      </div>
+    </div>
+  );
+};
+export default Collections;
