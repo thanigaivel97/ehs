@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /*jshint esversion: 6 */
 import React from "react";
 import Rectangle from "../../images/Rectangle.svg";
@@ -30,7 +31,7 @@ import { BottomAddedCart } from "../product_list2/right/Right";
 import Avatar from "@material-ui/core/Avatar";
 import { connect } from "react-redux";
 import Axios from "axios";
-import { getPoster, config } from "../../helper/apiPath";
+import { config, getPosterById } from "../../helper/apiPath";
 
 function ProductDescription(props) {
   const [posterData, setPosterData] = React.useState({});
@@ -38,17 +39,21 @@ function ProductDescription(props) {
   const [mat, setMat] = React.useState({});
   const [dim, setDim] = React.useState({});
 
+  const itemId = props.match.params.id;
+
   React.useEffect(() => {
     Axios.get(
-      getPoster,
+      `${getPosterById}/${itemId}`,
       config(
         props.loginResponse.token || localStorage.getItem("ehstoken12345678910")
       )
     )
       .then((res) => {
-        const posterItem = res.data.posterData.filter(
-          (v) => v._id === props.match.params.id
-        )[0];
+        const posterItem = res.data.posterData;
+        console.log(posterItem);
+        //   .filter(
+        //   (v) => v._id === props.match.params.id
+        // )[0];
 
         setPosterData(posterItem);
         setIsLoading(!isLoading);

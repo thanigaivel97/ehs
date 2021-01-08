@@ -16,8 +16,10 @@ import $ from "jquery";
 import { BottomAddedCart } from "../product_list2/right/Right";
 import { findMat, findDim } from "../../helper/apiPath";
 import CloseBtn from "../../images/ExitBtn.svg";
-import {ModalCard} from './Card2';
+import { ModalCard } from "./Card2";
 import ModelCard3 from "../product_list2/right/ModelCard3";
+import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 
 const CategoryPage = (props) => {
   const [posterData, setPosterData] = React.useState([]);
@@ -196,6 +198,17 @@ const CategoryPage = (props) => {
     } else if (e.target.id === "two") {
       setModalCar({ one: false, two: true, three: false });
     } else if (e.target.id === "three") {
+      setModalCar({ one: false, two: false, three: true });
+    }
+  };
+
+
+  const setModalCarouselb = (e) => {
+    if (e.target.id === "oneb") {
+      setModalCar({ one: true, two: false, three: false });
+    } else if (e.target.id === "twob") {
+      setModalCar({ one: false, two: true, three: false });
+    } else if (e.target.id === "threeb") {
       setModalCar({ one: false, two: false, three: true });
     }
   };
@@ -467,7 +480,38 @@ const CategoryPage = (props) => {
                 </Grid>
               ) : null}
             </div>
-            <div className="modal-footer border-0 justify-content-center bg-white">
+            <div className="modal-footer border-0 justify-content-center bg-white pt-2">
+              <div
+                style={{ position: "absolute", left: "22px", bottom: "5px" }}
+              >
+                <NavigateBeforeIcon
+                  style={
+                    modalCarousel.two
+                      ? { fontSize: "30px" }
+                      : { display: "none" }
+                  }
+                  id="oneb"
+                  onClick={setModalCarouselb}
+                />
+              </div>
+              <div
+                style={{
+                  position: "absolute",
+                  left: "22px",
+                  bottom: "5px",
+                }}
+              >
+                <NavigateBeforeIcon
+                  style={
+                    modalCarousel.three
+                      ? { fontSize: "30px" }
+                      : { display: "none" }
+                  }
+                  id="twob"
+                  onClick={setModalCarouselb}
+                />
+              </div>
+
               <div
                 id="one"
                 className={modalCarousel.one ? "bg-secondary" : ""}
@@ -504,6 +548,33 @@ const CategoryPage = (props) => {
                 }}
                 onClick={setModalCarousel}
               ></div>
+
+              <div
+                style={{ position: "absolute", right: "22px", bottom: "5px" }}
+              >
+                <NavigateNextIcon
+                  style={
+                    modalCarousel.one
+                      ? { fontSize: "30px" }
+                      : { display: "none" }
+                  }
+                  id="twob"
+                  onClick={setModalCarouselb}
+                />
+              </div>
+              <div
+                style={{ position: "absolute", right: "22px", bottom: "5px" }}
+              >
+                <NavigateNextIcon
+                  style={
+                    modalCarousel.two
+                      ? { fontSize: "30px" }
+                      : { display: "none" }
+                  }
+                  id="threeb"
+                  onClick={setModalCarouselb}
+                />
+              </div>
             </div>
           </div>
         </div>

@@ -10,7 +10,6 @@ import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Check from "@material-ui/icons/Check";
 import StepConnector from "@material-ui/core/StepConnector";
-import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import $ from "jquery";
@@ -375,7 +374,7 @@ const Orders = () => {
   // }
 
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(1);
+  const [activeStep] = React.useState(1);
   const steps = getSteps();
 
   // const handleNext = () => {

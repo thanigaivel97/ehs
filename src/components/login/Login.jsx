@@ -1,7 +1,6 @@
 import React from "react";
 import "./Login.css";
 import EhsLogo from "../../images/EhsLogo.svg";
-import { Checkbox } from "@material-ui/core";
 
 const Login = () => {
   return (

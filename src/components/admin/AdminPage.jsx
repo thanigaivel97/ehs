@@ -14,10 +14,8 @@ import {
   jsonToFormData,
 } from "../../helper/apiPath";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { Grid } from "semantic-ui-react";
-import { Checkbox } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import SaveIcon from "@material-ui/icons/Save";
 import defaultImage from "../../images/Artist.svg";
@@ -109,7 +107,7 @@ function CreatePoster(props) {
   }
 
   function check() {
-    Object.keys(newPoster).map((s) => {
+    Object.keys(newPoster).forEach((s) => {
       if (newPoster[s] === "" || newPoster[s] === 0 || !newPoster[s]) {
         setErr((prev) => {
           return { ...reduceObj(prev, s), [s]: true };
@@ -123,7 +121,7 @@ function CreatePoster(props) {
   }
 
   function setValue() {
-    allowed.map((single) => {
+    allowed.forEach((single) => {
       if (single === "imgUrl") {
         newPoster[single] = $(`#${single}`)[0].files[0];
       } else if (single === "category") {
@@ -428,7 +426,7 @@ function UpdateAndDeletePoster(props) {
   ];
 
   function setValue() {
-    allowed.map((single) => {
+    allowed.forEach((single) => {
       if (single === "category") {
         var a = props.catData.filter((v) => v.title === $(`#${single}`).text());
         newPoster[single] = a[0]._id;

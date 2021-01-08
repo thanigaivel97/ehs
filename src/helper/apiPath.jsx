@@ -1,5 +1,5 @@
 /*jshint esversion: 6 */
-const url = "https://ehsapi1att.herokuapp.com/";
+const url = "http://35.238.118.121:8080/";
 
 const login = url + "auth/login";
 const signup = url + "auth/signup";
@@ -7,6 +7,7 @@ const updateUser = url + "auth/updateUser";
 const getUsers = url + "auth/getUsers";
 
 const getPoster = url + "posters/getPoster";
+const getPosterById = url + "posters/getPosterById";
 const createPoster = url + "posters/createPoster";
 const updatePoster = url + "posters/updatePoster";
 const deletePoster = url + "posters/deletePoster";
@@ -31,7 +32,6 @@ const getOrders = url + "orders/getOrders";
 const updateOrders = url + "orders/updateOrders";
 const deleteOrder = url + "orders/deleteOrder";
 
-
 const config = (token) => {
   return { headers: { Authorization: `Bearer ${token}` } };
 };
@@ -47,7 +47,6 @@ const Dimension = {
   three: "24in by 36in",
 };
 
-
 const findMat = (mat) => {
   if (mat.one) return Material.one;
   else if (mat.two) return Material.two;
@@ -60,42 +59,41 @@ const findDim = (dim) => {
   else if (dim.three) return Dimension.three;
 };
 
+function buildFormData(formData, data, parentKey) {
+  if (
+    data &&
+    typeof data === "object" &&
+    !(data instanceof Date) &&
+    !(data instanceof File)
+  ) {
+    Object.keys(data).forEach((key) => {
+      buildFormData(
+        formData,
+        data[key],
+        parentKey ? `${parentKey}[${key}]` : key
+      );
+    });
+  } else {
+    const value = data == null ? "" : data;
 
-  function buildFormData(formData, data, parentKey) {
-    if (
-      data &&
-      typeof data === "object" &&
-      !(data instanceof Date) &&
-      !(data instanceof File)
-    ) {
-      Object.keys(data).forEach((key) => {
-        buildFormData(
-          formData,
-          data[key],
-          parentKey ? `${parentKey}[${key}]` : key
-        );
-      });
-    } else {
-      const value = data == null ? "" : data;
-
-      formData.append(parentKey, value);
-    }
+    formData.append(parentKey, value);
   }
+}
 
-  function jsonToFormData(data) {
-    const formData = new FormData();
+function jsonToFormData(data) {
+  const formData = new FormData();
 
-    buildFormData(formData, data);
+  buildFormData(formData, data);
 
-    return formData;
-  }
-
+  return formData;
+}
 
 export {
   url,
   login,
   updateUser,
   getPoster,
+  getPosterById,
   createPoster,
   signup,
   updatePoster,
@@ -120,5 +118,5 @@ export {
   config,
   findMat,
   findDim,
-  jsonToFormData
+  jsonToFormData,
 };

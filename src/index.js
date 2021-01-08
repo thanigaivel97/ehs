@@ -7,7 +7,7 @@ import reportWebVitals from "./reportWebVitals";
 import { createStore } from "redux";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import reducer from "./redux/reducer/index";
-import AdminPage from './components/admin/AdminPage';
+import AdminPage from "./components/admin/AdminPage";
 import { Provider } from "react-redux";
 
 const store = createStore(
@@ -20,12 +20,11 @@ ReactDOM.render(
     <Router>
       <Switch>
         <Route path="/admin">
-          <AdminPage/>
+          <AdminPage />
         </Route>
         <Route path="/">
           <App />
         </Route>
-        
       </Switch>
     </Router>
   </Provider>,

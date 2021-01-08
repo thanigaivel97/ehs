@@ -11,14 +11,13 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Cart from "./components/ShoppingCart/ShoppingCart";
 import Dashboard from "./components/CustomerDashboard/Dashboard";
 import Axios from "axios";
-import{url,login,getPoster,signup}  from './helper/apiPath';
-import {setLoginResponse} from './redux/actions/index.js';
-import { connect } from 'react-redux';
-
+import { login } from "./helper/apiPath";
+import { setLoginResponse } from "./redux/actions/index.js";
+import { connect } from "react-redux";
 
 export const DesContext = React.createContext({});
 
-function App(props){
+function App(props) {
   let cartJson = JSON.parse(localStorage.getItem("listCart12345678910")) || {
     cartList: [],
   };
@@ -39,22 +38,23 @@ function App(props){
 
   const [Description, setDescription] = useState({});
 
-  let [authToken, setAuthToken] = useState("");
+  // let [authToken, setAuthToken] = useState("");
 
-  const [posters, setPosters] = useState();
+  // const [posters, setPosters] = useState();
 
-  const [loginResponse,setLoginResponse] = useState({});
+  // const [loginResponse,setLoginResponse] = useState({});
 
   React.useEffect(() => {
-    Axios.post(login, { emailid: "balu@gmail.com",password: "1234"})
+    Axios.post(login, { emailid: "balu@gmail.com", password: "1234" })
       .then((res) => {
-      props.setLoginResponse(res.data);
-      localStorage.setItem("ehstoken12345678910", res.data?.token);
+        props.setLoginResponse(res.data);
+        localStorage.setItem("ehstoken12345678910", res.data?.token);
       })
       .catch((err) => {
         console.log(err);
       });
-  },[]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="App">
@@ -74,9 +74,11 @@ function App(props){
               <ProductList2 setCartCountFun={countSetFun} />
             </Route>
 
-            <Route exact path="/item/:id" component={ProductDescription}>
-              
-            </Route>
+            <Route
+              exact
+              path="/item/:id"
+              component={ProductDescription}
+            ></Route>
 
             <Route path="/cart">
               <Cart
@@ -90,8 +92,6 @@ function App(props){
             <Route exact path="/dashboard">
               <Dashboard />
             </Route>
-
-
           </Switch>
         </Router>
       </DesContext.Provider>
@@ -99,15 +99,14 @@ function App(props){
   );
 }
 
-
 const mapStateToProps = (state) => {
-   return {
-      loginResponse: state
-   };
+  return {
+    loginResponse: state,
+  };
 };
 const mapDispatchToProps = (dispatch) => {
-   return {
-      setLoginResponse: (payload) => dispatch(setLoginResponse(payload)),
-   };
+  return {
+    setLoginResponse: (payload) => dispatch(setLoginResponse(payload)),
+  };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(App);

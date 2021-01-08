@@ -7,79 +7,16 @@ import BreadVector from "../../../images/BreadVector.svg";
 import Card2 from "../../category_page/Card2";
 import $ from "jquery";
 import Tick from "../../../images/tick.svg";
-import AddIcon from "@material-ui/icons/Add";
 import Close from "../../../images/ExitBtn.svg";
-import { Button } from "semantic-ui-react";
 import DidYouPoster from "../../../images/DidYouPoster.svg";
 import DisInfect from "../../../images/DisInfectant.svg";
-import RemoveIcon from "@material-ui/icons/Remove";
 import { Link } from "react-router-dom";
 
-const Card3 = (props) => {
-  const quantityMinus = (e) => {
-    if (props.det.quantity > 1) $("#Quantity").text(props.det.quantity--);
-  };
-
-  const quantityPlus = (e) => {
-    $("#Quantity").text(props.det.quantity++);
-  };
-
-
-  return (
-    <div>
-      <p
-        className="text-center"
-        style={{
-          margin: "0 auto",
-          fontFamily: "Lato",
-          fontStyle: "normal",
-          fontWeight: "normal",
-          fontSize: "18px",
-          lineHeight: "22px",
-          color: "#000000",
-        }}
-      >
-        {props.det.select}
-      </p>
-      <div>
-        <Button.Group
-          style={{
-            background: "#FFFFFF",
-            border: "1px solid #D2D2D2",
-            boxSizing: "border-box",
-            borderRadius: "6px",
-          }}
-        >
-          <Button
-            onClick={quantityMinus}
-            style={{ border: "0", width: "45px", background: "none" }}
-          >
-            <RemoveIcon />
-          </Button>
-          <input
-            style={{ width: "35px", background: "none" }}
-            defaultValue={1}
-            disabled
-          />
-
-          <Button
-            onClick={quantityPlus}
-            style={{ border: "0", width: "45px", background: "none" }}
-          >
-            <AddIcon />
-          </Button>
-        </Button.Group>
-      </div>
-    </div>
-  );
-};
-
 export const BottomAddedCart = (props) => {
-
-  const {name,quantity}=props.det;
+  const { name, quantity } = props.det;
   return (
     <Grid>
-     <Grid.Row columns="2">
+      <Grid.Row columns="2">
         <Grid.Column className="ml-2">
           <img
             src={`data:${props.det?.imgUrl?.contentType};base64,${props.det?.imgUrl?.data}`}
@@ -95,7 +32,9 @@ export const BottomAddedCart = (props) => {
         </Grid.Column>
         <Grid.Column className="ml-3 pt-2" style={{ width: "200px" }}>
           <img
-            onClick={() => { $("#bottomCart").css("display","none")}}
+            onClick={() => {
+              $("#bottomCart").css("display", "none");
+            }}
             src={Close}
             alt=""
             style={{
@@ -113,28 +52,23 @@ export const BottomAddedCart = (props) => {
             {" "}
             Quantity: <span> {quantity} </span>{" "}
           </p>
-          <Link to="/cart" className="bottomViewCart" >View Cart</Link>
+          <Link to="/cart" className="bottomViewCart">
+            View Cart
+          </Link>
         </Grid.Column>
       </Grid.Row>
     </Grid>
-
   );
 };
 
-
-
-
-
 const Right = (props) => {
-  
-
   const cardDet = {
     src: DisInfect,
     title: "Floor Graphics | Printable Catalog | PRD-FG009",
     by: "By Pankaj Jadhav",
     isInStock: true,
     rate: 4.6,
-    price:400,
+    price: 400,
     bought: "473",
   };
 
@@ -142,7 +76,7 @@ const Right = (props) => {
 
   const addToCart = (bottomDet) => {
     setBottomDet(bottomDet);
-    $("#bottomCart").css("display","block");
+    $("#bottomCart").css("display", "block");
     props.setCartCountFun(bottomDet);
   };
 
@@ -165,7 +99,7 @@ const Right = (props) => {
           Posters
         </Link>{" "}
         <img src={BreadVector} className="mr-1" width="10" height="10" alt="" />
-        <span className="breadLink" to="/posters/covid-19"  >
+        <span className="breadLink" to="/posters/covid-19">
           COVID-19
         </span>
       </Grid.Column>
@@ -282,7 +216,7 @@ const Right = (props) => {
           bottom: "30px",
           right: "30px",
           boxShadow: "0px 2px 20px 4px rgba(0, 0, 0, 0.25)",
-          display:"none"
+          display: "none",
         }}
       >
         <BottomAddedCart det={bottomDet} />
