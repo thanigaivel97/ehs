@@ -51,7 +51,6 @@
 }
 
 #loginForgetPassword {
-
   position: absolute;
   width: 157px;
   height: 24px;
@@ -65,9 +64,10 @@
 }
 
 #keepSignIn {
-    background-color: #cc9e5d;
-    border: 1px solid #cacece ;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
+  background-color: #cc9e5d;
+  border: 1px solid #cacece;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05),
+    inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
 }
 
 #loginBtn {
@@ -91,4 +91,53 @@
   border: 1px solid #003459;
   box-sizing: border-box;
   border-radius: 8px;
+}
+
+#loginUserEmail1 {
+  margin: 0 auto;
+  width: 245px;
+  height: 55px;
+  left: 467px;
+  top: 283px;
+  /* grey */
+  border: 1px solid #757575;
+  box-sizing: border-box;
+  border-radius: 8px;
+
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 24px;
+  /* identical to box height */
+
+  /* grey */
+  text-indent: 10px;
+  color: #757575;
+}
+
+#loginUseraddress {
+  margin: 0 auto;
+  width: 509px;
+  height: 80px;
+  left: 467px;
+  top: 283px;
+  /* grey */
+  border: 1px solid #757575;
+  box-sizing: border-box;
+  border-radius: 8px;
+
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 24px;
+  /* identical to box height */
+
+  /* grey */
+  text-indent: 10px;
+  color: #757575;
+}
+textarea {
+  resize: none;
 }

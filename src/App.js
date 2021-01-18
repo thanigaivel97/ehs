@@ -10,6 +10,8 @@ import ProductDescription from "./components/productdescription/ProductDescripti
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Cart from "./components/ShoppingCart/ShoppingCart";
 import Dashboard from "./components/CustomerDashboard/Dashboard";
+import Login from './components/login/Login';
+import Signup from "./components/login/Signup";
 import Axios from "axios";
 import { login } from "./helper/apiPath";
 import { setLoginResponse } from "./redux/actions/index.js";
@@ -44,17 +46,23 @@ function App(props) {
 
   // const [loginResponse,setLoginResponse] = useState({});
 
-  React.useEffect(() => {
-    Axios.post(login, { emailid: "balu@gmail.com", password: "1234" })
-      .then((res) => {
-        props.setLoginResponse(res.data);
-        localStorage.setItem("ehstoken12345678910", res.data?.token);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
+
+
+  // React.useEffect(() => {
+  //   Axios.post(login, { emailid: "naveen@gmail.com", password: "1234" })
+  //     .then((res) => {
+  //       props.setLoginResponse(res.data);
+  //       // localStorage.setItem("ehstoken12345678910", res.data?.token);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
+
+  
 
   return (
     <div className="App">
@@ -62,7 +70,7 @@ function App(props) {
         <Router>
           <NavBar num={cartCount} />
           <Switch>
-            <Route exact path="/">
+            <Route exact path="/home">
               <HomePage />
             </Route>
 
@@ -74,11 +82,12 @@ function App(props) {
               <ProductList2 setCartCountFun={countSetFun} />
             </Route>
 
-            <Route
-              exact
-              path="/item/:id"
-              component={ProductDescription}
-            ></Route>
+            <Route exact path="/item/:id">
+              <ProductDescription
+                setCartCountFun={countSetFun}
+                navCount={cartCount}
+              />
+            </Route>
 
             <Route path="/cart">
               <Cart
@@ -91,6 +100,14 @@ function App(props) {
 
             <Route exact path="/dashboard">
               <Dashboard />
+            </Route>
+
+            <Route exact path="/">
+              <Login />
+            </Route>
+
+            <Route exact path="/signup">
+              <Signup />
             </Route>
           </Switch>
         </Router>

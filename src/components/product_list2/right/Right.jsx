@@ -18,12 +18,7 @@ export const BottomAddedCart = (props) => {
     <Grid>
       <Grid.Row columns="2">
         <Grid.Column className="ml-2">
-          <img
-            src={`data:${props.det?.imgUrl?.contentType};base64,${props.det?.imgUrl?.data}`}
-            alt={name}
-            width="100"
-            height="120"
-          />
+          <img src={props.det?.imgUrl} alt={name} width="100" height="120" />
           <img
             style={{ position: "fixed", bottom: "151px", right: "323px" }}
             src={Tick}
@@ -47,7 +42,7 @@ export const BottomAddedCart = (props) => {
             }}
           />
           <p className="addedToCartBot">Added to Cart</p>
-          <p className="botTitle">{name}</p>
+          <p className="botTitle">{name && name.slice(0, 20)}...</p>
           <p className="quant">
             {" "}
             Quantity: <span> {quantity} </span>{" "}

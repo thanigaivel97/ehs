@@ -391,7 +391,12 @@ function UpdateAndDeletePoster(props) {
   } = props.data;
   console.log(_id);
 
-  // const [image, setImg] = React.useState(defaultImage);
+  const configImage = {
+    headers: {
+      "content-type": "multipart/form-data",
+    },
+  };
+  const [image, setImg] = React.useState(imgUrl);
 
   var newPoster = {
     name: name,
@@ -399,6 +404,7 @@ function UpdateAndDeletePoster(props) {
     subCategory: subCategory._id,
     language: language,
     creator: creator,
+    imgUrl: imgUrl,
     originalPrice: originalPrice,
     priceGroup: priceGroup,
     description: description,
@@ -415,6 +421,7 @@ function UpdateAndDeletePoster(props) {
     "subCategory",
     "language",
     "creator",
+    "imgUrl",
     "originalPrice",
     "priceGroup",
     "description",
@@ -430,6 +437,8 @@ function UpdateAndDeletePoster(props) {
       if (single === "category") {
         var a = props.catData.filter((v) => v.title === $(`#${single}`).text());
         newPoster[single] = a[0]._id;
+      } else if (single === "imgUrl") {
+        newPoster[single] = $(`#${single}`)[0].files[0];
       } else if (single === "subCategory") {
         var b = props.subCatData.filter(
           (v) => v.title === $(`#${single}`).text()
@@ -455,9 +464,15 @@ function UpdateAndDeletePoster(props) {
         alert(err);
       });
   }
+
   function updatePosterFun() {
     setValue();
-    Axios.post(updatePoster, { posterId: _id, ...newPoster })
+    console.log(newPoster);
+    Axios.post(
+      updatePoster,
+      jsonToFormData({ posterId: _id, ...newPoster }),
+      configImage
+    )
       .then((res) => {
         console.log(_id);
         console.log(res.data.message);
@@ -545,15 +560,14 @@ function UpdateAndDeletePoster(props) {
               style={{ display: "none" }}
               variant="outlined"
               accept=".jpg,.png,.jpeg"
-              disabled={true}
-              // onChange={(e) => {
-              //   setImg(URL.createObjectURL(e.target.files[0]));
-              // }}
+              onChange={(e) => {
+                setImg(URL.createObjectURL(e.target.files[0]));
+              }}
             />
             <img
               width="50px"
               height="50px"
-              src={`data:${imgUrl?.contentType};base64,${imgUrl?.data}`}
+              src={image}
               alt=""
               onClick={(e) => $("#imgUrl").trigger("click")}
               style={{ marginTop: "-20px" }}
@@ -753,9 +767,10 @@ function Poster(props) {
                 style={{ height: "20px" }}
               >
                 <tr className="tableRow">
+                  <th style={{ width: "10%" }}>Image</th>
                   <th style={{ width: "15%" }}>Name</th>
                   <th style={{ width: "10%" }}>Creator</th>
-                  <th style={{ width: "33%" }}>description</th>
+                  <th style={{ width: "23%" }}>description</th>
                   <th style={{ width: "5%" }}>language</th>
                   <th style={{ width: "5%" }}>originalPrice</th>
                   <th style={{ width: "5%" }}>stocks</th>
@@ -822,9 +837,12 @@ function PostRow(props) {
       style={{ cursor: "pointer" }}
       onClick={() => props.setSelected(props.data)}
     >
+      <td style={{ width: "10%" }}>
+        <img src={props.data.imgUrl} alt="" height="80px" width="80px" />
+      </td>
       <td style={{ width: "15%" }}>{props.data.name}</td>
       <td style={{ width: "10%" }}>{props.data.creator}</td>
-      <td style={{ width: "33%" }}>
+      <td style={{ width: "23%" }}>
         {props.data.description.slice(0, 100)}....
       </td>
       <td style={{ width: "5%" }}>{props.data.language}</td>
@@ -889,7 +907,7 @@ export default function AdminPage() {
   }
 
   React.useEffect(() => {
-    Axios.post(login, { emailid: "balu@gmail.com", password: "1234" })
+    Axios.post(login, { emailid: "naveen@gmail.com", password: "1234" })
       .then((res) => {
         setData(res.data);
       })

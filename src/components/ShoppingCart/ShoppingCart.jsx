@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /*jshint esversion: 9 */
 import React from "react";
 import DisInfect from "../../images/DisInfectant.svg";
@@ -11,27 +12,100 @@ import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
 import { useEffect, useState } from "react";
 import $ from "jquery";
-import Left from '../homepage/leftimages/LeftImages';
+import Left from "../homepage/leftimages/LeftImages";
 import Tape from "../../images/tape.svg";
 import Pay from "../../images/payment.svg";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
-import Card2 from '../category_page/Card2';
+import Card2 from "../category_page/Card2";
 import { BottomAddedCart } from "../product_list2/right/Right";
-import {findMat,findDim} from '../../helper/apiPath';
+import { findMat, findDim } from "../../helper/apiPath";
+
+function loadScript(src) {
+  return new Promise((resolve) => {
+    const script = document.createElement("script");
+    script.src = src;
+    script.onload = () => {
+      resolve(true);
+    };
+    script.onerror = () => {
+      resolve(false);
+    };
+    document.body.appendChild(script);
+  });
+}
+
+const __DEV__ = document.domain === "localhost";
 
 const Tables = (props) => {
- 
   const cartDet = JSON.parse(localStorage.getItem("listCart12345678910")) || {
     cartList: [],
   };
+
+  var userJson;
 
   const [numCart, setNumCart] = useState(cartDet.cartList);
 
   const [num, setNum] = useState(props.navCount || 0);
 
+  const [totalPay, setTotalPay] = React.useState(0);
+
+  function calculate(e) {
+    let temp = 0;
+    e.map((v) => (temp += v.quantity * v.originalPrice));
+    setTotalPay(temp);
+    return temp;
+  }
+
   useEffect(() => {
-    console.log(props);
+    console.log(numCart);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    userJson = JSON.parse(localStorage.getItem("userDetails123")) || {
+      user: {},
+    };
+    console.log(userJson);
   });
+  useEffect(() => {
+    setTotalPay(calculate(numCart));
+  }, []);
+
+  async function displayRazorpay() {
+    const res = await loadScript(
+      "https://checkout.razorpay.com/v1/checkout.js"
+    );
+
+    if (!res) {
+      alert("Razorpay SDK failed to load. Are you online?");
+      return;
+    }
+
+    const data = await fetch("http://localhost:8080/razorpay", {
+      method: "POST",
+    }).then((t) => t.json());
+
+    console.log(data);
+
+    const options = {
+      key: __DEV__ ? "rzp_test_FvIgaLsvcCd3vG" : "PRODUCTION_KEY",
+      currency: data.currency,
+      amount: data.amount.toString(),
+      order_id: data.id,
+      name: "Donation",
+      description: "Thank you for nothing. Please give us some money",
+      image: { DisInfect },
+      handler: function (response) {
+        alert(response.razorpay_payment_id);
+        alert(response.razorpay_order_id);
+        alert(response.razorpay_signature);
+      },
+      prefill: {
+        name: userJson?.user?.firstname + userJson?.user?.lastname,
+        email: userJson?.user?.emailid,
+        phone_number: userJson?.user?.phonenumber,
+      },
+    };
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
+  }
 
   const updateCart = (index, type) => {
     let temp = [...numCart];
@@ -53,6 +127,8 @@ const Tables = (props) => {
 
     let cartLocal = { cartList: [...temp2] };
     localStorage.setItem("listCart12345678910", JSON.stringify(cartLocal));
+
+    calculate(cartLocal.cartList);
   };
 
   const remove = (index) => {
@@ -72,41 +148,44 @@ const Tables = (props) => {
     isInStock: true,
     rate: 4.6,
     bought: "473",
-    price:400
+    price: 400,
   };
 
   const [bottomDet, setBottomDet] = React.useState({});
-  
+
   const addToCart = (det) => {
     setBottomDet(det);
     $("#bottomCart").css("display", "block");
     props.setCartCountFun(det);
-    console.log("hello",bottomDet);
+    console.log("hello", bottomDet);
   };
 
-
-const leftImages = [Blank, Blank];
+  const leftImages = [Blank, Blank];
   return (
     <div className="row">
       <div className="col-3 justify-content-center mt-5 pt-3">
-        <button
-          className="btn shadow-none p-2 ml-4"
-          style={{
-            border: "1px solid #003459",
-            width: "234px",
-            borderRadius: " 5px",
-          }}
-        >
-          <span className="loginbtn">
-            Login or Sign up to save your Shopping Cart
-          </span>
-        </button>
-        <Left imgs={leftImages}/>
+        <Link to="/login">
+          <button
+            className="btn shadow-none p-2 ml-4"
+            style={{
+              border: "1px solid #003459",
+              width: "234px",
+              borderRadius: " 5px",
+            }}
+          >
+            <span className="loginbtn">
+              Login or Sign up to save your Shopping Cart
+            </span>
+          </button>
+        </Link>
+        <Left imgs={leftImages} />
       </div>
       <div className="col mt-5 pt-3 ">
         <Grid>
           <Grid.Row columns="2">
-            <Grid.Column style={{ width: "65%",marginLeft:"-20px",marginRight:"15px" }}>
+            <Grid.Column
+              style={{ width: "65%", marginLeft: "-20px", marginRight: "15px" }}
+            >
               {" "}
               <div className="mb-4">
                 <img
@@ -146,7 +225,7 @@ const leftImages = [Blank, Blank];
                             <Grid.Row columns="2">
                               <Grid.Column>
                                 <img
-                                  src={`data:${v.imgUrl?.contentType};base64,${v.imgUrl?.data}`}
+                                  src={v.imgUrl}
                                   width="120px"
                                   height="140px"
                                   alt={v.name}
@@ -173,7 +252,7 @@ const leftImages = [Blank, Blank];
                                   <span>{findDim(v.Dimension)}</span>
                                 </p>
                                 <p className="tabledata p-0 m-0">
-                                  Price : <span>₹{v.price}</span>
+                                  Price : <span>₹ {v.originalPrice}</span>
                                 </p>
                                 <div className="mt-3">
                                   <p
@@ -221,7 +300,9 @@ const leftImages = [Blank, Blank];
                           </ButtonGroup>
                         </td>
                         <td>
-                          <p className="mt-5">₹{v.price * v.quantity}</p>
+                          <p className="mt-5">
+                            ₹{v.originalPrice * v.quantity}
+                          </p>
                         </td>
                       </tr>
                     ))}
@@ -290,7 +371,7 @@ const leftImages = [Blank, Blank];
                   <tbody>
                     <tr height="30px">
                       <td className="pri left">Price</td>
-                      <td className="pri right">₹800.00</td>
+                      <td className="pri right">₹{totalPay}</td>
                     </tr>
                     <tr height="30px">
                       <td className="shi left">Shipping</td>
@@ -309,7 +390,7 @@ const leftImages = [Blank, Blank];
                       }}
                     >
                       <td className="pri left">Total Price</td>
-                      <td className="pri right">₹1020.00</td>
+                      <td className="pri right">₹{totalPay + 220}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -328,11 +409,20 @@ const leftImages = [Blank, Blank];
                     lineHeight: "19px",
                     borderRadius: "5px",
                   }}
+                  onClick={displayRazorpay}
+                  target="_blank"
                 >
                   Proceed to Payment{" "}
                 </Button>
 
-                <table width="250px" style={{ marginLeft: "32px",marginTop:"20px",marginBottom:"30px" }}>
+                <table
+                  width="250px"
+                  style={{
+                    marginLeft: "32px",
+                    marginTop: "20px",
+                    marginBottom: "30px",
+                  }}
+                >
                   <tbody>
                     <tr>
                       <td className="pri left">
@@ -340,16 +430,11 @@ const leftImages = [Blank, Blank];
                           Bank Transfer
                         </a>
                       </td>
-                      <td rowSpan="3" >
-                        <img
-                        
-                          src={Pay}
-                          alt=""
-                          width="130px"
-                        ></img>
+                      <td rowSpan="3">
+                        <img src={Pay} alt="" width="130px"></img>
                       </td>
                     </tr>
-                    <tr >
+                    <tr>
                       <td className="shi left">
                         {" "}
                         <a href="/#" className="bnk">
@@ -359,7 +444,10 @@ const leftImages = [Blank, Blank];
                     </tr>
                     <tr height="30px">
                       <td className=" left">
-                        <p className="bnk mt-1" style={{ color: "#003459",width:"120px" }}>
+                        <p
+                          className="bnk mt-1"
+                          style={{ color: "#003459", width: "120px" }}
+                        >
                           Pay Offline by <br /> generating Performa
                         </p>
                       </td>
@@ -367,16 +455,28 @@ const leftImages = [Blank, Blank];
                   </tbody>
                 </table>
               </div>
-              <div className="ml-5 mt-3">   
-              <p className="promo">Use a Promo Code</p>
-              <OutlinedInput style={{ width: "250px", height: "40px" }} />
-              <a href="/#" className="apply" style={{position:"absolute",right:"75px",marginTop:"7px"}}>Apply</a>
+              <div className="ml-5 mt-3">
+                <p className="promo">Use a Promo Code</p>
+                <OutlinedInput style={{ width: "250px", height: "40px" }} />
+                <a
+                  href="/#"
+                  className="apply"
+                  style={{
+                    position: "absolute",
+                    right: "75px",
+                    marginTop: "7px",
+                  }}
+                >
+                  Apply
+                </a>
               </div>
             </Grid.Column>
           </Grid.Row>
-        <Grid.Row className="orderDet mt-2" style={{marginLeft:"-50px"}}>My Wishlist</Grid.Row>
-        <Grid.Row className="mt-3">
-        {[...Array(4)].map((v, i) => (
+          <Grid.Row className="orderDet mt-2" style={{ marginLeft: "-50px" }}>
+            My Wishlist
+          </Grid.Row>
+          <Grid.Row className="mt-3">
+            {[...Array(4)].map((v, i) => (
               <Grid.Column key={i} className={i !== 0 ? "ml-3" : "m-0 p-0"}>
                 <Card2
                   data={cardDet}
@@ -384,22 +484,27 @@ const leftImages = [Blank, Blank];
                   isCardClickAvail={true}
                 />
                 <div>
-                {[...Array(2)].map((v, i)=><div key={i} className={i!==0?"carddiv mt-1":"carddiv"}><p className="pee">15% off on Self-adhesive sunboard</p></div>)}
+                  {[...Array(2)].map((v, i) => (
+                    <div
+                      key={i}
+                      className={i !== 0 ? "carddiv mt-1" : "carddiv"}
+                    >
+                      <p className="pee">15% off on Self-adhesive sunboard</p>
+                    </div>
+                  ))}
                 </div>
               </Grid.Column>
             ))}
-        </Grid.Row>
-        
+          </Grid.Row>
         </Grid>
       </div>
-      
+
       <div
         className="mt-5"
         style={{ width: "100%", height: "200px", background: "#003459" }}
-      >
-      </div>
+      ></div>
 
-           <div
+      <div
         id="bottomCart"
         className="pt-3 pl-4"
         style={{
@@ -415,8 +520,7 @@ const leftImages = [Blank, Blank];
         }}
       >
         <BottomAddedCart det={bottomDet} />
-        </div>
-
+      </div>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 /*jshint esversion: 6 */
-const url = "http://35.238.118.121:8080/";
+const url = "http://localhost:8080/";
 
 const login = url + "auth/login";
 const signup = url + "auth/signup";

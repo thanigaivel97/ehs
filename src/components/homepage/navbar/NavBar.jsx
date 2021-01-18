@@ -96,30 +96,30 @@ const NavBar = (props) => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item text-white" style={{ marginTop: "2px" }}>
-              <a
-                href="/#"
+              <Link
+                to="/"
                 className="text-white textColorAndWeight text-decoration-none"
               >
                 Login
-              </a>{" "}
+              </Link>{" "}
               |{" "}
-              <a
-                href="/#"
+              <Link
+                to="/signup"
                 className="text-white textColorAndWeight text-decoration-none"
               >
                 Register
-              </a>
+              </Link>
             </li>
             <li className="nav-item ml-4">
               <Link
-              to="/posters"
+                to="/posters"
                 className="nav-link text-white textColorAndWeight btn shadow-none border-0 drpbut "
                 style={{ backgroundColor: "#003459", border: "0px" }}
                 id="dropdownMenuButton"
                 data-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
-                onMouseEnter={(e) => $(".drp").toggle() }
+                onMouseEnter={(e) => $(".drp").toggle()}
               >
                 Posters
               </Link>
@@ -127,7 +127,7 @@ const NavBar = (props) => {
               <div
                 className="dropdown-menu p-3 drp"
                 aria-labelledby="dropdownMenuButton"
-                onMouseLeave={(e) => $(".drp").toggle() }
+                onMouseLeave={(e) => $(".drp").toggle()}
               >
                 <a className="searchCategory dropdown-item" href="/#">
                   Hindi
@@ -158,15 +158,18 @@ const NavBar = (props) => {
                   Health
                 </a>
 
-                <Link to="/posters/covid-19" className="searchCategory dropdown-item"> COVID-19</Link>
-
+                <Link
+                  to="/posters/covid-19"
+                  className="searchCategory dropdown-item"
+                >
+                  {" "}
+                  COVID-19
+                </Link>
 
                 <a className="searchCategory dropdown-item" href="/#">
                   Accident Prone
                 </a>
               </div>
-            
-            
             </li>
             <li className="nav-item ml-4">
               <a className="nav-link text-white textColorAndWeight" href="/#">
@@ -199,7 +202,10 @@ const NavBar = (props) => {
               </a>
             </li>
             <li className="nav-item ml-4" style={{ marginTop: "-2px" }}>
-              <Link to="/cart" className="nav-link text-white textColorAndWeight">
+              <Link
+                to="/cart"
+                className="nav-link text-white textColorAndWeight"
+              >
                 Shopping Cart
                 <img className="ml-1" src={ShopCart} alt="Shop" />
                 <span
@@ -215,7 +221,7 @@ const NavBar = (props) => {
                     paddingTop: "1.5px",
                   }}
                 >
-                {props.num}
+                  {props.num}
                 </span>
               </Link>
             </li>

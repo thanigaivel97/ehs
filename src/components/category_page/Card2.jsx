@@ -75,7 +75,7 @@ export const ModalCard = (props) => {
     >
       <img
         className="mt-4 mb-2 justify-content-center oneone "
-        src={`data:${props.boxDet.src.contentType};base64,${props.boxDet.src.data}`}
+        src={props.boxDet.src}
         style={{ marginLeft: "35px" }}
         width={"60px"}
         height={props.boxDet.cus ? props.boxDet.cusWidth : "90"}
@@ -152,7 +152,7 @@ const Card2 = (props) => {
             <Image
               style={{ width: "230px", height: "240px", cursor: "pointer" }}
               className="mx-auto d-block"
-              src={`data:${imgUrl?.contentType};base64,${imgUrl?.data}`}
+              src={imgUrl}
               alt={name}
               onClick={() => DesDetail.DesDetail(props.data)}
             />

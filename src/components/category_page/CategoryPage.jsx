@@ -358,7 +358,7 @@ const CategoryPage = (props) => {
                 height="250px"
                 className="d-block mx-auto"
                 style={{ marginTop: "-30px" }}
-                src={`data:${ModalDet.src?.contentType};base64,${ModalDet.src?.data}`}
+                src={ModalDet.src}
                 alt={ModalDet.title}
               />
               <p

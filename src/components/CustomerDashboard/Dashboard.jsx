@@ -698,8 +698,7 @@ const Wishlist = (props) => {
   );
 };
 const Quotes = () => {
-
-    const [s,sets]=useState(false);
+  const [s, sets] = useState(false);
 
   return (
     <>
@@ -762,7 +761,10 @@ const Quotes = () => {
                   </p>
                   <p className="perside">Address line 2</p>
                   <p className="perside">GST no</p>
-                  <Button className="perbut2 text-white" onClick={()=>sets(true)}>
+                  <Button
+                    className="perbut2 text-white"
+                    onClick={() => sets(true)}
+                  >
                     Confirm Purchase
                   </Button>
                 </div>
@@ -815,11 +817,15 @@ const Quotes = () => {
               </div>
             </div>
           </div>
-          
-          <p className="perside ml-3 mt-2" style={!s?{display:"none"}:{display:"block"}}>An email has been sent to you and the supplier on the registered email addresses.</p>
-        
+
+          <p
+            className="perside ml-3 mt-2"
+            style={!s ? { display: "none" } : { display: "block" }}
+          >
+            An email has been sent to you and the supplier on the registered
+            email addresses.
+          </p>
         </Grid.Row>
-        
       </Grid>
     </>
   );
@@ -890,6 +896,11 @@ export default function Dashboard() {
               <div
                 className="listanchor text-danger"
                 style={redirect.five ? { backgroundColor: "#F2F2F2" } : null}
+                onClick={() => {
+                  localStorage.removeItem("userDetails123");
+                  localStorage.removeItem("ehstoken12345678910");
+                  window.location.replace("http://localhost:3000/");
+                }}
               >
                 LOG OUT
               </div>

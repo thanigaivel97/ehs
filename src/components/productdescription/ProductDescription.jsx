@@ -9,6 +9,7 @@ import Profile from "../../images/Profile.svg";
 import Other from "../../images/otherwork.svg";
 import Rating from "@material-ui/lab/Rating";
 import { ModalCard } from "../category_page/Card2";
+import { useLocation } from "react-router-dom";
 import Card2 from "../category_page/Card2";
 import Also from "../../images/alsoavai.svg";
 import Button from "@material-ui/core/Button";
@@ -39,7 +40,8 @@ function ProductDescription(props) {
   const [mat, setMat] = React.useState({});
   const [dim, setDim] = React.useState({});
 
-  const itemId = props.match.params.id;
+  const location = useLocation();
+  const itemId = location.pathname.split("/")[2];
 
   React.useEffect(() => {
     Axios.get(
@@ -217,9 +219,10 @@ function ProductDescription(props) {
                 <Link className="breadLink">
                   {posterData.name.slice(0, 25)}...
                 </Link>
-                <div className="mt-2">
+                  <div className="mt-2">
+                    
                   <img
-                    src={`data:${posterData.imgUrl?.contentType};base64,${posterData.imgUrl?.data}`}
+                    src={posterData.imgUrl}
                     alt={posterData.name}
                     height="400px"
                     width="400px"
