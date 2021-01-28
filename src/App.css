@@ -867,3 +867,38 @@ body .ui.cards > .card {
 .hi li{
   list-style-type:none;
 }
+
+#loginUseraddress2 {
+  margin: 0 auto;
+  width: 400px;
+  height: 100px;
+  left: 467px;
+  top: 283px;
+  /* grey */
+   border: 1px solid #d2d2d2;
+  box-sizing: border-box;
+  border-radius: 5px;
+
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 24px;
+  /* identical to box height */
+
+  /* grey */
+  text-indent: 10px;
+  color: #757575;
+}
+
+.pay2 {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 16px;
+  margin-top: -10px;
+  /* dark grey */
+
+  color: #757575;
+}

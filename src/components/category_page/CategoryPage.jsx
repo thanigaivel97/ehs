@@ -44,53 +44,9 @@ const CategoryPage = (props) => {
     { src: Plumber, title: "Safety" },
     { src: Plumber, title: "Safety" },
     { src: Plumber, title: "Safety" },
-    { src: Plumber, title: "Safety" },
   ];
 
   const twoPosters = [GetBPoster, PosterNow];
-
-  // const bestSellers = [
-  //   {
-  //     src: BestSeller,
-  //     title: "Floor Graphics | Printable Catalog | PRD-FG009",
-  //     by: "By Pankaj Jadhav",
-  //     isInStock: true,
-  //     rate: 4.6,
-  //     bought: "473",
-  //   },
-  //   {
-  //     src: BestSeller,
-  //     title: "Floor Graphics | Printable Catalog | PRD-FG009",
-  //     by: "By Pankaj Jadhav",
-  //     isInStock: true,
-  //     rate: 4.6,
-  //     bought: "473",
-  //   },
-  //   {
-  //     src: BestSeller,
-  //     title: "Floor Graphics | Printable Catalog | PRD-FG009",
-  //     by: "By Pankaj Jadhav",
-  //     isInStock: true,
-  //     rate: 4.6,
-  //     bought: "473",
-  //   },
-  //   {
-  //     src: BestSeller,
-  //     title: "Floor Graphics | Printable Catalog | PRD-FG009",
-  //     by: "By Pankaj Jadhav",
-  //     isInStock: true,
-  //     rate: 4.6,
-  //     bought: "473",
-  //   },
-  //   {
-  //     src: BestSeller,
-  //     title: "Floor Graphics | Printable Catalog | PRD-FG009",
-  //     by: "By Pankaj Jadhav",
-  //     isInStock: true,
-  //     rate: 4.6,
-  //     bought: "473",
-  //   },
-  // ];
 
   const [bottomDet, setBottomDet] = useState({});
 
@@ -311,6 +267,7 @@ const CategoryPage = (props) => {
         >
           <BottomAddedCart det={bottomDet} />
         </div>
+     
       </div>
 
       <button
@@ -579,6 +536,7 @@ const CategoryPage = (props) => {
           </div>
         </div>
       </div>
+    
     </>
   );
 };

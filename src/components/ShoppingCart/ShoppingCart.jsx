@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /*jshint esversion: 9 */
 import React from "react";
-import DisInfect from "../../images/DisInfectant.svg";
 import Blank from "../../images/blank.svg";
 import { Link } from "react-router-dom";
 import Back from "../../images/back.svg";
@@ -11,14 +10,20 @@ import ButtonGroup from "@material-ui/core/ButtonGroup";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
 import { useEffect, useState } from "react";
-import $ from "jquery";
 import Left from "../homepage/leftimages/LeftImages";
 import Tape from "../../images/tape.svg";
 import Pay from "../../images/payment.svg";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
-import Card2 from "../category_page/Card2";
+// import Card2 from "../category_page/Card2";
+import Axios from "axios";
+import { createOrder, updateUser } from "../../helper/apiPath";
 import { BottomAddedCart } from "../product_list2/right/Right";
 import { findMat, findDim } from "../../helper/apiPath";
+import Otp from "../login/Otp";
+import $ from "jquery";
+import { Input } from "@material-ui/core";
+import EhsLogo from "../../images/EhsLogo.svg";
+import { login, signup } from "../../helper/apiPath";
 
 function loadScript(src) {
   return new Promise((resolve) => {
@@ -37,11 +42,80 @@ function loadScript(src) {
 const __DEV__ = document.domain === "localhost";
 
 const Tables = (props) => {
+  const [emailid1, setEmailId1] = React.useState("");
+  const [password1, setPassword1] = React.useState("");
+  const [phonenumber1, setPhonenumber1] = React.useState("");
+  const [token, setToken] = React.useState("");
+  const [isToken, setIsToken] = React.useState(false);
+  const [loginBody1, setLoginBody1] = React.useState({});
+
+  const [userJson, setUserJson] = React.useState({});
+
+  function mySubmitHandle(event) {
+    event.preventDefault();
+  }
+
+  function signupReq(loginBody1) {
+    Axios.post(signup, loginBody1)
+      .then((res) => {
+        if (res.data.token) {
+          setIsToken(true);
+          setToken(res.data.token);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  const [modalCarousel, setModalCarousel] = useState({
+    one: true,
+    two: false,
+    three: false,
+  });
+
+  const [emailid, setEmailId] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [phonenumber, setPhonenumber] = React.useState("");
+
+  const [address, setAddress] = React.useState("");
+  const [state, setState] = React.useState("");
+  const [name, setName] = React.useState("");
+  const [pincode, setPincode] = React.useState("");
+
+  const [loginBody, setLoginBody] = React.useState({});
+
+  function session(r) {
+    localStorage.setItem("userDetails123", JSON.stringify(r));
+  }
+
+  function responseFun(d) {
+    setUserJson(
+      JSON.parse(localStorage.getItem("userDetails123")) || {
+        user: {},
+      }
+    );
+    alert(d);
+  }
+
+  function loginReq(loginBody) {
+    Axios.post(login, loginBody)
+      .then((res) => {
+        session(res.data.user);
+        responseFun(res.data.message);
+        setModalCarousel({
+          one: false,
+          two: false,
+          three: true,
+        });
+      })
+      .catch((err) => {
+        console.log(`${err}`);
+      });
+  }
+
   const cartDet = JSON.parse(localStorage.getItem("listCart12345678910")) || {
     cartList: [],
   };
-
-  var userJson;
 
   const [numCart, setNumCart] = useState(cartDet.cartList);
 
@@ -49,24 +123,114 @@ const Tables = (props) => {
 
   const [totalPay, setTotalPay] = React.useState(0);
 
+  const [shipping, setShipping] = React.useState(220);
+
+  var addr;
+
   function calculate(e) {
     let temp = 0;
     e.map((v) => (temp += v.quantity * v.originalPrice));
     setTotalPay(temp);
+    temp > 1999 ? setShipping(0) : setShipping(220);
     return temp;
   }
 
+  function orderPlaced(res) {
+    Axios.post(createOrder, {
+      userId: userJson._id,
+      itemDetails: cartDet.cartList,
+      total: totalPay + shipping,
+      paymentId: res.razorpay_payment_id,
+      orderId: res.razorpay_order_id,
+      status: "Order Confirmed",
+      address: addr,
+      emailid: userJson?.emailid,
+      phonenumber: userJson?.phonenumber,
+    })
+      .then((res) => {
+        alert(res.data.message);
+        localStorage.removeItem("listCart12345678910");
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function proceed() {
+    if ($("#oldAdd").is(":checked")) {
+      addr = userJson.address;
+    } else if ($("#newAdd").is(":checked")) {
+      addr =
+        "Name:" +
+        name +
+        "  |  Landmark:" +
+        address +
+        "  |  State:" +
+        state +
+        "  |  Pincode:" +
+        pincode;
+    } else {
+      addr = userJson.emailid || userJson.phonenumber;
+    }
+    console.log(addr);
+    Axios.post(updateUser, {
+      emailid: userJson?.emailid,
+      phonenumber: userJson?.phonenumber,
+      address: addr,
+    })
+      .then((res) => {
+        $("#modalCls").trigger("click");
+        displayRazorpay();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function proceed1() {
+    addr =
+      "Name:" +
+      name +
+      "  | Landmark:" +
+      address +
+      "  | State:" +
+      state +
+      "  | Pincode:" +
+      pincode;
+
+    console.log(addr);
+    Axios.post(updateUser, {
+      emailid: userJson?.emailid,
+      phonenumber: userJson?.phonenumber,
+      address: addr,
+    })
+      .then((res) => {
+        $("#modalCls").trigger("click");
+        displayRazorpay();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   useEffect(() => {
-    console.log(numCart);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    userJson = JSON.parse(localStorage.getItem("userDetails123")) || {
-      user: {},
-    };
-    console.log(userJson);
-  });
+    setUserJson(
+      JSON.parse(localStorage.getItem("userDetails123")) || {
+        user: {},
+      }
+    );
+  }, []);
+
   useEffect(() => {
     setTotalPay(calculate(numCart));
+    totalPay > 1999 ? setShipping(0) : setShipping(220);
   }, []);
+
+  function paymentFun() {
+    $("#modalBut").trigger("click");
+  }
 
   async function displayRazorpay() {
     const res = await loadScript(
@@ -80,6 +244,11 @@ const Tables = (props) => {
 
     const data = await fetch("http://localhost:8080/razorpay", {
       method: "POST",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ amount: totalPay + shipping }),
     }).then((t) => t.json());
 
     console.log(data);
@@ -89,18 +258,19 @@ const Tables = (props) => {
       currency: data.currency,
       amount: data.amount.toString(),
       order_id: data.id,
-      name: "Donation",
-      description: "Thank you for nothing. Please give us some money",
-      image: { DisInfect },
+      name: "Payment",
+      description: "Thank you for Shopping with us. Please visit again",
+      image:
+        "https://ehsprints.com/wp-content/uploads/2018/12/cropped-EHS_-NEW_LOGO-1-300x93.jpg",
       handler: function (response) {
         alert(response.razorpay_payment_id);
         alert(response.razorpay_order_id);
-        alert(response.razorpay_signature);
+        orderPlaced(response);
       },
       prefill: {
-        name: userJson?.user?.firstname + userJson?.user?.lastname,
-        email: userJson?.user?.emailid,
-        phone_number: userJson?.user?.phonenumber,
+        name: userJson?.firstname + userJson?.lastname,
+        email: userJson?.emailid,
+        phone_number: userJson?.phonenumber,
       },
     };
     const paymentObject = new window.Razorpay(options);
@@ -139,26 +309,45 @@ const Tables = (props) => {
     localStorage.setItem("listCart12345678910", JSON.stringify(cartLocal));
     setNum(num - 1);
     props.setCartCount(props.navCount - 1);
+    setTotalPay(calculate(cartLocal.cartList));
   };
 
-  const cardDet = {
-    src: DisInfect,
-    title: "Floor Graphics | Printable Catalog | PRD-FG009",
-    by: "By Pankaj Jadhav",
-    isInStock: true,
-    rate: 4.6,
-    bought: "473",
-    price: 400,
-  };
+  function check() {
+    if (numCart.length > 0) {
+      userJson.emailid || userJson.phonenumber
+        ? setModalCarousel({
+            one: false,
+            two: false,
+            three: true,
+          })
+        : setModalCarousel({
+            one: true,
+            two: false,
+            three: false,
+          });
+      paymentFun();
+    } else {
+      alert("No Items in Your Cart");
+    }
+  }
+  // const cardDet = {
+  //   src: DisInfect,
+  //   title: "Floor Graphics | Printable Catalog | PRD-FG009",
+  //   by: "By Pankaj Jadhav",
+  //   isInStock: true,
+  //   rate: 4.6,
+  //   bought: "473",
+  //   price: 400,
+  // };
 
-  const [bottomDet, setBottomDet] = React.useState({});
+  const [bottomDet] = React.useState({});
 
-  const addToCart = (det) => {
-    setBottomDet(det);
-    $("#bottomCart").css("display", "block");
-    props.setCartCountFun(det);
-    console.log("hello", bottomDet);
-  };
+  // const addToCart = (det) => {
+  //   setBottomDet(det);
+  //   $("#bottomCart").css("display", "block");
+  //   props.setCartCountFun(det);
+  //   console.log("hello", bottomDet);
+  // };
 
   const leftImages = [Blank, Blank];
   return (
@@ -195,12 +384,13 @@ const Tables = (props) => {
                   height="10"
                   alt=""
                 />
-                <Link className="breadLink mt" to="/posters/covid-19">
+                <Link className="breadLink mt" to="/">
                   Back To Shopping
                 </Link>
               </div>
               <div>
                 <p className="tablecart">Shopping Cart ({num} items)</p>
+                <p className="pay2">Shop above ₹2000 to get free shipping</p>
               </div>
               {num > 0 ? (
                 <table class="table">
@@ -375,7 +565,7 @@ const Tables = (props) => {
                     </tr>
                     <tr height="30px">
                       <td className="shi left">Shipping</td>
-                      <td className="shi right">₹220.00</td>
+                      <td className="shi right">₹{shipping}</td>
                     </tr>
                     <tr height="30px">
                       <td className="shi left">Discount</td>
@@ -390,7 +580,7 @@ const Tables = (props) => {
                       }}
                     >
                       <td className="pri left">Total Price</td>
-                      <td className="pri right">₹{totalPay + 220}</td>
+                      <td className="pri right">₹{totalPay + shipping}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -409,7 +599,7 @@ const Tables = (props) => {
                     lineHeight: "19px",
                     borderRadius: "5px",
                   }}
-                  onClick={displayRazorpay}
+                  onClick={check}
                   target="_blank"
                 >
                   Proceed to Payment{" "}
@@ -472,6 +662,8 @@ const Tables = (props) => {
               </div>
             </Grid.Column>
           </Grid.Row>
+
+          {/*
           <Grid.Row className="orderDet mt-2" style={{ marginLeft: "-50px" }}>
             My Wishlist
           </Grid.Row>
@@ -496,6 +688,7 @@ const Tables = (props) => {
               </Grid.Column>
             ))}
           </Grid.Row>
+         */}
         </Grid>
       </div>
 
@@ -520,6 +713,425 @@ const Tables = (props) => {
         }}
       >
         <BottomAddedCart det={bottomDet} />
+      </div>
+
+      <button
+        type="button"
+        id="modalBut"
+        style={{ display: "none" }}
+        className="btn btn-info btn-lg"
+        data-toggle="modal"
+        data-target="#myModal"
+      >
+        Open Modal
+      </button>
+
+      <div id="myModal" className="modal fade" role="dialog">
+        <div className="modal-dialog">
+          <div
+            className="modal-content"
+            style={{ background: "none", border: "none" }}
+          >
+            <div className="modal-body">
+              {modalCarousel.two ? (
+                <>
+                  <div className="loginPage p-5 mx-auto d-block">
+                    <img
+                      className="mx-auto d-block"
+                      id="ehsLogoImg"
+                      src={EhsLogo}
+                      alt="Ehs Logo"
+                    />
+
+                    <p id="ehsLogoLabel" className="text-center mt-3">
+                      Log Into your account
+                    </p>
+
+                    <input
+                      className="mx-auto d-block mt-3"
+                      id="loginUserEmail"
+                      pattern="^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$"
+                      type="text"
+                      onChange={(e) => {
+                        document.getElementById("loginUserPhone").value = "";
+                        setEmailId(e.target.value);
+                        setLoginBody({
+                          emailid: e.target.value,
+                          password: password,
+                        });
+                      }}
+                      placeholder="Email"
+                    />
+
+                    <p className="text-center mt-2`">or</p>
+
+                    <input
+                      className="mx-auto d-block "
+                      id="loginUserPhone"
+                      pattern="[0-9]{10}"
+                      type="text"
+                      onChange={(e) => {
+                        document.getElementById("loginUserEmail").value = "";
+                        setPhonenumber(e.target.value);
+                        setLoginBody({
+                          password: password,
+                          phonenumber: e.target.value,
+                        });
+                      }}
+                      placeholder="Phone Number"
+                    />
+                    <input
+                      className="mx-auto d-block mt-3"
+                      id="loginUserPass"
+                      type="password"
+                      minLength="6"
+                      onChange={(e) => {
+                        setPassword(e.target.value);
+                        if (loginBody1.emailid) {
+                          setLoginBody({
+                            emailid: emailid,
+                            password: e.target.value,
+                          });
+                        } else if (loginBody1.emailid) {
+                          setLoginBody({
+                            phonenumber: phonenumber,
+                            password: e.target.value,
+                          });
+                        } else {
+                          setLoginBody({
+                            emailid: emailid,
+                            phonenumber: phonenumber,
+                            password: e.target.value,
+                          });
+                        }
+                      }}
+                      placeholder="Password"
+                    />
+
+                    <div className="mt-2 ml-3">
+                      <button
+                        id="loginBtn"
+                        className="mt-2"
+                        onClick={() => loginReq(loginBody)}
+                      >
+                        Log In
+                      </button>
+                    </div>
+
+                    <p className="text-center mt-1">or</p>
+
+                    <button
+                      id="signupBtn"
+                      className="ml-3 d-block"
+                      onClick={() =>
+                        setModalCarousel({
+                          one: true,
+                          two: false,
+                          three: false,
+                        })
+                      }
+                    >
+                      Create an account
+                    </button>
+                  </div>
+                </>
+              ) : null}
+              {modalCarousel.one ? (
+                <>
+                  <>
+                    {isToken ? (
+                      <div>
+                        <Otp
+                          token={token}
+                          setModalCarousel={setModalCarousel}
+                        />
+                      </div>
+                    ) : (
+                      <div className="loginPage p-5 mx-auto d-block">
+                        <img
+                          className="mx-auto d-block"
+                          id="ehsLogoImg"
+                          src={EhsLogo}
+                          alt="Ehs Logo"
+                        />
+
+                        <p id="ehsLogoLabel" className="text-center mt-3">
+                          Create Account
+                        </p>
+
+                        <form
+                          onSubmit={(e) => {
+                            signupReq(loginBody1);
+                            mySubmitHandle(e);
+                          }}
+                        >
+                          <input
+                            className="mx-auto d-block mt-3"
+                            id="loginUserEmail"
+                            pattern="^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$"
+                            type="text"
+                            onChange={(e) => {
+                              document.getElementById("loginUserPhone").value =
+                                "";
+                              setEmailId1(e.target.value);
+                              setLoginBody1({
+                                emailid: e.target.value,
+                                password: password1,
+                              });
+                            }}
+                            placeholder="Email"
+                          />
+
+                          <p className="text-center mt-2`">or</p>
+
+                          <input
+                            className="mx-auto d-block "
+                            id="loginUserPhone"
+                            pattern="[0-9]{10}"
+                            type="text"
+                            onChange={(e) => {
+                              document.getElementById("loginUserEmail").value =
+                                "";
+                              setPhonenumber1(e.target.value);
+                              setLoginBody1({
+                                password: password1,
+                                phonenumber: e.target.value,
+                              });
+                            }}
+                            placeholder="Phone Number"
+                          />
+                          <input
+                            className="mx-auto d-block mt-3"
+                            id="loginUserPass"
+                            type="password"
+                            minLength="6"
+                            onChange={(e) => {
+                              setPassword1(e.target.value);
+                              if (loginBody1.emailid) {
+                                setLoginBody1({
+                                  emailid: emailid1,
+                                  password: e.target.value,
+                                });
+                              } else if (loginBody1.emailid) {
+                                setLoginBody1({
+                                  phonenumber: phonenumber1,
+                                  password: e.target.value,
+                                });
+                              } else {
+                                setLoginBody1({
+                                  emailid: emailid1,
+                                  phonenumber: phonenumber1,
+                                  password: e.target.value,
+                                });
+                              }
+                            }}
+                            placeholder="Password"
+                          />
+
+                          <button
+                            id="loginBtn"
+                            className="mt-4"
+                            style={{ marginLeft: "13px" }}
+                            type="submit"
+                          >
+                            Sign Up
+                          </button>
+
+                          <p className="text-center mt-2">or</p>
+
+                          <button
+                            id="signupBtn"
+                            className="d-block "
+                            style={{ marginLeft: "13px" }}
+                            onClick={() =>
+                              setModalCarousel({
+                                one: false,
+                                two: true,
+                                three: false,
+                              })
+                            }
+                          >
+                            Log In
+                          </button>
+                        </form>
+                      </div>
+                    )}
+                  </>
+                </>
+              ) : null}
+              {modalCarousel.three ? (
+                <>
+                  <div className="loginPage p-5 mx-auto d-block">
+                    <img
+                      className="mx-auto d-block"
+                      id="ehsLogoImg"
+                      src={EhsLogo}
+                      alt="Ehs Logo"
+                    />
+
+                    <p id="ehsLogoLabel" className="text-center mt-3">
+                      Add Address
+                    </p>
+
+                    {userJson?.address ? (
+                      <>
+                        <div style={{ marginLeft: "20px" }}>
+                          <Grid.Row columns="2" style={{ marginLeft: "1px" }}>
+                            <Grid.Column style={{ width: "4%" }}>
+                              <input
+                                type="radio"
+                                id="oldAdd"
+                                name="old"
+                                value={userJson?.address}
+                                checked
+                              />
+                            </Grid.Column>
+                            <Grid.Column style={{ width: "90%" }}>
+                              <p>{userJson.address}</p>
+                            </Grid.Column>
+                          </Grid.Row>
+                        </div>
+                        <div style={{ marginLeft: "20px" }}>
+                          <input
+                            type="radio"
+                            id="newAdd"
+                            name="old"
+                            style={{
+                              position: "absolute",
+                              marginTop: "20px",
+                            }}
+                          />
+                          <label for="newAdd" style={{ marginLeft: "33px" }}>
+                            <Grid.Row columns="2">
+                              <Grid.Column className="ml-1">
+                                <Input
+                                  className="mx-auto d-block mt-3"
+                                  id="loginUserEmail1"
+                                  type="text"
+                                  placeholder="Name"
+                                  variant="outlined"
+                                  onChange={(e) => setName(e.target.value)}
+                                />
+                              </Grid.Column>
+                              <Grid.Column className="ml-2">
+                                <Input
+                                  className="mx-auto d-block mt-3 ml-2"
+                                  id="loginUserEmail1"
+                                  type="text"
+                                  placeholder="Address"
+                                  variant="outlined"
+                                  onChange={(e) => setAddress(e.target.value)}
+                                />
+                              </Grid.Column>
+                            </Grid.Row>
+
+                            <Grid.Row columns="2">
+                              <Grid.Column className="ml-1">
+                                {" "}
+                                <Input
+                                  className="mx-auto d-block mt-3"
+                                  id="loginUserEmail1"
+                                  type="text"
+                                  placeholder="State/Country"
+                                  variant="outlined"
+                                  onChange={(e) => setState(e.target.value)}
+                                />
+                              </Grid.Column>
+                              <Grid.Column className="ml-2">
+                                <Input
+                                  className="mx-auto d-block mt-3"
+                                  id="loginUserEmail1"
+                                  type="text"
+                                  placeholder="Pincode"
+                                  variant="outlined"
+                                  onChange={(e) => setPincode(e.target.value)}
+                                />
+                              </Grid.Column>
+                            </Grid.Row>
+                          </label>
+                        </div>
+                        <button
+                          id="loginBtn"
+                          className="ml-3 mt-2 d-block"
+                          onClick={proceed}
+                        >
+                          Add Address
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <Grid.Row columns="2" className="ml-4">
+                          <Grid.Column className="ml-1">
+                            <Input
+                              className="mx-auto d-block mt-3"
+                              id="loginUserEmail1"
+                              type="text"
+                              placeholder="Name"
+                              variant="outlined"
+                              onChange={(e) => setName(e.target.value)}
+                            />
+                          </Grid.Column>
+                          <Grid.Column className="ml-2">
+                            <Input
+                              className="mx-auto d-block mt-3 ml-2"
+                              id="loginUserEmail1"
+                              type="text"
+                              placeholder="Address"
+                              variant="outlined"
+                              onChange={(e) => setAddress(e.target.value)}
+                            />
+                          </Grid.Column>
+                        </Grid.Row>
+
+                        <Grid.Row columns="2" className="ml-4">
+                          <Grid.Column className="ml-1">
+                            {" "}
+                            <Input
+                              className="mx-auto d-block mt-3"
+                              id="loginUserEmail1"
+                              type="text"
+                              placeholder="State/Country"
+                              variant="outlined"
+                              onChange={(e) => setState(e.target.value)}
+                            />
+                          </Grid.Column>
+                          <Grid.Column className="ml-2">
+                            <Input
+                              className="mx-auto d-block mt-3"
+                              id="loginUserEmail1"
+                              type="text"
+                              placeholder="Pincode"
+                              variant="outlined"
+                              onChange={(e) => setPincode(e.target.value)}
+                            />
+                          </Grid.Column>
+                        </Grid.Row>
+                        <button
+                          id="loginBtn"
+                          className="ml-3 mt-2 d-block"
+                          onClick={proceed1}
+                        >
+                          Add Address
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </>
+              ) : null}
+            </div>
+            <div class="modal-footer" style={{ display: "none" }}>
+              <button
+                type="button"
+                id="modalCls"
+                class="btn btn-default"
+                style={{ display: "none" }}
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

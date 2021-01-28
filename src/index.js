@@ -10,6 +10,7 @@ import reducer from "./redux/reducer/index";
 import AdminPage from "./components/admin/AdminPage";
 import { Provider } from "react-redux";
 
+
 const store = createStore(
   reducer,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()

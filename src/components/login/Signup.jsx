@@ -4,47 +4,30 @@ import EhsLogo from "../../images/EhsLogo.svg";
 import { Link } from "react-router-dom";
 import Axios from "axios";
 import { signup } from "../../helper/apiPath";
+import Otp from "./Otp";
+import { setLoginResponse } from "../../redux/actions/index.js";
+import { connect } from "react-redux";
 
-const Signup = () => {
+const Signup = (props) => {
   const [emailid, setEmailId] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [firstname, setFirstname] = React.useState("");
-  const [lastname, setLastname] = React.useState("");
   const [phonenumber, setPhonenumber] = React.useState("");
-  const [address, setAddress] = React.useState("");
+  const [token, setToken] = React.useState("");
+  const [isToken, setIsToken] = React.useState(false);
 
-  const [loginBody, setLoginBody] = React.useState({
-    emailid: "",
-    password: "",
-    firstname: "",
-    lastname: "",
-    phonenumber: "",
-    address: "",
-  });
-
-  function responseFun(d) {
-    if (d === "User Created Successfully") {
-      alert(d);
-      window.location.replace("http://localhost:3000/");
-    } else if (d === "User Already Exists!!!") {
-      alert(d + " Login Please");
-      window.location.replace("http://localhost:3000/");
-    } else {
-      alert(d);
-      console.log(d);
-    }
-  }
+  const [loginBody, setLoginBody] = React.useState({});
 
   function mySubmitHandle(event) {
     event.preventDefault();
   }
 
-  function loginReq(loginBody) {
-    console.log(loginBody);
+  function signupReq(loginBody) {
     Axios.post(signup, loginBody)
       .then((res) => {
-        setTimeout(100);
-        responseFun(res.data.message);
+        if (res.data.token) {
+          setIsToken(true);
+          setToken(res.data.token);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -53,158 +36,122 @@ const Signup = () => {
 
   return (
     <>
-      <div className="loginPage p-5 mx-auto d-block">
-        <img
-          className="mx-auto d-block"
-          id="ehsLogoImg"
-          src={EhsLogo}
-          alt="Ehs Logo"
-        />
-
-        <p id="ehsLogoLabel" className="text-center mt-3">
-          Create Account
-        </p>
-
-        <form
-          onSubmit={(e) => {
-            loginReq(loginBody);
-            mySubmitHandle(e);
-          }}
-        >
-          <input
-            required
-            className="mx-auto d-block mt-3"
-            id="loginUserEmail"
-            type="text"
-            onChange={(e) => {
-              setEmailId(e.target.value);
-              setLoginBody({
-                emailid: e.target.value,
-                password: password,
-                firstname: firstname,
-                lastname: lastname,
-                phonenumber: phonenumber,
-                address: address,
-              });
-            }}
-            placeholder="Username/Email Address"
+      {isToken ? (
+        <div>
+          <Otp token={token} />
+        </div>
+      ) : (
+        <div className="loginPage p-5 mx-auto d-block">
+          <img
+            className="mx-auto d-block"
+            id="ehsLogoImg"
+            src={EhsLogo}
+            alt="Ehs Logo"
           />
 
-          <input
-            required
-            className="mx-auto d-block mt-3"
-            id="loginUserPass"
-            type="password"
-            minLength="6"
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setLoginBody({
-                emailid: emailid,
-                password: e.target.value,
-                firstname: firstname,
-                lastname: lastname,
-                phonenumber: phonenumber,
-                address: address,
-              });
-            }}
-            placeholder="Password"
-          />
+          <p id="ehsLogoLabel" className="text-center mt-3">
+            Create Account
+          </p>
 
-          <input
-            required
-            className=" mt-3"
-            id="loginUserEmail1"
-            type="text"
-            style={{ marginLeft: "13px" }}
-            onChange={(e) => {
-              setFirstname(e.target.value);
-              setLoginBody({
-                emailid: emailid,
-                password: password,
-                firstname: e.target.value,
-                lastname: lastname,
-                phonenumber: phonenumber,
-                address: address,
-              });
+          <form
+            onSubmit={(e) => {
+              signupReq(loginBody);
+              mySubmitHandle(e);
             }}
-            placeholder="Firstname"
-          />
-
-          <input
-            required
-            className=" mt-3"
-            id="loginUserEmail1"
-            type="text"
-            style={{ marginLeft: "13px" }}
-            onChange={(e) => {
-              setLastname(e.target.value);
-              setLoginBody({
-                emailid: emailid,
-                password: password,
-                firstname: firstname,
-                lastname: e.target.value,
-                phonenumber: phonenumber,
-                address: address,
-              });
-            }}
-            placeholder="Lastname"
-          />
-
-          <input
-            required
-            className="mx-auto d-block mt-3"
-            id="loginUserEmail"
-            type="text"
-            pattern="[0-9]{10}"
-            onChange={(e) => {
-              setPhonenumber(e.target.value);
-              setLoginBody({
-                emailid: emailid,
-                password: password,
-                firstname: firstname,
-                lastname: lastname,
-                phonenumber: e.target.value,
-                address: address,
-              });
-            }}
-            placeholder="Phone Number"
-          />
-          <textarea
-            required
-            className="mx-auto d-block mt-3"
-            id="loginUseraddress"
-            rows="4"
-            onChange={(e) => {
-              setAddress(e.target.value);
-              setLoginBody({
-                emailid: emailid,
-                password: password,
-                firstname: firstname,
-                lastname: lastname,
-                phonenumber: phonenumber,
-                address: e.target.value,
-              });
-            }}
-            placeholder="Address"
-          />
-
-          <button
-            id="loginBtn"
-            className="mt-4"
-            style={{ marginLeft: "13px" }}
-            type="submit"
           >
-            Sign Up
-          </button>
+            <input
+              className="mx-auto d-block mt-3"
+              id="loginUserEmail"
+              pattern="^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$"
+              type="text"
+              onChange={(e) => {
+                document.getElementById("loginUserPhone").value = "";
+                setEmailId(e.target.value);
+                setLoginBody({
+                  emailid: e.target.value,
+                  password: password,
+                });
+              }}
+              placeholder="Email"
+            />
 
-          <p className="text-center mt-2">or</p>
-          <Link className="d-block " to="/" style={{ marginLeft: "13px" }}>
-            <button id="signupBtn">Log In</button>
-          </Link>
-        </form>
-      </div>
+            <p className="text-center mt-2`">or</p>
+
+            <input
+              className="mx-auto d-block "
+              id="loginUserPhone"
+              pattern="[0-9]{10}"
+              type="text"
+              onChange={(e) => {
+                document.getElementById("loginUserEmail").value = "";
+                setPhonenumber(e.target.value);
+                setLoginBody({
+                  password: password,
+                  phonenumber: e.target.value,
+                });
+              }}
+              placeholder="Phone Number"
+            />
+            <input
+              className="mx-auto d-block mt-3"
+              id="loginUserPass"
+              type="password"
+              minLength="6"
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (loginBody.emailid) {
+                  setLoginBody({
+                    emailid: emailid,
+                    password: e.target.value,
+                  });
+                } else if (loginBody.emailid) {
+                  setLoginBody({
+                    phonenumber: phonenumber,
+                    password: e.target.value,
+                  });
+                } else {
+                  setLoginBody({
+                    emailid: emailid,
+                    phonenumber: phonenumber,
+                    password: e.target.value,
+                  });
+                }
+              }}
+              placeholder="Password"
+            />
+
+            <button
+              id="loginBtn"
+              className="mt-4"
+              style={{ marginLeft: "13px" }}
+              type="submit"
+            >
+              Sign Up
+            </button>
+
+            <p className="text-center mt-2">or</p>
+            <Link
+              className="d-block "
+              to="/login"
+              style={{ marginLeft: "13px" }}
+            >
+              <button id="signupBtn">Log In</button>
+            </Link>
+          </form>
+        </div>
+      )}
     </>
   );
 };
 
-export default Signup;
+const mapStateToProps = (state) => {
+  return {
+    loginResponse: state,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setLoginResponse: (payload) => dispatch(setLoginResponse(payload)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);

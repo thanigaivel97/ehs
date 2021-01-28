@@ -1,10 +1,11 @@
 /*jshint esversion: 6 */
-const url = "http://localhost:8080/";
+const url = window.location.protocol+"//"+window.location.hostname + ":8080/";
 
 const login = url + "auth/login";
 const signup = url + "auth/signup";
 const updateUser = url + "auth/updateUser";
 const getUsers = url + "auth/getUsers";
+const activate = url + "auth/activate";
 
 const getPoster = url + "posters/getPoster";
 const getPosterById = url + "posters/getPosterById";
@@ -29,7 +30,7 @@ const updateSubCategory = url + "category/updateSubCategory";
 
 const createOrder = url + "orders/createOrder";
 const getOrders = url + "orders/getOrders";
-const updateOrders = url + "orders/updateOrders";
+const updateOrder = url + "orders/updateOrder";
 const deleteOrder = url + "orders/deleteOrder";
 
 const config = (token) => {
@@ -91,6 +92,7 @@ function jsonToFormData(data) {
 export {
   url,
   login,
+  activate,
   updateUser,
   getPoster,
   getPosterById,
@@ -108,7 +110,7 @@ export {
   getSubCategory,
   createOrder,
   getOrders,
-  updateOrders,
+  updateOrder,
   deleteOrder,
   getUsers,
   getCategory,

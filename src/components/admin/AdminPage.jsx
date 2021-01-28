@@ -1,5 +1,6 @@
 /*jshint esversion: 9 */
 import React from "react";
+import EhsLogo from "../../images/EhsLogo.svg";
 import Axios from "axios";
 import {
   login,
@@ -12,6 +13,10 @@ import {
   updatePoster,
   deletePoster,
   jsonToFormData,
+  getOrders,
+  updateOrder,
+  findMat,
+  findDim,
 } from "../../helper/apiPath";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
@@ -22,6 +27,11 @@ import defaultImage from "../../images/Artist.svg";
 import { Input, TextField, MenuItem, InputAdornment } from "@material-ui/core";
 import $ from "jquery";
 import DeleteIcon from "@material-ui/icons/Delete";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
 
 function CreatePoster(props) {
   var materialIds = [];
@@ -146,8 +156,6 @@ function CreatePoster(props) {
     let p = [];
     Object.keys(err).map((v) => p.push(err[v]));
 
-    console.log(newPoster);
-
     Axios.post(createPoster, jsonToFormData(newPoster), configImage)
       .then((res) => {
         console.log(res.data.message);
@@ -252,15 +260,8 @@ function CreatePoster(props) {
               src={image}
               alt=""
               onClick={(e) => $("#imgUrl").trigger("click")}
-              style={{ marginTop: "-20px" }}
             ></img>
-            <label className="ml-4 text-secondary">
-              Choose Poster Image
-              <br />{" "}
-              <span style={{ color: "grey", fontSize: "12px" }}>
-                less than 150kb
-              </span>
-            </label>
+            <label className="ml-4 text-secondary">Choose Poster Image</label>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row columns="3" className="mt-4">
@@ -476,7 +477,7 @@ function UpdateAndDeletePoster(props) {
       .then((res) => {
         console.log(_id);
         console.log(res.data.message);
-        alert("Successfully Updated...Please Refresh");
+        alert("Successfully Updated...");
       })
       .catch((err) => {
         console.log(err);
@@ -570,15 +571,9 @@ function UpdateAndDeletePoster(props) {
               src={image}
               alt=""
               onClick={(e) => $("#imgUrl").trigger("click")}
-              style={{ marginTop: "-20px" }}
+              style={{ marginLeft: "-50px" }}
             ></img>
-            <label className="ml-4 text-secondary">
-              Poster Image
-              <br />{" "}
-              <span style={{ color: "grey", fontSize: "12px" }}>
-                less than 150kb
-              </span>
-            </label>
+            <label className="ml-4 text-secondary">Poster Image</label>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row columns="3" className="mt-4">
@@ -843,7 +838,7 @@ function PostRow(props) {
       <td style={{ width: "15%" }}>{props.data.name}</td>
       <td style={{ width: "10%" }}>{props.data.creator}</td>
       <td style={{ width: "23%" }}>
-        {props.data.description.slice(0, 100)}....
+        {props.data?.description?.slice(0, 100)}....
       </td>
       <td style={{ width: "5%" }}>{props.data.language}</td>
       <td style={{ width: "5%" }}>{props.data.originalPrice}</td>
@@ -855,12 +850,395 @@ function PostRow(props) {
   );
 }
 
+function UpdateAndDeleteOrder(props) {
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      display: "flex",
+    },
+    details: {
+      display: "flex",
+      flexDirection: "column",
+    },
+    cover: {
+      width: 160,
+    },
+  }));
+
+  const classes = useStyles();
+
+  const {
+    _id,
+    emailid,
+    phonenumber,
+    orderId,
+    paymentId,
+    total,
+    created_at,
+    status,
+    address,
+  } = props.data;
+
+  const [stat, setStat] = React.useState(status);
+
+  function updateOrderFun() {
+    Axios.post(updateOrder, { orderId: _id, status: stat })
+      .then((res) => {
+        console.log(res.data.status_Updated);
+        alert("Successfully Updated...");
+      })
+      .catch((err) => {
+        console.log(err);
+        alert(err);
+      });
+  }
+
+  return (
+    <>
+      <Grid className="text-center pt-5">
+        <Grid.Row columns="3" className="mt-2">
+          <Grid.Column style={{ width: "33%" }}>
+            <TextField
+              id="emailid"
+              label="Email"
+              variant="outlined"
+              defaultValue={emailid || phonenumber}
+              style={{ width: "300px" }}
+              disabled
+            />
+          </Grid.Column>
+          <Grid.Column style={{ width: "33%" }}>
+            <TextField
+              id="orderId"
+              label="OrderId"
+              variant="outlined"
+              defaultValue={orderId}
+              style={{ width: "300px" }}
+              disabled
+            />
+          </Grid.Column>
+          <Grid.Column style={{ width: "33%" }}>
+            <TextField
+              id="paymentId"
+              label="PaymentId"
+              variant="outlined"
+              defaultValue={paymentId}
+              style={{ width: "300px" }}
+              disabled
+            />
+          </Grid.Column>
+        </Grid.Row>
+
+        <Grid.Row columns="3" className="mt-4">
+          <Grid.Column style={{ width: "33%" }}>
+            <TextField
+              id="total"
+              label="Total"
+              variant="outlined"
+              defaultValue={total}
+              style={{ width: "300px" }}
+              disabled
+            />
+          </Grid.Column>
+          <Grid.Column style={{ width: "33%" }}>
+            <TextField
+              id="created_at"
+              label="Ordered_at"
+              variant="outlined"
+              defaultValue={created_at.split("T")[0]}
+              style={{ width: "300px" }}
+              disabled
+            />
+          </Grid.Column>
+          <Grid.Column style={{ width: "33%" }}>
+            <TextField
+              id="status"
+              select
+              label="Status"
+              style={{ width: "300px" }}
+              variant="outlined"
+              defaultValue={status}
+              onChange={(e) => setStat(e.target.value)}
+            >
+              <MenuItem value="Order Confirmed">Order Confirmed</MenuItem>
+              <MenuItem value="Order Dispatched">Order Dispatched</MenuItem>
+              <MenuItem value="Order Shipped">Order Shipped</MenuItem>
+              <MenuItem value="Order Delivered">Order Delivered</MenuItem>
+            </TextField>
+          </Grid.Column>
+        </Grid.Row>
+
+        <Grid.Row columns="2" className="mt-4">
+          <Grid.Column style={{ width: "66%" }}>
+            <TextField
+              id="address"
+              label="Address"
+              variant="outlined"
+              defaultValue={address}
+              style={{ width: "760px" }}
+              disabled
+            />
+          </Grid.Column>
+          <Grid.Column style={{ width: "33%" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ width: "300px", height: "60px", fontSize: "15px" }}
+              startIcon={<SaveIcon />}
+              onClick={updateOrderFun}
+            >
+              Update
+            </Button>
+          </Grid.Column>
+        </Grid.Row>
+
+        {props.data.itemDetails.map((v, i) => (
+          <Grid.Row key={i} style={{ width: "35%", margin: "20px auto" }}>
+            <Card className={classes.root}>
+              <CardMedia className={classes.cover} image={v.imgUrl} title="" />
+              <div className={classes.details}>
+                <CardContent style={{ textAlign: "left" }}>
+                  <Typography component="h6" variant="h6">
+                    {v.name}
+                  </Typography>
+                  <Typography variant="subtitle2" color="textSecondary">
+                    Material: {findMat(v.Material)}
+                  </Typography>
+                  <Typography variant="subtitle2" color="textSecondary">
+                    Dimension: {findMat(v.Dimension)}
+                  </Typography>
+                  <Typography variant="subtitle2" color="textSecondary">
+                    Price: ₹{v.originalPrice}
+                  </Typography>
+                  <Typography variant="subtitle2" color="textSecondary">
+                    Quantity: {v.quantity}
+                  </Typography>
+                </CardContent>
+              </div>
+            </Card>
+          </Grid.Row>
+        ))}
+      </Grid>
+    </>
+  );
+}
+
+function Order(props) {
+  const [search, setSearch] = React.useState("");
+  const [select, setSelect] = React.useState({});
+
+  const [redirect, setRedirect] = React.useState({
+    one: true,
+    two: false,
+  });
+
+  function setSelected(data) {
+    console.log(data);
+    setSelect(data);
+    setRedirect({
+      one: false,
+      two: true,
+    });
+  }
+
+  return (
+    <>
+      <div>
+        {redirect.two ? (
+          <button
+            className="btn"
+            onClick={() =>
+              setRedirect({
+                one: true,
+                two: false,
+              })
+            }
+            style={{ position: "absolute" }}
+          >
+            {" "}
+            <ArrowBackIcon />
+          </button>
+        ) : null}
+
+        <h2 className="text-center">Orders</h2>
+      </div>
+      {redirect.one ? (
+        <div>
+          <div class="wrap">
+            <div class="search">
+              <input
+                type="text"
+                class="searchTerm"
+                placeholder="Search"
+                onChange={(event) =>
+                  setSearch(event.target.value.toLowerCase())
+                }
+              />
+            </div>
+          </div>
+          <div className=" my-custom-scrollbar table-wrapper-scroll-y">
+            <table
+              className="table table-hover mx-auto table-responsive"
+              style={{ width: "98%" }}
+            >
+              <thead
+                className="table-dark tableHead "
+                style={{ height: "20px" }}
+              >
+                <tr className="tableRow">
+                  <th style={{ width: "25%" }}>User</th>
+                  <th style={{ width: "25%" }}>Order Id</th>
+                  <th style={{ width: "25%" }}>Payment Id</th>
+                  <th style={{ width: "25%" }}>Status</th>
+                  <th style={{ width: "20%" }}>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {search.length > 0
+                  ? props.data
+                      .filter(
+                        (data) =>
+                          ( data?.emailid || data?.phonenumber)
+                            .toString()
+                            .toLowerCase()
+                            .includes(search) ||
+                          data.orderId
+                            .toString()
+                            .toLowerCase()
+                            .includes(search) ||
+                          data.paymentId
+                            .toString()
+                            .toLowerCase()
+                            .includes(search) ||
+                          data.status
+                            .toString()
+                            .toLowerCase()
+                            .includes(search) ||
+                          data.total.toString().toLowerCase().includes(search)
+                      )
+                      .map((v, i) => (
+                        <OrderRow key={i} data={v} setSelected={setSelected} />
+                      ))
+                  : props.data.map((v, i) => (
+                      <OrderRow key={i} data={v} setSelected={setSelected} />
+                    ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ) : null}
+
+      {redirect.two ? <UpdateAndDeleteOrder data={select} /> : null}
+    </>
+  );
+}
+
+function OrderRow(props) {
+  return (
+    <tr
+      style={{ cursor: "pointer" }}
+      onClick={() => props.setSelected(props.data)}
+    >
+      <td style={{ width: "25%" }}>
+        {props.data?.emailid || props.data?.phonenumber}
+      </td>
+      <td style={{ width: "25%" }}>{props.data.orderId}</td>
+      <td style={{ width: "25%" }}>{props.data.paymentId}</td>
+      <td style={{ width: "25%" }}>{props.data.status}</td>
+      <td style={{ width: "20%" }}>₹{props.data.total}</td>
+    </tr>
+  );
+}
+
+const AdminLogin = (props) => {
+  const [emailid, setEmailId] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [loginBody, setLoginBody] = React.useState({
+    emailid: "",
+    password: "",
+  });
+
+  function loginReq(loginBody) {
+    Axios.post(login, loginBody)
+      .then((res) => {
+        if (res.data.user.isAdmin) {
+          props.setIsLogged(true);
+          props.setUserData(res.data);
+        } else {
+          alert("Not Admin");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  return (
+    <>
+      <div className="loginPage p-5 mx-auto d-block">
+        <img
+          className="mx-auto d-block"
+          id="ehsLogoImg"
+          src={EhsLogo}
+          alt="Ehs Logo"
+        />
+
+        <p id="ehsLogoLabel" className="text-center mt-3">
+          Log Into your account
+        </p>
+
+        <input
+          className="mx-auto d-block mt-3"
+          id="loginUserEmail"
+          type="text"
+          onChange={(e) => {
+            setEmailId(e.target.value);
+            setLoginBody({ emailid: e.target.value, password: password });
+          }}
+          placeholder="Username/Email Address"
+        />
+
+        <input
+          className="mx-auto d-block mt-3"
+          id="loginUserPass"
+          type="password"
+          onChange={(e) => {
+            setPassword(e.target.value);
+            setLoginBody({ emailid: emailid, password: e.target.value });
+          }}
+          placeholder="Password"
+        />
+        <button
+          id="loginBtn"
+          className="mt-2"
+          style={{ marginLeft: "13px" }}
+          onClick={() => loginReq(loginBody)}
+        >
+          Log In
+        </button>
+      </div>
+    </>
+  );
+};
+
 export default function AdminPage() {
-  const [data, setData] = React.useState({});
+  const [isLogged, setIsLogged] = React.useState(false);
   const [posterData, setPosterData] = React.useState([]);
   const [categoryData, setCategoryData] = React.useState([]);
+  const [userData, setUserData] = React.useState({});
   const [subCategoryData, setSubCategoryData] = React.useState([]);
   const [materialData, setMaterialData] = React.useState([]);
+
+  const [orderData, setOrderData] = React.useState([]);
+
+  function getOrderFun() {
+    Axios.get(getOrders)
+      .then((res) => {
+        setOrderData(res.data.orders);
+        console.log(res.data.orders);
+      })
+      .catch((err) => console.log(err));
+    setRedirect({ one: false, two: true });
+  }
 
   function getPosterData(token) {
     Axios.get(getPoster, config(token))
@@ -896,41 +1274,47 @@ export default function AdminPage() {
 
   const [redirect, setRedirect] = React.useState({
     one: false,
+    two: false,
   });
 
-  function getPosterFun() {
-    getPosterData(data.token);
-    getCategoryData(data.token);
-    getSubCategoryData(data.token);
-    getMaterialData(data.token);
-    setRedirect({ one: true });
+  function getPosterFun(token) {
+    getPosterData(token);
+    getCategoryData(token);
+    getSubCategoryData(token);
+    getMaterialData(token);
+    setRedirect({ one: true, two: false });
   }
-
-  React.useEffect(() => {
-    Axios.post(login, { emailid: "naveen@gmail.com", password: "1234" })
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
 
   return (
     <>
-      <div className="text-center mt-2 mb-2">
-        <button className="btn btn-dark" onClick={() => getPosterFun()}>
-          Poster
-        </button>
-      </div>
-      {redirect.one ? (
-        <Poster
-          data={posterData}
-          catData={categoryData}
-          subCatData={subCategoryData}
-          matDimData={materialData}
-        />
-      ) : null}
+      {!isLogged ? (
+        <AdminLogin setIsLogged={setIsLogged} setUserData={setUserData} />
+      ) : (
+        <>
+          {" "}
+          <div className="text-center mt-2 mb-2">
+            <button
+              className="btn btn-dark"
+              onClick={() => getPosterFun(userData.token)}
+            >
+              Poster
+            </button>
+
+            <button className="btn btn-dark ml-3" onClick={() => getOrderFun()}>
+              Orders
+            </button>
+          </div>
+          {redirect.one ? (
+            <Poster
+              data={posterData}
+              catData={categoryData}
+              subCatData={subCategoryData}
+              matDimData={materialData}
+            />
+          ) : null}
+          {redirect.two ? <Order data={orderData} /> : null}
+        </>
+      )}
     </>
   );
 }

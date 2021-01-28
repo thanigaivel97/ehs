@@ -8,7 +8,19 @@ import SearchIcon from "@material-ui/icons/Search";
 import { Link } from "react-router-dom";
 import $ from "jquery";
 
+
 const NavBar = (props) => {
+
+  const [authUser, setAuthUser] = React.useState(""
+  );
+  React.useEffect(() => {
+    if (JSON.parse(localStorage.getItem("userDetails123")))
+      setAuthUser(
+        JSON.parse(localStorage.getItem("userDetails123")).emailid ||
+          JSON.parse(localStorage.getItem("userDetails123")).phonenumber
+      );
+  },[props.loginResponse]);
+
   const [searchCat, setCat] = useState("All Categories");
 
   const searchCatogoriesOnClick = (event) => setCat(event.target.text);
@@ -96,20 +108,29 @@ const NavBar = (props) => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item text-white" style={{ marginTop: "2px" }}>
-              <Link
-                to="/"
-                className="text-white textColorAndWeight text-decoration-none"
-              >
-                Login
-              </Link>{" "}
-              |{" "}
-              <Link
-                to="/signup"
-                className="text-white textColorAndWeight text-decoration-none"
-              >
-                Register
-              </Link>
+              {authUser ? (
+                <p className="text-white textColorAndWeight text-decoration-none">
+                  { authUser.includes("@")?authUser.split("@").[0]:authUser}
+                </p>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    className="text-white textColorAndWeight text-decoration-none"
+                  >
+                    Login
+                  </Link>{" "}
+                  |{" "}
+                  <Link
+                    to="/signup"
+                    className="text-white textColorAndWeight text-decoration-none"
+                  >
+                    Register
+                  </Link>
+                </>
+              )}
             </li>
+
             <li className="nav-item ml-4">
               <Link
                 to="/posters"
@@ -129,46 +150,87 @@ const NavBar = (props) => {
                 aria-labelledby="dropdownMenuButton"
                 onMouseLeave={(e) => $(".drp").toggle()}
               >
-                <a className="searchCategory dropdown-item" href="/#">
-                  Hindi
-                </a>
-                <a className="searchCategory dropdown-item" href="/#">
-                  Bilingual - Hindi and English
-                </a>
+                <Link
+                  className="searchCategory dropdown-item"
+                  to="/posters/HINDI"
+                  onClick={(e) => props.setSubCat(e.target.text.trim())}
+                >
+                  HINDI
+                </Link>
+                <Link
+                  className="searchCategory dropdown-item"
+                  to="/posters/BILINGUAL-HINDI-AND-ENGLISH"
+                  onClick={(e) => props.setSubCat(e.target.text.trim())}
+                >
+                  BILINGUAL-HINDI-AND-ENGLISH
+                </Link>
                 <hr />
-                <a className="searchCategory dropdown-item" href="/#">
+                <Link
+                  className="searchCategory dropdown-item"
+                  to="/posters/PPE"
+                  onClick={(e) => props.setSubCat(e.target.text.trim())}
+                >
                   PPE
-                </a>
-                <a className="searchCategory dropdown-item" href="/#">
-                  Electrical Handling
-                </a>
-                <a className="searchCategory dropdown-item" href="/#">
-                  Material Handling
-                </a>
-                <a className="searchCategory dropdown-item" href="/#">
-                  Chemical Hazards
-                </a>
-                <a className="searchCategory dropdown-item" href="/#">
-                  Fire Safety
-                </a>
-                <a className="searchCategory dropdown-item" href="/#">
-                  General Safety
-                </a>
-                <a className="searchCategory dropdown-item" href="/#">
-                  Health
-                </a>
+                </Link>
+                <Link
+                  className="searchCategory dropdown-item"
+                  to="/posters/FIRE-SAFETY"
+                  onClick={(e) => props.setSubCat(e.target.text.trim())}
+                >
+                  FIRE-SAFETY
+                </Link>
+                <Link
+                  className="searchCategory dropdown-item"
+                  to="/posters/GENERAL-SAFETY"
+                  onClick={(e) => props.setSubCat(e.target.text.trim())}
+                >
+                  GENERAL-SAFETY
+                </Link>
+                <Link
+                  className="searchCategory dropdown-item"
+                  to="/posters/HEALTH"
+                  onClick={(e) => props.setSubCat(e.target.text.trim())}
+                >
+                  HEALTH
+                </Link>
+                <Link
+                  className="searchCategory dropdown-item"
+                  to="/posters/ACCIDENT-PRONE"
+                  onClick={(e) => props.setSubCat(e.target.text.trim())}
+                >
+                  ACCIDENT-PRONE
+                </Link>
+                <Link
+                  className="searchCategory dropdown-item"
+                  to="/posters/CHEMICAL-HAZARDS"
+                  onClick={(e) => props.setSubCat(e.target.text.trim())}
+                >
+                  CHEMICAL-HAZARDS
+                </Link>
+                <Link
+                  className="searchCategory dropdown-item"
+                  to="/posters/MATERIAL-HANDLING"
+                  onClick={(e) => props.setSubCat(e.target.text.trim())}
+                >
+                  MATERIAL-HANDLING
+                </Link>
 
                 <Link
-                  to="/posters/covid-19"
+                  to="/posters/COVID-19"
                   className="searchCategory dropdown-item"
+                  onClick={(e) => props.setSubCat(e.target.text.trim())}
                 >
                   {" "}
                   COVID-19
                 </Link>
 
-                <a className="searchCategory dropdown-item" href="/#">
-                  Accident Prone
-                </a>
+                <Link
+                  className="searchCategory dropdown-item"
+                  to="/posters/ELECTRICAL-HANDLING"
+                  onClick={(e) => props.setSubCat(e.target.text.trim())}
+                >
+                  ELECTRICAL-HANDLING
+                </Link>
               </div>
             </li>
             <li className="nav-item ml-4">
@@ -231,4 +293,5 @@ const NavBar = (props) => {
     </div>
   );
 };
+
 export default NavBar;

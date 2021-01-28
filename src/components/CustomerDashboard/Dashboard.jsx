@@ -29,7 +29,7 @@ const PersonalInfo = () => {
             floated="right"
             style={{ position: "absolute", right: "225px" }}
           >
-            <Button className="perbut text-white">Update</Button>
+            {/* <Button className="perbut text-white">Update</Button> */}
             <div style={{ marginTop: "140px" }}>
               <a href="/#" className="forget">
                 Forgot Password
@@ -69,12 +69,12 @@ const PersonalInfo = () => {
                       <div className="col ml-4">
                         <div className="row">
                           <div className="col-6">
-                            <label htmlFor="NEWPASSWORD" className="formd">
-                              NEW PASSWORD
+                            <label htmlFor="PASSWORD" className="formd">
+                               PASSWORD
                             </label>
                           </div>
                           <div className="col-6">
-                            <Input id="NEWPASSWORD" type="password" />
+                            <Input id="PASSWORD" type="password" />
                           </div>
                         </div>
                       </div>
@@ -94,7 +94,7 @@ const PersonalInfo = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="col" style={{ marginLeft: "-38px" }}>
+                      {/* <div className="col" style={{ marginLeft: "-38px" }}>
                         <div className="row">
                           <div className="col-7">
                             <label htmlFor="CONFIRMPASSWORD" className="formd">
@@ -105,7 +105,7 @@ const PersonalInfo = () => {
                             <Input id="CONFIRMPASSWORD" type="password" />
                           </div>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   </Grid.Row>
                   <Grid.Row className="mt-3">
@@ -146,9 +146,9 @@ const PersonalInfo = () => {
 
         <Grid.Row columns="2">
           <Grid.Column>
-            <p className="perhead mb-4">Addresses</p>
+            <p className="perhead mb-4">Address</p>
 
-            <div className="row">
+            {/* <div className="row">
               <div className="col-6">
                 <p className="address">Address line 1</p>
                 <p className="address">Address line 2</p>
@@ -192,13 +192,32 @@ const PersonalInfo = () => {
                   Set as Default
                 </a>
               </div>
-            </div>
+            </div> */}
+
+             <textarea
+            className="mx-auto d-block mt-3"
+            id="loginUseraddress2"
+            rows="5"
+            // onChange={(e) => {
+            //   setAddress(e.target.value);
+            //   setLoginBody({
+            //     emailid: emailid,
+            //     password: password,
+            //     firstname: firstname,
+            //     lastname: lastname,
+            //     phonenumber: phonenumber,
+            //     address: e.target.value,
+            //   });
+            // }}
+            placeholder="Address"
+          />
+
           </Grid.Column>
           <Grid.Column
             floated="right"
             style={{ position: "absolute", right: "225px" }}
           >
-            <Button className="perbut2 text-white">Add Address </Button>
+            <Button className="perbut2 text-white">Add Details </Button>
           </Grid.Column>
         </Grid.Row>
 
@@ -211,6 +230,8 @@ const PersonalInfo = () => {
             marginBottom: "50px",
           }}
         />
+
+{/*         
         <Grid.Row columns="2">
           <Grid.Column>
             <p className="perhead mb-4">Payment Preferences</p>
@@ -235,7 +256,10 @@ const PersonalInfo = () => {
           >
             <Button className="perbut3 text-white">Add Payment Option </Button>
           </Grid.Column>
-        </Grid.Row>
+        </Grid.Row> */}
+
+
+
       </Grid>
     </>
   );

@@ -9,13 +9,14 @@ import three from "../../../images/CheckOutAssetPoster.svg";
 import four from "../../../images/BuildYourPoster.svg";
 import five from "../../../images/JoinUsPoster.svg";
 
-const Left = () => {
+const Left = (props) => {
 
-    const imgs = [one, two, three, four, five];
+  const path = props.path;
+  const imgs = [one, two, three, four, five];
 
   return (
     <div className="p-2">
-      <Accordition />
+      <Accordition subCat={path} />
       <hr />
       <LeftImages imgs={imgs} />
     </div>

@@ -95,7 +95,7 @@
 
 #loginUserEmail1 {
   margin: 0 auto;
-  width: 245px;
+  width: 235px;
   height: 55px;
   left: 467px;
   top: 283px;
@@ -140,4 +140,75 @@
 }
 textarea {
   resize: none;
+}
+
+#loginUserPhone {
+  margin: 0 auto;
+  width: 509px;
+  height: 55px;
+  left: 467px;
+  top: 283px;
+  /* grey */
+  border: 1px solid #757575;
+  box-sizing: border-box;
+  border-radius: 8px;
+
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 24px;
+  /* identical to box height */
+
+  /* grey */
+  text-indent: 10px;
+  color: #757575;
+}
+
+
+#loginBtn1 {
+  width: 506px;
+  height: 55px;
+  background: #2e77aa;
+  border-radius: 8px;
+  font-family: Lato;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 29px;
+  text-align: center;
+  color: #ffffff;
+}
+
+#signupBtn1 {
+  width: 506px;
+  height: 55px;
+  background: #ffffff;
+  border: 1px solid #003459;
+  box-sizing: border-box;
+  border-radius: 8px;
+}
+
+
+#loginUseraddress1 {
+  margin: 0 auto;
+  width: 509px;
+  height: 80px;
+  left: 467px;
+  top: 283px;
+  /* grey */
+  border: 1px solid #757575;
+  box-sizing: border-box;
+  border-radius: 8px;
+
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 24px;
+  /* identical to box height */
+
+  /* grey */
+  text-indent: 10px;
+  color: #757575;
 }

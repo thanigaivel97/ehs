@@ -10,12 +10,13 @@ import ProductDescription from "./components/productdescription/ProductDescripti
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Cart from "./components/ShoppingCart/ShoppingCart";
 import Dashboard from "./components/CustomerDashboard/Dashboard";
-import Login from './components/login/Login';
-import Signup from "./components/login/Signup";
 import Axios from "axios";
 import { login } from "./helper/apiPath";
 import { setLoginResponse } from "./redux/actions/index.js";
 import { connect } from "react-redux";
+import Login from "./components/login/Login";
+import Signup from "./components/login/Signup.jsx";
+import Otp from "./components/login/Otp";
 
 export const DesContext = React.createContext({});
 
@@ -25,6 +26,7 @@ function App(props) {
   };
 
   const [cartCount, setCartCount] = useState(cartJson.cartList.length || 0);
+  const [subCat, setSubCat] = React.useState("");
 
   const countSetFun = (bottomDet) => {
     setCartCount(cartCount + 1);
@@ -46,31 +48,26 @@ function App(props) {
 
   // const [loginResponse,setLoginResponse] = useState({});
 
-
-
-
-  // React.useEffect(() => {
-  //   Axios.post(login, { emailid: "naveen@gmail.com", password: "1234" })
-  //     .then((res) => {
-  //       props.setLoginResponse(res.data);
-  //       // localStorage.setItem("ehstoken12345678910", res.data?.token);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
-
+  React.useEffect(() => {
   
+    Axios.post(login, { emailid: "naveen@gmail.com", password: "1234" })
+      .then((res) => {
+        props.setLoginResponse(res.data.token);
+        localStorage.setItem("ehstoken12345678910", res.data?.token);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="App">
       <DesContext.Provider value={{ DesDetail: setDescription }}>
         <Router>
-          <NavBar num={cartCount} />
+          <NavBar num={cartCount} setSubCat={setSubCat} />
           <Switch>
-            <Route exact path="/home">
+            <Route exact path="/">
               <HomePage />
             </Route>
 
@@ -78,8 +75,48 @@ function App(props) {
               <Category setCartCountFun={countSetFun} />
             </Route>
 
-            <Route path="/posters/covid-19">
-              <ProductList2 setCartCountFun={countSetFun} />
+            <Route exact path="/posters/PPE">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/posters/BILINGUAL-HINDI-AND-ENGLISH">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/posters/FIRE-SAFETY">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/posters/GENERAL-SAFETY">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/posters/HEALTH">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/posters/ACCIDENT-PRONE">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/posters/CHEMICAL-HAZARDS">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/posters/MATERIAL-HANDLING">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/posters/ELECTRICAL-HANDLING">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/posters/COVID-19">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/posters/HINDI">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
 
             <Route exact path="/item/:id">
@@ -97,17 +134,20 @@ function App(props) {
                 setCartCountFun={countSetFun}
               />
             </Route>
-
-            <Route exact path="/dashboard">
-              <Dashboard />
-            </Route>
-
-            <Route exact path="/">
+            <Route exact path="/login">
               <Login />
             </Route>
 
             <Route exact path="/signup">
               <Signup />
+            </Route>
+
+            <Route exact path="/activate">
+              <Otp />
+            </Route>
+
+            <Route exact path="/dashboard">
+              <Dashboard />
             </Route>
           </Switch>
         </Router>

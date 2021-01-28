@@ -2,8 +2,9 @@
 import React, { useState } from "react";
 import DownVector from "../../../images/DownVector.svg";
 import RightVector from "../../../images/RightVector.svg";
+import { Link } from "react-router-dom";
 
-const Accordition = () => {
+const Accordition = (props) => {
   const [sib, setSib] = useState({
     productSib: true,
     assetSib: false,
@@ -108,9 +109,9 @@ const Accordition = () => {
               className="pl-5 accordionDirectChild"
             >
               <div>
-                <a href="/#" className="accorditionRootChild ">
+                <Link to="/posters/COVID-19" className="accorditionRootChild ">
                   COVID-19
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -129,6 +130,7 @@ const Accordition = () => {
         </a>
         <div id="compaignSib"></div>
       </div>
+{/*       
       <div>
         <a href="/#" onClick={accorditionOnClick} className="accorditionRoot">
           <img
@@ -159,6 +161,8 @@ const Accordition = () => {
           </div>
         </div>
       </div>
+     */}
+    
     </div>
   );
 };
