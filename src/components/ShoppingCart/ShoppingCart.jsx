@@ -255,7 +255,7 @@ const Tables = (props) => {
     }).then((t) => t.json());
 
     const options = {
-      key: __DEV__ ? "rzp_test_FvIgaLsvcCd3vG" : "PRODUCTION_KEY",
+      key: __DEV__ ? "rzp_test_FvIgaLsvcCd3vG" : "rzp_test_FvIgaLsvcCd3vG",
       currency: data.currency,
       amount: data.amount.toString(),
       order_id: data.id,
