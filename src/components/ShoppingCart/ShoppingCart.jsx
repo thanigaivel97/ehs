@@ -245,7 +245,7 @@ const Tables = (props) => {
       return;
     }
 
-    const data = await fetch("http://localhost:8080/razorpay", {
+    const data = await fetch("http://35.238.118.121:8080/razorpay", {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",
