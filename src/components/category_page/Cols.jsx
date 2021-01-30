@@ -6,8 +6,8 @@ const SevenCol = (props) => {
   return (
     <Grid.Row columns={props.cols} className="mt-4 justify-content-center">
       {props.data.map((v, i) => (
-        <Grid.Column key={i} className={i !== 0 ? "ml-4" : null}>
-           <Card data={v} /> 
+        <Grid.Column key={i} className={i !== 0 ? "ml-5 pl-2" : null}>
+          <Card data={v} />
         </Grid.Column>
       ))}
     </Grid.Row>

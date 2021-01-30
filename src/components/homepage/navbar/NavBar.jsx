@@ -8,18 +8,15 @@ import SearchIcon from "@material-ui/icons/Search";
 import { Link } from "react-router-dom";
 import $ from "jquery";
 
-
 const NavBar = (props) => {
-
-  const [authUser, setAuthUser] = React.useState(""
-  );
+  const [authUser, setAuthUser] = React.useState("");
   React.useEffect(() => {
     if (JSON.parse(localStorage.getItem("userDetails123")))
       setAuthUser(
         JSON.parse(localStorage.getItem("userDetails123")).emailid ||
           JSON.parse(localStorage.getItem("userDetails123")).phonenumber
       );
-  },[props.loginResponse]);
+  }, [props.loginResponse]);
 
   const [searchCat, setCat] = useState("All Categories");
 
@@ -109,8 +106,11 @@ const NavBar = (props) => {
           <ul className="navbar-nav">
             <li className="nav-item text-white" style={{ marginTop: "2px" }}>
               {authUser ? (
-                <p className="text-white textColorAndWeight text-decoration-none">
-                  { authUser.includes("@")?authUser.split("@").[0]:authUser}
+                <p
+                  className="text-white textColorAndWeight text-decoration-none"
+                  style={{ marginTop: "6px" }}
+                >
+                  {authUser.includes("@") ? authUser.split("@")[0] : authUser}
                 </p>
               ) : (
                 <>
@@ -174,31 +174,17 @@ const NavBar = (props) => {
                 </Link>
                 <Link
                   className="searchCategory dropdown-item"
-                  to="/posters/FIRE-SAFETY"
+                  to="/posters/ELECTRICAL-HAZARD"
                   onClick={(e) => props.setSubCat(e.target.text.trim())}
                 >
-                  FIRE-SAFETY
+                  ELECTRICAL-HAZARD
                 </Link>
                 <Link
                   className="searchCategory dropdown-item"
-                  to="/posters/GENERAL-SAFETY"
+                  to="/posters/MATERIAL-HANDLING"
                   onClick={(e) => props.setSubCat(e.target.text.trim())}
                 >
-                  GENERAL-SAFETY
-                </Link>
-                <Link
-                  className="searchCategory dropdown-item"
-                  to="/posters/HEALTH"
-                  onClick={(e) => props.setSubCat(e.target.text.trim())}
-                >
-                  HEALTH
-                </Link>
-                <Link
-                  className="searchCategory dropdown-item"
-                  to="/posters/ACCIDENT-PRONE"
-                  onClick={(e) => props.setSubCat(e.target.text.trim())}
-                >
-                  ACCIDENT-PRONE
+                  MATERIAL-HANDLING
                 </Link>
                 <Link
                   className="searchCategory dropdown-item"
@@ -209,10 +195,39 @@ const NavBar = (props) => {
                 </Link>
                 <Link
                   className="searchCategory dropdown-item"
-                  to="/posters/MATERIAL-HANDLING"
+                  to="/posters/FIRE"
                   onClick={(e) => props.setSubCat(e.target.text.trim())}
                 >
-                  MATERIAL-HANDLING
+                  FIRE
+                </Link>
+                <Link
+                  className="searchCategory dropdown-item"
+                  to="/posters/HOUSE-KEEPING"
+                  onClick={(e) => props.setSubCat(e.target.text.trim())}
+                >
+                  HOUSE-KEEPING
+                </Link>
+                <Link
+                  className="searchCategory dropdown-item"
+                  to="/posters/QUALITY"
+                  onClick={(e) => props.setSubCat(e.target.text.trim())}
+                >
+                  QUALITY
+                </Link>
+                <Link
+                  className="searchCategory dropdown-item"
+                  to="/posters/ENVIRONMENT"
+                  onClick={(e) => props.setSubCat(e.target.text.trim())}
+                >
+                  ENVIRONMENT
+                </Link>
+                <Link
+                  className="searchCategory dropdown-item"
+                  to="/posters/PICTOGRAMS"
+                  onClick={(e) => props.setSubCat(e.target.text.trim())}
+                >
+                  {" "}
+                  PICTOGRAMS
                 </Link>
 
                 <Link
@@ -220,16 +235,7 @@ const NavBar = (props) => {
                   className="searchCategory dropdown-item"
                   onClick={(e) => props.setSubCat(e.target.text.trim())}
                 >
-                  {" "}
                   COVID-19
-                </Link>
-
-                <Link
-                  className="searchCategory dropdown-item"
-                  to="/posters/ELECTRICAL-HANDLING"
-                  onClick={(e) => props.setSubCat(e.target.text.trim())}
-                >
-                  ELECTRICAL-HANDLING
                 </Link>
               </div>
             </li>

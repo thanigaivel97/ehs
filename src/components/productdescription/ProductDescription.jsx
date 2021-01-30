@@ -52,11 +52,6 @@ function ProductDescription(props) {
     )
       .then((res) => {
         const posterItem = res.data.posterData;
-        console.log(posterItem);
-        //   .filter(
-        //   (v) => v._id === props.match.params.id
-        // )[0];
-
         setPosterData(posterItem);
         setIsLoading(!isLoading);
       })
@@ -132,7 +127,6 @@ function ProductDescription(props) {
     setBottomDet(det);
     $("#bottomCart").css("display", "block");
     props.setCartCountFun(det);
-    console.log("hello", bottomDet);
   };
 
   const [selectMatDim, setMatDim] = React.useState({
@@ -206,21 +200,9 @@ function ProductDescription(props) {
                   height="10"
                   alt=""
                 />
-                <Link className="breadLink" to="/posters/covid-19">
-                  COVID-19
-                </Link>
-                <img
-                  src={BreadVector}
-                  className="mr-1"
-                  width="10"
-                  height="10"
-                  alt=""
-                />
-                <Link className="breadLink">
-                  {posterData.name.slice(0, 25)}...
-                </Link>
-                  <div className="mt-2">
-                    
+                <p className="breadLink">{posterData.name.slice(0, 25)}...</p>
+                
+                <div className="mt-2">
                   <img
                     src={posterData.imgUrl}
                     alt={posterData.name}
@@ -462,7 +444,7 @@ function ProductDescription(props) {
               </Grid.Column>
             </Grid.Row>
             <hr className="m-4" style={{ border: "1px solid #D2D2D2" }} />
-            <Grid.Row columns="3 " className="ml-4">
+            <Grid.Row columns="3" className="ml-4">
               <Grid.Column className="mr-5 blablabla">
                 <p style={{ fontSize: "18px", lineHeight: "22px" }}>
                   Product Details
@@ -545,7 +527,7 @@ function ProductDescription(props) {
               <Grid.Column className="mt-5 pt-4">
                 {[...Array(5)].map((v, i) => (
                   <Grid.Row
-                    key={v}
+                    key={i}
                     columns="2"
                     className="pl-5 ml-2"
                     style={{ marginTop: "-8px" }}
@@ -555,7 +537,7 @@ function ProductDescription(props) {
                     </Grid.Column>
                     <Grid.Column>
                       <Grid.Row
-                        columns="2 "
+                        columns="2"
                         className="linearprog ml-3 mt-2"
                         style={{ width: "200px" }}
                       >
@@ -594,7 +576,7 @@ function ProductDescription(props) {
                 </Grid.Row>
                 <Grid.Row columns="4" className="mt-2">
                   {[...Array(4)].map((v, i) => (
-                    <Grid.Column className={i !== 0 ? "ml-3" : ""}>
+                    <Grid.Column key={i} className={i !== 0 ? "ml-3" : ""}>
                       <Card
                         style={{
                           width: "200px",

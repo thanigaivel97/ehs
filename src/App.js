@@ -75,7 +75,7 @@ function App(props) {
               <Category setCartCountFun={countSetFun} />
             </Route>
 
-            <Route exact path="/posters/PPE">
+            <Route exact path="/posters/HINDI">
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
 
@@ -83,23 +83,11 @@ function App(props) {
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
 
-            <Route exact path="/posters/FIRE-SAFETY">
+            <Route exact path="/posters/PPE">
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
 
-            <Route exact path="/posters/GENERAL-SAFETY">
-              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
-            </Route>
-
-            <Route exact path="/posters/HEALTH">
-              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
-            </Route>
-
-            <Route exact path="/posters/ACCIDENT-PRONE">
-              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
-            </Route>
-
-            <Route exact path="/posters/CHEMICAL-HAZARDS">
+            <Route exact path="/posters/ELECTRICAL-HAZARD">
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
 
@@ -107,15 +95,31 @@ function App(props) {
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
 
-            <Route exact path="/posters/ELECTRICAL-HANDLING">
+            <Route exact path="/posters/CHEMICAL-HAZARDS">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/posters/FIRE">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/posters/HOUSE-KEEPING">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/posters/QUALITY">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/posters/ENVIRONMENT">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/posters/PICTOGRAMS">
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
 
             <Route exact path="/posters/COVID-19">
-              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
-            </Route>
-
-            <Route exact path="/posters/HINDI">
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
 

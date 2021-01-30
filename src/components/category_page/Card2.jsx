@@ -40,15 +40,12 @@ export const ModalCard = (props) => {
         selected.Dimension = { one: false, two: false, three: true };
       }
       props.setMatDim((prev) => {
-        //props.addToCart(p=>{return { Material:{...p.Material}, Dimension:{...selected.Dimension}}});
         return {
           Material: { ...prev.Material },
           Dimension: { ...selected.Dimension },
         };
       });
     }
-
-    console.log(props.boxDet.select + props.boxDet.name);
   };
   return (
     <div
@@ -68,7 +65,6 @@ export const ModalCard = (props) => {
               height: "200px",
             }
       }
-      // props.oriDet[props.name]=props.boxDet.title;
       onClick={() => {
         blabla();
       }}

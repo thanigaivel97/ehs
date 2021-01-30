@@ -212,3 +212,26 @@ textarea {
   text-indent: 10px;
   color: #757575;
 }
+
+.loginUserEmail1 {
+  margin: 0 auto;
+  width: 235px;
+  height: 55px;
+  left: 467px;
+  top: 283px;
+  /* grey */
+  border: 1px solid #757575;
+  box-sizing: border-box;
+  border-radius: 8px;
+
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 24px;
+  /* identical to box height */
+
+  /* grey */
+  text-indent: 10px;
+  color: #757575;
+}

@@ -55,6 +55,7 @@ function CreatePoster(props) {
     originalPrice: "",
     priceGroup: "",
     imgUrl: defaultImage,
+    link:"",
     description: "",
     discountPercentage: "",
     stocks: 0,
@@ -80,6 +81,7 @@ function CreatePoster(props) {
     originalPrice: false,
     priceGroup: false,
     imgUrl: false,
+    link:false,
     description: false,
     discountPercentage: false,
     stocks: false,
@@ -99,6 +101,7 @@ function CreatePoster(props) {
     "originalPrice",
     "priceGroup",
     "imgUrl",
+    "link",
     "description",
     "discountPercentage",
     "stocks",
@@ -356,6 +359,17 @@ function CreatePoster(props) {
             />
           </Grid.Column>
           <Grid.Column style={{ width: "33%" }}>
+            <TextField
+              error={err.link}
+              id="link"
+              label="Link"
+              helperText={err.link ? "Enter Link" : null}
+              variant="outlined"
+            />
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row className="mt-4" columns="3">
+          <Grid.Column style={{ width: "33%" }}>
             <Button
               variant="contained"
               color="primary"
@@ -383,6 +397,7 @@ function UpdateAndDeletePoster(props) {
     originalPrice,
     priceGroup,
     imgUrl,
+    link,
     description,
     discountPercentage,
     stocks,
@@ -390,7 +405,6 @@ function UpdateAndDeletePoster(props) {
     additionalDetails,
     sale,
   } = props.data;
-  console.log(_id);
 
   const configImage = {
     headers: {
@@ -406,6 +420,7 @@ function UpdateAndDeletePoster(props) {
     language: language,
     creator: creator,
     imgUrl: imgUrl,
+    link:link,
     originalPrice: originalPrice,
     priceGroup: priceGroup,
     description: description,
@@ -423,6 +438,7 @@ function UpdateAndDeletePoster(props) {
     "language",
     "creator",
     "imgUrl",
+    "link",
     "originalPrice",
     "priceGroup",
     "description",
@@ -638,7 +654,7 @@ function UpdateAndDeletePoster(props) {
             />
           </Grid.Column>
         </Grid.Row>
-        <Grid.Row className="mt-4" columns="2">
+        <Grid.Row className="mt-4" columns="3">
           <Grid.Column style={{ width: "33%" }}>
             <TextField
               id="additionalDetails"
@@ -653,6 +669,14 @@ function UpdateAndDeletePoster(props) {
               label="Sales"
               variant="outlined"
               defaultValue={sale}
+            />
+          </Grid.Column>
+          <Grid.Column style={{ width: "33%" }}>
+            <TextField
+              id="link"
+              label="Link"
+              variant="outlined"
+              defaultValue={link}
             />
           </Grid.Column>
         </Grid.Row>
@@ -1004,7 +1028,7 @@ function UpdateAndDeleteOrder(props) {
                     Material: {findMat(v.Material)}
                   </Typography>
                   <Typography variant="subtitle2" color="textSecondary">
-                    Dimension: {findMat(v.Dimension)}
+                    Dimension: {findDim(v.Dimension)}
                   </Typography>
                   <Typography variant="subtitle2" color="textSecondary">
                     Price: ₹{v.originalPrice}

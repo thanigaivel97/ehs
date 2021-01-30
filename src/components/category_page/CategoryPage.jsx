@@ -3,7 +3,18 @@ import React, { useEffect, useState } from "react";
 import Design from "../homepage/design/Design";
 import Cols from "./Cols";
 import { Grid, Image, Segment } from "semantic-ui-react";
-import Plumber from "../../images/Plumber.svg";
+import Fire from "../../images/FIRE.jpg";
+import House from "../../images/HOUSE.jpg";
+import Material from "../../images/MATERIAL.jpg";
+import Chemical from "../../images/CHEMICAL.jpg";
+import Electrical from "../../images/ELECTRICAL.jpg";
+import Environment from "../../images/ENVIRONMENT.jpg";
+import Covid from "../../images/COVID.png";
+import Ppe from "../../images/PPE.jpg";
+import Pictogram from "../../images/PICTOGRAM.jpg";
+import Quality from "../../images/QUALITY.jpg";
+import Hindi from "../../images/HINDI.jpg";
+import Bilingual from "../../images/Bilingual.jpg";
 import GetBPoster from "../../images/GetBiPoster.svg";
 import PosterNow from "../../images/PosterNow.svg";
 import Upto50 from "../../images/Upto50Offer.svg";
@@ -38,12 +49,21 @@ const CategoryPage = (props) => {
   }, [props.loginResponse.token]);
 
   const cardDet = [
-    { src: Plumber, title: "Safety" },
-    { src: Plumber, title: "Safety" },
-    { src: Plumber, title: "Safety" },
-    { src: Plumber, title: "Safety" },
-    { src: Plumber, title: "Safety" },
-    { src: Plumber, title: "Safety" },
+    { src: Hindi, title: "Hindi" },
+    { src: Bilingual, title: "BiLingual" },
+    { src: Ppe, title: "PPE" },
+    { src: Electrical, title: "Electrical-Hazard" },
+    { src: Material, title: "Material-Handling" },
+    { src: Chemical, title: "Chemical-Hazard" },
+  ];
+
+  const cardDet2 = [
+    { src: Fire, title: "Fire" },
+    { src: House, title: "House-Keeping" },
+    { src: Quality, title: "Quality" },
+    { src: Environment, title: "Environment" },
+    { src: Pictogram, title: "Pictograms" },
+    { src: Covid, title: "Covid-19" },
   ];
 
   const twoPosters = [GetBPoster, PosterNow];
@@ -158,7 +178,6 @@ const CategoryPage = (props) => {
     }
   };
 
-
   const setModalCarouselb = (e) => {
     if (e.target.id === "oneb") {
       setModalCar({ one: true, two: false, three: false });
@@ -202,7 +221,7 @@ const CategoryPage = (props) => {
               Popular Categories
             </p>
 
-            <Cols data={cardDet} cols="7" />
+            <Cols data={cardDet} cols="6" />
 
             <Grid.Row className="mt-4 justify-content-center" columns="equal">
               {twoPosters.map((v, i) => (
@@ -220,7 +239,7 @@ const CategoryPage = (props) => {
               <Image src={Upto50} className="mx-auto d-block" />
             </Grid.Column>
 
-            <Cols data={cardDet} cols="7" />
+            <Cols data={cardDet2} cols="6" />
 
             <p
               className="ml-5"
@@ -236,9 +255,12 @@ const CategoryPage = (props) => {
               Best Sellers
             </p>
 
-            <Grid.Row columns={5} className="mt-4 justify-content-center">
+            <Grid.Row
+              columns={5}
+              className="mt-4 ml-5 mr-5 justify-content-start"
+            >
               {posterData.map((v, i) => (
-                <Grid.Column key={i} className={i !== 0 ? "ml-4" : null}>
+                <Grid.Column key={i} className={i !== 0 ? "ml-3" : null}>
                   <Card2
                     data={v}
                     addToCart={addToCart}
@@ -267,7 +289,6 @@ const CategoryPage = (props) => {
         >
           <BottomAddedCart det={bottomDet} />
         </div>
-     
       </div>
 
       <button
@@ -536,7 +557,6 @@ const CategoryPage = (props) => {
           </div>
         </div>
       </div>
-    
     </>
   );
 };

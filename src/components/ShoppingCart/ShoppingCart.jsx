@@ -173,7 +173,7 @@ const Tables = (props) => {
     } else {
       addr = userJson.emailid || userJson.phonenumber;
     }
-    console.log(addr);
+
     Axios.post(updateUser, {
       emailid: userJson?.emailid,
       phonenumber: userJson?.phonenumber,
@@ -181,6 +181,8 @@ const Tables = (props) => {
     })
       .then((res) => {
         $("#modalCls").trigger("click");
+        userJson["address"] = addr;
+        session(userJson);
         displayRazorpay();
       })
       .catch((err) => {
@@ -199,7 +201,6 @@ const Tables = (props) => {
       "  | Pincode:" +
       pincode;
 
-    console.log(addr);
     Axios.post(updateUser, {
       emailid: userJson?.emailid,
       phonenumber: userJson?.phonenumber,
@@ -207,6 +208,8 @@ const Tables = (props) => {
     })
       .then((res) => {
         $("#modalCls").trigger("click");
+        userJson["address"] = addr;
+        session(userJson);
         displayRazorpay();
       })
       .catch((err) => {
@@ -250,8 +253,6 @@ const Tables = (props) => {
       },
       body: JSON.stringify({ amount: totalPay + shipping }),
     }).then((t) => t.json());
-
-    console.log(data);
 
     const options = {
       key: __DEV__ ? "rzp_test_FvIgaLsvcCd3vG" : "PRODUCTION_KEY",
@@ -393,7 +394,7 @@ const Tables = (props) => {
                 <p className="pay2">Shop above ₹2000 to get free shipping</p>
               </div>
               {num > 0 ? (
-                <table class="table">
+                <table className="table">
                   <thead>
                     <tr>
                       <th className="tablehead" scope="col">
@@ -983,10 +984,13 @@ const Tables = (props) => {
                                 id="oldAdd"
                                 name="old"
                                 value={userJson?.address}
-                                checked
+                                defaultChecked
                               />
                             </Grid.Column>
-                            <Grid.Column style={{ width: "90%" }}>
+                            <Grid.Column
+                              className="ml-3"
+                              style={{ width: "90%" }}
+                            >
                               <p>{userJson.address}</p>
                             </Grid.Column>
                           </Grid.Row>
@@ -1001,22 +1005,23 @@ const Tables = (props) => {
                               marginTop: "20px",
                             }}
                           />
-                          <label for="newAdd" style={{ marginLeft: "33px" }}>
+                          <label
+                            htmlFor="newAdd"
+                            style={{ marginLeft: "33px" }}
+                          >
                             <Grid.Row columns="2">
-                              <Grid.Column className="ml-1">
+                              <Grid.Column className="ml-3">
                                 <Input
                                   className="mx-auto d-block mt-3"
-                                  id="loginUserEmail1"
                                   type="text"
                                   placeholder="Name"
                                   variant="outlined"
                                   onChange={(e) => setName(e.target.value)}
                                 />
                               </Grid.Column>
-                              <Grid.Column className="ml-2">
+                              <Grid.Column className="ml-5">
                                 <Input
                                   className="mx-auto d-block mt-3 ml-2"
-                                  id="loginUserEmail1"
                                   type="text"
                                   placeholder="Address"
                                   variant="outlined"
@@ -1026,21 +1031,19 @@ const Tables = (props) => {
                             </Grid.Row>
 
                             <Grid.Row columns="2">
-                              <Grid.Column className="ml-1">
+                              <Grid.Column className="ml-3">
                                 {" "}
                                 <Input
                                   className="mx-auto d-block mt-3"
-                                  id="loginUserEmail1"
                                   type="text"
                                   placeholder="State/Country"
                                   variant="outlined"
                                   onChange={(e) => setState(e.target.value)}
                                 />
                               </Grid.Column>
-                              <Grid.Column className="ml-2">
+                              <Grid.Column className="ml-5">
                                 <Input
                                   className="mx-auto d-block mt-3"
-                                  id="loginUserEmail1"
                                   type="text"
                                   placeholder="Pincode"
                                   variant="outlined"
@@ -1061,20 +1064,18 @@ const Tables = (props) => {
                     ) : (
                       <>
                         <Grid.Row columns="2" className="ml-4">
-                          <Grid.Column className="ml-1">
+                          <Grid.Column className="ml-4">
                             <Input
                               className="mx-auto d-block mt-3"
-                              id="loginUserEmail1"
                               type="text"
                               placeholder="Name"
                               variant="outlined"
                               onChange={(e) => setName(e.target.value)}
                             />
                           </Grid.Column>
-                          <Grid.Column className="ml-2">
+                          <Grid.Column className="ml-5">
                             <Input
                               className="mx-auto d-block mt-3 ml-2"
-                              id="loginUserEmail1"
                               type="text"
                               placeholder="Address"
                               variant="outlined"
@@ -1084,21 +1085,19 @@ const Tables = (props) => {
                         </Grid.Row>
 
                         <Grid.Row columns="2" className="ml-4">
-                          <Grid.Column className="ml-1">
+                          <Grid.Column className="ml-4">
                             {" "}
                             <Input
                               className="mx-auto d-block mt-3"
-                              id="loginUserEmail1"
                               type="text"
                               placeholder="State/Country"
                               variant="outlined"
                               onChange={(e) => setState(e.target.value)}
                             />
                           </Grid.Column>
-                          <Grid.Column className="ml-2">
+                          <Grid.Column className="ml-5">
                             <Input
                               className="mx-auto d-block mt-3"
-                              id="loginUserEmail1"
                               type="text"
                               placeholder="Pincode"
                               variant="outlined"
@@ -1108,7 +1107,7 @@ const Tables = (props) => {
                         </Grid.Row>
                         <button
                           id="loginBtn"
-                          className="ml-3 mt-2 d-block"
+                          className="ml-3 mt-4 d-block"
                           onClick={proceed1}
                         >
                           Add Address
@@ -1119,11 +1118,11 @@ const Tables = (props) => {
                 </>
               ) : null}
             </div>
-            <div class="modal-footer" style={{ display: "none" }}>
+            <div className="modal-footer" style={{ display: "none" }}>
               <button
                 type="button"
                 id="modalCls"
-                class="btn btn-default"
+                className="btn btn-default"
                 style={{ display: "none" }}
                 data-dismiss="modal"
               >

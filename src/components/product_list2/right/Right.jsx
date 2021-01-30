@@ -65,7 +65,6 @@ export const BottomAddedCart = (props) => {
 };
 
 const Right = (props) => {
-
   const [posterData, setPosterData] = React.useState([]);
 
   React.useEffect(() => {
@@ -74,15 +73,14 @@ const Right = (props) => {
       "posters/getPosterBySubCategory/" +
       window.location.pathname.split("/")[2];
     console.log(url1);
-     Axios.get(url1)
-       .then((res) => {
-         console.log(res.data.posterData);
-         setPosterData(res.data.posterData);
-       })
-       .catch((err) => console.log(err));
-    console.log(url + "posters/getPosterBySubCategory/" + props.path);  
+    Axios.get(url1)
+      .then((res) => {
+        console.log(res.data.posterData);
+        setPosterData(res.data.posterData);
+      })
+      .catch((err) => console.log(err));
+    console.log(url + "posters/getPosterBySubCategory/" + props.path);
   }, [props.path]);
-
 
   const [bottomDet, setBottomDet] = useState({});
 
@@ -92,120 +90,117 @@ const Right = (props) => {
     props.setCartCountFun(bottomDet);
   };
 
-    const [selectedModal, setSelectedModal] = React.useState({});
+  const [selectedModal, setSelectedModal] = React.useState({});
 
-    const selectedModalCard = (data) => {
-      setSelectedModal(data);
-      $("#modalOpen").trigger("click");
+  const selectedModalCard = (data) => {
+    setSelectedModal(data);
+    $("#modalOpen").trigger("click");
+  };
+
+  const [selectMatDim, setMatDim] = useState({
+    Material: { one: false, two: false, three: false },
+    Dimension: { one: false, two: false, three: false },
+  });
+
+  let card1Det, card2Det;
+  try {
+    card1Det = {
+      select: "Material",
+      box: [
+        {
+          src: selectedModal.material[0].imgUrl,
+          title: selectedModal.material[0].title,
+          name: "one",
+          select: "Material",
+        },
+        {
+          src: selectedModal.material[1].imgUrl,
+          title: selectedModal.material[1].title,
+          name: "two",
+          select: "Material",
+        },
+        {
+          src: selectedModal.material[2].imgUrl,
+          title: selectedModal.material[2].title,
+          name: "three",
+          select: "Material",
+        },
+      ],
     };
-
-    const [selectMatDim, setMatDim] = useState({
-      Material: { one: false, two: false, three: false },
-      Dimension: { one: false, two: false, three: false },
-    });
-
-    let card1Det, card2Det;
-    try {
-      card1Det = {
-        select: "Material",
-        box: [
-          {
-            src: selectedModal.material[0].imgUrl,
-            title: selectedModal.material[0].title,
-            name: "one",
-            select: "Material",
-          },
-          {
-            src: selectedModal.material[1].imgUrl,
-            title: selectedModal.material[1].title,
-            name: "two",
-            select: "Material",
-          },
-          {
-            src: selectedModal.material[2].imgUrl,
-            title: selectedModal.material[2].title,
-            name: "three",
-            select: "Material",
-          },
-        ],
-      };
-      card2Det = {
-        select: "Dimension",
-        box: [
-          {
-            src: selectedModal.dimension[0].imgUrl,
-            title: selectedModal.dimension[0].title,
-            cus: false,
-            cusWidth: "80",
-            name: "one",
-            select: "Dimension",
-          },
-          {
-            src: selectedModal.dimension[1].imgUrl,
-            title: selectedModal.dimension[1].title,
-            cus: true,
-            cusWidth: "100",
-            name: "two",
-            select: "Dimension",
-          },
-          {
-            src: selectedModal.dimension[2].imgUrl,
-            title: selectedModal.dimension[2].title,
-            cus: true,
-            cusWidth: "120",
-            name: "three",
-            select: "Dimension",
-          },
-        ],
-      };
-    } catch (e) {}
-
-    const card3Det = {
-      select: "Quantity",
-      quantity: 1,
-      material: "Material: " + findMat(selectMatDim.Material),
-      dimension: "Dimensions:" + findDim(selectMatDim.Dimension),
-      price: selectedModal.originalPrice,
+    card2Det = {
+      select: "Dimension",
+      box: [
+        {
+          src: selectedModal.dimension[0].imgUrl,
+          title: selectedModal.dimension[0].title,
+          cus: false,
+          cusWidth: "80",
+          name: "one",
+          select: "Dimension",
+        },
+        {
+          src: selectedModal.dimension[1].imgUrl,
+          title: selectedModal.dimension[1].title,
+          cus: true,
+          cusWidth: "100",
+          name: "two",
+          select: "Dimension",
+        },
+        {
+          src: selectedModal.dimension[2].imgUrl,
+          title: selectedModal.dimension[2].title,
+          cus: true,
+          cusWidth: "120",
+          name: "three",
+          select: "Dimension",
+        },
+      ],
     };
+  } catch (e) {}
 
-    const ModalDet = {
-      src: selectedModal.imgUrl,
-      title: selectedModal.name,
-      select: "Select Material",
-      selectedMatDim: selectMatDim,
-      card1: card1Det,
-      card2: card2Det,
-      card3: card3Det,
-    };
+  const card3Det = {
+    select: "Quantity",
+    quantity: 1,
+    material: "Material: " + findMat(selectMatDim.Material),
+    dimension: "Dimensions:" + findDim(selectMatDim.Dimension),
+    price: selectedModal.originalPrice,
+  };
 
-    const [modalCarousel, setModalCar] = useState({
-      one: true,
-      two: false,
-      three: false,
-    });
+  const ModalDet = {
+    src: selectedModal.imgUrl,
+    title: selectedModal.name,
+    select: "Select Material",
+    selectedMatDim: selectMatDim,
+    card1: card1Det,
+    card2: card2Det,
+    card3: card3Det,
+  };
 
-    const setModalCarousel = (e) => {
-      if (e.target.id === "one") {
-        setModalCar({ one: true, two: false, three: false });
-      } else if (e.target.id === "two") {
-        setModalCar({ one: false, two: true, three: false });
-      } else if (e.target.id === "three") {
-        setModalCar({ one: false, two: false, three: true });
-      }
-    };
+  const [modalCarousel, setModalCar] = useState({
+    one: true,
+    two: false,
+    three: false,
+  });
 
-    const setModalCarouselb = (e) => {
-      if (e.target.id === "oneb") {
-        setModalCar({ one: true, two: false, three: false });
-      } else if (e.target.id === "twob") {
-        setModalCar({ one: false, two: true, three: false });
-      } else if (e.target.id === "threeb") {
-        setModalCar({ one: false, two: false, three: true });
-      }
-    };
+  const setModalCarousel = (e) => {
+    if (e.target.id === "one") {
+      setModalCar({ one: true, two: false, three: false });
+    } else if (e.target.id === "two") {
+      setModalCar({ one: false, two: true, three: false });
+    } else if (e.target.id === "three") {
+      setModalCar({ one: false, two: false, three: true });
+    }
+  };
 
-
-
+  const setModalCarouselb = (e) => {
+    if (e.target.id === "oneb") {
+      setModalCar({ one: true, two: false, three: false });
+    } else if (e.target.id === "twob") {
+      setModalCar({ one: false, two: true, three: false });
+    } else if (e.target.id === "threeb") {
+      setModalCar({ one: false, two: false, three: true });
+    }
+  };
 
   return (
     <Grid centered columns={1}>
