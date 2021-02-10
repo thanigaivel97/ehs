@@ -223,11 +223,11 @@ const NavBar = (props) => {
                 </Link>
                 <Link
                   className="searchCategory dropdown-item"
-                  to="/posters/PICTOGRAMS"
+                  to="/posters/PICTOGRAM"
                   onClick={(e) => props.setSubCat(e.target.text.trim())}
                 >
                   {" "}
-                  PICTOGRAMS
+                  PICTOGRAM
                 </Link>
 
                 <Link
@@ -240,24 +240,122 @@ const NavBar = (props) => {
               </div>
             </li>
             <li className="nav-item ml-4">
-              <a className="nav-link text-white textColorAndWeight" href="/#">
+              <Link
+                to="/signages"
+                className="nav-link text-white textColorAndWeight btn shadow-none border-0 drpbut "
+                style={{ backgroundColor: "#003459", border: "0px" }}
+                id="dropdownMenuButton"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                onMouseEnter={(e) => $(".drp1").toggle()}
+              >
                 Signages
-              </a>
+              </Link>
+
+              <div
+                className="dropdown-menu p-3 drp1"
+                style={{ marginLeft: "250px" }}
+                aria-labelledby="dropdownMenuButton"
+                onMouseLeave={(e) => $(".drp1").toggle()}
+              >
+                <Link
+                  className="searchCategory dropdown-item"
+                  to="/signages/SIGNAL-TEMPLATE-SHEETS"
+                  onClick={(e) => props.setSubCat(e.target.text.trim())}
+                >
+                  SIGNAL TEMPLATE SHEETS
+                </Link>
+                <Link
+                  className="searchCategory dropdown-item"
+                  to="/signages/PICTOGRAMS"
+                  onClick={(e) => props.setSubCat(e.target.text.trim())}
+                >
+                  PICTOGRAMS
+                </Link>
+              </div>
             </li>
             <li className="nav-item ml-4">
-              <a className="nav-link text-white textColorAndWeight" href="/#">
+              <Link
+                to="/floor-graphics"
+                className="nav-link text-white textColorAndWeight btn shadow-none border-0"
+                style={{ backgroundColor: "#003459", border: "0px" }}
+              >
                 Floor Graphics
-              </a>
+              </Link>
             </li>
             <li className="nav-item ml-4">
-              <a className="nav-link text-white textColorAndWeight" href="/#">
+              <Link
+                to="/asset-marking"
+                className="nav-link text-white textColorAndWeight btn shadow-none border-0"
+                style={{ backgroundColor: "#003459", border: "0px" }}
+              >
                 Asset Marking
-              </a>
+              </Link>
             </li>
             <li className="nav-item ml-4">
-              <a className="nav-link text-white textColorAndWeight" href="/#">
+              <Link
+                to="/campaigns"
+                className="nav-link text-white textColorAndWeight btn shadow-none border-0 drpbut "
+                style={{ backgroundColor: "#003459", border: "0px" }}
+                id="dropdownMenuButton"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                onMouseEnter={(e) => $(".drp2").toggle()}
+              >
                 Campaigns
-              </a>
+              </Link>
+
+              <div
+                className="dropdown-menu p-3 drp2"
+                style={{marginLeft:"550px"}}
+                aria-labelledby="dropdownMenuButton"
+                onMouseLeave={(e) => $(".drp2").toggle()}
+              >
+                <Link
+                  className="searchCategory dropdown-item"
+                  to="/campaigns/FIT-INDIA"
+                  onClick={(e) => props.setSubCat(e.target.text.trim())}
+                >
+                  Fit India
+                </Link>
+                <Link
+                  className="searchCategory dropdown-item"
+                  to="/campaigns/MONSOON-SAFETY"
+                  onClick={(e) => props.setSubCat(e.target.text.trim())}
+                >
+                  Monsoon Safety
+                </Link>
+                <Link
+                  className="searchCategory dropdown-item"
+                  to="/campaigns/WORK-RIGHT"
+                  onClick={(e) => props.setSubCat(e.target.text.trim())}
+                >
+                  Work Right
+                </Link>
+                <Link
+                  className="searchCategory dropdown-item"
+                  to="/campaigns/HOME-ALONE"
+                  onClick={(e) => props.setSubCat(e.target.text.trim())}
+                >
+                  Home Alone
+                </Link>
+                <Link
+                  className="searchCategory dropdown-item"
+                  to="/campaigns/LAB-AND-SCHOOL-SAFETY"
+                  onClick={(e) => props.setSubCat(e.target.text.trim())}
+                >
+                  Lab And School Safety
+                </Link>
+                <Link
+                  className="searchCategory dropdown-item"
+                  to="/campaigns/NATURE-AND-SAFETY"
+                  onClick={(e) => props.setSubCat(e.target.text.trim())}
+                >
+                  Nature And Safety
+                </Link>
+                </div>
             </li>
             <li className="nav-item ml-4">
               <a className="nav-link text-white textColorAndWeight" href="/#">

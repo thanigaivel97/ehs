@@ -1,18 +1,10 @@
 /*jshint esversion: 6 */
 import React, { useEffect, useState } from "react";
-import Design from "../homepage/design/Design";
 import Cols from "./Cols";
 import { Grid, Image, Segment } from "semantic-ui-react";
-import Fire from "../../images/FIRE.jpg";
-import House from "../../images/HOUSE.jpg";
 import Material from "../../images/MATERIAL.jpg";
-import Chemical from "../../images/CHEMICAL.jpg";
 import Electrical from "../../images/ELECTRICAL.jpg";
-import Environment from "../../images/ENVIRONMENT.jpg";
-import Covid from "../../images/COVID.png";
 import Ppe from "../../images/PPE.jpg";
-import Pictogram from "../../images/PICTOGRAM.jpg";
-import Quality from "../../images/QUALITY.jpg";
 import Hindi from "../../images/HINDI.jpg";
 import Bilingual from "../../images/Bilingual.jpg";
 import GetBPoster from "../../images/GetBiPoster.svg";
@@ -20,7 +12,7 @@ import PosterNow from "../../images/PosterNow.svg";
 import Upto50 from "../../images/Upto50Offer.svg";
 import Card2 from "./Card2";
 import { connect } from "react-redux";
-import { getPoster, config } from "../../helper/apiPath";
+import { getCampaigns, config } from "../../helper/apiPath";
 import Axios from "axios";
 import $ from "jquery";
 import { BottomAddedCart } from "../product_list2/right/Right";
@@ -31,12 +23,36 @@ import ModelCard3 from "../product_list2/right/ModelCard3";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 
+
+function Design() {
+  return (
+    <div className="design row m-0">
+      <div className="ml-5">
+        <p id="rightText" className="ml-5" style={{ marginTop: "10px" }}>
+          Campaigns
+        </p>
+        <p id="rightbelow" className="ml-5" style={{ marginTop: "-10px" }}>
+          Need a little Direction in your Workplace ?
+        </p>
+        <p id="rightdes" className="ml-5" style={{ marginTop: "-35px" }}>
+          Get your Workplace/Warehouse organized with a Collection of Asset
+          Markers.
+        </p>
+      </div>
+      <div className="col row ml-5 pl-5" style={{ marginTop: "0px" }}>
+        {/* <img className="ml-5 pl-5" src={Back} alt="signage background" /> */}
+      </div>
+    </div>
+  );
+}
+
+
 const CategoryPage = (props) => {
   const [posterData, setPosterData] = React.useState([]);
 
   useEffect(() => {
     Axios.get(
-      getPoster,
+      getCampaigns,
       config(
         props.loginResponse.token || localStorage.getItem("ehstoken12345678910")
       )
@@ -53,16 +69,6 @@ const CategoryPage = (props) => {
     { src: Ppe, title: "PPE" },
     { src: Electrical, title: "Electrical-Hazard" },
     { src: Material, title: "Material-Handling" },
-    { src: Chemical, title: "Chemical-Hazard" },
-  ];
-
-  const cardDet2 = [
-    { src: Fire, title: "Fire" },
-    { src: House, title: "House-Keeping" },
-    { src: Quality, title: "Quality" },
-    { src: Environment, title: "Environment" },
-    { src: Pictogram, title: "Pictograms" },
-    { src: Covid, title: "Covid-19" },
   ];
 
   const twoPosters = [GetBPoster, PosterNow];
@@ -204,7 +210,7 @@ const CategoryPage = (props) => {
                 color: "#000000",
               }}
             >
-              Posters
+              Campaigns
             </p>
 
             <p
@@ -237,8 +243,6 @@ const CategoryPage = (props) => {
             <Grid.Column className="mt-4">
               <Image src={Upto50} className="mx-auto d-block" />
             </Grid.Column>
-
-            <Cols data={cardDet2} cols="6" />
 
             <p
               className="ml-5"

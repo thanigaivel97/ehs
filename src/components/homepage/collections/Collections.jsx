@@ -28,8 +28,9 @@ const Card = (props) => {
           src={props.src}
           alt={props.alt}
         />
-        <Link to="/posters"
-          style={{ fontFamily: "Source Sans Pro"  , color:"#000000 "}}
+        <Link
+          to={"/" + props.title.toLowerCase()}
+          style={{ fontFamily: "Source Sans Pro", color: "#000000 " }}
           className="text-center mt-3"
         >
           {props.title}
@@ -52,8 +53,8 @@ const Collections = () => {
         <div className="row pl-3">
           <Card src={PosterImg} alt="Posters" title="Posters" />
           <Card src={Signages} alt="Signages" title="Signages" />
-          <Card src={FloorImg} alt="Floor Graphics" title="Floor Graphics" />
-          <Card src={AssetImg} alt="Asset Markings" title="Asset Markings" />
+          <Card src={FloorImg} alt="Floor Graphics" title="Floor-Graphics" />
+          <Card src={AssetImg} alt="Asset Markings" title="Asset-Marking" />
         </div>
       </div>
     </div>

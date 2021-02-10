@@ -13,6 +13,12 @@ const createPoster = url + "posters/createPoster";
 const updatePoster = url + "posters/updatePoster";
 const deletePoster = url + "posters/deletePoster";
 
+const getSignages = url + "posters/getSignages";
+const getAssetMarking = url + "posters/getAssetMarking";
+const getCampaigns = url + "posters/getCampaigns";
+const getFloorGraphics = url + "posters/getFloorGraphics";
+
+
 const getMaterial = url + "material/getMaterial";
 const createMaterial = url + "material/createMaterial";
 const updateMaterial = url + "material/updateMaterial";
@@ -95,6 +101,10 @@ export {
   activate,
   updateUser,
   getPoster,
+  getSignages,
+  getAssetMarking,
+  getCampaigns,
+  getFloorGraphics,
   getPosterById,
   createPoster,
   signup,

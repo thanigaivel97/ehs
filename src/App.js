@@ -4,6 +4,10 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 import HomePage from "./components/homepage/HomePage.jsx";
 import Category from "./components/category_page/CategoryPage.jsx";
+import SignagesCategory from "./components/signages/CategoryPage.jsx";
+import AssetMarkingCategory from "./components/AssetMarking/CategoryPage.jsx";
+import CampaignsCategory from "./components/Campaigns/CategoryPage.jsx";
+import FloorGraphicsCategory from "./components/FloorGraphics/CategoryPage.jsx";
 import ProductList2 from "./components/product_list2/ProductList2.jsx";
 import NavBar from "./components/homepage/navbar/NavBar";
 import ProductDescription from "./components/productdescription/ProductDescription";
@@ -42,12 +46,6 @@ function App(props) {
 
   const [Description, setDescription] = useState({});
 
-  // let [authToken, setAuthToken] = useState("");
-
-  // const [posters, setPosters] = useState();
-
-  // const [loginResponse,setLoginResponse] = useState({});
-
   React.useEffect(() => {
   
     Axios.post(login, { emailid: "naveen@gmail.com", password: "1234" })
@@ -73,6 +71,22 @@ function App(props) {
 
             <Route exact path="/posters">
               <Category setCartCountFun={countSetFun} />
+            </Route>
+
+            <Route exact path="/signages">
+              <SignagesCategory setCartCountFun={countSetFun} />
+            </Route>
+
+            <Route exact path="/floor-graphics">
+              <FloorGraphicsCategory setCartCountFun={countSetFun} />
+            </Route>
+
+            <Route exact path="/asset-marking">
+              <AssetMarkingCategory setCartCountFun={countSetFun} />
+            </Route>
+
+            <Route exact path="/campaigns">
+              <CampaignsCategory setCartCountFun={countSetFun} />
             </Route>
 
             <Route exact path="/posters/HINDI">
@@ -115,11 +129,67 @@ function App(props) {
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
 
-            <Route exact path="/posters/PICTOGRAMS">
+            <Route exact path="/posters/PICTOGRAM">
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
 
             <Route exact path="/posters/COVID-19">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/signages/SIGNAL-TEMPLATE-SHEETS">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/signages/PICTOGRAMS">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/campaigns/FIT-INDIA">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/campaigns/MONSOON-SAFETY">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/campaigns/WORK-RIGHT">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/campaigns/HOME-ALONE">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/campaigns/LAB-AND-SCHOOL-SAFETY">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/campaigns/NATURE-AND-SAFETY">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/signages/FIT-INDIA">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/signages/MONSOON-SAFETY">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/signages/WORK-RIGHT">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/signages/HOME-ALONE">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/signages/LAB-AND-SCHOOL-SAFETY">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
+            <Route exact path="/signages/NATURE-AND-SAFETY">
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
 

@@ -207,6 +207,7 @@ function CreatePoster(props) {
               style={{ width: "223px" }}
               helperText={err.subCategory ? "Enter SubCategory" : null}
               select
+              defaultValue="none"
               variant="outlined"
               label="Sub-Category"
             >

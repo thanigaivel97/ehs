@@ -1,15 +1,33 @@
 .design {
   width: 100%;
   height: 200px;
-  padding: 15px;
   background: #f2994a;
 }
 
 #rightText {
   font-family: Bebas Neue;
   font-style: normal;
+  letter-spacing: 3px;
   font-weight: bold;
   font-size: 35px;
+  line-height: 60px;
+  color: #ffffff;
+}
+
+#rightbelow {
+  font-family: Bebas Neue;
+  font-style: normal;
+  letter-spacing: 3px;
+  font-weight: bold;
+  font-size: 25px;
+  line-height: 60px;
+  color: #ffffff;
+}
+
+#rightdes {
+  font-family: Bebas Neue;
+  font-style: normal;
+  font-size: 15px;
   line-height: 60px;
   color: #ffffff;
 }
@@ -20,16 +38,16 @@
 }
 #blueRect {
   background: #56ccf2;
-  margin-top: -5px;
+  margin-top: 10px;
 }
 #greenRect {
   background: #6fcf97;
-  margin-top: 40px;
+  margin-top: 25px;
   height: 145px;
 }
 #yellowRect {
   background: #f2c94c;
-  margin-top: -15px;
+  margin-top: 0px;
   height: 130px;
 }
 
