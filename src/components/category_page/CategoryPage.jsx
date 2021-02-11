@@ -49,11 +49,11 @@ const CategoryPage = (props) => {
 
   const cardDet = [
     { src: Hindi, title: "Hindi" },
-    { src: Bilingual, title: "BiLingual" },
+    { src: Bilingual, title: "BiLingual-Hindi-and-English" },
     { src: Ppe, title: "PPE" },
     { src: Electrical, title: "Electrical-Hazard" },
     { src: Material, title: "Material-Handling" },
-    { src: Chemical, title: "Chemical-Hazard" },
+    { src: Chemical, title: "Chemical-Hazards" },
   ];
 
   const cardDet2 = [
@@ -61,7 +61,7 @@ const CategoryPage = (props) => {
     { src: House, title: "House-Keeping" },
     { src: Quality, title: "Quality" },
     { src: Environment, title: "Environment" },
-    { src: Pictogram, title: "Pictograms" },
+    { src: Pictogram, title: "Pictogram" },
     { src: Covid, title: "Covid-19" },
   ];
 
