@@ -923,7 +923,9 @@ export default function Dashboard() {
                 onClick={() => {
                   localStorage.removeItem("userDetails123");
                   localStorage.removeItem("ehstoken12345678910");
-                  window.location.replace("http://localhost:3000/");
+                  window.location.replace(
+                    "http://" + window.location.host + "/"
+                  );
                 }}
               >
                 LOG OUT

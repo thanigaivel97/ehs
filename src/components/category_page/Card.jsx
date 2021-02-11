@@ -1,6 +1,8 @@
 /*jshint esversion: 6 */
+import { Link } from "react-router-dom";
+
 const Card = (props) => {
-    const {src, title} = props.data;
+  const { src, title } = props.data;
   return (
     <div className="cardInCat">
       <img
@@ -9,18 +11,22 @@ const Card = (props) => {
         src={src}
         alt=""
       />
-      <p
-        className="text-center mt-1"
+      <Link
+        className="mt-2"
         style={{
           fontFamily: "Lato",
           fontWeight: "500",
           fontStyle: "normal",
           fontSize: "16px",
+          display: "block",
+          textAlign: "center",
           color: "#000000",
           lineHeight: "19px",
         }}
-      >{title}
-      </p>
+        to={"/posters/" + title.toUpperCase()}
+      >
+        {title}
+      </Link>
     </div>
   );
 };

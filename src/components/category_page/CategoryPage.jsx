@@ -241,7 +241,7 @@ const CategoryPage = (props) => {
             <Cols data={cardDet2} cols="6" />
 
             <p
-              className="ml-5"
+              className="ml-5 mt-4"
               style={{
                 fontFamily: "Source Sans Pro",
                 fontStyle: "normal",

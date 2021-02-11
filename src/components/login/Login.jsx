@@ -19,7 +19,7 @@ const Login = (props) => {
 
   function responseFun(d) {
     if (d === "Logged in successfully!!!") {
-      window.location.replace("http://localhost:3000/");
+      window.location.replace("http://"+window.location.host+"/");
     } else {
       alert(d);
     }

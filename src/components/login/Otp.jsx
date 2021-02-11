@@ -12,7 +12,8 @@ const Otp = (props) => {
       
     Axios.get(`${activate}/${loginBody.token}/${loginBody.code}`)
         .then((res) => {
-            alert(res.data.message);
+          alert(res.data.message);
+          window.location.replace("http://" + window.location.host + "/login");
             props.setModalCarousel({
               one: false,
               two: true,
