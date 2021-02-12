@@ -32,7 +32,7 @@ import { BottomAddedCart } from "../product_list2/right/Right";
 import Avatar from "@material-ui/core/Avatar";
 import { connect } from "react-redux";
 import Axios from "axios";
-import { config, getPosterById } from "../../helper/apiPath";
+import { config, getPosterById, findMat, findDim } from "../../helper/apiPath";
 
 function ProductDescription(props) {
   const [posterData, setPosterData] = React.useState({});
@@ -97,8 +97,9 @@ function ProductDescription(props) {
       {
         src: posterData.dimension[0].imgUrl,
         title: posterData.dimension[0].title,
-        cus: false,
-        cusWidth: "80",
+        cus: true,
+        cusWidth: "90",
+        cusHeight: "50",
         name: "one",
         select: "Dimension",
       },
@@ -107,6 +108,7 @@ function ProductDescription(props) {
         title: posterData.dimension[1].title,
         cus: true,
         cusWidth: "100",
+        cusHeight: "60",
         name: "two",
         select: "Dimension",
       },
@@ -115,6 +117,7 @@ function ProductDescription(props) {
         title: posterData.dimension[2].title,
         cus: true,
         cusWidth: "120",
+        cusHeight: "80",
         name: "three",
         select: "Dimension",
       },
@@ -201,7 +204,6 @@ function ProductDescription(props) {
                   alt=""
                 />
                 <p className="breadLink">{posterData.name.slice(0, 25)}...</p>
-                
                 <div className="mt-2">
                   <img
                     src={posterData.imgUrl}
@@ -420,13 +422,17 @@ function ProductDescription(props) {
                         borderRadius: "6px",
                         width: "500px",
                       }}
-                      onClick={(e) => {
-                        addToCart({
-                          ...selectMatDim,
-                          ...posterData,
-                          quantity: count,
-                        });
-                        e.target.innerText = "Added!!!";
+                        onClick={(e) => {
+                          if (findMat(selectMatDim.Material) && findDim(selectMatDim.Dimension)) {
+                            addToCart({
+                              ...selectMatDim,
+                              ...posterData,
+                              quantity: count,
+                            });
+                            e.target.innerText = "Added!!!";
+                          } else {
+                            alert("Select The Proper Materail and Dimension");
+                          }
                       }}
                     >
                       Add to Cart
@@ -594,7 +600,7 @@ function ProductDescription(props) {
                             color="textSecondary"
                             component="p"
                           >
-                            This impressive paella is a perfect party dish
+                            This is impressive ArtWork
                           </Typography>
                         </CardContent>
                       </Card>

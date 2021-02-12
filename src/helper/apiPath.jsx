@@ -8,6 +8,7 @@ const getUsers = url + "auth/getUsers";
 const activate = url + "auth/activate";
 
 const getPoster = url + "posters/getPoster";
+const getBestSeller = url + "posters/getBestSeller";
 const getPosterById = url + "posters/getPosterById";
 const createPoster = url + "posters/createPoster";
 const updatePoster = url + "posters/updatePoster";
@@ -101,6 +102,7 @@ export {
   activate,
   updateUser,
   getPoster,
+  getBestSeller,
   getSignages,
   getAssetMarking,
   getCampaigns,

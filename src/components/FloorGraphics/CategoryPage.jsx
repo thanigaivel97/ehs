@@ -11,7 +11,7 @@ import PosterNow from "../../images/PosterNow.svg";
 import Upto50 from "../../images/Upto50Offer.svg";
 import Card2 from "./Card2";
 import { connect } from "react-redux";
-import { getFloorGraphics, config } from "../../helper/apiPath";
+import { getBestSeller, config } from "../../helper/apiPath";
 import Axios from "axios";
 import $ from "jquery";
 import { BottomAddedCart } from "../product_list2/right/Right";
@@ -51,7 +51,7 @@ const CategoryPage = (props) => {
 
   useEffect(() => {
     Axios.get(
-      getFloorGraphics,
+      getBestSeller + "/floorGraphics",
       config(
         props.loginResponse.token || localStorage.getItem("ehstoken12345678910")
       )
@@ -122,8 +122,9 @@ const CategoryPage = (props) => {
         {
           src: selectedModal.dimension[0].imgUrl,
           title: selectedModal.dimension[0].title,
-          cus: false,
-          cusWidth: "80",
+          cus: true,
+          cusWidth: "90",
+          cusHeight: "50",
           name: "one",
           select: "Dimension",
         },
@@ -132,6 +133,7 @@ const CategoryPage = (props) => {
           title: selectedModal.dimension[1].title,
           cus: true,
           cusWidth: "100",
+          cusHeight: "60",
           name: "two",
           select: "Dimension",
         },
@@ -140,6 +142,7 @@ const CategoryPage = (props) => {
           title: selectedModal.dimension[2].title,
           cus: true,
           cusWidth: "120",
+          cusHeight: "80",
           name: "three",
           select: "Dimension",
         },

@@ -864,8 +864,8 @@ body .ui.cards > .card {
   top: 0;
 }
 
-.hi li{
-  list-style-type:none;
+.hi li {
+  list-style-type: none;
 }
 
 #loginUseraddress2 {
@@ -875,7 +875,7 @@ body .ui.cards > .card {
   left: 467px;
   top: 283px;
   /* grey */
-   border: 1px solid #d2d2d2;
+  border: 1px solid #d2d2d2;
   box-sizing: border-box;
   border-radius: 5px;
 
@@ -902,3 +902,15 @@ body .ui.cards > .card {
 
   color: #757575;
 }
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {display: block;}
+

@@ -11,7 +11,7 @@ import PosterNow from "../../images/PosterNow.svg";
 import Upto50 from "../../images/Upto50Offer.svg";
 import Card2 from "./Card2";
 import { connect } from "react-redux";
-import { getSignages, config } from "../../helper/apiPath";
+import { getBestSeller, config } from "../../helper/apiPath";
 import Axios from "axios";
 import $ from "jquery";
 import { BottomAddedCart } from "../product_list2/right/Right";
@@ -33,11 +33,7 @@ function Design() {
         <p id="rightbelow" className="ml-5" style={{ marginTop: "-10px" }}>
           Signal that Matters.
         </p>
-        <p
-          id="rightdes"
-          className="ml-5"
-          style={{ marginTop: "-35px"}}
-        >
+        <p id="rightdes" className="ml-5" style={{ marginTop: "-35px" }}>
           Floor Graphics are used at Places of High Foot Traffic and to create a
           sense of Cautious and safety in the Surroundings.
         </p>
@@ -54,7 +50,7 @@ const CategoryPage = (props) => {
 
   useEffect(() => {
     Axios.get(
-      getSignages,
+      getBestSeller + "/signages",
       config(
         props.loginResponse.token || localStorage.getItem("ehstoken12345678910")
       )
@@ -125,8 +121,9 @@ const CategoryPage = (props) => {
         {
           src: selectedModal.dimension[0].imgUrl,
           title: selectedModal.dimension[0].title,
-          cus: false,
-          cusWidth: "80",
+          cus: true,
+          cusWidth: "90",
+          cusHeight: "50",
           name: "one",
           select: "Dimension",
         },
@@ -135,6 +132,7 @@ const CategoryPage = (props) => {
           title: selectedModal.dimension[1].title,
           cus: true,
           cusWidth: "100",
+          cusHeight: "60",
           name: "two",
           select: "Dimension",
         },
@@ -143,6 +141,7 @@ const CategoryPage = (props) => {
           title: selectedModal.dimension[2].title,
           cus: true,
           cusWidth: "120",
+          cusHeight: "80",
           name: "three",
           select: "Dimension",
         },

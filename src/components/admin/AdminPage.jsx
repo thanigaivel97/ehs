@@ -62,6 +62,7 @@ function CreatePoster(props) {
     weight: "",
     additionalDetails: "",
     sale: "",
+    bestSeller:"",
     material: materialIds,
     dimension: dimensionIds,
   };
@@ -90,6 +91,7 @@ function CreatePoster(props) {
     sale: false,
     material: false,
     dimension: false,
+    bestSeller:false
   });
 
   var allowed = [
@@ -108,6 +110,7 @@ function CreatePoster(props) {
     "weight",
     "additionalDetails",
     "sale",
+    "bestSeller"
   ];
 
   function reduceObj(prev, toReduce) {
@@ -145,7 +148,7 @@ function CreatePoster(props) {
           (v) => v.title === $(`#${single}`).text()
         );
         newPoster[single] = b[0]._id;
-      } else if (single === "language" || single === "priceGroup") {
+      } else if (single === "language" || single === "priceGroup" || single ==="bestSeller") {
         newPoster[single] = $(`#${single}`).text();
       } else {
         newPoster[single] = $(`#${single}`).val();
@@ -371,6 +374,20 @@ function CreatePoster(props) {
         </Grid.Row>
         <Grid.Row className="mt-4" columns="3">
           <Grid.Column style={{ width: "33%" }}>
+            <TextField
+              id="bestSeller"
+              select
+              label="BestSeller"
+              error={err.bestSeller}
+              style={{ width: "223px" }}
+              helperText={err.bestSeller ? "Enter BestSeller" : null}
+              variant="outlined"
+            >
+              <MenuItem value="true">true</MenuItem>
+              <MenuItem value="false">false</MenuItem>
+            </TextField>
+          </Grid.Column>
+          <Grid.Column style={{ width: "33%" }}>
             <Button
               variant="contained"
               color="primary"
@@ -405,6 +422,7 @@ function UpdateAndDeletePoster(props) {
     weight,
     additionalDetails,
     sale,
+    bestSeller
   } = props.data;
 
   const configImage = {
@@ -430,6 +448,7 @@ function UpdateAndDeletePoster(props) {
     weight: weight,
     additionalDetails: additionalDetails,
     sale: sale,
+    bestSeller:bestSeller
   };
 
   var allowed = [
@@ -448,6 +467,7 @@ function UpdateAndDeletePoster(props) {
     "weight",
     "additionalDetails",
     "sale",
+    "bestSeller"
   ];
 
   function setValue() {
@@ -462,7 +482,7 @@ function UpdateAndDeletePoster(props) {
           (v) => v.title === $(`#${single}`).text()
         );
         newPoster[single] = b[0]._id;
-      } else if (single === "language" || single === "priceGroup") {
+      } else if (single === "language" || single === "priceGroup" || single === "bestSeller") {
         newPoster[single] = $(`#${single}`).text();
       } else {
         newPoster[single] = $(`#${single}`).val();
@@ -681,7 +701,20 @@ function UpdateAndDeletePoster(props) {
             />
           </Grid.Column>
         </Grid.Row>
-        <Grid.Row columns="2" className="mt-4">
+        <Grid.Row columns="3" className="mt-4">
+          <Grid.Column style={{ width: "33%" }}>
+            <TextField
+              id="bestSeller"
+              select
+              label="BestSeller"
+              style={{ width: "223px" }}
+              variant="outlined"
+              defaultValue={bestSeller}
+            >
+              <MenuItem value="true">true</MenuItem>
+              <MenuItem value="false">false</MenuItem>
+            </TextField>
+          </Grid.Column>
           <Grid.Column style={{ width: "33%" }}>
             <Button
               variant="contained"

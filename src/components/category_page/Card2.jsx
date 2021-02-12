@@ -72,9 +72,16 @@ export const ModalCard = (props) => {
       <img
         className="mt-4 mb-2 justify-content-center oneone "
         src={props.boxDet.src}
-        style={{ marginLeft: "35px" }}
-        width={"60px"}
-        height={props.boxDet.cus ? props.boxDet.cusWidth : "90"}
+        style={
+          props.boxDet.cusHeight === "50"
+            ? { marginLeft: "40px" }
+            : props.boxDet.cusHeight === "60"
+            ? { marginLeft: "35px" }
+            : { marginLeft: "23px" }
+        }
+        // style={props.boxDet.cusHeight === 50 ? {margin:"0 35%"} : "90"}
+        width={props.boxDet.cus ? props.boxDet.cusHeight : "80"}
+        height={props.boxDet.cus ? props.boxDet.cusWidth : "80"}
         alt={props.boxDet.title}
         onMouseEnter={() => {
           popup(!pop);

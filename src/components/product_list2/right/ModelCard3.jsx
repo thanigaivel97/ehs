@@ -100,13 +100,17 @@ const ModelCard3 = (props) => {
       <Button
         className="text-white pl-3 pr-3 pt-2 pb-2"
         onClick={() => {
-          props.addToCart({
-            ...props.selectMatDim,
-            ...props.oriDet,
-            quantity: count,
-          });
-          $("#modalClose").click();
-          setCount(1);
+          if (findMat(props.selectMatDim.Material) && findDim(props.selectMatDim.Dimension)) {
+            props.addToCart({
+              ...props.selectMatDim,
+              ...props.oriDet,
+              quantity: count,
+            });
+            $("#modalClose").click();
+            setCount(1);
+          }else {
+            alert("Select The Proper Materail and Dimension");
+          }
         }}
         style={{
           fontFamily: "Lato",
