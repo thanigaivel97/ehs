@@ -149,7 +149,7 @@ const Tables = (props) => {
     const orderDet = JSON.parse(localStorage.getItem("orderUser"));
     Axios.post(createOrder, {
       userId: userJson._id,
-      name:orderDet.name,
+      name:orderDet.name || "",
       itemDetails: cartDet.cartList,
       total: totalPay + shipping,
       paymentId: res.razorpay_payment_id,
