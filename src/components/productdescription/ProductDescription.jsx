@@ -32,7 +32,13 @@ import { BottomAddedCart } from "../product_list2/right/Right";
 import Avatar from "@material-ui/core/Avatar";
 import { connect } from "react-redux";
 import Axios from "axios";
-import { config, getPosterById, findMat, findDim } from "../../helper/apiPath";
+import {
+  config,
+  getPosterById,
+  findMat,
+  findDim,
+  updateUser,
+} from "../../helper/apiPath";
 
 function ProductDescription(props) {
   const [posterData, setPosterData] = React.useState({});
@@ -136,6 +142,25 @@ function ProductDescription(props) {
     Material: { one: false, two: false, three: false },
     Dimension: { one: false, two: false, three: false },
   });
+  const [authUser, setAuthUser] = React.useState("");
+
+  function updateWishlist() {
+    Axios.post(updateUser, {
+      wishList: window.location.pathname.split("/")[2],
+      operation_type: 1,
+      userObjId: JSON.parse(localStorage.getItem("userDetails123"))._id,
+    }).then((data) => {
+      alert(data.data.message);
+    });
+  }
+
+  React.useEffect(() => {
+    if (JSON.parse(localStorage.getItem("userDetails123")))
+      setAuthUser(
+        JSON.parse(localStorage.getItem("userDetails123")).emailid ||
+          JSON.parse(localStorage.getItem("userDetails123")).phonenumber
+      );
+  }, []);
 
   React.useEffect(() => {
     if (selectMatDim.Material.one)
@@ -422,25 +447,41 @@ function ProductDescription(props) {
                         borderRadius: "6px",
                         width: "500px",
                       }}
-                        onClick={(e) => {
-                          if (findMat(selectMatDim.Material) && findDim(selectMatDim.Dimension)) {
-                            addToCart({
-                              ...selectMatDim,
-                              ...posterData,
-                              quantity: count,
-                            });
-                            e.target.innerText = "Added!!!";
-                          } else {
-                            alert("Select The Proper Materail and Dimension");
-                          }
+                      onClick={(e) => {
+                        if (
+                          findMat(selectMatDim.Material) &&
+                          findDim(selectMatDim.Dimension)
+                        ) {
+                          addToCart({
+                            ...selectMatDim,
+                            ...posterData,
+                            quantity: count,
+                          });
+                          e.target.innerText = "Added!!!";
+                        } else {
+                          alert("Select The Proper Materail and Dimension");
+                        }
                       }}
                     >
                       Add to Cart
                     </Button>
-                    <p className="ml-5 " style={{ float: "left" }}>
+                    <button
+                      className="ml-5 "
+                      onClick={() => {
+                        authUser
+                          ? updateWishlist()
+                          : alert("Login to Add Whishlist");
+                      }}
+                      style={{
+                        float: "left",
+                        background: "transparent",
+                        border: "none",
+                        color: "black",
+                      }}
+                    >
                       Add to Wishlist{" "}
                       <img src={Heart} width="15px" height="15px" alt="" />
-                    </p>
+                    </button>
                     <p style={{ float: "right", marginRight: "-50px" }}>
                       Share{" "}
                       <img src={Shareit} width="15px" height="15px" alt="" />

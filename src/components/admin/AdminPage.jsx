@@ -1207,6 +1207,12 @@ function OrderRow(props) {
   );
 }
 
+function Discount(props) {
+  return (<>
+    hi
+  </>);
+}
+
 const AdminLogin = (props) => {
   const [emailid, setEmailId] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -1288,6 +1294,10 @@ export default function AdminPage() {
 
   const [orderData, setOrderData] = React.useState([]);
 
+  function updateDiscount() {
+    setRedirect({ one: false, two: false,three:true });
+  }
+
   function getOrderFun() {
     Axios.get(getOrders)
       .then((res) => {
@@ -1333,6 +1343,7 @@ export default function AdminPage() {
   const [redirect, setRedirect] = React.useState({
     one: false,
     two: false,
+    three:false,
   });
 
   function getPosterFun(token) {
@@ -1355,11 +1366,18 @@ export default function AdminPage() {
               className="btn btn-dark"
               onClick={() => getPosterFun(userData.token)}
             >
-              Poster
+              Art Works
             </button>
 
             <button className="btn btn-dark ml-3" onClick={() => getOrderFun()}>
               Orders
+            </button>
+
+            <button
+              className="btn btn-dark ml-3"
+              onClick={() => updateDiscount()}
+            >
+              Update Discount
             </button>
           </div>
           {redirect.one ? (
@@ -1371,6 +1389,7 @@ export default function AdminPage() {
             />
           ) : null}
           {redirect.two ? <Order data={orderData} /> : null}
+          {redirect.three ? <Discount/> : null}
         </>
       )}
     </>

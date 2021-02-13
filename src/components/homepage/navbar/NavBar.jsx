@@ -6,7 +6,6 @@ import Vector from "../../../images/Vector.svg";
 import ShopCart from "../../../images/Shop.svg";
 import SearchIcon from "@material-ui/icons/Search";
 import { Link } from "react-router-dom";
-import $ from "jquery";
 
 const NavBar = (props) => {
   const [authUser, setAuthUser] = React.useState("");
@@ -22,10 +21,10 @@ const NavBar = (props) => {
 
   const searchCatogoriesOnClick = (event) => {
     setCat(event.target.text);
-        // window.location.replace(
-        //   "http://" + window.location.host + "/" + event.target.text.toLowerCase()
-        // );
-};
+    // window.location.replace(
+    //   "http://" + window.location.host + "/" + event.target.text.toLowerCase()
+    // );
+  };
 
   const search_catogories = [
     "All Categories",
@@ -68,25 +67,29 @@ const NavBar = (props) => {
                 className="dropdown-menu p-3"
                 aria-labelledby="dropdownMenuButton"
               >
-                {search_catogories.map((v, i) => (
-                   v === "All Categories" ? <>
+                {search_catogories.map((v, i) =>
+                  v === "All Categories" ? (
+                    <>
+                      <Link
+                        key={v}
+                        to="/"
+                        onClick={searchCatogoriesOnClick}
+                        className="searchCategory dropdown-item"
+                      >
+                        {v}
+                      </Link>
+                    </>
+                  ) : (
                     <Link
-                    key={v}
-                    to="/"
-                    onClick={searchCatogoriesOnClick}
-                    className="searchCategory dropdown-item"
-                  >
-                    {v}
-                  </Link></>:
-                  <Link
-                    key={v}
-                    to={"/"+v.toLowerCase()}
-                    onClick={searchCatogoriesOnClick}
-                    className="searchCategory dropdown-item"
-                  >
-                    {v}
-                  </Link>
-                ))}
+                      key={v}
+                      to={"/" + v.toLowerCase()}
+                      onClick={searchCatogoriesOnClick}
+                      className="searchCategory dropdown-item"
+                    >
+                      {v}
+                    </Link>
+                  )
+                )}
               </div>
             </div>
 
@@ -152,16 +155,26 @@ const NavBar = (props) => {
       <nav className="container navbar navbar-expand-lg mt-0 pt-0">
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
+            {authUser ? (
+              <>
+                <li className="nav-item ml-4">
+                  <Link
+                    to="/dashboard"
+                    className="nav-link text-white textColorAndWeight btn shadow-none border-0"
+                    style={{ backgroundColor: "#003459", border: "0px" }}
+                  >
+                    Profile
+                  </Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="nav-item ml-4">
+                  <p>{"                    "}</p>
+                </li>
+              </>
+            )}
             <li className="nav-item ml-4">
-              <Link
-                to="/dashboard"
-                className="nav-link text-white textColorAndWeight btn shadow-none border-0"
-                style={{ backgroundColor: "#003459", border: "0px" }}
-              >
-                Profile
-              </Link>
-            </li>
-            <li className="nav-item ml-4" >
               <div class="dropdown">
                 <Link
                   to="/posters"

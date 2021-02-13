@@ -5,7 +5,11 @@ const login = url + "auth/login";
 const signup = url + "auth/signup";
 const updateUser = url + "auth/updateUser";
 const getUsers = url + "auth/getUsers";
+const getUserById = url + "auth/getUserById";
 const activate = url + "auth/activate";
+const otp = url + "auth/otp";
+const verifyOtp = url + "auth/verifyOtp";
+
 
 const getPoster = url + "posters/getPoster";
 const getBestSeller = url + "posters/getBestSeller";
@@ -37,6 +41,7 @@ const updateSubCategory = url + "category/updateSubCategory";
 
 const createOrder = url + "orders/createOrder";
 const getOrders = url + "orders/getOrders";
+const getOrdersById = url + "orders/getOrdersById";
 const updateOrder = url + "orders/updateOrder";
 const deleteOrder = url + "orders/deleteOrder";
 
@@ -110,6 +115,8 @@ export {
   getPosterById,
   createPoster,
   signup,
+  otp,
+  verifyOtp,
   updatePoster,
   deletePoster,
   getMaterial,
@@ -122,9 +129,11 @@ export {
   getSubCategory,
   createOrder,
   getOrders,
+  getOrdersById,
   updateOrder,
   deleteOrder,
   getUsers,
+  getUserById,
   getCategory,
   deleteSubCategory,
   updateSubCategory,

@@ -19,13 +19,11 @@ import Axios from "axios";
 import { createOrder, updateUser } from "../../helper/apiPath";
 import { BottomAddedCart } from "../product_list2/right/Right";
 import { findMat, findDim } from "../../helper/apiPath";
+import Otp from "../login/Otp";
 import $ from "jquery";
 import { Input } from "@material-ui/core";
 import EhsLogo from "../../images/EhsLogo.svg";
 import { login, signup } from "../../helper/apiPath";
-import ModalComponent from "./modalComponent";
-import ModalComponentWithLogin from "./modalComponent";
-
 
 function loadScript(src) {
   return new Promise((resolve) => {
@@ -44,19 +42,6 @@ function loadScript(src) {
 const __DEV__ = document.domain === "localhost";
 
 const Tables = (props) => {
-
-
-
-  const [name, setName] = React.useState("");
-  const [addr, setAddr] = React.useState("");
-  const [phn, setPhn] = React.useState("");
-      const [nme, setNme] = React.useState("");
-
-
-
-
-
-
   const [emailid1, setEmailId1] = React.useState("");
   const [password1, setPassword1] = React.useState("");
   const [phonenumber1, setPhonenumber1] = React.useState("");
@@ -85,13 +70,16 @@ const Tables = (props) => {
   const [modalCarousel, setModalCarousel] = useState({
     one: true,
     two: false,
+    three: false,
   });
 
   const [emailid, setEmailId] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [phonenumber, setPhonenumber] = React.useState("");
 
   const [address, setAddress] = React.useState("");
   const [state, setState] = React.useState("");
+  const [name, setName] = React.useState("");
   const [pincode, setPincode] = React.useState("");
 
   const [loginBody, setLoginBody] = React.useState({});
@@ -117,6 +105,7 @@ const Tables = (props) => {
         setModalCarousel({
           one: false,
           two: false,
+          three: true,
         });
       })
       .catch((err) => {
@@ -136,6 +125,7 @@ const Tables = (props) => {
 
   const [shipping, setShipping] = React.useState(220);
 
+  var addr;
 
   function calculate(e) {
     let temp = 0;
@@ -146,18 +136,16 @@ const Tables = (props) => {
   }
 
   function orderPlaced(res) {
-    const orderDet = JSON.parse(localStorage.getItem("orderUser"));
     Axios.post(createOrder, {
       userId: userJson._id,
-      name:orderDet.name,
       itemDetails: cartDet.cartList,
       total: totalPay + shipping,
       paymentId: res.razorpay_payment_id,
       orderId: res.razorpay_order_id,
       status: "Order Confirmed",
-      address: addrWithLogin || orderDet.addr,
+      address: addr,
       emailid: userJson?.emailid,
-      phonenumber: userJson?.phonenumber || orderDet.phonenumber,
+      phonenumber: userJson?.phonenumber,
     })
       .then((res) => {
         alert(res.data.message);
@@ -169,51 +157,23 @@ const Tables = (props) => {
       });
   }
 
-  let addrWithLogin;
-
   function proceed() {
     if ($("#oldAdd").is(":checked")) {
-      addrWithLogin = userJson.address;
+      addr = userJson.address;
     } else if ($("#newAdd").is(":checked")) {
-      addrWithLogin =
-        "Door:" +
+      addr =
+        "Name:" +
         name +
-        "  |  Street:" +
+        "  |  Landmark:" +
         address +
-        "  |  City:" +
+        "  |  State:" +
         state +
         "  |  Pincode:" +
         pincode;
     } else {
-      addrWithLogin = userJson.emailid || userJson.phonenumber;
+      addr = userJson.emailid || userJson.phonenumber;
     }
 
-    Axios.post(updateUser, {
-      emailid: userJson?.emailid,
-      phonenumber: userJson?.phonenumber,
-      address: addrWithLogin,
-    })
-      .then((res) => {
-        $("#modalCls").trigger("click");
-        userJson["address"] = addr;
-        session(userJson);
-        displayRazorpay();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  function proceed1() {
-    addrWithLogin =
-      "Door:" +
-      name +
-      "  |  Street:" +
-      address +
-      "  |  City:" +
-      state +
-      "  |  Pincode:" +
-      pincode;
     Axios.post(updateUser, {
       emailid: userJson?.emailid,
       phonenumber: userJson?.phonenumber,
@@ -230,13 +190,32 @@ const Tables = (props) => {
       });
   }
 
-  function proceedWithoutLogin() {
-     
-      $("#modalCls").trigger("click");
-      displayRazorpay();
-     
-   }
+  function proceed1() {
+    addr =
+      "Name:" +
+      name +
+      "  | Landmark:" +
+      address +
+      "  | State:" +
+      state +
+      "  | Pincode:" +
+      pincode;
 
+    Axios.post(updateUser, {
+      emailid: userJson?.emailid,
+      phonenumber: userJson?.phonenumber,
+      address: addr,
+    })
+      .then((res) => {
+        $("#modalCls").trigger("click");
+        userJson["address"] = addr;
+        session(userJson);
+        displayRazorpay();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -339,11 +318,13 @@ const Tables = (props) => {
       userJson.emailid || userJson.phonenumber
         ? setModalCarousel({
             one: false,
-            two: true,
+            two: false,
+            three: true,
           })
         : setModalCarousel({
             one: true,
             two: false,
+            three: false,
           });
       paymentFun();
     } else {
@@ -753,17 +734,233 @@ const Tables = (props) => {
             style={{ background: "none", border: "none" }}
           >
             <div className="modal-body">
-              {modalCarousel.one ? (
+              {modalCarousel.two ? (
                 <>
-                  <ModalComponent
-                    proceedWithoutLogin={proceedWithoutLogin}
-                    setAddr={setAddr}
-                    setPhn={setPhn}
-                    setNme={setNme}
-                  />
+                  <div className="loginPage p-5 mx-auto d-block">
+                    <img
+                      className="mx-auto d-block"
+                      id="ehsLogoImg"
+                      src={EhsLogo}
+                      alt="Ehs Logo"
+                    />
+
+                    <p id="ehsLogoLabel" className="text-center mt-3">
+                      Log Into your account
+                    </p>
+
+                    <input
+                      className="mx-auto d-block mt-3"
+                      id="loginUserEmail"
+                      pattern="^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$"
+                      type="text"
+                      onChange={(e) => {
+                        document.getElementById("loginUserPhone").value = "";
+                        setEmailId(e.target.value);
+                        setLoginBody({
+                          emailid: e.target.value,
+                          password: password,
+                        });
+                      }}
+                      placeholder="Email"
+                    />
+
+                    <p className="text-center mt-2`">or</p>
+
+                    <input
+                      className="mx-auto d-block "
+                      id="loginUserPhone"
+                      pattern="[0-9]{10}"
+                      type="text"
+                      onChange={(e) => {
+                        document.getElementById("loginUserEmail").value = "";
+                        setPhonenumber(e.target.value);
+                        setLoginBody({
+                          password: password,
+                          phonenumber: e.target.value,
+                        });
+                      }}
+                      placeholder="Phone Number"
+                    />
+                    <input
+                      className="mx-auto d-block mt-3"
+                      id="loginUserPass"
+                      type="password"
+                      minLength="6"
+                      onChange={(e) => {
+                        setPassword(e.target.value);
+                        if (loginBody1.emailid) {
+                          setLoginBody({
+                            emailid: emailid,
+                            password: e.target.value,
+                          });
+                        } else if (loginBody1.emailid) {
+                          setLoginBody({
+                            phonenumber: phonenumber,
+                            password: e.target.value,
+                          });
+                        } else {
+                          setLoginBody({
+                            emailid: emailid,
+                            phonenumber: phonenumber,
+                            password: e.target.value,
+                          });
+                        }
+                      }}
+                      placeholder="Password"
+                    />
+
+                    <div className="mt-2 ml-3">
+                      <button
+                        id="loginBtn"
+                        className="mt-2"
+                        onClick={() => loginReq(loginBody)}
+                      >
+                        Log In
+                      </button>
+                    </div>
+
+                    <p className="text-center mt-1">or</p>
+
+                    <button
+                      id="signupBtn"
+                      className="ml-3 d-block"
+                      onClick={() =>
+                        setModalCarousel({
+                          one: true,
+                          two: false,
+                          three: false,
+                        })
+                      }
+                    >
+                      Create an account
+                    </button>
+                  </div>
                 </>
               ) : null}
-              {modalCarousel.two ? (
+              {modalCarousel.one ? (
+                <>
+                  <>
+                    {isToken ? (
+                      <div>
+                        <Otp
+                          token={token}
+                          setModalCarousel={setModalCarousel}
+                        />
+                      </div>
+                    ) : (
+                      <div className="loginPage p-5 mx-auto d-block">
+                        <img
+                          className="mx-auto d-block"
+                          id="ehsLogoImg"
+                          src={EhsLogo}
+                          alt="Ehs Logo"
+                        />
+
+                        <p id="ehsLogoLabel" className="text-center mt-3">
+                          Create Account
+                        </p>
+
+                        <form
+                          onSubmit={(e) => {
+                            signupReq(loginBody1);
+                            mySubmitHandle(e);
+                          }}
+                        >
+                          <input
+                            className="mx-auto d-block mt-3"
+                            id="loginUserEmail"
+                            pattern="^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$"
+                            type="text"
+                            onChange={(e) => {
+                              document.getElementById("loginUserPhone").value =
+                                "";
+                              setEmailId1(e.target.value);
+                              setLoginBody1({
+                                emailid: e.target.value,
+                                password: password1,
+                              });
+                            }}
+                            placeholder="Email"
+                          />
+
+                          <p className="text-center mt-2`">or</p>
+
+                          <input
+                            className="mx-auto d-block "
+                            id="loginUserPhone"
+                            pattern="[0-9]{10}"
+                            type="text"
+                            onChange={(e) => {
+                              document.getElementById("loginUserEmail").value =
+                                "";
+                              setPhonenumber1(e.target.value);
+                              setLoginBody1({
+                                password: password1,
+                                phonenumber: e.target.value,
+                              });
+                            }}
+                            placeholder="Phone Number"
+                          />
+                          <input
+                            className="mx-auto d-block mt-3"
+                            id="loginUserPass"
+                            type="password"
+                            minLength="6"
+                            onChange={(e) => {
+                              setPassword1(e.target.value);
+                              if (loginBody1.emailid) {
+                                setLoginBody1({
+                                  emailid: emailid1,
+                                  password: e.target.value,
+                                });
+                              } else if (loginBody1.emailid) {
+                                setLoginBody1({
+                                  phonenumber: phonenumber1,
+                                  password: e.target.value,
+                                });
+                              } else {
+                                setLoginBody1({
+                                  emailid: emailid1,
+                                  phonenumber: phonenumber1,
+                                  password: e.target.value,
+                                });
+                              }
+                            }}
+                            placeholder="Password"
+                          />
+
+                          <button
+                            id="loginBtn"
+                            className="mt-4"
+                            style={{ marginLeft: "13px" }}
+                            type="submit"
+                          >
+                            Sign Up
+                          </button>
+
+                          <p className="text-center mt-2">or</p>
+
+                          <button
+                            id="signupBtn"
+                            className="d-block "
+                            style={{ marginLeft: "13px" }}
+                            onClick={() =>
+                              setModalCarousel({
+                                one: false,
+                                two: true,
+                                three: false,
+                              })
+                            }
+                          >
+                            Log In
+                          </button>
+                        </form>
+                      </div>
+                    )}
+                  </>
+                </>
+              ) : null}
+              {modalCarousel.three ? (
                 <>
                   <div className="loginPage p-5 mx-auto d-block">
                     <img
@@ -817,7 +1014,7 @@ const Tables = (props) => {
                                 <Input
                                   className="mx-auto d-block mt-3"
                                   type="text"
-                                  placeholder="DoorNumber"
+                                  placeholder="Name"
                                   variant="outlined"
                                   onChange={(e) => setName(e.target.value)}
                                 />
@@ -826,7 +1023,7 @@ const Tables = (props) => {
                                 <Input
                                   className="mx-auto d-block mt-3 ml-2"
                                   type="text"
-                                  placeholder="Street"
+                                  placeholder="Address"
                                   variant="outlined"
                                   onChange={(e) => setAddress(e.target.value)}
                                 />
@@ -839,7 +1036,7 @@ const Tables = (props) => {
                                 <Input
                                   className="mx-auto d-block mt-3"
                                   type="text"
-                                  placeholder="City"
+                                  placeholder="State/Country"
                                   variant="outlined"
                                   onChange={(e) => setState(e.target.value)}
                                 />
@@ -871,7 +1068,7 @@ const Tables = (props) => {
                             <Input
                               className="mx-auto d-block mt-3"
                               type="text"
-                              placeholder="DoorNumber"
+                              placeholder="Name"
                               variant="outlined"
                               onChange={(e) => setName(e.target.value)}
                             />
@@ -880,7 +1077,7 @@ const Tables = (props) => {
                             <Input
                               className="mx-auto d-block mt-3 ml-2"
                               type="text"
-                              placeholder="Street"
+                              placeholder="Address"
                               variant="outlined"
                               onChange={(e) => setAddress(e.target.value)}
                             />
@@ -893,7 +1090,7 @@ const Tables = (props) => {
                             <Input
                               className="mx-auto d-block mt-3"
                               type="text"
-                              placeholder="City"
+                              placeholder="State/Country"
                               variant="outlined"
                               onChange={(e) => setState(e.target.value)}
                             />

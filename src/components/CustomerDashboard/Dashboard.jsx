@@ -15,12 +15,47 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 import $ from "jquery";
 import DisInfect from "../../images/DisInfectant.svg";
 import Card2 from "../category_page/Card2";
+import Axios from "axios";
+import { getOrdersById, getUserById, updateUser } from "../../helper/apiPath";
 
 const PersonalInfo = () => {
+  const [name, setName] = React.useState("");
+  const [oldPassword, setOldPassword] = React.useState("");
+  const [newPassword, setNewPassword] = React.useState("");
+  const [address, setAddress] = React.useState("");
+
+  function updatePassword() {
+    Axios.post(updateUser, {
+      firstname: name,
+      oldPassword: oldPassword,
+      password: newPassword,
+      userObjId: JSON.parse(localStorage.getItem("userDetails123"))._id,
+    })
+      .then((res) => {
+        console.log(res);
+        alert(res.data.message);
+        return;
+      })
+      .catch((err) => console.log(err));
+  }
+
+  function updateAddress() {
+    Axios.post(updateUser, {
+      address: address,
+      userObjId: JSON.parse(localStorage.getItem("userDetails123"))._id,
+    })
+      .then((res) => {
+        console.log(res);
+        alert(res.data.message);
+        return;
+      })
+      .catch((err) => console.log(err));
+  }
+
   return (
     <>
       <Grid className="mt-3 ml-5 ">
-        <Grid.Row columns="2">
+        {/* <Grid.Row columns="2">
           <Grid.Column>
             {" "}
             <p className="perhead">Personal Information </p>
@@ -29,7 +64,7 @@ const PersonalInfo = () => {
             floated="right"
             style={{ position: "absolute", right: "225px" }}
           >
-            {/* <Button className="perbut text-white">Update</Button> */}
+            <Button className="perbut text-white">Update</Button> 
             <div style={{ marginTop: "140px" }}>
               <a href="/#" className="forget">
                 Forgot Password
@@ -41,12 +76,7 @@ const PersonalInfo = () => {
             </div>
           </Grid.Column>
         </Grid.Row>
-        <Grid.Row>
-          <p className="perside">
-            Updating email address or phone number would require verification
-            after making changes here.{" "}
-          </p>
-        </Grid.Row>
+         */}
         <Grid.Row>
           <div className="ml-3">
             <Grid className="ml-3">
@@ -56,74 +86,63 @@ const PersonalInfo = () => {
                     <div className="row">
                       <div className="col">
                         <div className="row">
-                          <div className="col-3">
-                            <label htmlFor="Name" className="formd">
-                              Name
-                            </label>
-                          </div>
-                          <div className="col-3">
-                            <Input id="Name" type="text" />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col ml-4">
-                        <div className="row">
                           <div className="col-6">
                             <label htmlFor="PASSWORD" className="formd">
-                               PASSWORD
+                              NAME
                             </label>
                           </div>
                           <div className="col-6">
-                            <Input id="PASSWORD" type="password" />
+                            <Input
+                              id="NAME"
+                              type="text"
+                              onChange={(e) => setName(e.target.value)}
+                            />
+                          </div>
+
+                          <div className="col-6 mt-3">
+                            <label htmlFor="PASSWORD" className="formd">
+                              OLD PASSWORD
+                            </label>
+                          </div>
+                          <div className="col-6 mt-3">
+                            <Input
+                              id="PASSWORD"
+                              type="password"
+                              onChange={(e) => setOldPassword(e.target.value)}
+                            />
+                          </div>
+
+                          <div className="col-6 mt-3">
+                            <label htmlFor="PASSWORD" className="formd">
+                              NEW PASSWORD
+                            </label>
+                          </div>
+                          <div className="col-6 mt-3">
+                            <Input
+                              id="PASSWORD"
+                              type="password"
+                              onChange={(e) => setNewPassword(e.target.value)}
+                            />
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </Grid.Row>
-                  <Grid.Row className="mt-3">
-                    <div className="row">
-                      <div className="col">
-                        <div className="row">
-                          <div className="col-3">
-                            <label htmlFor="EMAIL" className="formd">
-                              EMAIL
-                            </label>
-                          </div>
-                          <div className="col-3" style={{ marginLeft: "-5px" }}>
-                            <Input id="EMAIL" type="email" />
-                          </div>
-                        </div>
-                      </div>
-                      {/* <div className="col" style={{ marginLeft: "-38px" }}>
-                        <div className="row">
-                          <div className="col-7">
-                            <label htmlFor="CONFIRMPASSWORD" className="formd">
-                              CONFIRM PASSWORD
-                            </label>
-                          </div>
-                          <div className="col-5">
-                            <Input id="CONFIRMPASSWORD" type="password" />
-                          </div>
-                        </div>
-                      </div> */}
-                    </div>
-                  </Grid.Row>
-                  <Grid.Row className="mt-3">
-                    <div className="row">
-                      <div className="col">
-                        <div className="row">
-                          <div className="col-3">
-                            <label htmlFor="MOBILE" className="formd">
-                              MOBILE
-                            </label>
-                          </div>
-                          <div className="col" style={{ marginLeft: "4px" }}>
-                            <Input id="MOBILE" type="text" />
-                          </div>
-                        </div>
+
+                      <div className="col ml-4">
+                        <div className="row"></div>
                       </div>
                     </div>
                   </Grid.Row>
+                </Grid.Column>
+                <Grid.Column
+                  floated="right"
+                  style={{ position: "absolute", right: "225px" }}
+                >
+                  <Button
+                    className="perbut2 text-white"
+                    onClick={updatePassword}
+                  >
+                    Update
+                  </Button>
                 </Grid.Column>
               </Grid.Row>
             </Grid>
@@ -194,30 +213,32 @@ const PersonalInfo = () => {
               </div>
             </div> */}
 
-             <textarea
-            className="mx-auto d-block mt-3"
-            id="loginUseraddress2"
-            rows="5"
-            // onChange={(e) => {
-            //   setAddress(e.target.value);
-            //   setLoginBody({
-            //     emailid: emailid,
-            //     password: password,
-            //     firstname: firstname,
-            //     lastname: lastname,
-            //     phonenumber: phonenumber,
-            //     address: e.target.value,
-            //   });
-            // }}
-            placeholder="Address"
-          />
-
+            <textarea
+              className="mx-auto d-block mt-3"
+              id="loginUseraddress2"
+              rows="5"
+              // onChange={(e) => {
+              //   setAddress(e.target.value);
+              //   setLoginBody({
+              //     emailid: emailid,
+              //     password: password,
+              //     firstname: firstname,
+              //     lastname: lastname,
+              //     phonenumber: phonenumber,
+              //     address: e.target.value,
+              //   });
+              // }}
+              placeholder="Address"
+              onChange={(e) => setAddress(e.target.value)}
+            />
           </Grid.Column>
           <Grid.Column
             floated="right"
             style={{ position: "absolute", right: "225px" }}
           >
-            <Button className="perbut2 text-white">Add Details </Button>
+            <Button className="perbut2 text-white" onClick={updateAddress}>
+              Add Address{" "}
+            </Button>
           </Grid.Column>
         </Grid.Row>
 
@@ -231,7 +252,7 @@ const PersonalInfo = () => {
           }}
         />
 
-{/*         
+        {/*         
         <Grid.Row columns="2">
           <Grid.Column>
             <p className="perhead mb-4">Payment Preferences</p>
@@ -257,14 +278,40 @@ const PersonalInfo = () => {
             <Button className="perbut3 text-white">Add Payment Option </Button>
           </Grid.Column>
         </Grid.Row> */}
-
-
-
       </Grid>
     </>
   );
 };
+
 const Orders = () => {
+  const [orderData, setOrderData] = React.useState([]);
+  const [authUser, setAuthUser] = React.useState("");
+
+  function getOrderFun() {
+    Axios.get(getOrdersById, {
+      params: {
+        emailid: JSON.parse(localStorage.getItem("userDetails123")).emailid,
+        phonenumber: JSON.parse(localStorage.getItem("userDetails123"))
+          .phonenumber,
+      },
+    })
+      .then((res) => {
+        setOrderData(res.data.orders);
+        console.log(res.data.orders);
+      })
+      .catch((err) => console.log(err));
+  }
+
+  React.useEffect(() => {
+    if (JSON.parse(localStorage.getItem("userDetails123"))) {
+      setAuthUser(
+        JSON.parse(localStorage.getItem("userDetails123")).emailid ||
+          JSON.parse(localStorage.getItem("userDetails123")).phonenumber
+      );
+      getOrderFun();
+    }
+  }, []);
+
   const Material = {
     one: "125 Micron (non-tearable)",
     two: "Self-adhesive (premium)",
@@ -286,19 +333,6 @@ const Orders = () => {
     if (dim.one) return Dimension.one;
     else if (dim.two) return Dimension.two;
     else if (dim.three) return Dimension.three;
-  };
-
-  const details = {
-    Dimension: { one: false, two: true, three: false },
-    Material: { one: false, two: true, three: false },
-    bought: "473",
-    by: "By Pankaj Jadhav",
-    isInStock: true,
-    quantity: 1,
-    rate: 4.6,
-    src: "/static/media/DisInfectant.ea3af391.svg",
-    title: "Floor Graphics | Printable Catalog | PRD-FG009",
-    price: 400,
   };
 
   const QontoConnector = withStyles({
@@ -415,131 +449,142 @@ const Orders = () => {
 
   const [value, setValue] = React.useState(2);
 
+
   return (
     <>
       <Grid className="mt-3 ml-5 " style={{ width: "100%" }}>
         <Grid.Row columns="2">
           <p className="perhead">My Orders</p>
         </Grid.Row>
-        <Grid.Row
-          style={{
-            border: "1px solid #D2D2D2",
-            borderRadius: "10px",
-            width: "80%",
-            padding: "30px",
-          }}
-        >
-          <div>
-            <div className="row">
-              <p
-                className=" perhead ml-3"
-                style={{ fontSize: "14px", lineHeight: "17px" }}
-              >
-                ORDER # 76-2260441-433074
-              </p>
-              <p
-                className="perhead "
-                style={{
-                  fontSize: "14px",
-                  lineHeight: "17px",
-                  marginLeft: "420px",
-                }}
-              >
-                Ordered on Saturday, 10 October 2020
-              </p>
-            </div>
-            <Grid className="ml-3">
-              <Grid.Row columns="2">
-                <Grid.Column className="ml-3">
-                  <Grid.Row>
-                    <Grid.Column>
-                      <img
-                        src={details.src}
-                        width="120px"
-                        height="140px"
-                        alt=""
-                      />
-                    </Grid.Column>
-                    <Grid.Column className="ml-4 mt-2 mr-0">
-                      <p
-                        className="tabletitle p-0 mb-2"
-                        style={{ width: "230px" }}
-                      >
-                        {details.title}
-                      </p>
-                      <p
-                        className="tabledata p-0 m-0"
-                        style={{ width: "300px" }}
-                      >
-                        Material : <span>{findMat(details.Material)}</span>
-                      </p>
-                      <p
-                        className="tabledata p-0 m-0"
-                        style={{ width: "300px" }}
-                      >
-                        Dimension : <span>{findDim(details.Dimension)}</span>
-                      </p>
-                      <p className="tabledata p-0 m-0">
-                        Price : <span>₹{details.price}</span>
-                      </p>
-                      <p className="tabledata p-0 m-0">
-                        Quantity : <span>{details.quantity}</span>
-                      </p>
-                    </Grid.Column>
-                  </Grid.Row>
-                </Grid.Column>
-                <Grid.Column
-                  className="mt-3"
-                  style={{ textAlign: "end", marginLeft: "239px" }}
+
+        {orderData.map((v, i) => (
+          <Grid.Row
+            style={{
+              border: "1px solid #D2D2D2",
+              borderRadius: "10px",
+              width: "80%",
+              padding: "30px",
+            }}
+            className="mt-3"
+            key={i}
+          >
+            <div>
+              <div className="row">
+                <p
+                  className=" perhead ml-3"
+                  style={{ fontSize: "14px", lineHeight: "17px" }}
                 >
-                  <p className="def" style={{ marginTop: "-5px" }}>
-                    View Quotation
-                  </p>
-                  <p className="def" style={{ marginTop: "-5px" }}>
-                    Get Invoice
-                  </p>
-                  <p className="def" style={{ marginTop: "-5px" }}>
-                    Request Cancellation{" "}
-                  </p>
-                  <p className="def" style={{ marginTop: "-5px" }}>
-                    Request Return or Replace{" "}
-                  </p>
-                  <button
-                    type="button"
-                    className="def"
-                    data-toggle="modal"
-                    data-target="#exampleModal"
-                    id="modalOpen"
-                    style={{
-                      marginTop: "-5px",
-                      border: "0px none",
-                      backgroundColor: "white",
-                    }}
-                  >
-                    Review Product
-                  </button>
-                </Grid.Column>
-              </Grid.Row>
-
-              <Grid.Row>
-                <div className={classes.root}>
-                  <Stepper
-                    alternativeLabel
-                    activeStep={activeStep}
-                    connector={<QontoConnector />}
-                  >
-                    {steps.map((label) => (
-                      <Step key={label}>
-                        <StepLabel StepIconComponent={QontoStepIcon}>
-                          <p className="steplabel">{label}</p>
-                        </StepLabel>
-                      </Step>
+                  {v.orderId}
+                </p>
+                <p
+                  className="perhead "
+                  style={{
+                    fontSize: "14px",
+                    lineHeight: "17px",
+                    marginLeft: "420px",
+                  }}
+                >
+                  Ordered on {v.created_at}
+                </p>
+              </div>
+              <Grid className="ml-3">
+                <Grid.Row columns="2">
+                  <Grid.Column className="ml-3">
+                    {v.itemDetails.map((val, ind) => (
+                      <Grid.Row key={ind} className="mt-4">
+                        <Grid.Column>
+                          <img
+                            src={val.imgUrl}
+                            width="120px"
+                            height="140px"
+                            alt=""
+                          />
+                        </Grid.Column>
+                        <Grid.Column className="ml-4 mt-2 mr-0">
+                          <p
+                            className="tabletitle p-0 mb-2"
+                            style={{ width: "230px" }}
+                          >
+                            {val.name}
+                          </p>
+                          <p
+                            className="tabledata p-0 m-0"
+                            style={{ width: "300px" }}
+                          >
+                            Material : <span>{findMat(val.Material)}</span>
+                          </p>
+                          <p
+                            className="tabledata p-0 m-0"
+                            style={{ width: "300px" }}
+                          >
+                            Dimension : <span>{findDim(val.Dimension)}</span>
+                          </p>
+                          <p className="tabledata p-0 m-0">
+                            Price : <span>₹{val.originalPrice}</span>
+                          </p>
+                          <p className="tabledata p-0 m-0">
+                            Quantity : <span>{val.quantity}</span>
+                          </p>
+                        </Grid.Column>
+                      </Grid.Row>
                     ))}
-                  </Stepper>
+                  </Grid.Column>
+                  <Grid.Column
+                    className="mt-3"
+                    style={{ textAlign: "end", marginLeft: "239px" }}
+                  >
+                    <p className="def" style={{ marginTop: "-5px" }}>
+                      View Quotation
+                    </p>
+                    <p className="def" style={{ marginTop: "-5px" }}>
+                      Request Cancellation{" "}
+                    </p>
+                    <button
+                      type="button"
+                      className="def"
+                      data-toggle="modal"
+                      data-target="#exampleModal"
+                      id="modalOpen"
+                      style={{
+                        marginTop: "-5px",
+                        border: "0px none",
+                        backgroundColor: "white",
+                      }}
+                    >
+                      Review Product
+                    </button>
+                  </Grid.Column>
+                </Grid.Row>
 
-                  {/* Stepper Button Controls */}
+                <Grid.Row>
+                  <div className={classes.root}>
+                    <Stepper
+                      alternativeLabel
+                      activeStep={
+                        v.status === "Order Confirmed"
+                          ? 1
+                          : v.status === "Order Dispatched"
+                          ? 2
+                          : v.status === "Order Shipped"
+                          ? 3
+                          : v.status === "Order Delivered"
+                          ? 4
+                          : 1
+                      }
+                      connector={<QontoConnector />}
+                    >
+                      {steps.map((label) => (
+                        <Step key={label}>
+                          <StepLabel StepIconComponent={QontoStepIcon}>
+                            <p className="steplabel">{label}</p>
+                          </StepLabel>
+                        </Step>
+                      ))}
+                    </Stepper>
 
-                  {/* 
+                    {/* Stepper Button Controls */}
+
+                    {/* 
                    <div>
                     {activeStep === steps.length ? (
                       <div>
@@ -580,23 +625,24 @@ const Orders = () => {
                       </div>
                     )}
                   </div> */}
-                </div>
-              </Grid.Row>
-              <Grid.Row>
-                <p
-                  className="perhead"
-                  style={{
-                    fontSize: "14px",
-                    lineHeight: "17px",
-                    marginLeft: "717px",
-                  }}
-                >
-                  Order Total: ₹520{" "}
-                </p>
-              </Grid.Row>
-            </Grid>
-          </div>
-        </Grid.Row>
+                  </div>
+                </Grid.Row>
+                <Grid.Row>
+                  <p
+                    className="perhead"
+                    style={{
+                      fontSize: "14px",
+                      lineHeight: "17px",
+                      marginLeft: "717px",
+                    }}
+                  >
+                    Order Total:{v.total}
+                  </p>
+                </Grid.Row>
+              </Grid>
+            </div>
+          </Grid.Row>
+        ))}
       </Grid>
 
       <div
@@ -673,18 +719,34 @@ const Orders = () => {
     </>
   );
 };
-const Wishlist = (props) => {
-  const cardDet = {
-    src: DisInfect,
-    title: "Floor Graphics | Printable Catalog | PRD-FG009",
-    by: "By Pankaj Jadhav",
-    isInStock: true,
-    rate: 4.6,
-    bought: "473",
-    price: 400,
-  };
 
+const Wishlist = (props) => {
+  const [orderData, setOrderData] = React.useState([]);
+
+  function getOrderFun() {
+    Axios.get(
+      getUserById + "/" + JSON.parse(localStorage.getItem("userDetails123"))._id
+    )
+      .then((res) => {
+        setOrderData(res.data.users.wishList);
+      })
+      .catch((err) => console.log(err));
+  }
+
+  React.useEffect(() => getOrderFun(), []);
+
+ 
   const [bottomDet, setBottomDet] = React.useState({});
+
+  function removeWishList(id) {
+    Axios.post(updateUser, {
+      wishList:id,
+      operation_type: 2,
+      userObjId: JSON.parse(localStorage.getItem("userDetails123"))._id,
+    }).then((data) => {
+      getOrderFun();
+    });
+  }
 
   const addToCart = (det) => {
     setBottomDet(det);
@@ -700,27 +762,22 @@ const Wishlist = (props) => {
           My Wishlist
         </Grid.Row>
         <Grid.Row className="mt-3">
-          {[...Array(4)].map((v, i) => (
+          {orderData.map((v, i) => (
             <Grid.Column key={i} className={i !== 0 ? "ml-3" : "m-0 p-0"}>
               <Card2
-                data={cardDet}
+                data={v}
                 addToCart={addToCart}
                 isCardClickAvail={true}
               />
-              <div>
-                {[...Array(2)].map((v, i) => (
-                  <div key={i} className={i !== 0 ? "carddiv mt-1" : "carddiv"}>
-                    <p className="pee">15% off on Self-adhesive sunboard</p>
-                  </div>
-                ))}
-              </div>
-            </Grid.Column>
+              <button onClick={()=>removeWishList(v._id)}>Remove</button>
+             </Grid.Column>
           ))}
         </Grid.Row>
       </Grid>
     </>
   );
 };
+
 const Quotes = () => {
   const [s, sets] = useState(false);
 
