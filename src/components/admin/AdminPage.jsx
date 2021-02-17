@@ -15,6 +15,7 @@ import {
   jsonToFormData,
   getOrders,
   updateOrder,
+  updateCategory,
   findMat,
   findDim,
 } from "../../helper/apiPath";
@@ -195,6 +196,7 @@ function CreatePoster(props) {
               select
               variant="outlined"
               label="Category"
+              onChange={(e) => props.getSubCategoryData(props.token,e.target.value)}
             >
               {props.catData.map((v, i) => (
                 <MenuItem key={i} value={v._id} name={v._id}>
@@ -542,6 +544,9 @@ function UpdateAndDeletePoster(props) {
               variant="outlined"
               label="Category"
               defaultValue={category._id}
+              onChange={(e) =>
+                props.getSubCategoryData(props.token, e.target.value)
+              }
             >
               {props.catData.map((v, i) => (
                 <MenuItem key={i} value={v._id} name={v._id}>
@@ -871,6 +876,7 @@ function Poster(props) {
           catData={props.catData}
           subCatData={props.subCatData}
           matDimData={props.matDimData}
+          getSubCategoryData={props.getSubCategoryData}
         />
       ) : null}
       {redirect.three ? (
@@ -878,6 +884,7 @@ function Poster(props) {
           data={select}
           catData={props.catData}
           subCatData={props.subCatData}
+          getSubCategoryData={props.getSubCategoryData}
         />
       ) : null}
     </>
@@ -1208,9 +1215,71 @@ function OrderRow(props) {
 }
 
 function Discount(props) {
-  return (<>
-    hi
-  </>);
+
+  const [discount, setDiscount] = React.useState("");
+    const [category, setCategory] = React.useState("");
+
+
+  function setValue() {
+    var a = props.catData.filter((v) => v.title === $(`#category`).text());
+    setCategory(a[0]._id);
+  }
+
+  function updateDiscount() {
+    setValue();
+  Axios.post(updateCategory, { categoryId: category, discountPercentage :discount})
+    .then((res) => {
+      console.log(res.data);
+      alert("Successfully Updated...");
+    })
+    .catch((err) => {
+      console.log(err);
+      alert(err);
+    });
+}
+
+  return (
+    <>
+      <Grid className="text-center pt-5">
+        <Grid.Row columns="3" className="mt-4">
+          <Grid.Column style={{ width: "33%" }}>
+            <TextField
+              id="category"
+              style={{ width: "223px" }}
+              select
+              variant="outlined"
+              label="Category"
+            >
+              {props.catData.map((v, i) => (
+                <MenuItem key={i} value={v._id} name={v._id}>
+                  {v.title}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Grid.Column>
+          <Grid.Column style={{ width: "33%" }}>
+            <TextField
+              id="discountPercentage"
+              label="discound %"
+              variant="outlined"
+              onChange={(e)=>setDiscount(e.target.value)}
+            />
+          </Grid.Column>
+          <Grid.Column style={{ width: "33%" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ width: "223px", height: "60px", fontSize: "15px" }}
+              startIcon={<SaveIcon />}
+              onClick={updateDiscount}
+            >
+              Update
+            </Button>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    </>
+  );
 }
 
 const AdminLogin = (props) => {
@@ -1291,6 +1360,7 @@ export default function AdminPage() {
   const [userData, setUserData] = React.useState({});
   const [subCategoryData, setSubCategoryData] = React.useState([]);
   const [materialData, setMaterialData] = React.useState([]);
+  const [categoryId, setCategoryId] = React.useState("");
 
   const [orderData, setOrderData] = React.useState([]);
 
@@ -1332,8 +1402,12 @@ export default function AdminPage() {
       .catch((err) => console.log(err));
   }
 
-  function getSubCategoryData(token) {
-    Axios.get(getSubCategory, config(token))
+  function getSubCategoryData(token,categoryId) {
+    Axios.get(getSubCategory,{
+      params: {
+        categoryId: categoryId,
+      },
+    })
       .then((res) => {
         setSubCategoryData(res.data.subCategory);
       })
@@ -1386,10 +1460,13 @@ export default function AdminPage() {
               catData={categoryData}
               subCatData={subCategoryData}
               matDimData={materialData}
+              getSubCategoryData={getSubCategoryData}
+              setCategoryId={setCategoryId}
+              token={userData.token}
             />
           ) : null}
           {redirect.two ? <Order data={orderData} /> : null}
-          {redirect.three ? <Discount/> : null}
+          {redirect.three ? <Discount catData={categoryData} /> : null}
         </>
       )}
     </>

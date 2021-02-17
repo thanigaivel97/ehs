@@ -21,7 +21,7 @@ import { ModalCard } from "./Card2";
 import ModelCard3 from "../product_list2/right/ModelCard3";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
-import Back from "../../images/Background for_FloorGraphics.svg";
+import Back from "../../images/Floor-graphics_banner.png";
 
 
 function Design() {
@@ -40,7 +40,7 @@ function Design() {
         </p>
       </div>
       <div className="col row ml-5 pl-5" style={{ marginTop: "0px" }}>
-        <img className="ml-5 pl-5" src={Back} alt="signage background" />
+        <img className="" src={Back} alt="signage background" height="200px" />
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /*jshint esversion: 9 */
 import React from "react";
@@ -22,10 +23,7 @@ import { findMat, findDim } from "../../helper/apiPath";
 import $ from "jquery";
 import { Input } from "@material-ui/core";
 import EhsLogo from "../../images/EhsLogo.svg";
-import { login, signup } from "../../helper/apiPath";
 import ModalComponent from "./modalComponent";
-import ModalComponentWithLogin from "./modalComponent";
-
 
 function loadScript(src) {
   return new Promise((resolve) => {
@@ -50,51 +48,20 @@ const Tables = (props) => {
   const [name, setName] = React.useState("");
   const [addr, setAddr] = React.useState("");
   const [phn, setPhn] = React.useState("");
-      const [nme, setNme] = React.useState("");
+  const [nme, setNme] = React.useState("");
 
-
-
-
-
-
-  const [emailid1, setEmailId1] = React.useState("");
-  const [password1, setPassword1] = React.useState("");
-  const [phonenumber1, setPhonenumber1] = React.useState("");
-  const [token, setToken] = React.useState("");
-  const [isToken, setIsToken] = React.useState(false);
-  const [loginBody1, setLoginBody1] = React.useState({});
 
   const [userJson, setUserJson] = React.useState({});
 
-  function mySubmitHandle(event) {
-    event.preventDefault();
-  }
-
-  function signupReq(loginBody1) {
-    Axios.post(signup, loginBody1)
-      .then((res) => {
-        if (res.data.token) {
-          setIsToken(true);
-          setToken(res.data.token);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
   const [modalCarousel, setModalCarousel] = useState({
     one: true,
     two: false,
   });
 
-  const [emailid, setEmailId] = React.useState("");
-  const [password, setPassword] = React.useState("");
 
   const [address, setAddress] = React.useState("");
   const [state, setState] = React.useState("");
   const [pincode, setPincode] = React.useState("");
-
-  const [loginBody, setLoginBody] = React.useState({});
 
   function session(r) {
     localStorage.setItem("userDetails123", JSON.stringify(r));
@@ -107,21 +74,6 @@ const Tables = (props) => {
       }
     );
     alert(d);
-  }
-
-  function loginReq(loginBody) {
-    Axios.post(login, loginBody)
-      .then((res) => {
-        session(res.data.user);
-        responseFun(res.data.message);
-        setModalCarousel({
-          one: false,
-          two: false,
-        });
-      })
-      .catch((err) => {
-        console.log(`${err}`);
-      });
   }
 
   const cartDet = JSON.parse(localStorage.getItem("listCart12345678910")) || {
