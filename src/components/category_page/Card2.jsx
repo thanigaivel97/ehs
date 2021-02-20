@@ -201,7 +201,7 @@ const Card2 = (props) => {
             <br />
             <div style={{ float: "left", marginTop: "-35px" }}>
               <p
-                onClick={() => props.selectedModalCard(props.data)}
+                onClick={() => { props.selectedModalCard(props.data);console.log(props.data); }}
                 style={{ float: "left", cursor: "pointer" }}
                 className="card2AddStock"
               >

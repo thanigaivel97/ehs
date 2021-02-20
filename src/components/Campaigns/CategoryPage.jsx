@@ -23,7 +23,6 @@ import ModelCard3 from "../product_list2/right/ModelCard3";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 
-
 function Design() {
   return (
     <div className="design row m-0">
@@ -46,7 +45,6 @@ function Design() {
   );
 }
 
-
 const CategoryPage = (props) => {
   const [posterData, setPosterData] = React.useState([]);
 
@@ -64,11 +62,12 @@ const CategoryPage = (props) => {
   }, [props.loginResponse.token]);
 
   const cardDet = [
-    { src: Hindi, title: "Hindi" },
-    { src: Bilingual, title: "BiLingual" },
-    { src: Ppe, title: "PPE" },
-    { src: Electrical, title: "Electrical-Hazard" },
-    { src: Material, title: "Material-Handling" },
+    { src: Hindi, title: "Fit-India" },
+    { src: Bilingual, title: "Monsoon-Safety" },
+    { src: Ppe, title: "Work-Right" },
+    { src: Electrical, title: "Home-Alone" },
+    { src: Material, title: "Lab-and-School-Safety" },
+    { src: Material, title: "Nature Safety" },
   ];
 
   const twoPosters = [GetBPoster, PosterNow];

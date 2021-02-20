@@ -221,7 +221,7 @@ function App(props) {
             </Route>
 
             <Route exact path="/dashboard">
-              <Dashboard />
+              <Dashboard setCartCountFun={countSetFun} />
             </Route>
           </Switch>
         </Router>

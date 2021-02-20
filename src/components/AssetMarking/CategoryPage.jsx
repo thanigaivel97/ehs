@@ -254,12 +254,20 @@ const CategoryPage = (props) => {
               ))}
             </Grid.Row>
 
-            <Grid.Column className="mt-4">
-              <Image src={Upto50} className="mx-auto d-block" />
-            </Grid.Column>
+            <Grid.Row className="mt-4 justify-content-center" columns="equal">
+              {twoPosters.map((v, i) => (
+                <Segment key={i}>
+                  <Image
+                    className={i !== 0 ? "ml-4" : null}
+                    style={{ height: "180px" }}
+                    src={v}
+                  />
+                </Segment>
+              ))}
+            </Grid.Row>
 
             <p
-              className="ml-5"
+              className="ml-5 mt-3"
               style={{
                 fontFamily: "Source Sans Pro",
                 fontStyle: "normal",
