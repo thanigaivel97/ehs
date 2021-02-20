@@ -56,14 +56,14 @@ function CreatePoster(props) {
     originalPrice: "",
     priceGroup: "",
     imgUrl: defaultImage,
-    link:"",
+    link: "",
     description: "",
     discountPercentage: "",
     stocks: 0,
     weight: "",
     additionalDetails: "",
     sale: "",
-    bestSeller:"",
+    bestSeller: "",
     material: materialIds,
     dimension: dimensionIds,
   };
@@ -83,7 +83,7 @@ function CreatePoster(props) {
     originalPrice: false,
     priceGroup: false,
     imgUrl: false,
-    link:false,
+    link: false,
     description: false,
     discountPercentage: false,
     stocks: false,
@@ -92,7 +92,7 @@ function CreatePoster(props) {
     sale: false,
     material: false,
     dimension: false,
-    bestSeller:false
+    bestSeller: false,
   });
 
   var allowed = [
@@ -111,7 +111,7 @@ function CreatePoster(props) {
     "weight",
     "additionalDetails",
     "sale",
-    "bestSeller"
+    "bestSeller",
   ];
 
   function reduceObj(prev, toReduce) {
@@ -149,7 +149,11 @@ function CreatePoster(props) {
           (v) => v.title === $(`#${single}`).text()
         );
         newPoster[single] = b[0]._id;
-      } else if (single === "language" || single === "priceGroup" || single ==="bestSeller") {
+      } else if (
+        single === "language" ||
+        single === "priceGroup" ||
+        single === "bestSeller"
+      ) {
         newPoster[single] = $(`#${single}`).text();
       } else {
         newPoster[single] = $(`#${single}`).val();
@@ -196,7 +200,9 @@ function CreatePoster(props) {
               select
               variant="outlined"
               label="Category"
-              onChange={(e) => props.getSubCategoryData(props.token,e.target.value)}
+              onChange={(e) =>
+                props.getSubCategoryData(props.token, e.target.value)
+              }
             >
               {props.catData.map((v, i) => (
                 <MenuItem key={i} value={v._id} name={v._id}>
@@ -424,7 +430,7 @@ function UpdateAndDeletePoster(props) {
     weight,
     additionalDetails,
     sale,
-    bestSeller
+    bestSeller,
   } = props.data;
 
   const configImage = {
@@ -441,7 +447,7 @@ function UpdateAndDeletePoster(props) {
     language: language,
     creator: creator,
     imgUrl: imgUrl,
-    link:link,
+    link: link,
     originalPrice: originalPrice,
     priceGroup: priceGroup,
     description: description,
@@ -450,7 +456,7 @@ function UpdateAndDeletePoster(props) {
     weight: weight,
     additionalDetails: additionalDetails,
     sale: sale,
-    bestSeller:bestSeller
+    bestSeller: bestSeller,
   };
 
   var allowed = [
@@ -469,7 +475,7 @@ function UpdateAndDeletePoster(props) {
     "weight",
     "additionalDetails",
     "sale",
-    "bestSeller"
+    "bestSeller",
   ];
 
   function setValue() {
@@ -484,7 +490,11 @@ function UpdateAndDeletePoster(props) {
           (v) => v.title === $(`#${single}`).text()
         );
         newPoster[single] = b[0]._id;
-      } else if (single === "language" || single === "priceGroup" || single === "bestSeller") {
+      } else if (
+        single === "language" ||
+        single === "priceGroup" ||
+        single === "bestSeller"
+      ) {
         newPoster[single] = $(`#${single}`).text();
       } else {
         newPoster[single] = $(`#${single}`).val();
@@ -1162,7 +1172,7 @@ function Order(props) {
                   ? props.data
                       .filter(
                         (data) =>
-                          ( data?.emailid || data?.phonenumber)
+                          (data?.emailid || data?.phonenumber)
                             .toString()
                             .toLowerCase()
                             .includes(search) ||
@@ -1215,10 +1225,8 @@ function OrderRow(props) {
 }
 
 function Discount(props) {
-
   const [discount, setDiscount] = React.useState("");
-    const [category, setCategory] = React.useState("");
-
+  const [category, setCategory] = React.useState("");
 
   function setValue() {
     var a = props.catData.filter((v) => v.title === $(`#category`).text());
@@ -1227,16 +1235,19 @@ function Discount(props) {
 
   function updateDiscount() {
     setValue();
-  Axios.post(updateCategory, { categoryId: category, discountPercentage :discount})
-    .then((res) => {
-      console.log(res.data);
-      alert("Successfully Updated...");
+    Axios.post(updateCategory, {
+      categoryId: category,
+      discountPercentage: discount,
     })
-    .catch((err) => {
-      console.log(err);
-      alert(err);
-    });
-}
+      .then((res) => {
+        console.log(res.data);
+        alert("Successfully Updated...");
+      })
+      .catch((err) => {
+        console.log(err);
+        alert(err);
+      });
+  }
 
   return (
     <>
@@ -1262,7 +1273,7 @@ function Discount(props) {
               id="discountPercentage"
               label="discound %"
               variant="outlined"
-              onChange={(e)=>setDiscount(e.target.value)}
+              onChange={(e) => setDiscount(e.target.value)}
             />
           </Grid.Column>
           <Grid.Column style={{ width: "33%" }}>
@@ -1365,7 +1376,7 @@ export default function AdminPage() {
   const [orderData, setOrderData] = React.useState([]);
 
   function updateDiscount() {
-    setRedirect({ one: false, two: false,three:true });
+    setRedirect({ one: false, two: false, three: true });
   }
 
   function getOrderFun() {
@@ -1402,8 +1413,8 @@ export default function AdminPage() {
       .catch((err) => console.log(err));
   }
 
-  function getSubCategoryData(token,categoryId) {
-    Axios.get(getSubCategory,{
+  function getSubCategoryData(token, categoryId) {
+    Axios.get(getSubCategory, {
       params: {
         categoryId: categoryId,
       },
@@ -1417,7 +1428,7 @@ export default function AdminPage() {
   const [redirect, setRedirect] = React.useState({
     one: false,
     two: false,
-    three:false,
+    three: false,
   });
 
   function getPosterFun(token) {

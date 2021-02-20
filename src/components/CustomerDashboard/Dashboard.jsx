@@ -16,6 +16,7 @@ import $ from "jquery";
 import DisInfect from "../../images/DisInfectant.svg";
 import Card2 from "../category_page/Card2";
 import Axios from "axios";
+import { Link } from "react-router-dom";
 import { getOrdersById, getUserById, updateUser } from "../../helper/apiPath";
 
 const PersonalInfo = () => {
@@ -449,7 +450,6 @@ const Orders = () => {
 
   const [value, setValue] = React.useState(2);
 
-
   return (
     <>
       <Grid className="mt-3 ml-5 " style={{ width: "100%" }}>
@@ -735,12 +735,11 @@ const Wishlist = (props) => {
 
   React.useEffect(() => getOrderFun(), []);
 
- 
   const [bottomDet, setBottomDet] = React.useState({});
 
   function removeWishList(id) {
     Axios.post(updateUser, {
-      wishList:id,
+      wishList: id,
       operation_type: 2,
       userObjId: JSON.parse(localStorage.getItem("userDetails123"))._id,
     }).then((data) => {
@@ -764,13 +763,9 @@ const Wishlist = (props) => {
         <Grid.Row className="mt-3">
           {orderData.map((v, i) => (
             <Grid.Column key={i} className={i !== 0 ? "ml-3" : "m-0 p-0"}>
-              <Card2
-                data={v}
-                addToCart={addToCart}
-                isCardClickAvail={true}
-              />
-              <button onClick={()=>removeWishList(v._id)}>Remove</button>
-             </Grid.Column>
+              <Card2 data={v} addToCart={addToCart} isCardClickAvail={true} />
+              <button onClick={() => removeWishList(v._id)}>Remove</button>
+            </Grid.Column>
           ))}
         </Grid.Row>
       </Grid>
@@ -997,10 +992,64 @@ export default function Dashboard() {
           </Grid.Column>
         </Grid.Row>
       </Grid>
-      <div
-        className="mt-5"
-        style={{ width: "100%", height: "200px", background: "#003459" }}
-      ></div>
+      <div className="mt-5" style={{ width: "100%", background: "#003459" }}>
+        <Grid style={{ paddingTop: "50px" }}>
+          <Grid.Row columns="4" className="ml-5">
+            <Grid.Column className="ml-5 pl-5">
+              <ul>
+                <h3 className="footerhead">Products</h3>
+                <Link to="/posters" className="footertxt">
+                  Posters
+                </Link>
+                <Link to="/signages" className="footertxt">
+                  Signages
+                </Link>
+                <Link to="/campaigns" className="footertxt">
+                  Campaigns
+                </Link>
+                <Link to="/floor-graphics" className="footertxt">
+                  Floor Graphics
+                </Link>
+                <Link to="/asset-marking" className="footertxt">
+                  Asset Marking
+                </Link>
+                <Link to="/posters" className="footertxt">
+                  Do It Yourself(DIY)
+                </Link>
+              </ul>
+            </Grid.Column>
+            <Grid.Column className="ml-5 pl-5">
+              <ul>
+                <h3 className="footerhead">My Account</h3>
+                <li className="footertxt">Profile</li>
+                <li className="footertxt">Order History</li>
+                <li className="footertxt">Order Tracking</li>
+                <li className="footertxt">Create An Account</li>
+                <li className="footertxt">New User Guide</li>
+              </ul>
+            </Grid.Column>
+            <Grid.Column className="ml-5 pl-5">
+              <ul>
+                <h3 className="footerhead">Contact Us</h3>
+                <li className="footertxt">Timings (Mon - Sat: 7:00 - 21:00)</li>
+                <li className="footertxt">Office Address</li>
+                <li className="footertxt">Mobile No.</li>
+                <li className="footertxt">Email ID</li>
+              </ul>
+            </Grid.Column>
+            <Grid.Column className="ml-5 pl-5">
+              <ul>
+                <h3 className="footerhead">About</h3>
+                <li className="footertxt">Privacy Policies</li>
+                <li className="footertxt">FAQ</li>
+                <li className="footertxt">Services</li>
+                <li className="footertxt">Support</li>
+                <li className="footertxt">Join Us (Affiliate)</li>
+              </ul>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </div>
     </div>
   );
 }
