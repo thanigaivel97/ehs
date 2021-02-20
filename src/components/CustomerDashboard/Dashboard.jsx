@@ -19,7 +19,13 @@ import Axios from "axios";
 import { ModalCard } from "../category_page/Card2";
 import ModelCard3 from "../product_list2/right/ModelCard3";
 import { Link } from "react-router-dom";
-import { getOrdersById, getUserById, updateUser, findMat, findDim } from "../../helper/apiPath";
+import {
+  getOrdersById,
+  getUserById,
+  updateUser,
+  findMat,
+  findDim,
+} from "../../helper/apiPath";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 import { BottomAddedCart } from "../product_list2/right/Right";
@@ -728,120 +734,126 @@ const Orders = () => {
 const Wishlist = (props) => {
   const [orderData, setOrderData] = React.useState([]);
 
-   const [selectedModal, setSelectedModal] = React.useState({});
+  const [selectedModal, setSelectedModal] = React.useState({});
 
-   const [selectMatDim, setMatDim] = useState({
-     Material: { one: false, two: false, three: false },
-     Dimension: { one: false, two: false, three: false },
-   });
+  const [selectMatDim, setMatDim] = useState({
+    Material: { one: false, two: false, three: false },
+    Dimension: { one: false, two: false, three: false },
+  });
 
-   let card1Det, card2Det;
-   try {
-     card1Det = {
-       select: "Material",
-       box: [
-         {
-           src: selectedModal.material[0].imgUrl,
-           title: selectedModal.material[0].title,
-           name: "one",
-           select: "Material",
-         },
-         {
-           src: selectedModal.material[1].imgUrl,
-           title: selectedModal.material[1].title,
-           name: "two",
-           select: "Material",
-         },
-         {
-           src: selectedModal.material[2].imgUrl,
-           title: selectedModal.material[2].title,
-           name: "three",
-           select: "Material",
-         },
-       ],
-     };
-     card2Det = {
-       select: "Dimension",
-       box: [
-         {
-           src: selectedModal.dimension[0].imgUrl,
-           title: selectedModal.dimension[0].title,
-           cus: true,
-           cusWidth: "90",
-           cusHeight: "50",
-           name: "one",
-           select: "Dimension",
-         },
-         {
-           src: selectedModal.dimension[1].imgUrl,
-           title: selectedModal.dimension[1].title,
-           cus: true,
-           cusWidth: "100",
-           cusHeight: "60",
-           name: "two",
-           select: "Dimension",
-         },
-         {
-           src: selectedModal.dimension[2].imgUrl,
-           title: selectedModal.dimension[2].title,
-           cus: true,
-           cusWidth: "120",
-           cusHeight: "80",
-           name: "three",
-           select: "Dimension",
-         },
-       ],
-     };
-   } catch (e) {}
+  let card1Det, card2Det;
+  try {
+    card1Det = {
+      select: "Material",
+      box: [
+        {
+          src:
+            "http://35.238.118.121:8080/assets/uploads/imgUrl-1610371399266.jpg",
+          title: "125 Micron (non-tearable)",
+          name: "one",
+          select: "Material",
+        },
+        {
+          src:
+            "http://35.238.118.121:8080/assets/uploads/imgUrl-1610371464860.jpg",
+          title: "Self-adhesive (premium)",
+          name: "two",
+          select: "Material",
+        },
+        {
+          src:
+            "http://35.238.118.121:8080/assets/uploads/imgUrl-1610371489961.jpg",
+          title: "Self-adhesive 3mm sunboard (premium)",
+          name: "three",
+          select: "Material",
+        },
+      ],
+    };
+    card2Det = {
+      select: "Dimension",
+      box: [
+        {
+          src:
+            "http://35.238.118.121:8080/assets/uploads/imgUrl-1610371522669.jpg",
+          title: "16in by 24in",
+          cus: true,
+          cusWidth: "90",
+          cusHeight: "50",
+          name: "one",
+          select: "Dimension",
+        },
+        {
+          src:
+            "http://35.238.118.121:8080/assets/uploads/imgUrl-1610371522669.jpg",
+          title: "19in by 27in",
+          cus: true,
+          cusWidth: "100",
+          cusHeight: "60",
+          name: "two",
+          select: "Dimension",
+        },
+        {
+          src:
+            "http://35.238.118.121:8080/assets/uploads/imgUrl-1610371522669.jpg",
+          title: "24in by 36in",
+          cus: true,
+          cusWidth: "120",
+          cusHeight: "80",
+          name: "three",
+          select: "Dimension",
+        },
+      ],
+    };
+  } catch (e) {}
 
-   const card3Det = {
-     select: "Quantity",
-     quantity: 1,
-     material: "Material: " + findMat(selectMatDim.Material),
-     dimension: "Dimensions:" + findDim(selectMatDim.Dimension),
-     price: selectedModal.originalPrice,
-   };
+  const card3Det = {
+    select: "Quantity",
+    quantity: 1,
+    material: "Material: " + findMat(selectMatDim.Material),
+    dimension: "Dimensions:" + findDim(selectMatDim.Dimension),
+    price: selectedModal.originalPrice,
+  };
 
-   const ModalDet = {
-     src: selectedModal.imgUrl,
-     title: selectedModal.name,
-     select: "Select Material",
-     selectedMatDim: selectMatDim,
-     card1: card1Det,
-     card2: card2Det,
-     card3: card3Det,
-   };
+  const ModalDet = {
+    src: selectedModal.imgUrl,
+    title: selectedModal.name,
+    select: "Select Material",
+    selectedMatDim: selectMatDim,
+    card1: card1Det,
+    card2: card2Det,
+    card3: card3Det,
+  };
 
-   const [modalCarousel, setModalCar] = useState({
-     one: true,
-     two: false,
-     three: false,
-   });
+  const [modalCarousel, setModalCar] = useState({
+    one: true,
+    two: false,
+    three: false,
+  });
 
-   const setModalCarousel = (e) => {
-     if (e.target.id === "one") {
-       setModalCar({ one: true, two: false, three: false });
-     } else if (e.target.id === "two") {
-       setModalCar({ one: false, two: true, three: false });
-     } else if (e.target.id === "three") {
-       setModalCar({ one: false, two: false, three: true });
-     }
-   };
+  const setModalCarousel = (e) => {
+    if (e.target.id === "one") {
+      setModalCar({ one: true, two: false, three: false });
+    } else if (e.target.id === "two") {
+      setModalCar({ one: false, two: true, three: false });
+    } else if (e.target.id === "three") {
+      setModalCar({ one: false, two: false, three: true });
+    }
+  };
 
-   const setModalCarouselb = (e) => {
-     if (e.target.id === "oneb") {
-       setModalCar({ one: true, two: false, three: false });
-     } else if (e.target.id === "twob") {
-       setModalCar({ one: false, two: true, three: false });
-     } else if (e.target.id === "threeb") {
-       setModalCar({ one: false, two: false, three: true });
-     }
-   };
-  
-   const selectedModalCard = (data) => {
-     setSelectedModal(data);
-     $("#modalOpen").trigger("click");
-   };
+  const setModalCarouselb = (e) => {
+    if (e.target.id === "oneb") {
+      setModalCar({ one: true, two: false, three: false });
+    } else if (e.target.id === "twob") {
+      setModalCar({ one: false, two: true, three: false });
+    } else if (e.target.id === "threeb") {
+      setModalCar({ one: false, two: false, three: true });
+    }
+  };
+
+  const selectedModalCard = (data) => {
+    setSelectedModal(data);
+    $("#modalOpen").trigger("click");
+  };
 
   function getOrderFun() {
     Axios.get(
@@ -889,7 +901,18 @@ const Wishlist = (props) => {
                 isCardClickAvail={true}
                 selectedModalCard={selectedModalCard}
               />
-              <button onClick={() => removeWishList(v._id)}>Remove</button>
+              <button
+                style={{
+                  backgroundColor: "#F2994A",
+                  border: "none",
+                  color: "white",
+                  padding: "8px",
+                  borderRadius: "8px",
+                }}
+                onClick={() => removeWishList(v._id)}
+              >
+                Remove
+              </button>
             </Grid.Column>
           ))}
         </Grid.Row>
