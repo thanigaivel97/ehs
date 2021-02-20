@@ -16,7 +16,7 @@ import { getBestSeller, config } from "../../helper/apiPath";
 import Axios from "axios";
 import $ from "jquery";
 import { BottomAddedCart } from "../product_list2/right/Right";
-import { findMat, findDim } from "../../helper/apiPath";
+import { findMat, findDim, getAssetMarking } from "../../helper/apiPath";
 import CloseBtn from "../../images/ExitBtn.svg";
 import { ModalCard } from "./Card2";
 import ModelCard3 from "../product_list2/right/ModelCard3";
@@ -53,18 +53,25 @@ function Design() {
 
 const CategoryPage = (props) => {
   const [posterData, setPosterData] = React.useState([]);
+    const [posterData1, setPosterData1] = React.useState([]);
+
 
   useEffect(() => {
     Axios.get(
-      getBestSeller + "/assetMarking",
-      config(
-        props.loginResponse.token || localStorage.getItem("ehstoken12345678910")
-      )
+      getBestSeller + "/assetMarking"
     )
       .then((res) => {
         setPosterData(res.data.posterData);
       })
       .catch((err) => console.log(err));
+    
+     Axios.get(
+       getAssetMarking
+     )
+       .then((res) => {
+         setPosterData1(res.data.posterData);
+       })
+       .catch((err) => console.log(err));
   }, [props.loginResponse.token]);
 
   const cardDet = [
@@ -230,20 +237,20 @@ const CategoryPage = (props) => {
                 color: "#000000",
               }}
             >
-              Popular Categories
+              Products
             </p>
-
-            <Cols data={cardDet} cols="6" />
-
-            <Grid.Row className="mt-4 justify-content-center" columns="equal">
-              {twoPosters.map((v, i) => (
-                <Segment key={i}>
-                  <Image
-                    className={i !== 0 ? "ml-4" : null}
-                    style={{ height: "180px" }}
-                    src={v}
+            <Grid.Row
+              columns={5}
+              className="mt-4 ml-5 mr-5 justify-content-start"
+            >
+              {posterData1.map((v, i) => (
+                <Grid.Column key={i} className={i !== 0 ? "ml-3" : null}>
+                  <Card2
+                    data={v}
+                    addToCart={addToCart}
+                    selectedModalCard={selectedModalCard}
                   />
-                </Segment>
+                </Grid.Column>
               ))}
             </Grid.Row>
 
