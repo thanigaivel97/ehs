@@ -5,7 +5,7 @@ import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
 import { useState } from "react";
 import $ from "jquery";
-import {findMat,findDim} from '../../../helper/apiPath';
+import { findMat, findDim } from "../../../helper/apiPath";
 
 const ModelCard3 = (props) => {
   var [count, setCount] = useState(1);
@@ -100,15 +100,25 @@ const ModelCard3 = (props) => {
       <Button
         className="text-white pl-3 pr-3 pt-2 pb-2"
         onClick={() => {
-          if (findMat(props.selectMatDim.Material) && findDim(props.selectMatDim.Dimension)) {
+          if (
+            findMat(props.selectMatDim.Material) &&
+            findDim(props.selectMatDim.Dimension)
+          ) {
             props.addToCart({
               ...props.selectMatDim,
               ...props.oriDet,
               quantity: count,
             });
+            if (props?.setModalCar) {
+              props?.setModalCar({
+                one: true,
+                two: false,
+                three: false,
+              });
+            }
             $("#modalClose").click();
             setCount(1);
-          }else {
+          } else {
             alert("Select The Proper Materail and Dimension");
           }
         }}

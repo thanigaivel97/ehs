@@ -145,6 +145,10 @@ function App(props) {
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
 
+            <Route exact path="/signages/PRE-PRINTED">
+              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
+            </Route>
+
             <Route exact path="/campaigns/FIT-INDIA">
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
@@ -169,27 +173,19 @@ function App(props) {
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
 
-            <Route exact path="/signages/FIT-INDIA">
+            <Route exact path="/floor-graphics/COVID-19">
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
 
-            <Route exact path="/signages/MONSOON-SAFETY">
+            <Route exact path="/floor-graphics/ROAD-SAFETY">
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
 
-            <Route exact path="/signages/WORK-RIGHT">
+            <Route exact path="/floor-graphics/WAREHOUSE">
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
 
-            <Route exact path="/signages/HOME-ALONE">
-              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
-            </Route>
-
-            <Route exact path="/signages/LAB-AND-SCHOOL-SAFETY">
-              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
-            </Route>
-
-            <Route exact path="/signages/NATURE-AND-SAFETY">
+            <Route exact path="/floor-graphics/PUBLIC-PLACE">
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
 

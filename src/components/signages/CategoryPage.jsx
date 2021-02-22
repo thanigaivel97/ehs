@@ -62,10 +62,10 @@ const CategoryPage = (props) => {
   }, [props.loginResponse.token]);
 
   const cardDet = [
-    { src: Hindi, title: "DO IT YOURSELF (DIY)" },
+    { src: Hindi, title: "DO-IT-YOURSELF" },
     { src: Bilingual, title: "Pictograms" },
     { src: Ppe, title: "Pre-Printed" },
-    { src: Electrical, title: "Signal Templates" },
+    { src: Electrical, title: "Signal-Template-Sheets" },
   ];
 
   const twoPosters = [GetBPoster, PosterNow];

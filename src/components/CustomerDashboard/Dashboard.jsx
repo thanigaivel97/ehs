@@ -1340,8 +1340,14 @@ const Quotes = () => {
 };
 
 export default function Dashboard(props) {
+  const [authUser, setAuthUser] = React.useState("");
   useEffect(() => {
     document.title = "Ehs prints | Dashboard";
+    if (JSON.parse(localStorage.getItem("userDetails123")))
+      setAuthUser(
+        JSON.parse(localStorage.getItem("userDetails123")).emailid ||
+          JSON.parse(localStorage.getItem("userDetails123")).phonenumber
+      );
   }, []);
 
   const [redirect, setRedirect] = useState({
@@ -1455,10 +1461,34 @@ export default function Dashboard(props) {
             <Grid.Column className="ml-5 pl-5">
               <ul>
                 <h3 className="footerhead">My Account</h3>
-                <li className="footertxt">Profile</li>
-                <li className="footertxt">Order History</li>
+                {authUser ? (
+                  <>
+                    <Link to="/dashboard" className="footertxt">
+                      Profile
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <li className="footertxt">Profile</li>
+                  </>
+                )}
+
+                {authUser ? (
+                  <>
+                    <Link to="/dashboard" className="footertxt">
+                      Order History
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <li className="footertxt">Order History</li>
+                  </>
+                )}
+
                 <li className="footertxt">Order Tracking</li>
-                <li className="footertxt">Create An Account</li>
+                <Link to="/signup" className="footertxt">
+                  Create An Account
+                </Link>
                 <li className="footertxt">New User Guide</li>
               </ul>
             </Grid.Column>

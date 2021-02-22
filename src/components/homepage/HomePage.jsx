@@ -13,7 +13,15 @@ import Four from "../../images/Four.svg";
 import Five from "../../images/Five.svg";
 import { Link } from "react-router-dom";
 
-const HomePage = () => {
+const HomePage = (props) => {
+  const [authUser, setAuthUser] = React.useState("");
+   React.useEffect(() => {
+     if (JSON.parse(localStorage.getItem("userDetails123")))
+       setAuthUser(
+         JSON.parse(localStorage.getItem("userDetails123")).emailid ||
+           JSON.parse(localStorage.getItem("userDetails123")).phonenumber
+       );
+   }, [props.loginResponse]);
   const imgs = [One, Two, Three, Four, Five];
   return (
     <>
@@ -60,13 +68,39 @@ const HomePage = () => {
               </ul>
             </Grid.Column>
             <Grid.Column className="ml-5 pl-5">
-              <ul className="footertxt">
+              <ul>
                 <h3 className="footerhead">My Account</h3>
-                <li>Profile</li>
-                <li>Order History</li>
-                <li>Order Tracking</li>
-                <li>Create An Account</li>
-                <li>New User Guide</li>
+                {authUser ? (
+                  <>
+                    <Link to="/dashboard" className="footertxt">
+                      Profile
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <li className="footertxt">Profile</li>
+                  </>
+                )}
+
+                {authUser ? (
+                  <>
+                    <Link to="/dashboard" className="footertxt">
+                      Order History
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <li className="footertxt">
+                      Order History
+                    </li>
+                  </>
+                )}
+
+                <li className="footertxt">Order Tracking</li>
+                <Link to="/signup" className="footertxt">
+                  Create An Account
+                </Link>
+                <li className="footertxt">New User Guide</li>
               </ul>
             </Grid.Column>
             <Grid.Column className="ml-5 pl-5">

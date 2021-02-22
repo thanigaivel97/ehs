@@ -1,0 +1,25 @@
+<Grid.Row className="container mt-5">
+                  <p
+                    style={{
+                      marginLeft: "-170px",
+                      fontSize: "18px",
+                      lineHeight: "22px",
+                      fontWeight: "600",
+                      fontFamily: "Lato",
+                    }}
+                  >
+                    Also Check Out
+                  </p>
+                </Grid.Row>
+             <Grid.Row className="mt-3" style={{ marginLeft: "35px" }}>
+                {[...Array(5)].map((v, i) => (
+                  <Grid.Column key={i} className={i !== 0 ? "ml-3" : "m-0 p-0"}>
+                    <Card2
+                      data={posterData}
+                      addToCart={addToCart}
+                      isCardClickAvail={true}
+                    />
+                  </Grid.Column>
+                ))}
+              </Grid.Row>
+           

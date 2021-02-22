@@ -66,20 +66,24 @@ export const BottomAddedCart = (props) => {
 
 const Right = (props) => {
   const [posterData, setPosterData] = React.useState([]);
+  const [bread1, setBread1] = React.useState("");
+  const [bread2, setBread2] = React.useState("");
 
+  function bread() {
+    setBread1(window.location.pathname.split("/")[1]);
+    setBread2(window.location.pathname.split("/")[2]);
+  }
   React.useEffect(() => {
+    bread();
     let url1 =
       url +
       "posters/getPosterBySubCategory/" +
       window.location.pathname.split("/")[2];
-    console.log(url1);
     Axios.get(url1)
       .then((res) => {
-        console.log(res.data.posterData);
         setPosterData(res.data.posterData);
       })
       .catch((err) => console.log(err));
-    console.log(url + "posters/getPosterBySubCategory/" + props.path);
   }, [props.path]);
 
   const [bottomDet, setBottomDet] = useState({});
@@ -217,12 +221,12 @@ const Right = (props) => {
           Home
         </Link>{" "}
         <img src={BreadVector} className="mr-1" width="10" height="10" alt="" />
-        <Link className="breadLink" to="/posters">
-          Posters
+        <Link className="breadLink" to={`/${bread1}`}>
+          {bread1}
         </Link>{" "}
         <img src={BreadVector} className="mr-1" width="10" height="10" alt="" />
-        <span className="breadLink" to={`/posters/${props.path}`}>
-          {props.path}
+        <span className="breadLink" to={`/${bread1}/${bread2}`}>
+          {bread2}
         </span>
       </Grid.Column>
 
@@ -236,7 +240,7 @@ const Right = (props) => {
             color: "#000000",
           }}
         >
-          {props.path} Posters
+          {bread2} {bread1}
         </p>
       </Grid.Column>
 
@@ -246,7 +250,7 @@ const Right = (props) => {
         style={{ marginTop: "-15px" }}
       >
         {posterData?.map((v, i) => (
-          <Grid.Column key={i} className={i !== 0 ? "ml-3" : ""}>
+          <Grid.Column key={i} className={i !== 0 && i !== 4 ? "ml-3" : ""}>
             <Card2
               data={v}
               addToCart={addToCart}

@@ -145,6 +145,7 @@ export const ModalCard = (props) => {
 };
 
 const Card2 = (props) => {
+  console.log(props.data);
   const { _id, name, imgUrl, creator, bought, stocks, rating } = props.data;
 
   return (
@@ -201,7 +202,10 @@ const Card2 = (props) => {
             <br />
             <div style={{ float: "left", marginTop: "-35px" }}>
               <p
-                onClick={() => { props.selectedModalCard(props.data);console.log(props.data); }}
+                onClick={() => {
+                  props.selectedModalCard(props.data);
+                  console.log(props.data);
+                }}
                 style={{ float: "left", cursor: "pointer" }}
                 className="card2AddStock"
               >

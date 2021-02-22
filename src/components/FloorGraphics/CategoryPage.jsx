@@ -64,9 +64,9 @@ const CategoryPage = (props) => {
 
   const cardDet = [
     { src: Hindi, title: "Covid-19" },
-    { src: Bilingual, title: "Road Safety" },
+    { src: Bilingual, title: "Road-Safety" },
     { src: Ppe, title: "Warehouse" },
-    { src: Electrical, title: "Public Place" },
+    { src: Electrical, title: "Public-Place" },
   ];
 
   const twoPosters = [GetBPoster, PosterNow];

@@ -1,6 +1,5 @@
 /*jshint esversion: 6 */
 import React, { useEffect, useState } from "react";
-import Cols from "./Cols";
 import { Grid, Image, Segment } from "semantic-ui-react";
 import Material from "../../images/MATERIAL.jpg";
 import Electrical from "../../images/ELECTRICAL.jpg";
@@ -9,10 +8,9 @@ import Hindi from "../../images/HINDI.jpg";
 import Bilingual from "../../images/Bilingual.jpg";
 import GetBPoster from "../../images/GetBiPoster.svg";
 import PosterNow from "../../images/PosterNow.svg";
-import Upto50 from "../../images/Upto50Offer.svg";
 import Card2 from "./Card2";
 import { connect } from "react-redux";
-import { getBestSeller, config } from "../../helper/apiPath";
+import { getBestSeller } from "../../helper/apiPath";
 import Axios from "axios";
 import $ from "jquery";
 import { BottomAddedCart } from "../product_list2/right/Right";
@@ -244,7 +242,7 @@ const CategoryPage = (props) => {
               className="mt-4 ml-5 mr-5 justify-content-start"
             >
               {posterData1.map((v, i) => (
-                <Grid.Column key={i} className={i !== 0 ? "ml-3" : null}>
+                <Grid.Column key={i} className={i !== 0 && i !== 5 ? "ml-3" : null}>
                   <Card2
                     data={v}
                     addToCart={addToCart}
