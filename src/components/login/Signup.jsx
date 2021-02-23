@@ -41,7 +41,7 @@ const Signup = (props) => {
           <Otp token={token} />
         </div>
       ) : (
-        <div className="loginPage p-5 mx-auto d-block">
+        <div className="loginPage p-5 mx-auto mt-5 d-block">
           <img
             className="mx-auto d-block"
             id="ehsLogoImg"
@@ -49,7 +49,7 @@ const Signup = (props) => {
             alt="Ehs Logo"
           />
 
-          <p id="ehsLogoLabel" className="text-center mt-3">
+          <p id="ehsLogoLabel" className="text-center mt-2">
             Create Account
           </p>
 
@@ -75,10 +75,8 @@ const Signup = (props) => {
               placeholder="Email"
             />
 
-            <p className="text-center mt-2`">or</p>
-
             <input
-              className="mx-auto d-block "
+              className="mx-auto d-block mt-3 "
               id="loginUserPhone"
               pattern="[0-9]{10}"
               type="text"
@@ -122,16 +120,15 @@ const Signup = (props) => {
 
             <button
               id="loginBtn"
-              className="mt-4"
+              className="mt-3"
               style={{ marginLeft: "13px" }}
               type="submit"
             >
               Sign Up
             </button>
 
-            <p className="text-center mt-2">or</p>
             <Link
-              className="d-block "
+              className="d-block mt-3 "
               to="/login"
               style={{ marginLeft: "13px" }}
             >

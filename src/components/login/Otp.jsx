@@ -3,6 +3,7 @@ import "./Login.css";
 import EhsLogo from "../../images/EhsLogo.svg";
 import { activate } from "../../helper/apiPath";
 import Axios from "axios";
+import swal from "sweetalert";
 
 const Otp = (props) => {
 
@@ -11,14 +12,18 @@ const Otp = (props) => {
     function loginReq(loginBody) {
       
     Axios.get(`${activate}/${loginBody.token}/${loginBody.code}`)
-        .then((res) => {
-          alert(res.data.message);
+      .then((res) => {
+        if (res.data.message === "Account activated") {
           window.location.replace("http://" + window.location.host + "/login");
-            props.setModalCarousel({
-              one: false,
-              two: true,
-              three: false,
-            });
+          props.setModalCarousel({
+            one: false,
+            two: true,
+            three: false,
+          });
+        }
+        else {
+          swal("Oops",res.data.message,"error")
+        }
       })
       .catch((err) => {
         console.log(`${err}`);

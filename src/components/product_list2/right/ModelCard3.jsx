@@ -6,6 +6,8 @@ import RemoveIcon from "@material-ui/icons/Remove";
 import { useState } from "react";
 import $ from "jquery";
 import { findMat, findDim } from "../../../helper/apiPath";
+import swal from "sweetalert";
+
 
 const ModelCard3 = (props) => {
   var [count, setCount] = useState(1);
@@ -119,7 +121,7 @@ const ModelCard3 = (props) => {
             $("#modalClose").click();
             setCount(1);
           } else {
-            alert("Select The Proper Materail and Dimension");
+            swal("Oops","Select The Proper Material and Dimension","warning");
           }
         }}
         style={{

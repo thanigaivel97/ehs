@@ -29,6 +29,7 @@ import {
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 import { BottomAddedCart } from "../product_list2/right/Right";
+import swal from "sweetalert";
 
 const PersonalInfo = () => {
   const [name, setName] = React.useState("");
@@ -44,11 +45,15 @@ const PersonalInfo = () => {
       userObjId: JSON.parse(localStorage.getItem("userDetails123"))._id,
     })
       .then((res) => {
-        console.log(res);
-        alert(res.data.message);
+        if (res.data.message === "password Mismatch") {
+          swal(res.data.message,"","error")
+        }
+        else {
+          swal(res.data.message, "", "success");
+        }
         return;
       })
-      .catch((err) => console.log(err));
+      .catch((err) => swal(err));
   }
 
   function updateAddress() {
@@ -57,11 +62,10 @@ const PersonalInfo = () => {
       userObjId: JSON.parse(localStorage.getItem("userDetails123"))._id,
     })
       .then((res) => {
-        console.log(res);
-        alert(res.data.message);
+        swal(res.data.message,"","success");
         return;
       })
-      .catch((err) => console.log(err));
+      .catch((err) => swal(err));
   }
 
   return (
@@ -883,7 +887,6 @@ const Wishlist = (props) => {
     setBottomDet(det);
     $("#bottomCart").css("display", "block");
     props.setCartCountFun(det);
-    console.log("hello", bottomDet);
   };
 
   return (

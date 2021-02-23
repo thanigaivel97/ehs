@@ -347,7 +347,6 @@
 //   //   setBottomDet(det);
 //   //   $("#bottomCart").css("display", "block");
 //   //   props.setCartCountFun(det);
-//   //   console.log("hello", bottomDet);
 //   // };
 
 //   const leftImages = [Blank, Blank];

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /*jshint esversion: 9 */
 import React from "react";
@@ -24,6 +23,7 @@ import $ from "jquery";
 import { Input } from "@material-ui/core";
 import EhsLogo from "../../images/EhsLogo.svg";
 import ModalComponent from "./modalComponent";
+import swal from "sweetalert";
 
 function loadScript(src) {
   return new Promise((resolve) => {
@@ -62,15 +62,6 @@ const Tables = (props) => {
     localStorage.setItem("userDetails123", JSON.stringify(r));
   }
 
-  function responseFun(d) {
-    setUserJson(
-      JSON.parse(localStorage.getItem("userDetails123")) || {
-        user: {},
-      }
-    );
-    alert(d);
-  }
-
   const cartDet = JSON.parse(localStorage.getItem("listCart12345678910")) || {
     cartList: [],
   };
@@ -106,7 +97,6 @@ const Tables = (props) => {
       phonenumber: userJson?.phonenumber || orderDet.phonenumber,
     })
       .then((res) => {
-        alert(res.data.message);
         localStorage.removeItem("listCart12345678910");
         window.location.reload();
       })
@@ -118,9 +108,44 @@ const Tables = (props) => {
   let addrWithLogin;
 
   function proceed() {
-    if ($("#oldAdd").is(":checked")) {
-      addrWithLogin = userJson.address;
-    } else if ($("#newAdd").is(":checked")) {
+      if ($("#oldAdd").is(":checked")) {
+        addrWithLogin = userJson.address;
+      } else if ($("#newAdd").is(":checked")) {
+        if (name && address && state && pincode) {
+          addrWithLogin =
+            "Door:" +
+            name +
+            "  |  Street:" +
+            address +
+            "  |  City:" +
+            state +
+            "  |  Pincode:" +
+            pincode;
+        } else {
+          swal("Oops", "Please provide complete address", "warning");
+        }
+      } else {
+        addrWithLogin = userJson.emailid || userJson.phonenumber;
+      }
+
+      Axios.post(updateUser, {
+        emailid: userJson?.emailid,
+        phonenumber: userJson?.phonenumber,
+        address: addrWithLogin,
+      })
+        .then((res) => {
+          userJson["address"] = addr;
+          session(userJson);
+          $("#modalCls").trigger("click");
+          displayRazorpay();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  }
+
+  function proceed1() {
+    if (name && address && state && pincode) {
       addrWithLogin =
         "Door:" +
         name +
@@ -130,50 +155,23 @@ const Tables = (props) => {
         state +
         "  |  Pincode:" +
         pincode;
+      Axios.post(updateUser, {
+        emailid: userJson?.emailid,
+        phonenumber: userJson?.phonenumber,
+        address: addr,
+      })
+        .then((res) => {
+          userJson["address"] = addr;
+          session(userJson);
+          $("#modalCls").trigger("click");
+          displayRazorpay();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
-      addrWithLogin = userJson.emailid || userJson.phonenumber;
+      swal("Oops", "Please provide complete address", "warning");
     }
-
-    Axios.post(updateUser, {
-      emailid: userJson?.emailid,
-      phonenumber: userJson?.phonenumber,
-      address: addrWithLogin,
-    })
-      .then((res) => {
-        $("#modalCls").trigger("click");
-        userJson["address"] = addr;
-        session(userJson);
-        displayRazorpay();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  function proceed1() {
-    addrWithLogin =
-      "Door:" +
-      name +
-      "  |  Street:" +
-      address +
-      "  |  City:" +
-      state +
-      "  |  Pincode:" +
-      pincode;
-    Axios.post(updateUser, {
-      emailid: userJson?.emailid,
-      phonenumber: userJson?.phonenumber,
-      address: addr,
-    })
-      .then((res) => {
-        $("#modalCls").trigger("click");
-        userJson["address"] = addr;
-        session(userJson);
-        displayRazorpay();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   }
 
   function proceedWithoutLogin() {
@@ -181,7 +179,7 @@ const Tables = (props) => {
     displayRazorpay();
   }
 
-    const [authUser, setAuthUser] = React.useState("");
+  const [authUser, setAuthUser] = React.useState("");
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -212,7 +210,7 @@ const Tables = (props) => {
     );
 
     if (!res) {
-      alert("Razorpay SDK failed to load. Are you online?");
+      swal("Oops", "Razorpay SDK failed to load. Are you online?", "error");
       return;
     }
 
@@ -235,9 +233,12 @@ const Tables = (props) => {
       image:
         "https://ehsprints.com/wp-content/uploads/2018/12/cropped-EHS_-NEW_LOGO-1-300x93.jpg",
       handler: function (response) {
-        alert(response.razorpay_payment_id);
-        alert(response.razorpay_order_id);
-        orderPlaced(response);
+        swal({
+          title: "Payment Success",
+          icon: "success",
+        }).then((value) => {
+          orderPlaced(response);
+        });
       },
       prefill: {
         name: userJson?.firstname + userJson?.lastname,
@@ -297,7 +298,7 @@ const Tables = (props) => {
           });
       paymentFun();
     } else {
-      alert("No Items in Your Cart");
+      swal("Oops", "No Items in Your Cart", "warning");
     }
   }
   // const cardDet = {
@@ -316,7 +317,6 @@ const Tables = (props) => {
   //   setBottomDet(det);
   //   $("#bottomCart").css("display", "block");
   //   props.setCartCountFun(det);
-  //   console.log("hello", bottomDet);
   // };
 
   const leftImages = [Blank, Blank];

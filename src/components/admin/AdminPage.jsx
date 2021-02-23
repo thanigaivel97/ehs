@@ -4,7 +4,7 @@ import EhsLogo from "../../images/EhsLogo.svg";
 import Axios from "axios";
 import {
   login,
-  getPoster,
+  getArtWorks,
   config,
   getCategory,
   getSubCategory,
@@ -19,8 +19,10 @@ import {
   findMat,
   findDim,
 } from "../../helper/apiPath";
+import swal from "sweetalert";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { Grid } from "semantic-ui-react";
 import Button from "@material-ui/core/Button";
 import SaveIcon from "@material-ui/icons/Save";
@@ -169,12 +171,21 @@ function CreatePoster(props) {
 
     Axios.post(createPoster, jsonToFormData(newPoster), configImage)
       .then((res) => {
-        console.log(res.data.message);
-        alert(res.data.message);
+        swal({
+          title: res.data.message,
+          icon: "success",
+        }).then(() => {
+          props.getPosterFun();
+          props.setRedirect({
+            one: true,
+            two: false,
+            three: false,
+          });
+        });
       })
       .catch((err) => {
         console.log(err);
-        alert(err);
+        swal(err);
       });
   }
 
@@ -505,32 +516,47 @@ function UpdateAndDeletePoster(props) {
   function deletePosterFun() {
     Axios.post(deletePoster, { posterId: _id })
       .then((res) => {
-        console.log(_id);
-        console.log(res.data.message);
-        alert("Successfully Deleted ...Please Refresh");
+        swal({
+          title: res.data.message,
+          icon: "success",
+        }).then(() => {
+          props.getPosterFun();
+          props.setRedirect({
+            one: true,
+            two: false,
+            three: false,
+          });
+        });
       })
       .catch((err) => {
         console.log(err);
-        alert(err);
+        swal(err);
       });
   }
 
   function updatePosterFun() {
     setValue();
-    console.log(newPoster);
     Axios.post(
       updatePoster,
       jsonToFormData({ posterId: _id, ...newPoster }),
       configImage
     )
       .then((res) => {
-        console.log(_id);
-        console.log(res.data.message);
-        alert("Successfully Updated...");
+        swal({
+          title: res.data.message,
+          icon: "success",
+        }).then(() => {
+          props.getPosterFun();
+          props.setRedirect({
+            one: true,
+            two: false,
+            three: false,
+          });
+        });
       })
       .catch((err) => {
         console.log(err);
-        alert(err);
+        swal(err);
       });
   }
 
@@ -761,6 +787,7 @@ function UpdateAndDeletePoster(props) {
 function Poster(props) {
   const [search, setSearch] = React.useState("");
   const [select, setSelect] = React.useState({});
+  const [skip1, setSkip1] = React.useState(props.skip);
 
   const [redirect, setRedirect] = React.useState({
     one: true,
@@ -768,7 +795,6 @@ function Poster(props) {
     three: false,
   });
   function setSelected(data) {
-    console.log(data);
     setSelect(data);
     setRedirect({
       one: false,
@@ -783,13 +809,14 @@ function Poster(props) {
         {redirect.two || redirect.three ? (
           <button
             className="btn"
-            onClick={() =>
+            onClick={() => {
+              props.getPosterFun();
               setRedirect({
                 one: true,
                 two: false,
                 three: false,
-              })
-            }
+              });
+            }}
             style={{ position: "absolute" }}
           >
             {" "}
@@ -838,12 +865,12 @@ function Poster(props) {
                   <th style={{ width: "10%" }}>Image</th>
                   <th style={{ width: "15%" }}>Name</th>
                   <th style={{ width: "10%" }}>Creator</th>
-                  <th style={{ width: "23%" }}>description</th>
+                  <th style={{ width: "10%" }}>Category</th>
+                  <th style={{ width: "15%" }}>SubCategory</th>
                   <th style={{ width: "5%" }}>language</th>
                   <th style={{ width: "5%" }}>originalPrice</th>
                   <th style={{ width: "5%" }}>stocks</th>
-                  <th style={{ width: "5%" }}>weight</th>
-                  <th style={{ width: "5%" }}>sale</th>
+                  <th style={{ width: "5%" }}>Discount</th>
                   <th style={{ width: "10%" }}>price Group</th>
                 </tr>
               </thead>
@@ -862,12 +889,20 @@ function Poster(props) {
                             .toLowerCase()
                             .includes(search) ||
                           data.sale.toString().toLowerCase().includes(search) ||
+                          data.category.title
+                            .toString()
+                            .toLowerCase()
+                            .includes(search) ||
+                          data.subCategory.title
+                            .toString()
+                            .toLowerCase()
+                            .includes(search) ||
                           data.originalPrice
                             .toString()
                             .toLowerCase()
                             .includes(search) ||
-                          data.language.includes(search) ||
-                          data.priceGroup.includes(search) ||
+                          data.language.toLowerCase().includes(search) ||
+                          data.priceGroup.toLowerCase().includes(search) ||
                           data.stocks.toString().toLowerCase().includes(search)
                       )
                       .map((v, i) => (
@@ -878,6 +913,41 @@ function Poster(props) {
                     ))}
               </tbody>
             </table>
+            {props.skip > 0 ? (
+              <>
+                <div style={{ margin: "10px" }}>
+                  <button
+                    className="btn"
+                    onClick={() => {
+                      if (props.skip > 0) {
+                        props.setSkip(skip1 - 10);
+                        props.getPosterFun();
+                      }
+                    }}
+                    style={{ position: "absolute" }}
+                  >
+                    {" "}
+                    <ArrowBackIcon />
+                  </button>
+                </div>
+              </>
+            ) : null}
+            {props.data.length > 0 ? (
+              <>
+                <div style={{ marginLeft: "1270px", marginBottom: "40px" }}>
+                  <button
+                    className="btn"
+                    onClick={() => {
+                      props.setSkip(skip1+10);
+                      props.getPosterFun();
+                    }}
+                    style={{ position: "absolute" }}
+                  >
+                    <ArrowForwardIcon />
+                  </button>
+                </div>
+              </>
+            ) : null}
           </div>
         </div>
       ) : null}
@@ -887,6 +957,8 @@ function Poster(props) {
           subCatData={props.subCatData}
           matDimData={props.matDimData}
           getSubCategoryData={props.getSubCategoryData}
+          setRedirect={setRedirect}
+          getPosterFun={props.getPosterFun}
         />
       ) : null}
       {redirect.three ? (
@@ -895,6 +967,8 @@ function Poster(props) {
           catData={props.catData}
           subCatData={props.subCatData}
           getSubCategoryData={props.getSubCategoryData}
+          setRedirect={setRedirect}
+          getPosterFun={props.getPosterFun}
         />
       ) : null}
     </>
@@ -912,14 +986,12 @@ function PostRow(props) {
       </td>
       <td style={{ width: "15%" }}>{props.data.name}</td>
       <td style={{ width: "10%" }}>{props.data.creator}</td>
-      <td style={{ width: "23%" }}>
-        {props.data?.description?.slice(0, 100)}....
-      </td>
+      <td style={{ width: "10%" }}>{props.data?.category.title}</td>
+      <td style={{ width: "15%" }}>{props.data?.subCategory.title}</td>
       <td style={{ width: "5%" }}>{props.data.language}</td>
       <td style={{ width: "5%" }}>{props.data.originalPrice}</td>
       <td style={{ width: "5%" }}>{props.data.stocks}</td>
-      <td style={{ width: "5%" }}>{props.data.weight}</td>
-      <td style={{ width: "5%" }}>{props.data.sale}</td>
+      <td style={{ width: "5%" }}>{props.data.discountPercentage}%</td>
       <td style={{ width: "10%" }}>{props.data.priceGroup}</td>
     </tr>
   );
@@ -958,12 +1030,20 @@ function UpdateAndDeleteOrder(props) {
   function updateOrderFun() {
     Axios.post(updateOrder, { orderId: _id, status: stat })
       .then((res) => {
-        console.log(res.data.status_Updated);
-        alert("Successfully Updated...");
+        swal({
+          title: res.data.message,
+          icon: "success",
+        }).then(() => {
+          props.getOrderFun();
+          props.setRedirect({
+            one: true,
+            two: false,
+          });
+        });
       })
       .catch((err) => {
         console.log(err);
-        alert(err);
+        swal(err);
       });
   }
 
@@ -1107,7 +1187,6 @@ function Order(props) {
   });
 
   function setSelected(data) {
-    console.log(data);
     setSelect(data);
     setRedirect({
       one: false,
@@ -1121,12 +1200,13 @@ function Order(props) {
         {redirect.two ? (
           <button
             className="btn"
-            onClick={() =>
+            onClick={() => {
+              props.getOrderFun();
               setRedirect({
                 one: true,
                 two: false,
-              })
-            }
+              });
+            }}
             style={{ position: "absolute" }}
           >
             {" "}
@@ -1202,7 +1282,13 @@ function Order(props) {
         </div>
       ) : null}
 
-      {redirect.two ? <UpdateAndDeleteOrder data={select} /> : null}
+      {redirect.two ? (
+        <UpdateAndDeleteOrder
+          data={select}
+          setRedirect={setRedirect}
+          getOrderFun={props.getOrderFun}
+        />
+      ) : null}
     </>
   );
 }
@@ -1240,12 +1326,10 @@ function Discount(props) {
       discountPercentage: discount,
     })
       .then((res) => {
-        console.log(res.data);
-        alert("Successfully Updated...");
+        swal("Successfully Updated!!!", "", "success");
       })
       .catch((err) => {
-        console.log(err);
-        alert(err);
+        swal(err);
       });
   }
 
@@ -1304,11 +1388,15 @@ const AdminLogin = (props) => {
   function loginReq(loginBody) {
     Axios.post(login, loginBody)
       .then((res) => {
-        if (res.data.user.isAdmin) {
-          props.setIsLogged(true);
-          props.setUserData(res.data);
+        if (res.data.message === "Logged in successfully!!!") {
+          if (res.data.user.isAdmin) {
+            props.setIsLogged(true);
+            props.setUserData(res.data);
+          } else {
+            swal("Oops", "You are not a Admin", "error");
+          }
         } else {
-          alert("Not Admin");
+          swal("Oops", res.data.message, "error");
         }
       })
       .catch((err) => {
@@ -1371,7 +1459,9 @@ export default function AdminPage() {
   const [userData, setUserData] = React.useState({});
   const [subCategoryData, setSubCategoryData] = React.useState([]);
   const [materialData, setMaterialData] = React.useState([]);
-  const [categoryId, setCategoryId] = React.useState("");
+  const [setCategoryId] = React.useState("");
+  const [skip, setSkip] = React.useState(0);
+  const [limit] = React.useState(10);
 
   const [orderData, setOrderData] = React.useState([]);
 
@@ -1383,14 +1473,18 @@ export default function AdminPage() {
     Axios.get(getOrders)
       .then((res) => {
         setOrderData(res.data.orders);
-        console.log(res.data.orders);
       })
       .catch((err) => console.log(err));
     setRedirect({ one: false, two: true });
   }
 
-  function getPosterData(token) {
-    Axios.get(getPoster, config(token))
+  function getPosterData() {
+    Axios.get(getArtWorks, {
+      params: {
+        skip: skip,
+        limit: limit,
+      },
+    })
       .then((res) => {
         setPosterData(res.data.posterData);
       })
@@ -1460,7 +1554,10 @@ export default function AdminPage() {
 
             <button
               className="btn btn-dark ml-3"
-              onClick={() => updateDiscount()}
+              onClick={() => {
+                getPosterFun(userData.token);
+                updateDiscount();
+              }}
             >
               Update Discount
             </button>
@@ -1474,9 +1571,14 @@ export default function AdminPage() {
               getSubCategoryData={getSubCategoryData}
               setCategoryId={setCategoryId}
               token={userData.token}
+              getPosterFun={getPosterFun}
+              setSkip={setSkip}
+              skip={skip}
             />
           ) : null}
-          {redirect.two ? <Order data={orderData} /> : null}
+          {redirect.two ? (
+            <Order data={orderData} getOrderFun={getOrderFun} />
+          ) : null}
           {redirect.three ? <Discount catData={categoryData} /> : null}
         </>
       )}

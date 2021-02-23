@@ -36,6 +36,7 @@ import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 import { connect } from "react-redux";
 import ModelCard3 from "../product_list2/right/ModelCard3";
 import Axios from "axios";
+import swal from "sweetalert";
 import {
   config,
   getPosterById,
@@ -56,8 +57,7 @@ function ProductDescription(props) {
   const itemId = location.pathname.split("/")[2];
 
   function getSimilar(s) {
-    let a = url + "posters/get"+ s.charAt(0).toUpperCase() + s.slice(1);
-    console.log(a);
+    let a = url + "posters/get" + s.charAt(0).toUpperCase() + s.slice(1);
     Axios.get(a)
       .then((res) => {
         setSimilarPosterData(res.data.posterData);
@@ -76,10 +76,10 @@ function ProductDescription(props) {
         const posterItem = res.data.posterData;
         setPosterData(posterItem);
         getSimilar(posterItem.category.title);
-        setIsLoading(false);   
+        setIsLoading(false);
       })
       .catch((err) => console.log(err));
-  }, [props.loginResponse.token,itemId]);
+  }, [props.loginResponse.token, itemId]);
 
   const [reviewPer] = React.useState(0);
   var [count, setCount] = React.useState(1);
@@ -93,36 +93,36 @@ function ProductDescription(props) {
     }
   }
   const [selectedModal, setSelectedModal] = React.useState({});
-  
-    const selectedModalCard = (data) => {
-      setSelectedModal(data);
-      $("#modalOpen").trigger("click");
-    };
 
-   const [modalCarousel, setModalCar] = React.useState({
-     one: true,
-     two: false,
-     three: false,
-   });
+  const selectedModalCard = (data) => {
+    setSelectedModal(data);
+    $("#modalOpen").trigger("click");
+  };
 
-   const setModalCarousel = (e) => {
-     if (e.target.id === "one") {
-       setModalCar({ one: true, two: false, three: false });
-     } else if (e.target.id === "two") {
-       setModalCar({ one: false, two: true, three: false });
-     } else if (e.target.id === "three") {
-       setModalCar({ one: false, two: false, three: true });
-     }
-   };
+  const [modalCarousel, setModalCar] = React.useState({
+    one: true,
+    two: false,
+    three: false,
+  });
 
-   const setModalCarouselb = (e) => {
-     if (e.target.id === "oneb") {
-       setModalCar({ one: true, two: false, three: false });
-     } else if (e.target.id === "twob") {
-       setModalCar({ one: false, two: true, three: false });
-     } else if (e.target.id === "threeb") {
-       setModalCar({ one: false, two: false, three: true });
-     }
+  const setModalCarousel = (e) => {
+    if (e.target.id === "one") {
+      setModalCar({ one: true, two: false, three: false });
+    } else if (e.target.id === "two") {
+      setModalCar({ one: false, two: true, three: false });
+    } else if (e.target.id === "three") {
+      setModalCar({ one: false, two: false, three: true });
+    }
+  };
+
+  const setModalCarouselb = (e) => {
+    if (e.target.id === "oneb") {
+      setModalCar({ one: true, two: false, three: false });
+    } else if (e.target.id === "twob") {
+      setModalCar({ one: false, two: true, three: false });
+    } else if (e.target.id === "threeb") {
+      setModalCar({ one: false, two: false, three: true });
+    }
   };
 
   const [selectMatDim, setMatDim] = React.useState({
@@ -182,77 +182,75 @@ function ProductDescription(props) {
         select: "Dimension",
       },
     ];
-  } catch (e) { }
-  
+  } catch (e) {}
 
- let card1Det1, card2Det1;
- try {
-   card1Det1 = {
-     select: "Material",
-     box: [
-       {
-         src: selectedModal.material[0].imgUrl,
-         title: selectedModal.material[0].title,
-         name: "one",
-         select: "Material",
-       },
-       {
-         src: selectedModal.material[1].imgUrl,
-         title: selectedModal.material[1].title,
-         name: "two",
-         select: "Material",
-       },
-       {
-         src: selectedModal.material[2].imgUrl,
-         title: selectedModal.material[2].title,
-         name: "three",
-         select: "Material",
-       },
-     ],
-   };
-   card2Det1 = {
-     select: "Dimension",
-     box: [
-       {
-         src: selectedModal.dimension[0].imgUrl,
-         title: selectedModal.dimension[0].title,
-         cus: true,
-         cusWidth: "90",
-         cusHeight: "50",
-         name: "one",
-         select: "Dimension",
-       },
-       {
-         src: selectedModal.dimension[1].imgUrl,
-         title: selectedModal.dimension[1].title,
-         cus: true,
-         cusWidth: "100",
-         cusHeight: "60",
-         name: "two",
-         select: "Dimension",
-       },
-       {
-         src: selectedModal.dimension[2].imgUrl,
-         title: selectedModal.dimension[2].title,
-         cus: true,
-         cusWidth: "120",
-         cusHeight: "80",
-         name: "three",
-         select: "Dimension",
-       },
-     ],
-   };
- } catch (e) {}
+  let card1Det1, card2Det1;
+  try {
+    card1Det1 = {
+      select: "Material",
+      box: [
+        {
+          src: selectedModal.material[0].imgUrl,
+          title: selectedModal.material[0].title,
+          name: "one",
+          select: "Material",
+        },
+        {
+          src: selectedModal.material[1].imgUrl,
+          title: selectedModal.material[1].title,
+          name: "two",
+          select: "Material",
+        },
+        {
+          src: selectedModal.material[2].imgUrl,
+          title: selectedModal.material[2].title,
+          name: "three",
+          select: "Material",
+        },
+      ],
+    };
+    card2Det1 = {
+      select: "Dimension",
+      box: [
+        {
+          src: selectedModal.dimension[0].imgUrl,
+          title: selectedModal.dimension[0].title,
+          cus: true,
+          cusWidth: "90",
+          cusHeight: "50",
+          name: "one",
+          select: "Dimension",
+        },
+        {
+          src: selectedModal.dimension[1].imgUrl,
+          title: selectedModal.dimension[1].title,
+          cus: true,
+          cusWidth: "100",
+          cusHeight: "60",
+          name: "two",
+          select: "Dimension",
+        },
+        {
+          src: selectedModal.dimension[2].imgUrl,
+          title: selectedModal.dimension[2].title,
+          cus: true,
+          cusWidth: "120",
+          cusHeight: "80",
+          name: "three",
+          select: "Dimension",
+        },
+      ],
+    };
+  } catch (e) {}
 
+  const card3Det = {
+    select: "Quantity",
+    quantity: 1,
+    material: "Material: " + findMat(selectMatDim.Material),
+    dimension: "Dimensions:" + findDim(selectMatDim.Dimension),
+    price: selectedModal.originalPrice,
+  };
 
-const card3Det = {
-  select: "Quantity",
-  quantity: 1,
-  material: "Material: " + findMat(selectMatDim.Material),
-  dimension: "Dimensions:" + findDim(selectMatDim.Dimension),
-  price: selectedModal.originalPrice,
-};
-  
   const ModalDet = {
     src: selectedModal.imgUrl,
     title: selectedModal.name,
@@ -279,7 +277,7 @@ const card3Det = {
       operation_type: 1,
       userObjId: JSON.parse(localStorage.getItem("userDetails123"))._id,
     }).then((data) => {
-      alert(data.data.message);
+      swal("", "Added to Whishlist", "success");
     });
   }
 
@@ -588,7 +586,11 @@ const card3Det = {
                           });
                           e.target.innerText = "Added!!!";
                         } else {
-                          alert("Select The Proper Materail and Dimension");
+                          swal(
+                            "Oops",
+                            "Select The Proper Material and Dimension",
+                            "warning"
+                          );
                         }
                       }}
                     >
@@ -599,7 +601,7 @@ const card3Det = {
                       onClick={() => {
                         authUser
                           ? updateWishlist()
-                          : alert("Login to Add Whishlist");
+                          : swal("Oops", "Login to Add Whishlist", "error");
                       }}
                       style={{
                         float: "left",
@@ -762,9 +764,9 @@ const card3Det = {
                       >
                         <CardHeader
                           avatar={<Avatar aria-label="recipe"></Avatar>}
-                          title="User name"
+                          title="ThanigaiVel"
                         />
-                        <CardContent className="pt-0 mb-2">
+                        <CardContent className="pt-0 mb-2 ml-2">
                           <Typography
                             variant="body2"
                             color="textSecondary"

@@ -6,10 +6,11 @@ import { Link } from "react-router-dom";
 import Axios from "axios";
 import { login } from "../../helper/apiPath";
 import { connect } from "react-redux";
+import swal from "sweetalert";
 
 const Login = (props) => {
   const [emailid, setEmailId] = React.useState("");
-    const [phonenumber, setPhonenumber] = React.useState("");
+  const [phonenumber, setPhonenumber] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [loginBody, setLoginBody] = React.useState({});
 
@@ -19,9 +20,9 @@ const Login = (props) => {
 
   function responseFun(d) {
     if (d === "Logged in successfully!!!") {
-      window.location.replace("http://"+window.location.host+"/");
+      window.location.replace("http://" + window.location.host + "/");
     } else {
-      alert(d);
+      swal("Oops", d, "error");
     }
   }
 
@@ -40,7 +41,7 @@ const Login = (props) => {
 
   return (
     <>
-      <div className="loginPage p-5 mx-auto d-block">
+      <div className="loginPage p-5 mx-auto mt-5 d-block">
         <img
           className="mx-auto d-block"
           id="ehsLogoImg"
@@ -48,12 +49,12 @@ const Login = (props) => {
           alt="Ehs Logo"
         />
 
-        <p id="ehsLogoLabel" className="text-center mt-3">
+        <p id="ehsLogoLabel" className="text-center mt-2">
           Log Into your account
         </p>
 
         <input
-          className="mx-auto d-block mt-3"
+          className="mx-auto d-block mt-3 mb-3"
           id="loginUserEmail"
           pattern="^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$"
           type="text"
@@ -64,7 +65,6 @@ const Login = (props) => {
           }}
           placeholder="Email"
         />
-        <p className="text-center mt-2`">or</p>
 
         <input
           className="mx-auto d-block "
@@ -109,7 +109,7 @@ const Login = (props) => {
           placeholder="Password"
         />
 
-        <div className="mt-2 ml-3">
+        <div className="mt-2" style={{ marginLeft: "13px" }}>
           <button
             id="loginBtn"
             className="mt-2"
@@ -119,8 +119,11 @@ const Login = (props) => {
           </button>
         </div>
 
-        <p className="text-center mt-1">or</p>
-        <Link className="ml-3 d-block " to="/signup">
+        <Link
+          className="mt-3 d-block"
+          style={{ marginLeft: "13px" }}
+          to="/signup"
+        >
           <button id="signupBtn">Create an account</button>
         </Link>
       </div>

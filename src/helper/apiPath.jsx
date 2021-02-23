@@ -10,7 +10,7 @@ const activate = url + "auth/activate";
 const otp = url + "auth/otp";
 const verifyOtp = url + "auth/verifyOtp";
 
-
+const getArtWorks = url + "posters/getArtWorks";
 const getPoster = url + "posters/getPoster";
 const getBestSeller = url + "posters/getBestSeller";
 const getPosterById = url + "posters/getPosterById";
@@ -106,6 +106,7 @@ export {
   login,
   activate,
   updateUser,
+  getArtWorks,
   getPoster,
   getBestSeller,
   getSignages,

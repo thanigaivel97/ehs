@@ -4,6 +4,7 @@ import { TextField } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Axios from "axios";
 import { otp, verifyOtp } from "../../helper/apiPath";
+import swal from "sweetalert";
 
 export default function ModalComponent(props) {
   const [ot, setOtp] = React.useState(false);
@@ -11,9 +12,8 @@ export default function ModalComponent(props) {
   const [but, setbut] = React.useState("Send Otp");
   const [name, setName] = React.useState("");
   const [code, setCode] = React.useState("");
-    const [phonenumber, setPhonenumber] = React.useState("");
-    
-    const [door, setDoor] = React.useState("");
+  const [phonenumber, setPhonenumber] = React.useState(""); 
+  const [door, setDoor] = React.useState("");
   const [street, setStreet] = React.useState("");
   const [city, setCity] = React.useState("");
   const [pin, setPin] = React.useState("");
@@ -25,38 +25,37 @@ export default function ModalComponent(props) {
         if (res.data.success) {
           setOtp(true);
           setbut("Verify");
-        } else alert(res.data.message);
+        } else swal(res.data.message);
       });
     } else if (door || street || city || pin) {
-      if (!door && !street && !city && !pin) {
-        alert("Please Fill All Details");
+      if (door && street && city && pin) {
+         let addr =
+           "Door:" +
+           door +
+           "  |  Street:" +
+           street +
+           "  |  City:" +
+           city +
+           "  |  Pincode:" +
+           pin;
+         let json = {
+           name: name,
+           addr: addr,
+           phonenumber: phonenumber,
+         };
+         localStorage.setItem("orderUser", JSON.stringify(json));
+         props.proceedWithoutLogin();
       } else {
-        let addr =
-          "Door:" +
-          door +
-          "  |  Street:" +
-          street +
-          "  |  City:" +
-          city +
-          "  |  Pincode:" +
-          pin;
-        let json = {
-          name: name,
-          addr: addr,
-          phonenumber: phonenumber,
-        };
-        localStorage.setItem("orderUser", JSON.stringify(json));
-        props.proceedWithoutLogin();
+       swal("Oops", "Please Fill Complete Address", "warning");
       }
     } else if (code !== "" && otpVerified === false) {
       Axios.get(verifyOtp + "/" + phonenumber + "/" + code).then((res) => {
         if (res.data.success) {
-          alert(res.data.message);
           setOtpVerified(true);
           setOtp(false);
           setCode("");
           setbut("Proceed To Checkout");
-        } else alert(res.data.message);
+        } else swal(res.data.message,"","error");
       });
     } else {
     }
