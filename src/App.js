@@ -21,6 +21,10 @@ import { connect } from "react-redux";
 import Login from "./components/login/Login";
 import Signup from "./components/login/Signup.jsx";
 import Otp from "./components/login/Otp";
+import PrivacyPolicy from "./components/PrivacyPolicy/PrivacyPolicy.jsx";
+import Support from "./components/Support/Support";
+import Affiliate from "./components/Affliate/Affliate";
+import Faq from "./components/Faq/Faq";
 
 export const DesContext = React.createContext({});
 
@@ -47,6 +51,7 @@ function App(props) {
   const [Description, setDescription] = useState({});
 
   React.useEffect(() => {
+    document.title = "Ehs prints";
   
     Axios.post(login, { emailid: "naveen@gmail.com", password: "1234" })
       .then((res) => {
@@ -67,6 +72,22 @@ function App(props) {
           <Switch>
             <Route exact path="/">
               <HomePage />
+            </Route>
+
+            <Route exact path="/privacy-policy">
+              <PrivacyPolicy />
+            </Route>
+            
+            <Route exact path="/faq">
+              <Faq />
+            </Route>
+
+            <Route exact path="/support">
+              <Support />
+            </Route>
+
+            <Route exact path="/affiliate">
+              <Affiliate />
             </Route>
 
             <Route exact path="/posters">

@@ -5,7 +5,7 @@ import PosterImg from "../../../images/Posters.svg";
 import Signages from "../../../images/Signages.svg";
 import FloorImg from "../../../images/FloorGraphics.svg";
 import AssetImg from "../../../images/AssetMarking.svg";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Card = (props) => {
   return (
@@ -43,7 +43,7 @@ const Card = (props) => {
 const Collections = () => {
   return (
     <div className="row p-3 pl-5">
-      <div className="col-sm-3 pl-4">
+      <div className="col-sm-3 pl-1">
         <p id="getQText">
           Get High Quality <br />
           Prints for your <br /> Workplace

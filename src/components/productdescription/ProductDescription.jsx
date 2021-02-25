@@ -846,8 +846,8 @@ function ProductDescription(props) {
             style={{ width: "100%", background: "#003459" }}
           >
             <Grid style={{ paddingTop: "50px" }}>
-              <Grid.Row columns="4" className="ml-5">
-                <Grid.Column className="ml-5 pl-5">
+              <Grid.Row columns="4" className="ml-4">
+                <Grid.Column className="ml-5">
                   <ul>
                     <h3 className="footerhead">Products</h3>
                     <Link to="/posters" className="footertxt">
@@ -910,19 +910,30 @@ function ProductDescription(props) {
                     <li className="footertxt">
                       Timings (Mon - Sat: 7:00 - 21:00)
                     </li>
-                    <li className="footertxt">Office Address</li>
-                    <li className="footertxt">Mobile No.</li>
-                    <li className="footertxt">Email ID</li>
+                    <li className="footertxt">
+                      45, old Agrawal Nagar, Indore, Madhya Pradesh, Pin: 452001
+                    </li>
+                    <li className="footertxt">Mobile No : +91 9632418602</li>
+                    <li className="footertxt">
+                      Email ID : hello@ehsposters.com
+                    </li>
                   </ul>
                 </Grid.Column>
-                <Grid.Column className="ml-5 pl-5">
+                <Grid.Column className="ml-5">
                   <ul>
                     <h3 className="footerhead">About</h3>
-                    <li className="footertxt">Privacy Policies</li>
-                    <li className="footertxt">FAQ</li>
-                    <li className="footertxt">Services</li>
-                    <li className="footertxt">Support</li>
-                    <li className="footertxt">Join Us (Affiliate)</li>
+                    <Link to="/privacy-policy" className="footertxt">
+                      Privacy Policies
+                    </Link>
+                    <Link to="/faq" className="footertxt">
+                      FAQ
+                    </Link>
+                    <Link to="/support" className="footertxt">
+                      Support
+                    </Link>
+                    <Link to="/affiliate" className="footertxt">
+                      Join Us (Affiliate)
+                    </Link>
                   </ul>
                 </Grid.Column>
               </Grid.Row>

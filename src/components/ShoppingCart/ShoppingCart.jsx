@@ -44,16 +44,11 @@ const __DEV__ = document.domain === "localhost";
 const Tables = (props) => {
   const [name, setName] = React.useState("");
   const [addr, setAddr] = React.useState("");
-  const [phn, setPhn] = React.useState("");
-  const [nme, setNme] = React.useState("");
-
   const [userJson, setUserJson] = React.useState({});
-
   const [modalCarousel, setModalCarousel] = useState({
     one: true,
     two: false,
   });
-
   const [address, setAddress] = React.useState("");
   const [state, setState] = React.useState("");
   const [pincode, setPincode] = React.useState("");
@@ -108,40 +103,40 @@ const Tables = (props) => {
   let addrWithLogin;
 
   function proceed() {
-      if ($("#oldAdd").is(":checked")) {
-        addrWithLogin = userJson.address;
-      } else if ($("#newAdd").is(":checked")) {
-        if (name && address && state && pincode) {
-          addrWithLogin =
-            "Door:" +
-            name +
-            "  |  Street:" +
-            address +
-            "  |  City:" +
-            state +
-            "  |  Pincode:" +
-            pincode;
-        } else {
-          swal("Oops", "Please provide complete address", "warning");
-        }
+    if ($("#oldAdd").is(":checked")) {
+      addrWithLogin = userJson.address;
+    } else if ($("#newAdd").is(":checked")) {
+      if (name && address && state && pincode) {
+        addrWithLogin =
+          "Door:" +
+          name +
+          "  |  Street:" +
+          address +
+          "  |  City:" +
+          state +
+          "  |  Pincode:" +
+          pincode;
       } else {
-        addrWithLogin = userJson.emailid || userJson.phonenumber;
+        swal("Oops", "Please provide complete address", "warning");
       }
+    } else {
+      addrWithLogin = userJson.emailid || userJson.phonenumber;
+    }
 
-      Axios.post(updateUser, {
-        emailid: userJson?.emailid,
-        phonenumber: userJson?.phonenumber,
-        address: addrWithLogin,
+    Axios.post(updateUser, {
+      emailid: userJson?.emailid,
+      phonenumber: userJson?.phonenumber,
+      address: addrWithLogin,
+    })
+      .then((res) => {
+        userJson["address"] = addr;
+        session(userJson);
+        $("#modalCls").trigger("click");
+        displayRazorpay();
       })
-        .then((res) => {
-          userJson["address"] = addr;
-          session(userJson);
-          $("#modalCls").trigger("click");
-          displayRazorpay();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   function proceed1() {
@@ -664,8 +659,8 @@ const Tables = (props) => {
 
       <div className="mt-5" style={{ width: "100%", background: "#003459" }}>
         <Grid style={{ paddingTop: "50px", paddingBottom: "30px" }}>
-          <Grid.Row columns="4" className="ml-5">
-            <Grid.Column className="ml-5 pl-5">
+          <Grid.Row columns="4" className="ml-4">
+            <Grid.Column className="ml-5">
               <ul>
                 <h3 className="footerhead">Products</h3>
                 <Link to="/posters" className="footertxt">
@@ -726,19 +721,28 @@ const Tables = (props) => {
               <ul>
                 <h3 className="footerhead">Contact Us</h3>
                 <li className="footertxt">Timings (Mon - Sat: 7:00 - 21:00)</li>
-                <li className="footertxt">Office Address</li>
-                <li className="footertxt">Mobile No.</li>
-                <li className="footertxt">Email ID</li>
+                <li className="footertxt">
+                  45, old Agrawal Nagar, Indore, Madhya Pradesh, Pin: 452001
+                </li>
+                <li className="footertxt">Mobile No : +91 9632418602</li>
+                <li className="footertxt">Email ID : hello@ehsposters.com</li>
               </ul>
             </Grid.Column>
-            <Grid.Column className="ml-5 pl-5">
+            <Grid.Column className="ml-5">
               <ul>
                 <h3 className="footerhead">About</h3>
-                <li className="footertxt">Privacy Policies</li>
-                <li className="footertxt">FAQ</li>
-                <li className="footertxt">Services</li>
-                <li className="footertxt">Support</li>
-                <li className="footertxt">Join Us (Affiliate)</li>
+                <Link to="/privacy-policy" className="footertxt">
+                  Privacy Policies
+                </Link>
+                <Link to="/faq" className="footertxt">
+                  FAQ
+                </Link>
+                <Link to="/support" className="footertxt">
+                  Support
+                </Link>
+                <Link to="/affiliate" className="footertxt">
+                  Join Us (Affiliate)
+                </Link>
               </ul>
             </Grid.Column>
           </Grid.Row>
@@ -786,8 +790,6 @@ const Tables = (props) => {
                   <ModalComponent
                     proceedWithoutLogin={proceedWithoutLogin}
                     setAddr={setAddr}
-                    setPhn={setPhn}
-                    setNme={setNme}
                   />
                 </>
               ) : null}

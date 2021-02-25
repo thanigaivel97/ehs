@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /*jshint esversion: 9 */
 import React from "react";
 import EhsLogo from "../../images/EhsLogo.svg";
@@ -787,7 +788,7 @@ function UpdateAndDeletePoster(props) {
 function Poster(props) {
   const [search, setSearch] = React.useState("");
   const [select, setSelect] = React.useState({});
-  const [skip1, setSkip1] = React.useState(props.skip);
+  const [skip, setSkip] = React.useState(0);
 
   const [redirect, setRedirect] = React.useState({
     one: true,
@@ -802,6 +803,22 @@ function Poster(props) {
       three: true,
     });
   }
+
+  const nextPage = () => {
+    setSkip(skip + props.limit);
+  };
+
+  const previousPage = () => {
+    setSkip(skip - props.limit);
+  };
+
+  const fetchUsers = (limit, skip) => {
+    props.getPosterData(skip);
+  };
+
+  React.useEffect(() => {
+    fetchUsers(props.limit, skip);
+  }, [skip, props.limit]);
 
   return (
     <>
@@ -913,17 +930,12 @@ function Poster(props) {
                     ))}
               </tbody>
             </table>
-            {props.skip > 0 ? (
+            {skip > 0 ? (
               <>
                 <div style={{ margin: "10px" }}>
                   <button
                     className="btn"
-                    onClick={() => {
-                      if (props.skip > 0) {
-                        props.setSkip(skip1 - 10);
-                        props.getPosterFun();
-                      }
-                    }}
+                    onClick={previousPage}
                     style={{ position: "absolute" }}
                   >
                     {" "}
@@ -932,15 +944,12 @@ function Poster(props) {
                 </div>
               </>
             ) : null}
-            {props.data.length > 0 ? (
+            {props.data.length > 0 && props.data.length >= props.limit ? (
               <>
                 <div style={{ marginLeft: "1270px", marginBottom: "40px" }}>
                   <button
                     className="btn"
-                    onClick={() => {
-                      props.setSkip(skip1+10);
-                      props.getPosterFun();
-                    }}
+                    onClick={nextPage}
                     style={{ position: "absolute" }}
                   >
                     <ArrowForwardIcon />
@@ -1460,10 +1469,10 @@ export default function AdminPage() {
   const [subCategoryData, setSubCategoryData] = React.useState([]);
   const [materialData, setMaterialData] = React.useState([]);
   const [setCategoryId] = React.useState("");
-  const [skip, setSkip] = React.useState(0);
   const [limit] = React.useState(10);
-
   const [orderData, setOrderData] = React.useState([]);
+
+  React.useEffect(() => (document.title = "Ehs prints | Admin"));
 
   function updateDiscount() {
     setRedirect({ one: false, two: false, three: true });
@@ -1478,10 +1487,10 @@ export default function AdminPage() {
     setRedirect({ one: false, two: true });
   }
 
-  function getPosterData() {
+  function getPosterData(s) {
     Axios.get(getArtWorks, {
       params: {
-        skip: skip,
+        skip: s,
         limit: limit,
       },
     })
@@ -1526,7 +1535,7 @@ export default function AdminPage() {
   });
 
   function getPosterFun(token) {
-    getPosterData(token);
+    getPosterData();
     getCategoryData(token);
     getSubCategoryData(token);
     getMaterialData(token);
@@ -1571,9 +1580,9 @@ export default function AdminPage() {
               getSubCategoryData={getSubCategoryData}
               setCategoryId={setCategoryId}
               token={userData.token}
+              limit={limit}
               getPosterFun={getPosterFun}
-              setSkip={setSkip}
-              skip={skip}
+              getPosterData={getPosterData}
             />
           ) : null}
           {redirect.two ? (

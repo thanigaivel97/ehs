@@ -916,9 +916,9 @@ body .ui.cards > .card {
   display: block;
 }
 
-.footertxt{
+.footertxt {
   text-align: left;
-  display:block;
+  display: block;
   font-family: Segoe UI;
   font-size: 15px;
   letter-spacing: 0px;
@@ -935,4 +935,17 @@ body .ui.cards > .card {
   color: #ffffff;
   opacity: 1;
   padding-bottom: 15px;
+}
+.privacy {
+  color: #0d375d;
+  font-family: Sans-serif;
+  font-size: 19px;
+  font-weight: 800;
+  text-shadow: 0px 0px 0px rgb(0 0 0 / 30%);
+}
+.privacyPoints {
+  color: #525252;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
 }

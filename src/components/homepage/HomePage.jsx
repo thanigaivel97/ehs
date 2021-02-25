@@ -15,7 +15,8 @@ import { Link } from "react-router-dom";
 
 const HomePage = (props) => {
   const [authUser, setAuthUser] = React.useState("");
-   React.useEffect(() => {
+  React.useEffect(() => {
+     document.title = "Ehs prints";
      if (JSON.parse(localStorage.getItem("userDetails123")))
        setAuthUser(
          JSON.parse(localStorage.getItem("userDetails123")).emailid ||
@@ -44,7 +45,7 @@ const HomePage = (props) => {
         />
         <Grid>
           <Grid.Row columns="4">
-            <Grid.Column className="ml-5 pl-5">
+            <Grid.Column className="ml-5">
               <ul>
                 <h3 className="footerhead">Products</h3>
                 <Link to="/posters" className="footertxt">
@@ -90,9 +91,7 @@ const HomePage = (props) => {
                   </>
                 ) : (
                   <>
-                    <li className="footertxt">
-                      Order History
-                    </li>
+                    <li className="footertxt">Order History</li>
                   </>
                 )}
 
@@ -107,19 +106,24 @@ const HomePage = (props) => {
               <ul className="footertxt">
                 <h3 className="footerhead">Contact Us</h3>
                 <li>Timings (Mon - Sat: 7:00 - 21:00)</li>
-                <li>Office Address</li>
-                <li>Mobile No.</li>
-                <li>Email ID</li>
+                <li>
+                  45, old Agrawal Nagar, Indore, Madhya Pradesh, Pin: 452001
+                </li>
+                <li>Mobile No : +91 9632418602</li>
+                <li>Email ID : hello@ehsposters.com</li>
               </ul>
             </Grid.Column>
-            <Grid.Column className="ml-5 pl-5">
-              <ul className="footertxt">
+            <Grid.Column className="ml-5">
+              <ul>
                 <h3 className="footerhead">About</h3>
-                <li>Privacy Policies</li>
-                <li>FAQ</li>
-                <li>Services</li>
-                <li>Support</li>
-                <li>Join Us (Affiliate)</li>
+                <Link to="/privacy-policy" className="footertxt">
+                  Privacy Policies
+                </Link>
+                <Link to="/faq" className="footertxt">FAQ</Link>
+                <Link to="/support" className="footertxt">
+                  Support
+                </Link>
+                <Link to="/affiliate" className="footertxt">Join Us (Affiliate)</Link>
               </ul>
             </Grid.Column>
           </Grid.Row>

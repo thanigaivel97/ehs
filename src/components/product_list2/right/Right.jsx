@@ -19,6 +19,8 @@ import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 import { Link } from "react-router-dom";
 import Axios from "axios";
 import { url } from "../../../helper/apiPath";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 
 export const BottomAddedCart = (props) => {
   const { name, quantity } = props.det;
@@ -68,23 +70,44 @@ const Right = (props) => {
   const [posterData, setPosterData] = React.useState([]);
   const [bread1, setBread1] = React.useState("");
   const [bread2, setBread2] = React.useState("");
+  const [skip, setSkip] = React.useState(0);
+  const [limit] = React.useState(12);
 
   function bread() {
     setBread1(window.location.pathname.split("/")[1]);
     setBread2(window.location.pathname.split("/")[2]);
   }
-  React.useEffect(() => {
-    bread();
+
+  const nextPage = () => {
+    setSkip(skip + limit);
+  };
+
+  const previousPage = () => {
+    setSkip(skip - limit);
+  };
+
+  
+  const fetchPoster = (s,l) => {
     let url1 =
       url +
       "posters/getPosterBySubCategory/" +
       window.location.pathname.split("/")[2];
-    Axios.get(url1)
+    Axios.get(url1, {
+      params: {
+        skip: s,
+        limit: l,
+      },
+    })
       .then((res) => {
         setPosterData(res.data.posterData);
       })
       .catch((err) => console.log(err));
-  }, [props.path]);
+  };
+
+  React.useEffect(() => {
+    bread();
+    fetchPoster(skip, limit);
+  }, [props.path, skip, limit]);
 
   const [bottomDet, setBottomDet] = useState({});
 
@@ -261,20 +284,25 @@ const Right = (props) => {
         ))}
       </Grid.Row>
 
-      <Grid.Row className="justify-content-center mt-4">
-        <p className="page mr-1 pt-1">Page</p>
-        <a href="/#" className="pageLink text-center pt-1 activePage ml-3 mr-2">
-          1
-        </a>
-        <a href="/#" className="pageLink text-center pt-1  ml-3 mr-2">
-          2
-        </a>
-        <a href="/#" className="pageLink text-center pt-1 ml-3 mr-2">
-          3
-        </a>
-        <a href="/#" className="pageLink text-center pt-1 ml-3 mr-2">
-          4
-        </a>
+      <Grid.Row className="mt-4" columns="2">
+        <Grid.Column style={{ width: "95%" }}>
+          {skip > 0 ? (
+            <div>
+              <button className="btn" onClick={previousPage}>
+                <ArrowBackIcon />
+              </button>
+            </div>
+          ) : null}
+        </Grid.Column>
+        <Grid.Column>
+          {(posterData.length > 0 && posterData.length >= limit) ? (
+            <div>
+              <button className="btn" onClick={nextPage}>
+                <ArrowForwardIcon />
+              </button>
+            </div>
+          ) : null}
+        </Grid.Column>
       </Grid.Row>
       <Grid.Column className="justify-content-center mt-3">
         <Image
