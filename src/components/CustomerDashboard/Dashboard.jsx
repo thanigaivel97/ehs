@@ -302,7 +302,7 @@ const PersonalInfo = () => {
 
 const Orders = () => {
   const [orderData, setOrderData] = React.useState([]);
-  const [setAuthUser] = React.useState("");
+  const [authUser,setAuthUser] = React.useState("");
 
   function getOrderFun() {
     Axios.get(getOrdersById, {
