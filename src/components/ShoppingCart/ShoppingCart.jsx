@@ -499,6 +499,7 @@ const Tables = (props) => {
                     lineHeight: "19px",
                     borderRadius: "5px",
                   }}
+                  onClick={()=>window.location.replace("/quotation")}
                 >
                   Request a Quote{" "}
                 </Button>

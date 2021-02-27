@@ -184,6 +184,7 @@ const NavBar = (props) => {
                   data-toggle="dropdown"
                   aria-haspopup="true"
                   aria-expanded="false"
+                  onClick={() => window.location.replace("/posters")}
                 >
                   Posters
                 </Link>
@@ -288,16 +289,17 @@ const NavBar = (props) => {
                   data-toggle="dropdown"
                   aria-haspopup="true"
                   aria-expanded="false"
+                  onClick={() => window.location.replace("/signages")}
                 >
                   Signages
                 </Link>
                 <div className="dropdown-content p-3">
                   <Link
                     className="searchCategory dropdown-item"
-                    to="/signages/SIGNAL-TEMPLATE-SHEETS"
+                    to="/signages/PRE-PRINTED"
                     onClick={(e) => props.setSubCat(e.target.text.trim())}
                   >
-                    SIGNAL TEMPLATE SHEETS
+                    PRE PRINTED
                   </Link>
                   <Link
                     className="searchCategory dropdown-item"
@@ -306,17 +308,50 @@ const NavBar = (props) => {
                   >
                     PICTOGRAMS
                   </Link>
+                  <Link
+                    className="searchCategory dropdown-item"
+                    to="/signages/SIGNAL-TEMPLATE-SHEETS"
+                    onClick={(e) => props.setSubCat(e.target.text.trim())}
+                  >
+                    SIGNAL TEMPLATE SHEETS
+                  </Link>
                 </div>
               </div>
             </li>
             <li className="nav-item ml-4">
-              <Link
-                to="/floor-graphics"
-                className="nav-link text-white textColorAndWeight btn shadow-none border-0"
-                style={{ backgroundColor: "#003459", border: "0px" }}
-              >
-                Floor Graphics
-              </Link>
+              <div class="dropdown">
+                <Link
+                  to="/floor-graphics"
+                  className="nav-link text-white textColorAndWeight btn shadow-none border-0"
+                  style={{ backgroundColor: "#003459", border: "0px" }}
+                  onClick={() => window.location.replace("/floor-graphics")}
+                >
+                  Floor Graphics
+                </Link>
+                <div className="dropdown-content p-3">
+                  <Link
+                    className="searchCategory dropdown-item"
+                    to="/floor-graphics/ROAD-SAFETY"
+                    onClick={(e) => props.setSubCat(e.target.text.trim())}
+                  >
+                    ROAD SAFETY
+                  </Link>
+                  <Link
+                    className="searchCategory dropdown-item"
+                    to="/floor-graphics/WAREHOUSE"
+                    onClick={(e) => props.setSubCat(e.target.text.trim())}
+                  >
+                    WAREHOUSE
+                  </Link>
+                  <Link
+                    className="searchCategory dropdown-item"
+                    to="/floor-graphics/PUBLIC-PLACE"
+                    onClick={(e) => props.setSubCat(e.target.text.trim())}
+                  >
+                    PUBLIC PLACE
+                  </Link>
+                </div>
+              </div>
             </li>
             <li className="nav-item ml-4">
               <Link
@@ -337,6 +372,7 @@ const NavBar = (props) => {
                   data-toggle="dropdown"
                   aria-haspopup="true"
                   aria-expanded="false"
+                  onClick={() => window.location.replace("/campaigns")}
                 >
                   Campaigns
                 </Link>
@@ -387,14 +423,14 @@ const NavBar = (props) => {
               </div>
             </li>
             <li className="nav-item ml-4">
-              <a className="nav-link text-white textColorAndWeight" href="/#">
+              <Link className="nav-link text-white textColorAndWeight" to="/#">
                 Create your own
-              </a>
+              </Link>
             </li>
             <li className="nav-item ml-4">
-              <a className="nav-link text-white textColorAndWeight" href="/#">
+              <Link className="nav-link text-white textColorAndWeight" to="/#">
                 Resources
-              </a>
+              </Link>
             </li>
             <li className="nav-item ml-4" style={{ marginTop: "-2px" }}>
               <Link

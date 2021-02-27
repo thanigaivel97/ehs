@@ -1570,6 +1570,12 @@ export default function AdminPage() {
             >
               Update Discount
             </button>
+            <button
+              className="btn btn-danger ml-3"
+              onClick={() => window.location.reload()}
+            >
+              Logout
+            </button>
           </div>
           {redirect.one ? (
             <Poster

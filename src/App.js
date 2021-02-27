@@ -25,6 +25,7 @@ import PrivacyPolicy from "./components/PrivacyPolicy/PrivacyPolicy.jsx";
 import Support from "./components/Support/Support";
 import Affiliate from "./components/Affliate/Affliate";
 import Faq from "./components/Faq/Faq";
+import Quotation from "./components/Quotation/Quotation";
 
 export const DesContext = React.createContext({});
 
@@ -78,6 +79,10 @@ function App(props) {
               <PrivacyPolicy />
             </Route>
             
+            <Route exact path="/quotation">
+              <Quotation />
+            </Route>
+
             <Route exact path="/faq">
               <Faq />
             </Route>

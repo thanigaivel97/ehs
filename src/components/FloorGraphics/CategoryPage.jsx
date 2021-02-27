@@ -22,6 +22,7 @@ import ModelCard3 from "../product_list2/right/ModelCard3";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 import Back from "../../images/Floor-graphics_banner.png";
+import { Link } from "react-router-dom";
 
 
 function Design() {
@@ -48,6 +49,8 @@ function Design() {
 
 const CategoryPage = (props) => {
   const [posterData, setPosterData] = React.useState([]);
+      const [authUser, setAuthUser] = React.useState("");
+
 
   useEffect(() => {
     Axios.get(
@@ -60,6 +63,12 @@ const CategoryPage = (props) => {
         setPosterData(res.data.posterData);
       })
       .catch((err) => console.log(err));
+    
+     if (JSON.parse(localStorage.getItem("userDetails123")))
+       setAuthUser(
+         JSON.parse(localStorage.getItem("userDetails123")).emailid ||
+           JSON.parse(localStorage.getItem("userDetails123")).phonenumber
+       );
   }, [props.loginResponse.token]);
 
   const cardDet = [
@@ -560,6 +569,97 @@ const CategoryPage = (props) => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="mt-5" style={{ width: "100%", background: "#003459" }}>
+        <Grid style={{ paddingTop: "50px", paddingBottom: "30px" }}>
+          <Grid.Row columns="4" className="ml-4">
+            <Grid.Column className="ml-5">
+              <ul>
+                <h3 className="footerhead">Products</h3>
+                <Link to="/posters" className="footertxt">
+                  Posters
+                </Link>
+                <Link to="/signages" className="footertxt">
+                  Signages
+                </Link>
+                <Link to="/campaigns" className="footertxt">
+                  Campaigns
+                </Link>
+                <Link to="/floor-graphics" className="footertxt">
+                  Floor Graphics
+                </Link>
+                <Link to="/asset-marking" className="footertxt">
+                  Asset Marking
+                </Link>
+                <Link to="/posters" className="footertxt">
+                  Do It Yourself(DIY)
+                </Link>
+              </ul>
+            </Grid.Column>
+            <Grid.Column className="ml-5 pl-5">
+              <ul>
+                <h3 className="footerhead">My Account</h3>
+                {authUser ? (
+                  <>
+                    <Link to="/dashboard" className="footertxt">
+                      Profile
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <li className="footertxt">Profile</li>
+                  </>
+                )}
+
+                {authUser ? (
+                  <>
+                    <Link to="/dashboard" className="footertxt">
+                      Order History
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <li className="footertxt">Order History</li>
+                  </>
+                )}
+
+                <li className="footertxt">Order Tracking</li>
+                <Link to="/signup" className="footertxt">
+                  Create An Account
+                </Link>
+                <li className="footertxt">New User Guide</li>
+              </ul>
+            </Grid.Column>
+            <Grid.Column className="ml-5 pl-5">
+              <ul>
+                <h3 className="footerhead">Contact Us</h3>
+                <li className="footertxt">Timings (Mon - Sat: 7:00 - 21:00)</li>
+                <li className="footertxt">
+                  45, old Agrawal Nagar, Indore, Madhya Pradesh, Pin: 452001
+                </li>
+                <li className="footertxt">Mobile No : +91 9632418602</li>
+                <li className="footertxt">Email ID : hello@ehsposters.com</li>
+              </ul>
+            </Grid.Column>
+            <Grid.Column className="ml-5">
+              <ul>
+                <h3 className="footerhead">About</h3>
+                <Link to="/privacy-policy" className="footertxt">
+                  Privacy Policies
+                </Link>
+                <Link to="/faq" className="footertxt">
+                  FAQ
+                </Link>
+                <Link to="/support" className="footertxt">
+                  Support
+                </Link>
+                <Link to="/affiliate" className="footertxt">
+                  Join Us (Affiliate)
+                </Link>
+              </ul>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </div>
     </>
   );

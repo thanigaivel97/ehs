@@ -142,73 +142,73 @@ const Card2 = (props) => {
 
   return (
     <DesContext.Consumer>
-      {(DesDetail) => (
-        <div className="card2InCat">
-          <Link to={`/item/${_id}`}>
-            <Image
-              style={{ width: "230px", height: "240px", cursor: "pointer" }}
-              className="mx-auto d-block"
-              src={imgUrl}
-              alt={name}
+      {(DesDetail) => (      
+          <div className="card2InCat">
+            <Link to={`/item/${_id}`}>
+              <Image
+                style={{ width: "230px", height: "240px", cursor: "pointer" }}
+                className="mx-auto d-block"
+                src={imgUrl}
+                alt={name}
+                onClick={() => DesDetail.DesDetail(props.data)}
+              />
+            </Link>
+
+            <Link
+              className="card2Title"
+              style={{ cursor: "pointer" }}
+              to={`/item/${_id}`}
               onClick={() => DesDetail.DesDetail(props.data)}
-            />
-          </Link>
+            >
+              {name && name.slice(0, 25)} ...
+            </Link>
 
-          <Link
-            className="card2Title"
-            style={{ cursor: "pointer" }}
-            to={`/item/${_id}`}
-            onClick={() => DesDetail.DesDetail(props.data)}
-          >
-            {name && name.slice(0, 25)} ...
-          </Link>
-
-          <div>
             <div>
-              <p className="card2By">{creator}</p>
-            </div>
-            <div className="ml-3" style={{ marginTop: "-10px" }}>
-              <Grid>
-                <Grid.Row columns="3">
-                  <Grid.Column>
-                    <p className="card2Stock" style={{ float: "left" }}>
-                      {stocks > 0 ? "In Stock" : "No Stock"}
-                    </p>
-                  </Grid.Column>
-                  <Grid.Column floated="right" style={{ marginLeft: "70px" }}>
-                    <Rating
-                      style={{ float: "left" }}
-                      name="size-small"
-                      size="small"
-                      defaultValue={rating?.length}
-                      precision={0.5}
-                      disabled
-                    />
-                  </Grid.Column>
-                  <Grid.Column>
-                    <p className="card2Rating">{rating?.length}</p>
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
-            </div>
-            <br />
-            <div style={{ float: "left", marginTop: "-35px" }}>
-              <p
-                onClick={() => props.selectedModalCard(props.data)}
-                style={{ float: "left", cursor: "pointer" }}
-                className="card2AddStock"
-              >
-                Add to Cart
-              </p>
-              <p
-                className="card2Bought"
-                style={{ float: "right", width: "95px", marginLeft: "65px" }}
-              >
-                {bought} bought this
-              </p>
+              <div>
+                <p className="card2By">{creator}</p>
+              </div>
+              <div className="ml-3" style={{ marginTop: "-10px" }}>
+                <Grid>
+                  <Grid.Row columns="3">
+                    <Grid.Column>
+                      <p className="card2Stock" style={{ float: "left" }}>
+                        {stocks > 0 ? "In Stock" : "No Stock"}
+                      </p>
+                    </Grid.Column>
+                    <Grid.Column floated="right" style={{ marginLeft: "70px" }}>
+                      <Rating
+                        style={{ float: "left" }}
+                        name="size-small"
+                        size="small"
+                        defaultValue={rating?.length}
+                        precision={0.5}
+                        disabled
+                      />
+                    </Grid.Column>
+                    <Grid.Column>
+                      <p className="card2Rating">{rating?.length}</p>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              </div>
+              <br />
+              <div style={{ float: "left", marginTop: "-35px" }}>
+                <p
+                  onClick={() => props.selectedModalCard(props.data)}
+                  style={{ float: "left", cursor: "pointer" }}
+                  className="card2AddStock"
+                >
+                  Add to Cart
+                </p>
+                <p
+                  className="card2Bought"
+                  style={{ float: "right", width: "95px", marginLeft: "63px" }}
+                >
+                  {bought} bought this
+                </p>
+              </div>
             </div>
           </div>
-        </div>
       )}
     </DesContext.Consumer>
   );
