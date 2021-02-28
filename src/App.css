@@ -955,17 +955,17 @@ body .ui.cards > .card {
   font-weight: 600;
   margin-bottom: 4px;
 }
-.card2InCat:hover {
+.cardInCatImg:hover {
   box-shadow: 0px 0px 30px #a8a8a8;
   z-index: 2;
   -webkit-transition: all 200ms ease-in;
-  -webkit-transform: scale(1.1);
+  -webkit-transform: scale(1.05);
   -ms-transition: all 200ms ease-in;
-  -ms-transform: scale(1.1);
+  -ms-transform: scale(1.05);
   -moz-transition: all 200ms ease-in;
-  -moz-transform: scale(1.1);
+  -moz-transform: scale(1.05);
   transition: all 200ms ease-in;
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .leftimages:hover {
@@ -979,4 +979,55 @@ body .ui.cards > .card {
   -moz-transform: scale(1.1);
   transition: all 200ms ease-in;
   transform: scale(1.1);
+}
+.quotation {
+  box-shadow: 0px 0px 30px #a8a8a8;
+  z-index: 1;
+  display: block;
+  border-radius: 15px;
+  width: 625px;
+}
+
+.quotation1 {
+  margin-left: 10px !important;
+}
+.choose {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  /* identical to box height */
+
+  text-align: center;
+
+  color: #f2994a;
+}
+.chooseUnder {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 19px;
+  text-align: center;
+  color: #757575;
+}
+.clickHere {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  /* identical to box height */
+  color: #000000;
+}
+.fill {
+  font-family: Lato;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  /* identical to box height */
+  text-align: center;
+  color: #000000;
 }

@@ -154,7 +154,7 @@ const Card2 = (props) => {
           <Link to={`/item/${_id}`}>
             <Image
               style={{ width: "230px", height: "240px", cursor: "pointer" }}
-              className="mx-auto d-block"
+              className="mx-auto d-block cardInCatImg "
               src={imgUrl}
               alt={name}
               onClick={() => DesDetail.DesDetail(props.data)}

@@ -7,7 +7,7 @@ const Card = (props) => {
     <div className="cardInCat">
       <img
         style={{ width: "160px", height: "180px" }}
-        className="mx-auto d-block"
+        className="mx-auto d-block cardInCatImg"
         src={src}
         alt=""
       />
