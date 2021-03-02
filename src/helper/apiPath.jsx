@@ -10,6 +10,9 @@ const activate = url + "auth/activate";
 const otp = url + "auth/otp";
 const verifyOtp = url + "auth/verifyOtp";
 
+const getDistributors = url + "distributor/getDistributors";
+const addDistributor = url + "distributor/addDistributor";
+
 const getArtWorks = url + "posters/getArtWorks";
 const getPoster = url + "posters/getPoster";
 const getBestSeller = url + "posters/getBestSeller";
@@ -115,6 +118,8 @@ export {
   getFloorGraphics,
   getPosterById,
   createPoster,
+  getDistributors,
+  addDistributor,
   signup,
   otp,
   verifyOtp,

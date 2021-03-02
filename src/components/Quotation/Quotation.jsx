@@ -2,20 +2,34 @@
 import React from "react";
 import { Grid } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import { Input, TextField, MenuItem } from "@material-ui/core";
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import StepLabel from "@material-ui/core/StepLabel";
+import { TextField, MenuItem } from "@material-ui/core";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
-import PropTypes from "prop-types";
-import StepConnector from "@material-ui/core/StepConnector";
-import Check from "@material-ui/icons/Check";
-
-
-
+import { makeStyles } from "@material-ui/core/styles";
+import Stepper from "@material-ui/core/Stepper";
+import Axios from "axios";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
+import { getDistributors, addDistributor } from "../../helper/apiPath";
+import swal from "sweetalert";
 
 const Supplier = (props) => {
+  const [details, setDetails] = React.useState("");
+  const [distributor, setDistributor] = React.useState("");
+  const [det, setDet] = React.useState("");
+
+  function addDistributors() {
+    if (distributor && det) {
+      Axios.post(addDistributor, { distributor: distributor, details: det })
+        .then((res) => {
+          swal("", res.data.message, "success");
+          props.setAdd(false);
+        })
+        .catch((err) => console.log(err));
+    } else {
+      swal("Please Provide Proper Details", "", "warning");
+    }
+  }
+
   return (
     <>
       <Grid className="ml-3" style={{ width: "600px" }}>
@@ -27,31 +41,73 @@ const Supplier = (props) => {
             You can choose a suitable distributor from the dropdown list
           </p>
         </Grid.Row>
-        <Grid.Row className="mt-3">
-          <TextField
-            select
-            label="Select Distributor"
-            style={{ width: " 506px" }}
-            variant="outlined"
-            onChange={()=>props.setBuyer(true)}
-          >
-            <MenuItem value="English">1</MenuItem>
-            <MenuItem value="Hindi">2</MenuItem>
-            <MenuItem value="BiLingual">3</MenuItem>
-          </TextField>
-        </Grid.Row>
-        <Grid.Row className="mt-3">
-          <TextField
-            label="Seller Details"
-            style={{ width: " 506px" }}
-            variant="outlined"
-          ></TextField>
-        </Grid.Row>
-        <Grid.Row className="mt-1">
-          <p className="clickHere">
-            Could not find your Distributor? <a href="#1">Click here to Add</a>
-          </p>
-        </Grid.Row>
+        {props.add ? (
+          <>
+            <Grid.Row className="mt-3">
+              <TextField
+                label="Add Distributor"
+                style={{ width: " 506px" }}
+                variant="outlined"
+                onChange={(e) => {
+                  setDistributor(e.target.value);
+                }}
+              />
+            </Grid.Row>
+            <Grid.Row className="mt-3">
+              <TextField
+                label="Add Details"
+                style={{ width: " 506px" }}
+                variant="outlined"
+                onChange={(e) => {
+                  setDet(e.target.value);
+                }}
+              />
+            </Grid.Row>
+            <Grid.Row className="mt-3 mb-3">
+              <button id="loginBtn" onClick={addDistributors}>
+                ADD
+              </button>
+            </Grid.Row>
+          </>
+        ) : (
+          <>
+            <Grid.Row className="mt-3">
+              <TextField
+                select
+                label="Select Distributor"
+                style={{ width: " 506px" }}
+                variant="outlined"
+                onChange={(e) => {
+                  props.setBuyer(true);
+                  props.setActiveStep((prevActiveStep) => prevActiveStep + 1);
+                  setDetails(e.target.value);
+                }}
+              >
+                {props.dist.map((v, i) => (
+                  <MenuItem key={i} value={v.details} name={v._id}>
+                    {v.distributor}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid.Row>
+            <Grid.Row className="mt-3">
+              <TextField
+                value={details}
+                label="Seller Details"
+                style={{ width: " 506px" }}
+                variant="outlined"
+              ></TextField>
+            </Grid.Row>
+            <Grid.Row className="mt-1 ml-5 pl-5">
+              <p className="clickHere">
+                Could not find your Distributor?{" "}
+                <a href="#1" onClick={() => props.setAdd(true)}>
+                  Click here to Add
+                </a>
+              </p>
+            </Grid.Row>
+          </>
+        )}
       </Grid>
     </>
   );
@@ -62,7 +118,9 @@ const BuyersDetail = (props) => {
     <>
       <Grid className="ml-3" style={{ width: "600px" }}>
         <Grid.Row>
-          <p className="fill">FILL BUYER’S DETAILS</p>
+          <p className={props.buyer ? "choose" : "fill"}>
+            FILL BUYER’S DETAILS
+          </p>
         </Grid.Row>
         <Grid.Row style={{ marginTop: "-12px" }}>
           <p className="chooseUnder">
@@ -175,7 +233,7 @@ const Shipping = (props) => {
             style={{
               margin: "4px 4px 4px 0px",
             }}
-            onChange={() => props.setBilling((p)=>!p)}
+            onChange={() => props.setBilling((p) => !p)}
           />
           <label htmlFor="shippingAdd" className="chooseUnder">
             Shipping address different from Billing address?
@@ -209,7 +267,7 @@ const Shipping = (props) => {
                 variant="outlined"
               ></TextField>
             </Grid.Row>
-            <Grid.Row className="mt-3">
+            <Grid.Row className="mt-3 mb-3">
               <TextField
                 label="Country"
                 style={{ width: " 250px", marginRight: "6px" }}
@@ -229,50 +287,16 @@ const Shipping = (props) => {
 };
 
 const Quotation = (props) => {
-  const [activeStep, setActiveStep] = React.useState(2);
   const [buyer, setBuyer] = React.useState(false);
   const [billing, setBilling] = React.useState(false);
-
-  
-  const QontoConnector = withStyles({
-    alternativeLabel: {
-      top: 10,
-      left: "calc(-50% + 10px)",
-      right: "calc(50% + 10px)",
-    },
-    active: {
-      "& $line": {
-        borderColor: "#003459",
-      },
-    },
-    completed: {
-      "& $line": {
-        borderColor: "#003459",
-      },
-    },
-    line: {
-      borderColor: "#F2994A",
-      borderTopWidth: 3,
-      borderRadius: 1,
-    },
-  })(StepConnector);
-
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleReset = () => {
-    setActiveStep(0);
-  };
+  const [activeStep, setActiveStep] = React.useState(0);
+  const steps = getSteps();
+  const [dist, setDist] = React.useState([]);
+  const [add, setAdd] = React.useState(false);
 
   const useStyles = makeStyles((theme) => ({
     root: {
-      marginTop: theme.spacing(0),
-      maxWidth: 600,
+      width: "100%",
     },
     button: {
       marginTop: theme.spacing(1),
@@ -286,69 +310,102 @@ const Quotation = (props) => {
     },
   }));
 
-  const steps = [
-    {
-      label: <Supplier setActiveStep={setActiveStep} setBuyer={setBuyer} />,
-    },
-    {
-      label: <BuyersDetail buyer={buyer} />,
-    },
-    {
-      label: <Shipping billing={billing} setBilling={ setBilling}/>,
-    },
-  ];
+  function getSteps() {
+    return ["", ""];
+  }
+  React.useEffect(() => {
+    Axios.get(getDistributors)
+      .then((res) => {
+        setDist(res.data.distributors);
+      })
+      .catch((err) => console.log(err));
+  }, [add]);
+
   const classes = useStyles();
 
   return (
     <>
-      <Grid className="quotation mx-auto mt-5 mb-5 p-3 pl-4">
-        <Link to="/cart">
-          <HighlightOffIcon
-            style={{ color: "black", position: "absolute", right: "375px" }}
-          />
-        </Link>
+      <div
+        style={{
+          width: "660px",
+          background: "lightgrey",
+          height: "68px",
+          borderTopRightRadius: "15px",
+          borderTopLeftRadius: "15px",
+        }}
+        className="mx-auto mt-5"
+      >
+        <Grid className="quotation  mb-5 p-3 pl-4">
+          <Link to="/cart">
+            <HighlightOffIcon
+              style={{ color: "black", position: "absolute", right: "355px" }}
+            />
+          </Link>
 
-        <Grid.Row
-          className="quotation1 mt-4"
-          style={{
-            fontFamily: "Lato",
-            fontStyle: "normal",
-            fontWeight: "500",
-            fontSize: "24px",
-            lineHeight: "29px",
-            color: "#003459",
-          }}
-        >
-          2 STEPS TO SELF GENERATE PROFORMO INVOICE
-        </Grid.Row>
+          <Grid.Row
+            className="quotation1 mt-1 ml-4"
+            style={{
+              fontFamily: "Lato",
+              fontStyle: "normal",
+              fontWeight: "500",
+              fontSize: "24px",
+              lineHeight: "29px",
+              color: "#003459",
+            }}
+          >
+            2 STEPS TO SELF GENERATE PROFORMO INVOICE
+          </Grid.Row>
 
-        <Grid.Row columns="2">
-          <div className={classes.root}>
-            <Stepper
-              activeStep={activeStep}
-              orientation="vertical"
-              connector={<QontoConnector />}
+          <Grid.Row columns="2" className="mt-4">
+            <Grid.Column style={{ width: "10%" }}>
+              <div className={classes.root}>
+                <Stepper activeStep={activeStep} orientation="vertical">
+                  {steps.map((label, index) => (
+                    <Step key={label} style={{ height: "210px" }}>
+                      <StepLabel>{label}</StepLabel>
+                    </Step>
+                  ))}
+                </Stepper>
+              </div>
+            </Grid.Column>
+            <Grid.Column
+              style={{ width: "80%", marginLeft: "20px", marginTop: "22px" }}
             >
-              {steps.map((step, index) => (
-                <Step key={step.label}>
-                  <StepLabel >{step.label}</StepLabel>
-                </Step>
-              ))}
-            </Stepper>
-          </div>
-
-          <Grid.Row className="ml-5 pl-2">
-            <button id="loginBtn">PREVIEW PROFORMA</button>
+              <Grid.Row>
+                <Supplier
+                  setActiveStep={setActiveStep}
+                  setBuyer={setBuyer}
+                  dist={dist}
+                  add={add}
+                  setAdd={setAdd}
+                />
+              </Grid.Row>
+              <Grid.Row>
+                <BuyersDetail buyer={buyer} />
+              </Grid.Row>
+              <Grid.Row className="mt-3">
+                <Shipping billing={billing} setBilling={setBilling} />
+              </Grid.Row>
+            </Grid.Column>
+            <Grid.Row
+              style={
+                buyer
+                  ? { marginLeft: "69px" }
+                  : { marginLeft: "69px", marginTop: "-105px" }
+              }
+            >
+              <button id="loginBtn">PREVIEW PROFORMA</button>
+            </Grid.Row>
+            <Grid.Row className="mt-5 pl-5 pr-5">
+              <p className="chooseUnder">
+                Note: Creating performa invoice is a record of intent of the
+                seller to supply goods in the cart. Supplies will be subject to
+                issue of format purchase order as per terms of performa invoice.
+              </p>
+            </Grid.Row>
           </Grid.Row>
-          <Grid.Row className="mt-5 pl-5 pr-5">
-            <p className="chooseUnder">
-              Note: Creating performa invoice is a record of intent of the
-              seller to supply goods in the cart. Supplies will be subject to
-              issue of format purchase order as per terms of performa invoice.
-            </p>
-          </Grid.Row>
-        </Grid.Row>
-      </Grid>
+        </Grid>
+      </div>
     </>
   );
 };

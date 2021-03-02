@@ -9,34 +9,35 @@ import { Link } from "react-router-dom";
 
 const Card = (props) => {
   return (
-    <div
-      className="mr-5 p-4  coll"
-      style={{
-        border: "1px solid #D2D2D2",
-        borderRadius: "25px",
-        height: "140px",
-        width: "180px",
-      }}
-    >
-      <div className="mx-auto d-block ">
-        <img
-          className="animateCard mx-auto d-block mb-3"
-          style={{
-            width: "55px",
-            height: "55px",
-          }}
-          src={props.src}
-          alt={props.alt}
-        />
-        <Link
-          to={"/" + props.title.toLowerCase()}
-          style={{ fontFamily: "Source Sans Pro", color: "#000000 " }}
-          className="text-center mt-3"
-        >
-          {props.title}
-        </Link>
+    <Link to={"/" + props.title.toLowerCase()}>
+      <div
+        className="mr-5 p-4  coll animateCard"
+        style={{
+          border: "1px solid #D2D2D2",
+          borderRadius: "25px",
+          height: "140px",
+          width: "180px",
+        }}
+      >
+        <div className="mx-auto d-block ">
+          <img
+            className="mx-auto d-block mb-3"
+            style={{
+              width: "55px",
+              height: "55px",
+            }}
+            src={props.src}
+            alt={props.alt}
+          />
+          <p
+            style={{ fontFamily: "Source Sans Pro", color: "#000000 " }}
+            className="text-center mt-3"
+          >
+            {props.title}{" "}
+          </p>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
