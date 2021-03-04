@@ -335,7 +335,7 @@ const Quotation = (props) => {
         }}
         className="mx-auto mt-5"
       >
-        <Grid className="quotation  mb-5 p-3 pl-4">
+        <Grid className="quotation mb-5 p-3 pl-4">
           <Link to="/cart">
             <HighlightOffIcon
               style={{ color: "black", position: "absolute", right: "355px" }}

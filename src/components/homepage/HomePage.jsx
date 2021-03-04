@@ -95,7 +95,9 @@ const HomePage = (props) => {
                   </>
                 )}
 
-                <li className="footertxt">Order Tracking</li>
+                <Link to="/track" className="footertxt">
+                  Order Tracking
+                </Link>
                 <Link to="/signup" className="footertxt">
                   Create An Account
                 </Link>
@@ -119,11 +121,15 @@ const HomePage = (props) => {
                 <Link to="/privacy-policy" className="footertxt">
                   Privacy Policies
                 </Link>
-                <Link to="/faq" className="footertxt">FAQ</Link>
+                <Link to="/faq" className="footertxt">
+                  FAQ
+                </Link>
                 <Link to="/support" className="footertxt">
                   Support
                 </Link>
-                <Link to="/affiliate" className="footertxt">Join Us (Affiliate)</Link>
+                <Link to="/affiliate" className="footertxt">
+                  Join Us (Affiliate)
+                </Link>
               </ul>
             </Grid.Column>
           </Grid.Row>

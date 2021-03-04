@@ -405,9 +405,6 @@ const Orders = () => {
   }
 
   QontoStepIcon.propTypes = {
-    /**
-     * Mark the step as completed. Is passed to child components.
-     */
     completed: PropTypes.bool,
   };
 
@@ -432,37 +429,8 @@ const Orders = () => {
       "Order Delivered",
     ];
   }
-
-  // function getStepContent(step) {
-  //   switch (step) {
-  //     case 0:
-  //       return "Order Confirmed";
-  //     case 1:
-  //       return "Order Dispatched";
-  //     case 2:
-  //       return "Order Shipped";
-  //     case 3:
-  //       return "Order Delivered";
-  //     default:
-  //       return "Unknown step";
-  //   }
-  // }
-
   const classes = useStyles();
-  // const [activeStep] = React.useState(1);
   const steps = getSteps();
-
-  // const handleNext = () => {
-  //   setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  // };
-
-  // const handleBack = () => {
-  //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  // };
-
-  // const handleReset = () => {
-  //   setActiveStep(0);
-  // };
 
   const [value, setValue] = React.useState(2);
 
@@ -1489,7 +1457,9 @@ export default function Dashboard(props) {
                   </>
                 )}
 
-                <li className="footertxt">Order Tracking</li>
+                <Link to="/track" className="footertxt">
+                  Order Tracking
+                </Link>
                 <Link to="/signup" className="footertxt">
                   Create An Account
                 </Link>

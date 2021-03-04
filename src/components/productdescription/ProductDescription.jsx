@@ -897,7 +897,9 @@ function ProductDescription(props) {
                       </>
                     )}
 
-                    <li className="footertxt">Order Tracking</li>
+                    <Link to="/track" className="footertxt">
+                      Order Tracking
+                    </Link>
                     <Link to="/signup" className="footertxt">
                       Create An Account
                     </Link>

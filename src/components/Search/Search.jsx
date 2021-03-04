@@ -1,18 +1,9 @@
 /*jshint esversion: 6 */
 import React, { useEffect, useState } from "react";
-import Cols from "./Cols";
-import { Grid, Image, Segment } from "semantic-ui-react";
-import Electrical from "../../images/Pre-printed_Signages.svg";
-import Ppe from "../../images/Signal-Template_Signages.svg";
-import Hindi from "../../images/DIY_Signages.svg";
-import Bilingual from "../../images/Pictogram_Signages.svg";
-import GetBPoster from "../../images/GetBiPoster.svg";
-import PosterNow from "../../images/PosterNow.svg";
-import Upto50 from "../../images/Upto50Offer.svg";
+import { Grid } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 import Card2 from "./Card2";
 import { connect } from "react-redux";
-import { getBestSeller, config } from "../../helper/apiPath";
-import Axios from "axios";
 import $ from "jquery";
 import { BottomAddedCart } from "../product_list2/right/Right";
 import { findMat, findDim } from "../../helper/apiPath";
@@ -21,63 +12,20 @@ import { ModalCard } from "./Card2";
 import ModelCard3 from "../product_list2/right/ModelCard3";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
-import Back from "../../images/Signages_banner.png";
-import { Link } from "react-router-dom";
 
-function Design() {
-  return (
-    <div className="design row m-0">
-      <div className="ml-5">
-        <p id="rightText" className="ml-5" style={{ marginTop: "10px" }}>
-          SIGNAGES
-        </p>
-        <p id="rightbelow" className="ml-5" style={{ marginTop: "-10px" }}>
-          Signal that Matters.
-        </p>
-        <p id="rightdes" className="ml-5" style={{ marginTop: "-35px" }}>
-          Floor Graphics are used at Places of High Foot Traffic and to create a
-          sense of Cautious and safety in the Surroundings.
-        </p>
-      </div>
-      <div className="col row ml-5 pl-5" style={{ marginTop: "0px" }}>
-        <img src={Back} alt="signage background" height="200px" />
-      </div>
-    </div>
-  );
-}
-
-const CategoryPage = (props) => {
+const Search = (props) => {
   const [posterData, setPosterData] = React.useState([]);
-        const [authUser, setAuthUser] = React.useState("");
-
+  const [authUser, setAuthUser] = React.useState("");
 
   useEffect(() => {
-    Axios.get(
-      getBestSeller + "/signages",
-      config(
-        props.loginResponse.token || localStorage.getItem("ehstoken12345678910")
-      )
-    )
-      .then((res) => {
-        setPosterData(res.data.posterData);
-      })
-      .catch((err) => console.log(err));
-    
+    setPosterData(JSON.parse(localStorage.getItem("searchData123")));
     if (JSON.parse(localStorage.getItem("userDetails123")))
       setAuthUser(
         JSON.parse(localStorage.getItem("userDetails123")).emailid ||
           JSON.parse(localStorage.getItem("userDetails123")).phonenumber
       );
-  }, [props.loginResponse.token]);
-
-  const cardDet = [
-    { src: Ppe, title: "Pre-Printed" },
-    { src: Bilingual, title: "Pictograms" },
-    { src: Electrical, title: "Signal-Template-Sheets" },
-    { src: Hindi, title: "DO-IT-YOURSELF" },
-  ];
-
-  const twoPosters = [GetBPoster, PosterNow];
+    console.log(props.searchData);
+  }, [props.searchData]);
 
   const [bottomDet, setBottomDet] = useState({});
 
@@ -205,56 +153,10 @@ const CategoryPage = (props) => {
   return (
     <>
       <div>
-        <Design />
-
-        <div className="posters mt-3 mb-3">
+        <div className="posters mt-3">
           <Grid>
             <p
-              className="ml-5"
-              style={{
-                fontFamily: "Source Sans Pro",
-                fontWeight: "600",
-                fontSize: "25px",
-                lineHeight: "10px",
-                color: "#000000",
-              }}
-            >
-              Signages
-            </p>
-
-            <p
-              className="ml-5"
-              style={{
-                fontFamily: "Lato",
-                fontStyle: "normal",
-                fontWeight: "600",
-                fontSize: "15px",
-                color: "#000000",
-              }}
-            >
-              Popular Categories
-            </p>
-
-            <Cols data={cardDet} cols="4" />
-
-            <Grid.Row className="mt-4 justify-content-center" columns="equal">
-              {twoPosters.map((v, i) => (
-                <Segment key={i}>
-                  <Image
-                    className={i !== 0 ? "ml-4" : null}
-                    style={{ height: "180px" }}
-                    src={v}
-                  />
-                </Segment>
-              ))}
-            </Grid.Row>
-
-            <Grid.Column className="mt-4">
-              <Image src={Upto50} className="mx-auto d-block" />
-            </Grid.Column>
-
-            <p
-              className="ml-5"
+              className="ml-5 mt-4"
               style={{
                 fontFamily: "Source Sans Pro",
                 fontStyle: "normal",
@@ -264,14 +166,14 @@ const CategoryPage = (props) => {
                 color: "#000000",
               }}
             >
-              Best Sellers
+              Search Result
             </p>
 
             <Grid.Row
               columns={5}
               className="mt-4 ml-5 mr-5 justify-content-start"
             >
-              {posterData.map((v, i) => (
+              {posterData?.map((v, i) => (
                 <Grid.Column key={i} className={i !== 0 ? "ml-3" : null}>
                   <Card2
                     data={v}
@@ -282,24 +184,125 @@ const CategoryPage = (props) => {
               ))}
             </Grid.Row>
           </Grid>
-        </div>
 
-        <div
-          id="bottomCart"
-          className="pt-3 pl-4"
-          style={{
-            width: "320px",
-            height: "150px",
-            backgroundColor: "white",
-            zIndex: "22",
-            position: "fixed",
-            bottom: "30px",
-            right: "30px",
-            boxShadow: "0px 2px 20px 4px rgba(0, 0, 0, 0.25)",
-            display: "none",
-          }}
-        >
-          <BottomAddedCart det={bottomDet} />
+          <div
+            className="mt-5"
+            style={{ width: "100%", background: "#003459" }}
+          >
+            <Grid style={{ paddingTop: "50px", paddingBottom: "30px" }}>
+              <Grid.Row columns="4" className="ml-4">
+                <Grid.Column className="ml-5">
+                  <ul>
+                    <h3 className="footerhead">Products</h3>
+                    <Link to="/posters" className="footertxt">
+                      Posters
+                    </Link>
+                    <Link to="/signages" className="footertxt">
+                      Signages
+                    </Link>
+                    <Link to="/campaigns" className="footertxt">
+                      Campaigns
+                    </Link>
+                    <Link to="/floor-graphics" className="footertxt">
+                      Floor Graphics
+                    </Link>
+                    <Link to="/asset-marking" className="footertxt">
+                      Asset Marking
+                    </Link>
+                    <Link to="/posters" className="footertxt">
+                      Do It Yourself(DIY)
+                    </Link>
+                  </ul>
+                </Grid.Column>
+                <Grid.Column className="ml-5 pl-5">
+                  <ul>
+                    <h3 className="footerhead">My Account</h3>
+                    {authUser ? (
+                      <>
+                        <Link to="/dashboard" className="footertxt">
+                          Profile
+                        </Link>
+                      </>
+                    ) : (
+                      <>
+                        <li className="footertxt">Profile</li>
+                      </>
+                    )}
+
+                    {authUser ? (
+                      <>
+                        <Link to="/dashboard" className="footertxt">
+                          Order History
+                        </Link>
+                      </>
+                    ) : (
+                      <>
+                        <li className="footertxt">Order History</li>
+                      </>
+                    )}
+
+                    <Link to="/track" className="footertxt">
+                      Order Tracking
+                    </Link>
+                    <Link to="/signup" className="footertxt">
+                      Create An Account
+                    </Link>
+                    <li className="footertxt">New User Guide</li>
+                  </ul>
+                </Grid.Column>
+                <Grid.Column className="ml-5 pl-5">
+                  <ul>
+                    <h3 className="footerhead">Contact Us</h3>
+                    <li className="footertxt">
+                      Timings (Mon - Sat: 7:00 - 21:00)
+                    </li>
+                    <li className="footertxt">
+                      45, old Agrawal Nagar, Indore, Madhya Pradesh, Pin: 452001
+                    </li>
+                    <li className="footertxt">Mobile No : +91 9632418602</li>
+                    <li className="footertxt">
+                      Email ID : hello@ehsposters.com
+                    </li>
+                  </ul>
+                </Grid.Column>
+                <Grid.Column className="ml-5">
+                  <ul>
+                    <h3 className="footerhead">About</h3>
+                    <Link to="/privacy-policy" className="footertxt">
+                      Privacy Policies
+                    </Link>
+                    <Link to="/faq" className="footertxt">
+                      FAQ
+                    </Link>
+                    <Link to="/support" className="footertxt">
+                      Support
+                    </Link>
+                    <Link to="/affiliate" className="footertxt">
+                      Join Us (Affiliate)
+                    </Link>
+                  </ul>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </div>
+
+          <div
+            id="bottomCart"
+            className="pt-3 pl-4"
+            style={{
+              width: "320px",
+              height: "150px",
+              backgroundColor: "white",
+              zIndex: "22",
+              position: "fixed",
+              bottom: "30px",
+              right: "30px",
+              boxShadow: "0px 2px 20px 4px rgba(0, 0, 0, 0.25)",
+              display: "none",
+            }}
+          >
+            <BottomAddedCart det={bottomDet} />
+          </div>
         </div>
       </div>
 
@@ -569,99 +572,6 @@ const CategoryPage = (props) => {
           </div>
         </div>
       </div>
-      <div className="mt-5" style={{ width: "100%", background: "#003459" }}>
-        <Grid style={{ paddingTop: "50px", paddingBottom: "30px" }}>
-          <Grid.Row columns="4" className="ml-4">
-            <Grid.Column className="ml-5">
-              <ul>
-                <h3 className="footerhead">Products</h3>
-                <Link to="/posters" className="footertxt">
-                  Posters
-                </Link>
-                <Link to="/signages" className="footertxt">
-                  Signages
-                </Link>
-                <Link to="/campaigns" className="footertxt">
-                  Campaigns
-                </Link>
-                <Link to="/floor-graphics" className="footertxt">
-                  Floor Graphics
-                </Link>
-                <Link to="/asset-marking" className="footertxt">
-                  Asset Marking
-                </Link>
-                <Link to="/posters" className="footertxt">
-                  Do It Yourself(DIY)
-                </Link>
-              </ul>
-            </Grid.Column>
-            <Grid.Column className="ml-5 pl-5">
-              <ul>
-                <h3 className="footerhead">My Account</h3>
-                {authUser ? (
-                  <>
-                    <Link to="/dashboard" className="footertxt">
-                      Profile
-                    </Link>
-                  </>
-                ) : (
-                  <>
-                    <li className="footertxt">Profile</li>
-                  </>
-                )}
-
-                {authUser ? (
-                  <>
-                    <Link to="/dashboard" className="footertxt">
-                      Order History
-                    </Link>
-                  </>
-                ) : (
-                  <>
-                    <li className="footertxt">Order History</li>
-                  </>
-                )}
-
-                <Link to="/track" className="footertxt">
-                  Order Tracking
-                </Link>
-                <Link to="/signup" className="footertxt">
-                  Create An Account
-                </Link>
-                <li className="footertxt">New User Guide</li>
-              </ul>
-            </Grid.Column>
-            <Grid.Column className="ml-5 pl-5">
-              <ul>
-                <h3 className="footerhead">Contact Us</h3>
-                <li className="footertxt">Timings (Mon - Sat: 7:00 - 21:00)</li>
-                <li className="footertxt">
-                  45, old Agrawal Nagar, Indore, Madhya Pradesh, Pin: 452001
-                </li>
-                <li className="footertxt">Mobile No : +91 9632418602</li>
-                <li className="footertxt">Email ID : hello@ehsposters.com</li>
-              </ul>
-            </Grid.Column>
-            <Grid.Column className="ml-5">
-              <ul>
-                <h3 className="footerhead">About</h3>
-                <Link to="/privacy-policy" className="footertxt">
-                  Privacy Policies
-                </Link>
-                <Link to="/faq" className="footertxt">
-                  FAQ
-                </Link>
-                <Link to="/support" className="footertxt">
-                  Support
-                </Link>
-                <Link to="/affiliate" className="footertxt">
-                  Join Us (Affiliate)
-                </Link>
-              </ul>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </div>
     </>
   );
 };
@@ -671,4 +581,4 @@ const mapStateToProps = (state) => {
     loginResponse: state,
   };
 };
-export default connect(mapStateToProps)(CategoryPage);
+export default connect(mapStateToProps)(Search);

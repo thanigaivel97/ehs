@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 import HomePage from "./components/homepage/HomePage.jsx";
+import Search from "./components/Search/Search";
 import Category from "./components/category_page/CategoryPage.jsx";
 import SignagesCategory from "./components/signages/CategoryPage.jsx";
 import AssetMarkingCategory from "./components/AssetMarking/CategoryPage.jsx";
@@ -26,6 +27,7 @@ import Support from "./components/Support/Support";
 import Affiliate from "./components/Affliate/Affliate";
 import Faq from "./components/Faq/Faq";
 import Quotation from "./components/Quotation/Quotation";
+import TrackOrder from "./components/TrackOrder/TrackOrder";
 
 export const DesContext = React.createContext({});
 
@@ -36,6 +38,8 @@ function App(props) {
 
   const [cartCount, setCartCount] = useState(cartJson.cartList.length || 0);
   const [subCat, setSubCat] = React.useState("");
+  const [searchData, setSearchData] = React.useState([]);
+
 
   const countSetFun = (bottomDet) => {
     setCartCount(cartCount + 1);
@@ -53,7 +57,7 @@ function App(props) {
 
   React.useEffect(() => {
     document.title = "Ehs prints";
-  
+
     Axios.post(login, { emailid: "naveen@gmail.com", password: "1234" })
       .then((res) => {
         props.setLoginResponse(res.data.token);
@@ -63,22 +67,35 @@ function App(props) {
         console.log(err);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [searchData]);
 
   return (
     <div className="App">
       <DesContext.Provider value={{ DesDetail: setDescription }}>
         <Router>
-          <NavBar num={cartCount} setSubCat={setSubCat} />
+          <NavBar
+            num={cartCount}
+            setSubCat={setSubCat}
+            setSearchData={setSearchData}
+            searchData={searchData}
+          />
           <Switch>
             <Route exact path="/">
               <HomePage />
             </Route>
 
+            <Route exact path="/track">
+              <TrackOrder />
+            </Route>
+
+            <Route exact path="/search">
+              <Search searchData={searchData} setCartCountFun={countSetFun} />
+            </Route>
+
             <Route exact path="/privacy-policy">
               <PrivacyPolicy />
             </Route>
-            
+
             <Route exact path="/quotation">
               <Quotation />
             </Route>

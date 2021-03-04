@@ -499,7 +499,7 @@ const Tables = (props) => {
                     lineHeight: "19px",
                     borderRadius: "5px",
                   }}
-                  onClick={()=>window.location.replace("/quotation")}
+                  onClick={() => window.location.replace("/quotation")}
                 >
                   Request a Quote{" "}
                 </Button>
@@ -711,7 +711,9 @@ const Tables = (props) => {
                   </>
                 )}
 
-                <li className="footertxt">Order Tracking</li>
+                <Link to="/track" className="footertxt">
+                  Order Tracking
+                </Link>
                 <Link to="/signup" className="footertxt">
                   Create An Account
                 </Link>

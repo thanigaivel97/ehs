@@ -1032,3 +1032,7 @@ body .ui.cards > .card {
   text-align: center;
   color: #000000;
 }
+.track {
+  display: block;
+  width: 500px;
+}

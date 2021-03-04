@@ -5,10 +5,15 @@ import EhsLogo from "../../../images/EhsLogo.svg";
 import Vector from "../../../images/Vector.svg";
 import ShopCart from "../../../images/Shop.svg";
 import SearchIcon from "@material-ui/icons/Search";
+import Axios from "axios";
 import { Link } from "react-router-dom";
+import { getArtWorks} from "../../../helper/apiPath";
+import swal from "sweetalert";
 
 const NavBar = (props) => {
   const [authUser, setAuthUser] = React.useState("");
+  const [find, setFind] = React.useState("");
+
   React.useEffect(() => {
     if (JSON.parse(localStorage.getItem("userDetails123")))
       setAuthUser(
@@ -33,6 +38,30 @@ const NavBar = (props) => {
     "Floor-Graphics",
     "Asset-Marking",
   ];
+
+  function findArt() {
+    Axios.get(getArtWorks, {
+      params: {
+        find: find,
+      },
+    })
+      .then((res) => {
+        if (res.data.posterData.length > 0) {
+          props.setSearchData(res.data.posterData);
+          localStorage.setItem("searchData123",JSON.stringify(res.data.posterData));
+          window.location.replace(
+            window.location.protocol +
+              "//" +
+              window.location.hostname +
+              ":3000/" +
+              "search"
+          );
+        } else {
+          swal("No ArtWork Found", "", "error");
+        }
+      })
+      .catch((err) => console.log(err));
+  }
 
   return (
     <div id="navBarTop">
@@ -92,7 +121,6 @@ const NavBar = (props) => {
                 )}
               </div>
             </div>
-
             <div
               className="bg-white"
               style={{ height: "38px", marginTop: "1px" }}
@@ -101,6 +129,7 @@ const NavBar = (props) => {
                 className="mt-2 ml-3"
                 aria-hidden="true"
                 style={{ color: "grey", border: "0px" }}
+                onClick={() => (find ? findArt() : null)}
               />
             </div>
 
@@ -113,8 +142,10 @@ const NavBar = (props) => {
                 border: "0px",
                 marginTop: "1px",
               }}
+              onChange={(e) => setFind(e.target.value)}
             />
           </div>
+
           <ul className="navbar-nav pl-4">
             <li
               className="nav-item text-white"
