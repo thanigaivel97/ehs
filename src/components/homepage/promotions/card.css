@@ -1,0 +1,45 @@
+.promoCard{
+    width: 270px;
+    border: none;
+}
+.promo{
+    padding: 30px;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    justify-content: space-evenly;
+}
+
+#card-title{
+    font-family: "Source Sans Pro";
+font-style: normal;
+font-weight: bold;
+font-size: 19px;
+height: 40px;
+text-align: center;
+align-items: center;
+}
+#card-text{
+    font-family: "Source Sans Pro";
+font-style: normal;
+font-weight: normal;
+    font-size: 14px;
+}
+@media (max-width: 480px){
+    .promoCard{
+        width: 160px;
+    }
+    .promo{
+
+        grid-template-columns: auto auto;
+        grid-template-rows: auto auto;
+    }
+    #card-title{
+        font-weight: 700;
+        font-size: 11px;
+        height: 25px;
+    }
+    #card-text{
+        font-size: 9px;
+        line-height: 5%;
+    }
+}

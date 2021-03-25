@@ -2,16 +2,16 @@
 import React from "react";
 import Design from "./design/Design";
 import Collections from "./collections/Collections";
-import LeftImages from "./leftimages/LeftImages";
-import Right from "./right/Right";
 import BottomImg from "../../images/BottomImg.svg";
+import footerbanner1 from "../../images/footerBanner1.jpg"
+import footerbanner2 from "../../images/footerBanner2.jpg"
+import footerbanner3 from "../../images/footerBanner3.jpg"
 import { Grid } from "semantic-ui-react";
-import One from "../../images/One.svg";
-import Two from "../../images/Two.svg";
-import Three from "../../images/Three.svg";
-import Four from "../../images/Four.svg";
-import Five from "../../images/Five.svg";
 import { Link } from "react-router-dom";
+import Promotions from "./promotions/Promotions"
+import PrintPromise from "./printPromise/PrintPromise";
+import Bestsellers from "./bestsellers/Bestsellers";
+import Visitor from "./visitor/Visitor";
 
 const HomePage = (props) => {
   const [authUser, setAuthUser] = React.useState("");
@@ -23,26 +23,35 @@ const HomePage = (props) => {
            JSON.parse(localStorage.getItem("userDetails123")).phonenumber
        );
    }, [props.loginResponse]);
-  const imgs = [One, Two, Three, Four, Five];
   return (
     <>
       <Design />
       <Collections />
-      <div className="row">
-        <div className="col-3">
-          <LeftImages imgs={imgs} />
-        </div>
-        <div className="col pr-5">
-          <Right />
-        </div>
-      </div>
-      <div className="p-5 mt-3" style={{ backgroundColor: "#003459" }}>
-        <img
-          className="mb-5"
-          style={{ display: "block", margin: "0 auto", width: "90%" }}
+      <div style={{
+        borderTop: "6px solid #F6F6F6",
+        margin: "20px 0 20px 0"
+      }}></div>
+      <Promotions />
+      <PrintPromise />
+      <Visitor />
+      <div style={{
+        borderTop: "6px solid #F6F6F6",
+        margin: "20px 0 20px 0"
+      }}></div>
+      <Bestsellers />
+      <img
+          className="mb-5 d-none d-sm-block"
+          style={{ display: "block", margin: "0 auto", width: "80%" }}
           src={BottomImg}
           alt="Bottom Img"
         />
+        <div className="d-block d-sm-none">
+          <img src={footerbanner1} alt="footer"  className="ml-5"  />
+          <img src={footerbanner2} alt="footer" className=" ml-4" />
+          <img src={footerbanner3} alt="footer" className="ml-2" />
+        </div>
+
+      <div className="p-5 mt-3" style={{ backgroundColor: "#003459" }}>
         <Grid>
           <Grid.Row columns="4">
             <Grid.Column className="ml-5">

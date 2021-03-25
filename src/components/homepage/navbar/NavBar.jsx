@@ -9,6 +9,7 @@ import Axios from "axios";
 import { Link } from "react-router-dom";
 import { getArtWorks} from "../../../helper/apiPath";
 import swal from "sweetalert";
+import Icon from '@material-ui/core/Icon';
 
 const NavBar = (props) => {
   const [authUser, setAuthUser] = React.useState("");
@@ -65,14 +66,14 @@ const NavBar = (props) => {
 
   return (
     <div id="navBarTop">
-      <nav className="container navbar navbar-expand-lg">
-        <Link className="navbar-brand" to="/">
-          <img id="ehsLogoImg" src={EhsLogo} alt="Ehs Logo" />
+      <nav className="container-fluid navbar navbar-expand-lg">
+        <Link className="navbar-brand ehsLogoImg" to="/">
+          <img src={EhsLogo} alt="Ehs Logo" />
         </Link>
         <div className="collapse navbar-collapse">
           <div
             className="form-inline input-group ml-5"
-            style={{ width: "620px" }}
+            style={{ width: "750px" }}
           >
             <div className="input-group-prepend">
               <button
@@ -80,6 +81,7 @@ const NavBar = (props) => {
                 style={{
                   color: "#757575",
                   paddingRight: "65px",
+                  width: "200px",
                   height: "40px",
                   borderRight: "1px solid lightgrey",
                 }}
@@ -141,13 +143,39 @@ const NavBar = (props) => {
                 borderLeft: "none",
                 border: "0px",
                 marginTop: "1px",
+                width: "480px"
               }}
               onChange={(e) => setFind(e.target.value)}
             />
           </div>
 
           <ul className="navbar-nav pl-4">
-            <li
+          <li className="nav-item ml-4">
+              <Link
+                to="/about"
+                className="nav-link text-white textColorAndWeight btn shadow-none border-0"
+                style={{ backgroundColor: "#003459", border: "0px" }}
+              >
+                About
+              </Link>
+              </li>
+              <li className="nav-item ml-4">
+              <Link
+                to="/contact"
+                className="nav-link text-white textColorAndWeight btn shadow-none border-0"
+                style={{ backgroundColor: "#003459", border: "0px" }}
+              >
+                Contact
+              </Link>
+              </li>
+            
+          </ul>
+        </div>
+      </nav>
+      <nav className="container-fluid navbar navbar-expand-lg mt-0 pt-0">
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav d-flex justify-content-between">
+          <li
               className="nav-item text-white"
               style={{
                 marginTop: "2px",
@@ -180,12 +208,6 @@ const NavBar = (props) => {
                 </>
               )}
             </li>
-          </ul>
-        </div>
-      </nav>
-      <nav className="container navbar navbar-expand-lg mt-0 pt-0">
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav">
             {authUser ? (
               <>
                 <li className="nav-item ml-4">
@@ -201,7 +223,7 @@ const NavBar = (props) => {
             ) : (
               <>
                 <li className="nav-item ml-4">
-                  <p>{"                    "}</p>
+                  <p>{"                   "}</p>
                 </li>
               </>
             )}
@@ -463,7 +485,7 @@ const NavBar = (props) => {
                 Resources
               </Link>
             </li>
-            <li className="nav-item ml-4" style={{ marginTop: "-2px" }}>
+            <li className="nav-item ml-5" style={{ marginTop: "-2px" }}>
               <Link
                 to="/cart"
                 className="nav-link text-white textColorAndWeight"

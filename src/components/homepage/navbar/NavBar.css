@@ -1,18 +1,17 @@
 #navBarTop {
-  padding: 0px;
+  padding-left: 150px;
+  padding-right: 150px;
   background: #003459;
   box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.2);
 }
-#ehsLogoImg {
-  width: 100px;
-  height: 35px;
-}
 
 .textColorAndWeight {
+  font-family: 'Lato';
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
   line-height: 14px;
+  letter-spacing: 0.2px;
 }
 
 .searchCategory:hover {

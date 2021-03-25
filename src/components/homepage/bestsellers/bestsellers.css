@@ -1,0 +1,87 @@
+.sellerContainer{
+    margin: 0 100px;
+}
+.promiseHeading{
+    padding-top: 20px;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 30px;
+    text-align: center;
+    letter-spacing: 0.2px;
+    color: #003459;
+}
+.sellerHead{
+    font-family: "Source Sans Pro";
+font-style: normal;
+font-weight: 600;
+font-size: 24px;
+line-height: 30px;
+text-transform: uppercase;
+color: #C6C6C6;
+;
+}
+.active{
+    text-decoration: underline;
+    color: #003459;
+}
+.sellerPoster{
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    justify-content: space-around;
+    padding: 40px 70px;
+}
+.imgBox{
+    width: 200px;
+}
+.imgBoxImg{
+    height: 200px;
+    margin-bottom: 10px;
+}
+.imgBoxTitle{
+        font-family: "Source Sans Pro";
+        color: black;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 12px;
+        
+}
+.seemore{
+                font-family: "Source Sans Pro";
+                font-style: normal;
+                font-weight: bold;
+                font-size: 24px;
+                line-height: 57px;
+                cursor: pointer;
+                text-align: center;
+                letter-spacing: 0.2px;
+                text-decoration: underline;
+                color: #40CEFC
+}
+@media (max-width: 480px){
+    .sellerContainer{
+        margin: 0;
+    }
+    .promiseHeading{
+        font-size: 20px;
+    }
+    .sellerHead{
+        font-size: 15px;  
+    }
+    .sellerPoster{
+        grid-template-columns: auto auto;
+        grid-template-rows: auto auto;
+        padding: 0 auto;
+        grid-gap: 15px 30px;
+    }
+    .imgBoxImg{
+        width: 170px;
+        margin-bottom: 0;
+    }
+    .imgBox{
+        margin: 0px;
+        width: 170px;
+    }
+    .seemore{
+        font-size: 18px;
+    }
+}

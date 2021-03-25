@@ -1,0 +1,23 @@
+.visitorContainer{
+    margin: 30px auto;
+    width: 60%;
+}
+.visitor{
+    font-family: Source Sans Pro;
+font-style: normal;
+font-weight: bold;
+font-size: 30px;
+text-align: center;
+letter-spacing: 0.2px;
+width: 20%;
+color: #868686;
+}
+@media (max-width: 480px){
+    .visitorContainer{
+        width: 80%;
+    }
+    .visitor{
+        font-size: 15px;
+        margin: 15px;
+    }
+}

@@ -1,62 +1,24 @@
-.design {
+.design img{
+  margin: 40px auto;
   width: 100%;
-  height: 200px;
-  background: #f2994a;
 }
-
-#rightText {
-  font-family: Bebas Neue;
-  font-style: normal;
-  letter-spacing: 3px;
-  font-weight: bold;
-  font-size: 35px;
-  line-height: 60px;
-  color: #ffffff;
+.tagline{
+  font-family: 'Source Sans Pro', sans-serif;
+font-style: normal;
+font-weight: 900;
+font-size: 2.5rem;
+line-height: 57px;
+text-align: center;
+letter-spacing: 0.2px;
+color: #003459;
 }
-
-#rightbelow {
-  font-family: Bebas Neue;
-  font-style: normal;
-  letter-spacing: 3px;
-  font-weight: bold;
-  font-size: 25px;
-  line-height: 60px;
-  color: #ffffff;
-}
-
-#rightdes {
-  font-family: Bebas Neue;
-  font-style: normal;
-  font-size: 15px;
-  line-height: 60px;
-  color: #ffffff;
-}
-
-.rect {
-  width: 145px;
-  height: 150px;
-}
-#blueRect {
-  background: #56ccf2;
-  margin-top: 10px;
-}
-#greenRect {
-  background: #6fcf97;
-  margin-top: 25px;
-  height: 145px;
-}
-#yellowRect {
-  background: #f2c94c;
-  margin-top: 0px;
-  height: 130px;
-}
-
-@media only screen and (max-width: 600px) {
-  #rightText {
-    font-size: 18px;
-    text-align: center;
+@media (max-width: 480px){
+  .design img{
+    margin: 10px 0;
+    height: 100px;
   }
-  .rectangles {
-    display: none;
+  .tagline{
+    font-size: 1.4rem;
+    line-height: 37px;
   }
 }
