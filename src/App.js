@@ -28,6 +28,10 @@ import Affiliate from "./components/Affliate/Affliate";
 import Faq from "./components/Faq/Faq";
 import Quotation from "./components/Quotation/Quotation";
 import TrackOrder from "./components/TrackOrder/TrackOrder";
+import SignageProductPage from "./components/signages/SignageProductPage";
+import Footer from "./components/homepage/Footer";
+import PosterProductPage from "./components/category_page/PosterProductPage";
+import Contact from "./components/contact/Contact"
 
 export const DesContext = React.createContext({});
 
@@ -111,36 +115,84 @@ function App(props) {
             <Route exact path="/affiliate">
               <Affiliate />
             </Route>
+            <Route exact path="/contact">
+              <Contact />
+            </Route>
 
-            <Route exact path="/posters">
+            <Route exact path="/cat/:catName">
               <Category setCartCountFun={countSetFun} />
             </Route>
 
-            <Route exact path="/signages">
-              <SignagesCategory setCartCountFun={countSetFun} />
-            </Route>
-
-            <Route exact path="/floor-graphics">
-              <FloorGraphicsCategory setCartCountFun={countSetFun} />
-            </Route>
-
-            <Route exact path="/asset-marking">
-              <AssetMarkingCategory setCartCountFun={countSetFun} />
-            </Route>
-
-            <Route exact path="/campaigns">
-              <CampaignsCategory setCartCountFun={countSetFun} />
-            </Route>
-
-            <Route exact path="/posters/HINDI">
+            <Route exact path="/:catName/subcat/:subCatName">
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
 
-            <Route exact path="/posters/BILINGUAL-HINDI-AND-ENGLISH">
+            <Route exact path="/posters/:posterCatName/:productName">
+              <PosterProductPage  />
+            </Route>
+
+            <Route exact path="/signages/PPE/ProductName">
+              <SignageProductPage  />
+            </Route>
+
+            <Route exact path="/item/:id">
+              <ProductDescription
+                setCartCountFun={countSetFun}
+                navCount={cartCount}
+              />
+            </Route>
+
+            <Route path="/cart">
+              <Cart
+                setCartCount={setCartCount}
+                navCount={cartCount}
+                det={Description}
+                setCartCountFun={countSetFun}
+              />
+            </Route>
+            <Route exact path="/login">
+              <Login />
+            </Route>
+
+            <Route exact path="/signup">
+              <Signup />
+            </Route>
+
+            <Route exact path="/activate">
+              <Otp />
+            </Route>
+
+            <Route exact path="/dashboard">
+              <Dashboard setCartCountFun={countSetFun} />
+            </Route>
+          </Switch>
+          <Footer />
+        </Router>
+      </DesContext.Provider>
+    </div>
+  );
+}
+
+const mapStateToProps = (state) => {
+  return {
+    loginResponse: state,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setLoginResponse: (payload) => dispatch(setLoginResponse(payload)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(App);
+
+
+
+
+/*<Route exact path="/posters/BILINGUAL-HINDI-AND-ENGLISH">
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
 
-            <Route exact path="/posters/PPE">
+            <Route exact path="/posters/">
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
 
@@ -178,105 +230,4 @@ function App(props) {
 
             <Route exact path="/posters/COVID-19">
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
-            </Route>
-
-            <Route exact path="/signages/SIGNAL-TEMPLATE-SHEETS">
-              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
-            </Route>
-
-            <Route exact path="/signages/PICTOGRAMS">
-              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
-            </Route>
-
-            <Route exact path="/signages/PRE-PRINTED">
-              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
-            </Route>
-
-            <Route exact path="/campaigns/FIT-INDIA">
-              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
-            </Route>
-
-            <Route exact path="/campaigns/MONSOON-SAFETY">
-              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
-            </Route>
-
-            <Route exact path="/campaigns/WORK-RIGHT">
-              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
-            </Route>
-
-            <Route exact path="/campaigns/HOME-ALONE">
-              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
-            </Route>
-
-            <Route exact path="/campaigns/LAB-AND-SCHOOL-SAFETY">
-              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
-            </Route>
-
-            <Route exact path="/campaigns/NATURE-AND-SAFETY">
-              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
-            </Route>
-
-            <Route exact path="/floor-graphics/COVID-19">
-              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
-            </Route>
-
-            <Route exact path="/floor-graphics/ROAD-SAFETY">
-              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
-            </Route>
-
-            <Route exact path="/floor-graphics/WAREHOUSE">
-              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
-            </Route>
-
-            <Route exact path="/floor-graphics/PUBLIC-PLACE">
-              <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
-            </Route>
-
-            <Route exact path="/item/:id">
-              <ProductDescription
-                setCartCountFun={countSetFun}
-                navCount={cartCount}
-              />
-            </Route>
-
-            <Route path="/cart">
-              <Cart
-                setCartCount={setCartCount}
-                navCount={cartCount}
-                det={Description}
-                setCartCountFun={countSetFun}
-              />
-            </Route>
-            <Route exact path="/login">
-              <Login />
-            </Route>
-
-            <Route exact path="/signup">
-              <Signup />
-            </Route>
-
-            <Route exact path="/activate">
-              <Otp />
-            </Route>
-
-            <Route exact path="/dashboard">
-              <Dashboard setCartCountFun={countSetFun} />
-            </Route>
-          </Switch>
-        </Router>
-      </DesContext.Provider>
-    </div>
-  );
-}
-
-const mapStateToProps = (state) => {
-  return {
-    loginResponse: state,
-  };
-};
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setLoginResponse: (payload) => dispatch(setLoginResponse(payload)),
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+            </Route>*/

@@ -1,15 +1,18 @@
 import React from "react";
 import "./Login.css";
-import EhsLogo from "../../images/EhsLogo.svg";
+import EhsLogo from "../../images/EhsLogo2.png";
 import { Link } from "react-router-dom";
 import Axios from "axios";
 import { signup } from "../../helper/apiPath";
 import Otp from "./Otp";
+import $ from "jquery"
 import { setLoginResponse } from "../../redux/actions/index.js";
 import { connect } from "react-redux";
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
 
 const Signup = (props) => {
   const [emailid, setEmailId] = React.useState("");
+  const [name, setName] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [phonenumber, setPhonenumber] = React.useState("");
   const [token, setToken] = React.useState("");
@@ -34,6 +37,14 @@ const Signup = (props) => {
       });
   }
 
+  const otpBox = () => {
+    $("#otpNote").removeClass("otpBoxShow");
+    $("#otpNote").addClass("otpBoxHide");
+    $("#otpNoteSuccess").removeClass("otpBoxHide");
+    $("#otpNoteSuccess").addClass("otpBoxShow");
+    $(".otpBox").addClass("otpBoxShow");
+  }
+
   return (
     <>
       {isToken ? (
@@ -41,17 +52,18 @@ const Signup = (props) => {
           <Otp token={token} />
         </div>
       ) : (
-        <div className="loginPage p-5 mx-auto mt-5 d-block">
+        <div className="loginPage p-1 pt-5 pb-5 p-sm-5 mx-auto mt-5 mb-5 d-block">
+        <div className="d-flex justify-content-center align-items-center">
+          <AccountBoxIcon id="accountIcon" />
           <img
-            className="mx-auto d-block"
+            className=" d-inline-block"
             id="ehsLogoImg"
             src={EhsLogo}
             alt="Ehs Logo"
           />
+        </div>
 
-          <p id="ehsLogoLabel" className="text-center mt-2">
-            Create Account
-          </p>
+
 
           <form
             onSubmit={(e) => {
@@ -59,23 +71,36 @@ const Signup = (props) => {
               mySubmitHandle(e);
             }}
           >
+
+            <input
+              className="mx-auto d-block mt-3"
+              id="loginUserEmail"
+              pattern="[a-zA-Z]"
+              type="text"
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+              placeholder="Name"
+            />
             <input
               className="mx-auto d-block mt-3"
               id="loginUserEmail"
               pattern="^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$"
               type="text"
               onChange={(e) => {
-                document.getElementById("loginUserPhone").value = "";
                 setEmailId(e.target.value);
                 setLoginBody({
                   emailid: e.target.value,
                   password: password,
                 });
+                otpBox();
               }}
-              placeholder="Email"
+              placeholder="Email or Phone Number"
             />
+            <p id="otpNote" className="note otpBoxShow">We will send you a verification link at your Email address or Mobile Number. Kindly click to verify your account. </p>
 
-            <input
+            <p id="otpNoteSuccess" className="note otpBoxHide text-success">OTP sent successfully!!! </p>
+           {/* <input
               className="mx-auto d-block mt-3 "
               id="loginUserPhone"
               pattern="[0-9]{10}"
@@ -89,7 +114,7 @@ const Signup = (props) => {
                 });
               }}
               placeholder="Phone Number"
-            />
+            />*/}
             <input
               className="mx-auto d-block mt-3"
               id="loginUserPass"
@@ -117,6 +142,30 @@ const Signup = (props) => {
               }}
               placeholder="Password"
             />
+            <p className="note ">The password should be at least 8 characters long. Add numbers and symbols to make it stronger. </p>
+
+                <input
+                
+              className=" mx-auto otpBox mt-3 otpBoxHide "
+              id="loginUserEmail"
+              type="text"
+              onChange={(e) => {
+                setLoginBody({
+                  token: props.token,
+                  code: e.target.value,
+                });
+              }}
+              placeholder="OTP"
+            />
+            <span className="resendOTP otpBox otpBoxHide " style={{
+              fontFamily: "Lato",
+              fontStyle: "normal",
+              fontWeight: "normal",
+              fontSize: "16px",
+              lineHeight: "19px",
+              color: "#40CEFC",
+            }}>Resend OTP</span>
+          
 
             <button
               id="loginBtn"
@@ -124,9 +173,20 @@ const Signup = (props) => {
               style={{ marginLeft: "13px" }}
               type="submit"
             >
-              Sign Up
+              Register
             </button>
-
+              <Link className="d-block registerAs mt-2 mx-auto" to="/login" >
+              To register as a Distributor or Designer, click here.
+              </Link>
+              <p className="mt-4" style={{
+                fontFamily: "Lato",
+                fontStyle: "normal",
+                fontWeight: "normal",
+                fontSize: "16px",
+                lineHeight: "19px",
+                textAlign: "center",
+                color: "#000000"
+              }}>Already have an account?</p>
             <Link
               className="d-block mt-3 "
               to="/login"
@@ -137,6 +197,7 @@ const Signup = (props) => {
           </form>
         </div>
       )}
+
     </>
   );
 };

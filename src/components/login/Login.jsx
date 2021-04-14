@@ -1,12 +1,13 @@
 import React from "react";
 import "./Login.css";
-import EhsLogo from "../../images/EhsLogo.svg";
+import EhsLogo from "../../images/EhsLogo2.png";
 import { setLoginResponse } from "../../redux/actions/index.js";
 import { Link } from "react-router-dom";
 import Axios from "axios";
 import { login } from "../../helper/apiPath";
 import { connect } from "react-redux";
 import swal from "sweetalert";
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
 
 const Login = (props) => {
   const [emailid, setEmailId] = React.useState("");
@@ -41,17 +42,17 @@ const Login = (props) => {
 
   return (
     <>
-      <div className="loginPage p-5 mx-auto mt-5 d-block">
-        <img
-          className="mx-auto d-block"
-          id="ehsLogoImg"
-          src={EhsLogo}
-          alt="Ehs Logo"
-        />
+      <div className="loginPage p-1 pt-5 pb-5  p-sm-5 mx-auto mt-5 mb-5 d-block">
+        <div className="d-flex justify-content-center align-items-center mb-4">
+          <AccountBoxIcon id="accountIcon" />
+          <img
+            className=" d-inline-block"
+            id="ehsLogoImg"
+            src={EhsLogo}
+            alt="Ehs Logo"
+          />
+        </div>
 
-        <p id="ehsLogoLabel" className="text-center mt-2">
-          Log Into your account
-        </p>
 
         <input
           className="mx-auto d-block mt-3 mb-3"
@@ -63,10 +64,10 @@ const Login = (props) => {
             setEmailId(e.target.value);
             setLoginBody({ emailid: e.target.value, password: password });
           }}
-          placeholder="Email"
+          placeholder="Username/Email Address"
         />
 
-        <input
+        {/*<input
           className="mx-auto d-block "
           id="loginUserPhone"
           pattern="[0-9]{10}"
@@ -80,7 +81,7 @@ const Login = (props) => {
             });
           }}
           placeholder="Phone Number"
-        />
+        />*/}
 
         <input
           className="mx-auto d-block mt-3"
@@ -108,6 +109,12 @@ const Login = (props) => {
           }}
           placeholder="Password"
         />
+        <div className="keepSignedIn ml-3 mt-1 d-inline-block">
+          <input type="checkbox" />
+          <span className="ml-1">Keep me Signed In</span>
+        </div>
+        <p className="d-inline-block forgotPassword float-right mr-3 mt-1">Forgot Password?</p>
+
 
         <div className="mt-2" style={{ marginLeft: "13px" }}>
           <button
@@ -119,6 +126,8 @@ const Login = (props) => {
           </button>
         </div>
 
+          <p className="or">or</p>
+
         <Link
           className="mt-3 d-block"
           style={{ marginLeft: "13px" }}
@@ -127,6 +136,8 @@ const Login = (props) => {
           <button id="signupBtn">Create an account</button>
         </Link>
       </div>
+
+  
     </>
   );
 };

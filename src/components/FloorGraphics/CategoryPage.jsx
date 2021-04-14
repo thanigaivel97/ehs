@@ -99,7 +99,6 @@ const CategoryPage = (props) => {
     Material: { one: false, two: false, three: false },
     Dimension: { one: false, two: false, three: false },
   });
-
   let card1Det, card2Det;
   try {
     card1Det = {

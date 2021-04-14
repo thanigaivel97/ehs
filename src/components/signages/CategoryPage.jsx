@@ -1,11 +1,14 @@
 /*jshint esversion: 6 */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Cols from "./Cols";
 import { Grid, Image, Segment } from "semantic-ui-react";
-import Electrical from "../../images/Pre-printed_Signages.svg";
-import Ppe from "../../images/Signal-Template_Signages.svg";
-import Hindi from "../../images/DIY_Signages.svg";
-import Bilingual from "../../images/Pictogram_Signages.svg";
+import PPE from "../../images/Pre-printed_Signages.svg";
+import SignalTemplate from "../../images/Signal-Template_Signages.svg";
+import DIY from "../../images/DIY_Signages.svg";
+import Pictograms from "../../images/Pictogram_Signages.svg";
+import Hindi from "../../images/posterCategory/HINDI.png";
+import English from "../../images/posterCategory/ENGLISH.png";
+import Bilingual from "../../images/posterCategory/BILINGUAL.png";
 import GetBPoster from "../../images/GetBiPoster.svg";
 import PosterNow from "../../images/PosterNow.svg";
 import Upto50 from "../../images/Upto50Offer.svg";
@@ -23,6 +26,40 @@ import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 import Back from "../../images/Signages_banner.png";
 import { Link } from "react-router-dom";
+import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
+import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounded';
+import Carousel,  { consts } from "react-elastic-carousel";
+import Card from "./Card";
+import SafeTwo from "../../images/BeSafe.svg";
+import Mind from "../../images/Mind.svg";
+import BeforeStart from "../../images/BeforeStart.svg";
+import FloorImg from "../../images/floor1.svg";
+
+
+const ncard = (val) => {
+  return (
+      <Card src={val.src} title={val.title} />
+  );
+};
+
+const mcard = (val) => {
+  return (
+      <ImgBox src={val.src} title={val.title} />
+  );
+};
+
+const ImgBox = (props) => {
+  return (
+    <div className="text-center bestsellerBox">
+      <img className="bestsellerBoxImg" src={props.src} alt="poster" />
+      <p
+        className="bestsellerBoxTitle"
+      >
+        {props.title}
+      </p>
+    </div>
+  );
+};
 
 function Design() {
   return (
@@ -48,7 +85,7 @@ function Design() {
 
 const CategoryPage = (props) => {
   const [posterData, setPosterData] = React.useState([]);
-        const [authUser, setAuthUser] = React.useState("");
+  const [authUser, setAuthUser] = React.useState("");
 
 
   useEffect(() => {
@@ -71,10 +108,10 @@ const CategoryPage = (props) => {
   }, [props.loginResponse.token]);
 
   const cardDet = [
-    { src: Ppe, title: "Pre-Printed" },
-    { src: Bilingual, title: "Pictograms" },
-    { src: Electrical, title: "Signal-Template-Sheets" },
-    { src: Hindi, title: "DO-IT-YOURSELF" },
+    { src: PPE, title: "Pre-Printed" },
+    { src: Pictograms, title: "Pictograms" },
+    { src: SignalTemplate, title: "Signal-Template-Sheets" },
+    { src: DIY, title: "DO-IT-YOURSELF" },
   ];
 
   const twoPosters = [GetBPoster, PosterNow];
@@ -202,8 +239,116 @@ const CategoryPage = (props) => {
     }
   };
 
+  const shopByCategoryCards = [
+    {src: PPE, title: "Pre-Printed" },
+    { src: SignalTemplate, title: "Signal Template Sheets" },
+    { src: Pictograms, title: "Pictograms" },
+    { src: DIY, title: "Do-It-Yourself" },
+  ];
+  const shopByLanguageCards = [
+    {src: Hindi, title: "Hindi" },
+    {src: English, title: "English"},
+    { src: Bilingual, title: "BiLingual-Hindi-and-English" },
+  ];
+
+  const FloorGraphicsImgTitle = [
+    { src: FloorImg, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
+    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
+    { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
+    { src: BeforeStart, title: "Floor Graphics | Printable Catalog | PRD-FG009"},
+    { src: FloorImg, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
+    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
+    { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
+    { src: BeforeStart, title: "Floor Graphics | Printable Catalog | PRD-FG009"},
+  ];
+
+
+  const breakPoints = [
+    { width: 1, itemsToShow: 2, itemsToScroll: 1 },
+    { width: 1000, itemsToShow: 5 }
+  ];
+
+  const signageCatCarousel = useRef();
+  const signageCat2Carousel = useRef();
+
   return (
     <>
+
+      <div>
+        <div className="container-fluid pb-lg-5 padding-10" style={{ background: "#F6F6F6" }}>
+            <div className="pt-2 pb-lg-2">
+                <Link to="/" className="text-dark">Home </Link>/<span className="font-weight-bold" > Signages</span>
+            </div>
+            <div className="d-flex mt-lg-2">
+              <h1 className="mt-2 catHead" >
+              Signages
+              </h1>
+              <img src={Upto50} className="ml-auto d-none d-sm-block" style={{width: "640px"}} />
+            </div>
+          </div>
+
+          <div  className="padding-10  ">
+          <h2 className="shopByHead d-inline-block" >Shop by Category</h2>
+          <div className="d-flex float-right mt-4 align-items-center d-block d-sm-none">
+          <ArrowBackIosRoundedIcon onClick={() => signageCatCarousel.current.slidePrev()} role="button" className="border mt-auto mb-auto mr-4 shadow-sm rounded-circle " />
+          <ArrowForwardIosRoundedIcon onClick={() => signageCatCarousel.current.slideNext()} role="button" className="border mt-auto mb-auto shadow-sm rounded-circle "  />
+         
+          </div>
+           <div className="" style={{opacity: "1"}}>       
+            <Carousel className="d-flex justify-content-start" itemPosition={consts.START} breakPoints={breakPoints}  pagination={false} showArrows={false} ref={signageCatCarousel} style={{opacity: "1!important"}} showEmptySlots>
+                {shopByCategoryCards.map(ncard)}
+            </Carousel>                
+          </div>
+        </div>
+
+        <div style={{
+        borderTop: "6px solid #F6F6F6",
+        margin: "50px 0 20px 0"
+      }}></div>
+       <div  className="padding-10">
+          <h2 className="shopByHead d-inline-block mb-3" >Shop by Language</h2>
+          <div className="d-flex float-right mt-4 align-items-center d-block d-sm-none">
+          <ArrowBackIosRoundedIcon onClick={() => signageCat2Carousel.current.slidePrev()} role="button" className="border mt-auto mb-auto mr-4 shadow-sm rounded-circle " />
+          <ArrowForwardIosRoundedIcon onClick={() => signageCat2Carousel.current.slideNext()} role="button" className="border mt-auto mb-auto shadow-sm rounded-circle "  />
+         
+          </div>
+           <div className="" style={{opacity: "1"}}>       
+            <Carousel className="d-flex " itemPosition={consts.START} breakPoints={breakPoints}  pagination={false} showArrows={false} ref={signageCat2Carousel} style={{opacity: "1!important"}} showEmptySlots>
+                {shopByLanguageCards.map(ncard)}
+            </Carousel>                
+          </div>
+        </div>
+
+        <div id="myCarousel" class="carousel slide padding-10 mt-5" data-ride="carousel" data-interval="false" style={{backgroundColor: "#F6F6F6"}}>
+                  <h2 className="shopByHead d-inline-block mt-4 ">Bestsellers</h2>
+                  <div className="d-inline-block float-right mt-4  align-middle">
+                    <ArrowBackIosRoundedIcon id="prevBtn"  role="button" data-slide="prev" className="border shadow-sm m-3 rounded-circle pointer" />
+                    <ArrowForwardIosRoundedIcon id="nextBtn" role="button" data-slide="next" className="border shadow-sm m-3 rounded-circle pointer "  />
+                  </div>
+              <div className="carousel-inner " >
+                <div className="carousel-item active ">
+                  {FloorGraphicsImgTitle.slice(0,4).map(mcard)}
+                </div>
+                <div className="carousel-item ">
+                  {FloorGraphicsImgTitle.slice(4,9).map(mcard)}
+                </div>
+              </div>
+        </div>
+        
+        
+
+        <div className="p-lg-5 mt-4 mb-0">
+            <img src={Upto50} className="ml-auto mr-auto d-block w-75 "  /> 
+        </div>
+
+
+      </div>
+
+
+
+
+
+{/*
       <div>
         <Design />
 
@@ -236,6 +381,9 @@ const CategoryPage = (props) => {
             </p>
 
             <Cols data={cardDet} cols="4" />
+
+              <Link to="/signages/PRE-PRINTED/Preprinted-Sign-1">SignageProductPage</Link>
+
 
             <Grid.Row className="mt-4 justify-content-center" columns="equal">
               {twoPosters.map((v, i) => (
@@ -569,6 +717,7 @@ const CategoryPage = (props) => {
           </div>
         </div>
       </div>
+      
       <div className="mt-5" style={{ width: "100%", background: "#003459" }}>
         <Grid style={{ paddingTop: "50px", paddingBottom: "30px" }}>
           <Grid.Row columns="4" className="ml-4">
@@ -662,6 +811,8 @@ const CategoryPage = (props) => {
           </Grid.Row>
         </Grid>
       </div>
+    
+      */}
     </>
   );
 };

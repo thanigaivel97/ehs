@@ -26,12 +26,15 @@ font-weight: normal;
 }
 @media (max-width: 480px){
     .promoCard{
-        width: 160px;
+        width: 150px;
+    }
+    .card-body{
+        padding: 10px;
     }
     .promo{
-
         grid-template-columns: auto auto;
         grid-template-rows: auto auto;
+        grid-gap: 30px 20px;
     }
     #card-title{
         font-weight: 700;

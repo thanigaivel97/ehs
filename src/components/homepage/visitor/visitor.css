@@ -12,6 +12,13 @@ letter-spacing: 0.2px;
 width: 20%;
 color: #868686;
 }
+.dot{
+    height: 15px;
+    width: 15px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+}
 @media (max-width: 480px){
     .visitorContainer{
         width: 80%;
@@ -19,5 +26,13 @@ color: #868686;
     .visitor{
         font-size: 15px;
         margin: 15px;
+    }
+    .dot{
+        height: 5px;
+        width: 5px;
+    }
+    .visitorHead{
+        font-size: 10px;
+        font-weight: 700;
     }
 }

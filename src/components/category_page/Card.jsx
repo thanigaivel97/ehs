@@ -2,9 +2,27 @@
 import { Link } from "react-router-dom";
 
 const Card = (props) => {
-  const { src, title } = props.data;
+  const title = props.title;
   return (
-    <div className="cardInCat">
+
+    <div>
+      <Link className="catCardContainer" to={`/${props.cat}/subcat/${title.toUpperCase()}`} >
+      <img
+        className="mx-auto d-block catCardImg"
+        src={props.src}
+        alt=""
+      />
+      <div
+      className="cardOverlay text-light"
+      >
+      {title}
+      </div>
+
+      </Link>
+    </div>
+
+
+    /*<div className="cardInCat ">
       <img
         style={{ width: "160px", height: "180px" }}
         className="mx-auto d-block cardInCatImg"
@@ -27,7 +45,7 @@ const Card = (props) => {
       >
         {title}
       </Link>
-    </div>
+    </div>*/
   );
 };
 export default Card;

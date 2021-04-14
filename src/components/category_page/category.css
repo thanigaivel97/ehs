@@ -1,0 +1,115 @@
+.shopByCardContainer{
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto;
+    grid-gap: 6% 2%;
+    justify-content: start;
+}
+.bestsellerBox{
+    margin: 30px 50px 30px 0px;
+    display: inline-block;
+    width: 220px;
+}
+.bestsellerBoxImg{
+    width: 220px;
+    height: 250px;
+    margin-bottom: 10px;
+}
+.bestsellerBoxTitle{
+        font-family: "Source Sans Pro";
+        color: black;
+        cursor: pointer;
+        font-weight: 500;
+        font-size: 14px;      
+}
+.padding-10{
+    padding-left: 10%;
+    padding-right: 10%;
+}
+.catHead{
+    font-style: normal;
+    font-weight: bold;
+    font-size: 40px;
+    line-height: 57px;
+    text-align: center;
+    letter-spacing: 0.2px;
+    color: #003459;
+}
+.shopByHead{
+    font-style: normal;
+    font-weight: 600;
+    font-size: 34px;
+    line-height: 57px;
+    letter-spacing: 0.2px;
+    color: #003459;
+}
+.catCardContainer{
+    width: 180px;
+    height: 200px;
+    position: relative;
+}
+.catCardImg{
+    width:  180px;
+    height: 200px;
+}
+.cardOverlay{
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(8px);
+    height: 200px;
+    width: 180px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 1;
+    -webkit-transition: .5s ease;
+    -ms-transition: .5s ease;
+    -moz-transition: .5s ease;
+    transition: .5s ease;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+    padding: 10px;
+}
+.catCardContainer:hover .cardOverlay{
+opacity: 0 ;
+}
+@media screen and (max-width: 480px){
+    .padding-10{
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+    .catHead{
+        font-size: 26px;
+    }
+    .shopByHead{
+        font-size: 18px;
+    }
+    .shopByCardContainer{
+        grid-template-columns: auto auto;
+        grid-gap: 20px 20px;
+        justify-content: space-evenly;
+    }
+    .catCardContainer, .catCardImg , .cardOverlay{
+        width: 140px;
+        height: 160px;
+        
+    }
+    .bestsellerBoxImg{
+        width: 90%;
+        height: 100%;
+        margin-bottom: 0;
+    }
+    .bestsellerBox{
+        margin: 5%;
+        width: 40%;
+    }
+}
+
+
+
+
+
+
