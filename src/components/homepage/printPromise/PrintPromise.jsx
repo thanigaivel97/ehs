@@ -6,22 +6,31 @@ import "./printPromise.css"
 
 const Card = (props) => {
     return (
-        <div className="card promiseCard ">
-            <img src={props.imgsrc} className="cardImg" />
-            <p className="card-title titleText">{props.title}</p>
-            <p className="card-text descText">{props.desc}</p>
+        <div className="d-flex flex-column promiseCard  ">
+            <img src={props.imgsrc} className="cardImg  m-0" alt="promiseTag" />
+            <p className=" titleText m-0 ">{props.title}</p>
+            <p className=" descText ">{props.desc}</p>
+        </div>
+    );
+};
+const Card2 = (props) => {
+    return (
+        <div className="d-flex flex-column  promiseCard2  ">
+            <img src={props.imgsrc} className="cardImg2 " alt="promiseTag" />
+            <p className="titleText m-0 ">{props.title}</p>
+            <p className="descText ">{props.desc}</p>
         </div>
     );
 };
 
 const PrintPromise = () => {
     return(
-    <div style={{ backgroundColor: "#F6F6F6", paddingBottom: "20px"}}>
-        <h2 className="promiseHeading">The EHS Prints Promise</h2>
-        <div className="cardContainer">
-        <Card imgsrc={tag1} title="Effusive Designs" desc="We provide you a huge variety of highly impactful Visual communications designed by skilled artists all around the Globe!" />
-        <Card imgsrc={tag2} title="High Quality Prints" desc="Prints from all our category are printed digitally on best quality durable materials providing effective communication!" />
-        <Card imgsrc={tag3} title="Door Step Service" desc="We provide all your orders at your doorstep in least possible time in safest packaging with help of best logistics firms." />
+    <div className="d-flex flex-column" style={{ backgroundColor: "#F6F6F6", }}>
+        <p className="promiseHeading   m-0">The EHS Prints Promise</p>
+        <div className="cardContainer   margin-10">
+            <Card imgsrc={tag1} title="Effusive Designs" desc="We provide you a huge variety of highly impactful Visual communications designed by skilled artists all around the Globe!" />
+            <Card imgsrc={tag2} title="High Quality Prints" desc="Prints from all our category are printed digitally on best quality durable materials providing effective communication!" />
+            <Card2 imgsrc={tag3} title="Door Step Service" desc="We provide all your orders at your doorstep in least possible time in safest packaging with help of best logistics firms." />
         </div>
     </div>
     );

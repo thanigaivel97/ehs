@@ -12,11 +12,10 @@ const Footer = (props) => {
        );
    }, [props.loginResponse]);
     return (
-        <div className="p-2 p-sm-5 mt-3" style={{ background: "#003459" }}>
-        <Grid className=" d-none d-sm-block ">
-          <Grid.Row columns="4" className="d-flex justify-content-around">
-            <Grid.Column >
-              <ul>
+        <div className="p-2 p-sm-0  pt-sm-0 mt-3  " style={{ background: "#003459" , position: "relative", bottom: "0",right:"0",left: "0"}}>
+        <Grid className=" d-none d-sm-block padding-10  " style={{paddingTop: "42px" , paddingBottom: "21px"}}>
+          <Grid.Row columns="4" className="d-flex justify-content-between ">
+            <Grid.Column >          
                 <h3 className="footerhead">Products</h3>
                 <Link to="/cat/posters" className="footertxt">
                   Posters
@@ -34,12 +33,10 @@ const Footer = (props) => {
                   Asset Marking
                 </Link>
                 <Link to="/posters" className="footertxt">
-                  Do It Yourself(DIY)
-                </Link>
-              </ul>
+                  Create Your Own
+                </Link>            
             </Grid.Column>
             <Grid.Column >
-              <ul>
                 <h3 className="footerhead">My Account</h3>
                 {authUser ? (
                   <>
@@ -71,22 +68,20 @@ const Footer = (props) => {
                 <Link to="/signup" className="footertxt">
                   Create An Account
                 </Link>
-                <li className="footertxt">New User Guide</li>
-              </ul>
+              
             </Grid.Column>
             <Grid.Column >
-              <ul >
                 <h3 className="footerhead">Contact Us</h3>
-                <li className="footertxt">Timings (Mon - Sat: 7:00 - 21:00)</li>
+                <li className="footertxt">Timings (Mon-Sat: 09:00 - 18:00)</li>
                 <li className="footertxt">
                   45, old Agrawal Nagar, Indore, Madhya Pradesh, Pin: 452001
                 </li>
                 <li className="footertxt">Mobile No : +91 9632418602</li>
                 <li className="footertxt">Email ID : hello@ehsposters.com</li>
-              </ul>
+              
             </Grid.Column>
             <Grid.Column >
-              <ul>
+              
                 <h3 className="footerhead">About</h3>
                 <Link to="/privacy-policy" className="footertxt">
                   Privacy Policies
@@ -95,19 +90,15 @@ const Footer = (props) => {
                   FAQ
                 </Link>
                 <Link to="/support" className="footertxt">
-                  Support
+                  Contact Us
                 </Link>
-                <Link to="/affiliate" className="footertxt">
-                  Join Us (Affiliate)
-                </Link>
-              </ul>
+              
             </Grid.Column>
-            
           </Grid.Row>
         </Grid>
         <div className="d-block d-sm-none mb-2 mx-3">
                 <h3 className="text-center mb-0" style={{
-                  fontFamily: "Segoe UI",
+                  fontFamily: "Source Sans Pro",
                   fontWeight: "600",
                   fontSize: "20px",
                   letterSpacing: "0px",
@@ -116,17 +107,17 @@ const Footer = (props) => {
                   }}>About</h3>
             <div className="text-center d-flex justify-content-around align-items-center" style={{color: "#FFFFFF"}}>
                 <Link to="/privacy-policy" style={{
-                  fontFamily: "Segoe UI",
+                  fontFamily: "Source Sans Pro",
                   fontWeight: "normal",
                   fontSize: "14px",
                   letterSpacing: "0px",
                   opacity: "1",
                   color: "#FFFFFF"
                   }}>
-                  Privacy Policies
+                  Privacy Policy
                 </Link>|
                 <Link to="/faq" style={{
-                  fontFamily: "Segoe UI",
+                  fontFamily: "Source Sans Pro",
                   fontWeight: "normal",
                   fontSize: "14px",
                   letterSpacing: "0px",
@@ -135,31 +126,22 @@ const Footer = (props) => {
                   }}>
                   FAQ
                 </Link>|
-                <Link to="/support" style={{
-                  fontFamily: "Segoe UI",
+                <Link to="/contact" style={{
+                  fontFamily: "Source Sans Pro",
                   fontWeight: "normal",
                   fontSize: "14px",
                   letterSpacing: "0px",
                   color: "#FFFFFF",
                   opacity: "1",
                   }}>
-                  Support
-                </Link>|
-                <Link to="/affiliate" style={{
-                  fontFamily: "Segoe UI",
-                  fontWeight: "normal",
-                  fontSize: "14px",
-                  letterSpacing: "0px",
-                  color: "#FFFFFF",
-                  opacity: "1",
-                  }}>
-                  Join Us
+                  Contact Us
                 </Link>
+                
               </div>
             </div>
         <div className="d-block d-sm-none text-center ">
                 <h3 className="mx-auto text-center mb-1" style={{
-                  fontFamily: "Segoe UI",
+                  fontFamily: "Source Sans Pro",
                   fontWeight: "600",
                   fontSize: "20px",
                   letterSpacing: "0px",
@@ -167,7 +149,7 @@ const Footer = (props) => {
                   opacity: "1",
                   }}>Contact Us</h3>
                 <li className=" mb-1" style={{
-                  fontFamily: "Segoe UI",
+                  fontFamily: "Source Sans Pro",
                   fontWeight: "normal",
                   fontSize: "10px",
                   lineHeight: "12px",
@@ -175,9 +157,9 @@ const Footer = (props) => {
                   color: "#FFFFFF",
                   opacity: "1",
                   listStyleType: "none"
-                  }}>Timings (Mon - Sat: 7:00 - 21:00)</li>
+                  }}>Timings (Mon - Sat: 09:00 - 18:00)</li>
                 <li className=" mb-1" style={{
-                  fontFamily: "Segoe UI",
+                  fontFamily: "Source Sans Pro",
                   fontWeight: "normal",
                   fontSize: "10px",
                   lineHeight: "12px",
@@ -186,10 +168,10 @@ const Footer = (props) => {
                   opacity: "1",
                   listStyleType: "none"
                   }}>
-                  45, old Agrawal Nagar, Indore, Madhya Pradesh, Pin: 452001
+                  45, Old Agrawal Nagar, Indore, Madhya Pradesh, Pin: 452001
                 </li>
                 <li  style={{
-                  fontFamily: "Segoe UI",
+                  fontFamily: "Source Sans Pro",
                   fontWeight: "normal",
                   fontSize: "10px",
                   lineHeight: "12px",
@@ -199,7 +181,7 @@ const Footer = (props) => {
                   listStyleType: "none"
                   }}>Mobile No : +91 9632418602</li>
                 <li  style={{
-                  fontFamily: "Segoe UI",
+                  fontFamily: "Source Sans Pro",
                   fontWeight: "normal",
                   fontSize: "10px",
                   lineHeight: "12px",

@@ -4,24 +4,31 @@
   background: #003459;
   box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.2);
 }
+#navbarNav{
+  padding-left: 10%;
+  padding-right: 10%;
+}
 
 .textColorAndWeight {
-  font-family: 'Lato';
+  font-family: Lato;
   font-style: normal;
   font-weight: 500;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 14px;
   letter-spacing: 0.2px;
   color: #F2994A;
+  
 }
 
 .searchCategory:hover {
   background-color: #003459;
-  color: #ffffff;
+  color: #ffffff!important;
+  
 }
+
 #navbarContainer{
   padding-left: 5%;
-  padding-right: 10%;
+  padding-right: 5%;
   background: #003459;
 }
 .addDisplay{
@@ -30,35 +37,99 @@
 .searchInput{
   display: none;
 }
+.searchBar{
+  width: 835px;
+}
+.searchDropBtn{
+  width: 200px;
+  color: #757575!important;
+  padding-right: 65px;
+  height: 35px;
+  border-right: 1px solid lightgrey;
+}
+.searchDropCat{
+  width: 200px;
+  position: absolute;
+  top: 0;
+  border-top: none;
+  box-shadow: none;
+}
+.searchBarInput{
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border: 1px solid #757575;
+  border-left: none;
+  height: 35px;
+  margin-top: 0px;
+  width: 470px;
+  margin-right: 5px;
+}
 @media screen and (max-width: 480px){
-  #navBarTop{
-    padding: 10px;
+  .searchBar{
     width: 100%;
-    z-index: 1;
+    margin-left: auto;
+    margin-right: auto;
   }
+  .searchDropBtn{
+    width: 111px;
+    font-family: "Source Sans Pro";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 14px;
+    padding-right: 0;
+    padding-left: 0;
+  }
+  .searchDropCat{
+    width: 111px;
+    
+  }
+  .searchBarInput{
+    width: 100%;
+    font-family: "Source Sans Pro";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 14px;
+    margin-right: 0;
+  }
+
+  #navBarTop{
+    padding: 10px 5%;
+    width: 100%;
+    z-index: 5;
+    position: fixed;
+    top: 0;
+  }
+  
   .ehsLogoImg{
     padding: 0;
     margin: 0;
     margin-left: 20px;
+
   }
   #navbarContainer{
-    height: 100%;
-    width: 75%;
-    position: fixed!important;
-    z-index: 1;
-    overflow: auto;
-    display: none;
+    
+  }
+  #searchBoxMobile{
     background: #003459;
+    position: fixed;
+    top: 55px;
+    left: 0;
+    height: 96px;
+    width: 100%;
+    padding: 10px;
+    transform: scaleY(0);
+    transition: all ease 0.5s;
+    z-index: -5;
   }
+  .slideSearchBox{
+    transform: scaleY(1)!important;
+  }
+  
   #navbarNav{
-    position: relative;
-    margin-top: 10px;
-  }
-  .nav-item{
-    margin: 10px;
-    text-align: center;
-  }
-  .dropdown-content{
+    padding-left: 0;
+    padding-right: 5%;
     display: block;
     transform: translateX(-100%);
     height: 100%;
@@ -68,6 +139,22 @@
     top: 58px;
     left: 0;
     transition: all ease 0.25s;
+    z-index: 3;
+  }
+  .nav-item{
+    margin: 10px;
+    text-align: center;
+  }
+  .dropdown-content{
+    display: block;
+    transform: translateX(-100%);
+    height: 100%;
+    width: 100%;
+    background: #003459;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: all ease 0.25s;
   
   }
   .slideSubMenu{
@@ -75,7 +162,7 @@
   }
   .searchCategory{
     color: white;
-    font-family: 'Lato';
+    font-family: 'Source Sans Pro';
     font-style: normal;
     font-weight: 500;
     font-size: 14px;
@@ -105,12 +192,7 @@
      margin-left: auto;
   }
   .rightSide{
-    position: fixed!important;
-    margin-left: 0;
-    z-index: 3;
-    right: 30px;
-    height: 0;
-    background: #003459;
+   
   }
   .overlay {
     position: fixed;
@@ -121,7 +203,7 @@
     margin: auto;
     background-color: rgba(0, 0, 0, 0.5);
     display: none;
-    z-index: 0;
+    z-index: 2!important;
   }
   .menuBackBlur {
     display: block;

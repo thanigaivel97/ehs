@@ -42,8 +42,8 @@ const Login = (props) => {
 
   return (
     <>
-      <div className="loginPage p-1 pt-5 pb-5  p-sm-5 mx-auto mt-5 mb-5 d-block">
-        <div className="d-flex justify-content-center align-items-center mb-4">
+      <div className="loginPage p-1 pt-5 pb-5  p-sm-3 mx-auto mt-5 mt-sm-4 mb-5 mb-sm-4 d-block">
+        <div className="d-flex justify-content-center align-items-center mb-4 mb-sm-3">
           <AccountBoxIcon id="accountIcon" />
           <img
             className=" d-inline-block"
@@ -55,7 +55,7 @@ const Login = (props) => {
 
 
         <input
-          className="mx-auto d-block mt-3 mb-3"
+          className="mx-auto d-block mt-3 mb-2"
           id="loginUserEmail"
           pattern="^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$"
           type="text"
@@ -84,7 +84,7 @@ const Login = (props) => {
         />*/}
 
         <input
-          className="mx-auto d-block mt-3"
+          className="mx-auto d-block "
           id="loginUserPass"
           type="password"
           onChange={(e) => {
@@ -113,23 +113,24 @@ const Login = (props) => {
           <input type="checkbox" />
           <span className="ml-1">Keep me Signed In</span>
         </div>
+        <Link to="/forgotpassword">
         <p className="d-inline-block forgotPassword float-right mr-3 mt-1">Forgot Password?</p>
+        </Link>
 
-
-        <div className="mt-2" style={{ marginLeft: "13px" }}>
+        <div className="pt-0  " style={{ marginLeft: "13px", }}>
           <button
             id="loginBtn"
-            className="mt-2"
+            className="mt-0"
             onClick={() => loginReq(loginBody)}
           >
             Log In
           </button>
         </div>
 
-          <p className="or">or</p>
+          <p className="or  m-0 p-0">or</p>
 
         <Link
-          className="mt-3 d-block"
+          className="mt-1 d-block"
           style={{ marginLeft: "13px" }}
           to="/signup"
         >

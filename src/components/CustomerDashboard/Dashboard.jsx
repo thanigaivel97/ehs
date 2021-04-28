@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /*jshint esversion: 6 */
 import { Grid } from "semantic-ui-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Rating from "@material-ui/lab/Rating";
 import { Button } from "@material-ui/core";
 import { Input } from "semantic-ui-react";
@@ -15,11 +15,10 @@ import PropTypes from "prop-types";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import $ from "jquery";
 import DisInfect from "../../images/DisInfectant.svg";
-import Card2 from "../category_page/Card2";
 import Axios from "axios";
-import { ModalCard } from "../category_page/Card2";
-import ModelCard3 from "../product_list2/right/ModelCard3";
 import { Link } from "react-router-dom";
+import ProductCard from "../signages/ProductCard";
+import Typography from '@material-ui/core/Typography';
 import {
   getOrdersById,
   getUserById,
@@ -29,8 +28,214 @@ import {
 } from "../../helper/apiPath";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
-import { BottomAddedCart } from "../product_list2/right/Right";
 import swal from "sweetalert";
+import Carousel, {consts} from "react-elastic-carousel";
+import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
+import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounded';
+import { Tune } from "@material-ui/icons";
+import Pagination from '@material-ui/lab/Pagination';
+import SafeTwo from "../../images/BeSafe.svg";
+import Swal from "sweetalert2";
+import withReactContent from 'sweetalert2-react-content';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+
+
+const MySwal = withReactContent(Swal);
+
+const AddressCard = (props) => {
+  const updateAddressPopup = () => {
+    const onConfirm = () => {
+        MySwal.clickConfirm();
+    }
+    MySwal.fire({
+      html: <div className="">
+              <p className="addAddressHead">Add Address</p>
+              <hr style={{color: "#D2D2D2",marginBottom: "10px",marginTop: "0"}} />
+              <input type="text" placeholder="First Name" className="addAddressInput" required/>
+              <input type="text" placeholder="Last Name" className="addAddressInput" />
+              <input type="text" placeholder="Address Line 1" className="addAddressInput" required/>
+              <input type="text" placeholder="Address Line 2" className="addAddressInput" />
+              <input type="text" placeholder="City" className="addAddressInput" required/>
+              <input type="text" placeholder="State" className="addAddressInput" required/>
+              <input type="number" placeholder="Pin Code" className="addAddressInput" required/>
+              <input type="number" placeholder="Contact Number" className="addAddressInput" required/>
+              <input type="email" placeholder="Email" className="addAddressInput" required/>
+              <button onClick={onConfirm} className="saveBtn">Update</button>
+            </div>,
+            showConfirmButton: false,
+            padding: "10px 0px 5px 0px",
+            backdrop: "rgba(0, 0, 0, 0.5)",
+            position: "center",
+            scrollbarPadding: false,
+            showClass: {
+              popup: 'animate__animated animate__zoomIn  animate__faster',
+              backdrop: 'animate__animated animate__fadeIn  animate__faster'
+            },
+            hideClass: {
+              popup: '',
+              backdrop: ''
+            }
+    }).then((result)=>{
+      if(result.isConfirmed){
+        MySwal.fire({
+          html: <div className="d-flex mt-2">
+                  <CheckCircleIcon style={{color: "#003459"}} />
+                  <p className="ml-2" style={{color: "#003459"}}>Address Sucessfully Updated!</p>
+              </div>,
+          
+          position: "top-end",
+          timer: 2000,
+          showConfirmButton: false,
+          showCloseButton: true,
+          width: "500px",
+          height: "100px",
+          backdrop: "rgba(0, 0, 0, 0.5)",
+          scrollbarPadding: false,
+          showClass: {
+            popup: 'animate__animated animate__zoomIn  animate__faster',
+            backdrop: 'swal2-noanimation'
+          },
+          hideClass: {
+            popup: 'animate__animated animate__slideOutRight  animate__faster',
+            backdrop: 'animate__animated animate__fadeOut  animate__faster'
+          }
+          
+      });
+      }
+    })
+  };
+
+  const confirmDeleteAddress = () => {
+    const onCancel = () => {
+      MySwal.clickCancel();
+    }
+    const onConfirm = () => {
+      MySwal.clickConfirm();
+    }
+    MySwal.fire({
+      html: <div className="">
+              <div className="confirmationMsg ">
+                Are you sure you want to remove this address?
+              </div>
+              <button className="confirmationBtn yesBtnMargin" onClick={onConfirm} >Yes</button>
+              <button className="confirmationBtn" onClick={onCancel} style={{borderColor: "#C51D1D"}}>Cancel</button>
+            </div>,
+      position: "center",
+      showConfirmButton: false,
+      width: "700px",
+      backdrop: "rgba(0, 0, 0, 0.5)",
+      scrollbarPadding: false,
+      padding: "23px 10px 22px 12px",
+      showClass: {
+        popup: 'animate__animated animate__zoomIn animate__faster',
+        backdrop: 'animate__animated animate__fadeIn animate__faster'
+      },
+      hideClass: {
+        popup: 'animate__animated animate__zoomOut animate__faster',
+        backdrop: 'animate__animated animate__fadeOut animate__faster'
+      }
+    })
+  };
+  return(
+      <div className="p-3" style={ props.default ? {
+        width: "157px",
+        height: "205px",
+        background: "#FFF",
+        border: "2px solid #2D9CDB",
+        borderRadius: "4px",
+        boxSizing: "border-box",
+        padding: "10x 15px"
+      } : {
+        width: "157px",
+        height: "205px",
+        background: "#FFF",
+        border: "1px solid #D2D2D2",
+        borderRadius: "4px",
+        boxSizing: "border-box",
+        padding: "10x 15px"
+      }}>
+        <p className="" style={{
+          fontWeight: "bold",
+          fontSize: "14px",
+          lineHeight: "18px",
+          color: "#000000",
+          marginBottom: "8px"
+        }}>{props.name}</p>
+        <p className="addressLine">Address line 1</p>
+        <p className="addressLine">Address line 2</p>
+        <p className="addressLine">Address line 3</p>
+        <p className="addressLine">{props.mobile}</p>
+        <div className="mt-1">
+          <span onClick={updateAddressPopup} className="passForgot">Edit</span>
+          <span onClick={confirmDeleteAddress} className="passForgot float-right">Remove</span>
+        </div>
+        {  props.default ? (
+          <p style={{
+            fontSize: "13px",
+            lineHeight: "16px",
+            color: "#003459",
+            fontWeight: "600"
+          }}>Default</p>
+        ):(
+          <p style={{
+            fontWeight: "bold",
+            fontSize: "13px",
+            lineHeight: "16px",
+            textDecorationLine: "underline",
+            color: "#F2994A",
+          }}>Set as Default</p>
+        )}
+      </div>
+  );
+};
+
+const PaymentCard = (props) => {
+  return(
+    <div className="p-2 pl-3" style={props.default ? {
+      width: "211px",
+      height: "144px",
+      background: "#FFF",
+      border: "2px solid #2D9CDB",
+      boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+      borderRadius: "8px",
+    }:{
+      width: "211px",
+      height: "144px",
+      background: "#FFF",
+      border: "2px solid #D2D2D2",
+      boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+      borderRadius: "8px",
+    }}>
+      {  props.default ? (
+          <p className="float-right " style={{
+            fontSize: "13px",
+            lineHeight: "16px",
+            color: "#003459",
+            fontWeight: "600"
+          }}>Default</p>
+        ):(
+          <p className="float-right " style={{
+            fontWeight: "bold",
+            fontSize: "13px",
+            lineHeight: "16px",
+            textDecorationLine: "underline",
+            color: "#F2994A",
+          }}>Set as Default</p>
+        )}
+        <p className=" mt-4" style={{
+          fontWeight: "600",
+          fontSize: "14px",
+          lineHeight: "18px",
+          color: "#000000",
+          marginBottom: "8px"
+        }}>{props.name}</p>
+          <p className="addressLine">********7788</p>
+          <p className="addressLine">Expiry: 04/2022</p>
+          <p className="passForgot float-right">Remove</p>
+    </div>
+  );
+};
 
 const PersonalInfo = () => {
   const [name, setName] = React.useState("");
@@ -69,9 +274,205 @@ const PersonalInfo = () => {
       .catch((err) => swal(err));
   }
 
+  const breakPoints = [
+    { width: 1, itemsToShow: 1, itemsToScroll: 1 },
+    { width: 360, itemsToShow: 2}
+  ];
+
+  const addressCarousel =useRef();
+  const paymentCarousel =useRef();
+
+  const profileUpdate = () =>{
+    MySwal.fire({
+        html: <div className="d-flex mt-2">
+                <AccountBoxIcon style={{color: "#003459"}} />
+                <p className="ml-2" style={{color: "#003459"}}>Profile Updated!</p>
+            </div>,
+        
+        position: "top-end",
+        showConfirmButton: false,
+        showCloseButton: true,
+        timer: 2000,
+        width: "500px",
+        height: "100px",
+        backdrop: "rgba(0, 0, 0, 0.5)",
+        scrollbarPadding: false,
+        showClass: {
+          popup: 'animate__animated animate__zoomIn  animate__faster',
+          backdrop: 'swal2-noanimation'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__slideOutRight  animate__faster',
+          backdrop: 'animate__animated animate__fadeOut  animate__faster'
+        }
+    })
+};
+
+const confirmDeleteAccount = () => {
+  const onCancel = () => {
+    MySwal.clickCancel();
+  }
+  const onConfirm = () => {
+    MySwal.clickConfirm();
+  }
+  MySwal.fire({
+    html: <div>
+            <div className="confirmationMsg ">
+              Are you sure you want to delete account from EHS Prints?
+            </div>
+            <button className="confirmationBtn yesBtnMargin" onClick={onConfirm} >Yes</button>
+            <button className="confirmationBtn" onClick={onCancel} style={{borderColor: "#C51D1D"}}>Cancel</button>
+          </div>,
+    position: "center",
+    showConfirmButton: false,
+    width: "700px",
+    backdrop: "rgba(0, 0, 0, 0.5)",
+    scrollbarPadding: false,
+    padding: "23px 10px 22px 12px",
+    showClass: {
+      popup: 'animate__animated animate__zoomIn animate__faster',
+      backdrop: 'animate__animated animate__fadeIn animate__faster'
+    },
+    hideClass: {
+      popup: 'animate__animated animate__zoomOut animate__faster',
+      backdrop: 'animate__animated animate__fadeOut animate__faster'
+    }
+  })
+};
+const addAddress = () => {
+  const onConfirm = () => {
+    MySwal.clickConfirm();
+  }
+  MySwal.fire({
+    html: <div className="">
+            <p className="addAddressHead">Add Address</p>
+            <hr style={{color: "#D2D2D2",marginBottom: "10px",marginTop: "0"}} />
+            <input type="text" placeholder="First Name" className="addAddressInput" required/>
+            <input type="text" placeholder="Last Name" className="addAddressInput" />
+            <input type="text" placeholder="Address Line 1" className="addAddressInput" required/>
+            <input type="text" placeholder="Address Line 2" className="addAddressInput" />
+            <input type="text" placeholder="City" className="addAddressInput" required/>
+            <input type="text" placeholder="State" className="addAddressInput" required/>
+            <input type="number" placeholder="Pin Code" className="addAddressInput" required/>
+            <input type="number" placeholder="Contact Number" className="addAddressInput" required/>
+            <input type="email" placeholder="Email" className="addAddressInput" required/>
+            <button onClick={onConfirm} className="saveBtn">Save</button>
+          </div>,
+          showConfirmButton: false,
+          padding: "10px 0px 5px 0px",
+          backdrop: "rgba(0, 0, 0, 0.5)",
+          position: "center",
+          scrollbarPadding: false,
+          showClass: {
+            popup: 'animate__animated animate__zoomIn  animate__faster',
+            backdrop: 'animate__animated animate__fadeIn animate__faster'
+          },
+          hideClass: {
+            popup: '',
+            backdrop: ''
+          }
+  }).then((result)=>{
+    if(result.isConfirmed){
+      MySwal.fire({
+        html: <div className="d-flex mt-2">
+                <CheckCircleIcon style={{color: "#003459"}} />
+                <p className="ml-2" style={{color: "#003459"}}>Address Sucessfully Added!</p>
+            </div>,
+        
+        position: "top-end",
+        timer: 2000,
+        showConfirmButton: false,
+        showCloseButton: true,
+        width: "500px",
+        height: "100px",
+        backdrop: "rgba(0, 0, 0, 0.5)",
+        scrollbarPadding: false,
+        showClass: {
+          popup: 'animate__animated animate__zoomIn  animate__faster',
+          backdrop: 'swal2-noanimation'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__slideOutRight  animate__faster',
+          backdrop: 'animate__animated animate__fadeOut  animate__faster'
+        }
+        
+    });
+    }
+  })
+};
+
+
   return (
     <>
-      <Grid className="mt-3 ml-5 ">
+
+      <div class="padding-10 d-flex justify-content-center align-items-center align-items-sm-start justify-content-sm-around flex-sm-row flex-column pt-4  pb-4" style={{background: "#F6F6F6",width: "100vw!important"}}>
+        <div className="personalInfo ">
+            <p className="perHead mb-0 mt-3  ">Personal Information</p>
+            <p className="perTag ">Updating email address or phone number would require verification after making changes here.</p>
+            <div className="perInput">
+              <label htmlFor="NAME " className="perLabel ">NAME</label>
+              <input type="text" id="NAME"  placeholder="Abc Xyz"/>
+            </div>
+            <div className="perInput">
+              <label htmlFor="EMAIL"  className="perLabel">EMAIL</label>
+              <input type="email" pattern="^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$" id="EMAIL" placeholder="Abc@gmail.com" />
+            </div>
+            <div className="perInput">
+              <label htmlFor="MOBILE" className="perLabel">MOBILE</label>
+              <input type="number" id="MOBILE" placeholder="+91 8992376000" />
+            </div>
+            <div className="perInput">
+              <label htmlFor="NEWPASSWORD" className="perLabel">NEW PASSWORD</label>
+              <input type="password" id="NEWPASSWORD"  />
+            </div>
+            <div className="perInput">
+              <label htmlFor="CPASSWORD"  className="perLabel">CONFIRM PASSWORD</label>
+              <input type="password" id="CPASSWORD" />
+            </div>
+            <div className="perInput">
+                <Link to="/forgotpassword"><span className="passForgot" >Forgot Password</span></Link>
+                <span className="passForgot float-right" onClick={confirmDeleteAccount}>Delete Account</span>
+            </div>
+            <div className="updateBtn mx-auto mt-5" role="button" onClick={profileUpdate} >UPDATE</div>
+            </div>
+        <div className=" border">
+          <div className=" addressBox mb-4  p-3 ">
+            <div className=" perInput mb-3 ">
+              <p className="perHead  d-inline-block ml-sm-5 ml-0" style={{ lineHeight: "38px"}}>Addresses</p>
+              <span onClick={addAddress} className="passForgot float-right" style={{fontSize: "14px",lineHeight: "38px"}}>Add Address</span>
+            </div>
+            <div className="d-flex " style={{height: "212px"}} >
+              <ArrowBackIosRoundedIcon onClick={() => addressCarousel.current.slidePrev()} role="button" className="border  mt-auto mb-auto  shadow-sm rounded-circle " />
+              <Carousel ref={addressCarousel} breakPoints={breakPoints}  showArrows={false} pagination={false}>
+                <AddressCard name="Name" mobile="9849065486" default={true} />
+                <AddressCard name="Shubham" mobile="9849065486" default={false} />
+                <AddressCard name="Shubham" mobile="9849065486" default={false} />
+              </Carousel>
+              <ArrowForwardIosRoundedIcon onClick={() => addressCarousel.current.slideNext()} role="button" className="border  mt-auto mb-auto  shadow-sm rounded-circle " />
+            </div>
+          </div>
+          <div className=" addressBox p-3">
+              <div className="perInput mb-4 ">
+                <p className="perHead  d-inline-block ml-sm-5 ml-0" style={{ lineHeight: "38px"}}>Payment Preferences</p>
+                <span className="passForgot float-right" style={{fontSize: "14px",lineHeight: "38px"}}>Add Payment Option</span>
+              </div>
+              <div className="d-flex mt-0 " style={{height: "148px", marginTop: "0px!important"}} >
+                <ArrowBackIosRoundedIcon onClick={() => paymentCarousel.current.slidePrev()} role="button" className="border  mt-auto mb-auto  shadow-sm rounded-circle " />
+                <Carousel ref={paymentCarousel} breakPoints={breakPoints}  showArrows={false} pagination={false}>
+                  <PaymentCard name="Name on Card"  default={true} />
+                  <PaymentCard name="Name on Card"  default={false} />
+                  <PaymentCard name="Shubham"  default={false} />
+                </Carousel>
+                <ArrowForwardIosRoundedIcon onClick={() => paymentCarousel.current.slideNext()} role="button" className="border  mt-auto mb-auto  shadow-sm rounded-circle " />
+              </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <Grid className="mt-3 ml-5 d-none">
         {/* <Grid.Row columns="2">
           <Grid.Column>
             {" "}
@@ -300,9 +701,83 @@ const PersonalInfo = () => {
   );
 };
 
+const OrderDetailCard = (props) => {
+  return(
+    <div className="orderDetailBox mx-auto mt-4">
+        <div className="d-flex justify-content-sm-between flex-column flex-sm-row p-3 pl-sm-5 pl-2 pr-5" style={{
+          fontFamily: "Source Sans Pro",
+          fontStyle: "normal",
+          fontWeight: "600",
+          fontSize: "14px",
+          lineHeight: "18px",
+          color: "rgba(0, 0, 0, 0.8)",
+          borderBottom: "1px solid #D2D2D2"
+        }}>
+          <span className="mb-1 mb-sm-0">ORDER # {props.orderId}</span>
+          <span className="float-sm-right">Ordered on {props.createdAt}</span>
+        </div>
+        <div className="p-sm-3 p-2  pr-sm-5">
+            <div className="d-inline-block">
+              <div className="productDetails  d-flex">
+                <img src={props.imgUrl} alt="product" className="myOrderProductImg" />
+                <div className="ml-sm-3 ml-2">
+                  <p className="myOrderProductName ">{props.name}</p>
+                  <p className="myOrderProductDetail ">Material: <span style={{fontWeight: "600"}}>{props.material}</span> </p>
+                  <p className="myOrderProductDetail">Dimension: <span style={{fontWeight: "600"}}>{props.dimension}</span> </p>
+                  <pre className="myOrderProductDetail">Price: <span style={{fontWeight: "600"}}>₹{props.originalPrice}     </span>  Quantity: <span style={{fontWeight: "600"}}>{props.quantity}</span> </pre>
+                  <p className="myOrderProductDetail">Seller: <span style={{fontWeight: "600"}}>Dichroic Lab</span></p>
+                </div>
+              </div>
+              <p className="  mt-3 d-block d-sm-none" style={{
+                fontFamily: "Lato",
+                fontStyle: "normal",
+                fontWeight: "bold",
+                fontSize: "16px",
+                lineHeight: "19px",
+                color: "#000000",
+                textDecorationLine: "none"
+              }}>Order Total: <span>₹{props.totalPrice}</span></p>
+              <div className="mt-3 stepper">
+                  {props.children}
+              </div>
+            </div>
+            <div className=" d-inline-block float-sm-right float-left text-sm-right text-left " style={{
+              fontWeight: "bold",
+              fontSize: "14px",
+              lineHeight: "18px",
+              textDecorationLine: "underline",
+              color: "#F2994A",
+              
+            }}>
+              <p>View Quotation</p>
+              <p>Get Invoice</p>
+              <p>Request Cancellation</p>
+              <p>Request Return or Replace</p>
+              <p>Review Product</p>
+              <p className="float-right mt-4 d-none d-sm-block" style={{
+                fontFamily: "Lato",
+                fontStyle: "normal",
+                fontWeight: "bold",
+                fontSize: "16px",
+                lineHeight: "19px",
+                color: "#000000",
+                textDecorationLine: "none"
+              }}>Order Total: <span>₹{props.totalPrice}</span></p>
+            </div>
+            
+        </div>
+        
+    </div>
+  );
+};
+
 const Orders = () => {
   const [orderData, setOrderData] = React.useState([]);
   const [authUser,setAuthUser] = React.useState("");
+
+  
+  /*Dummy Order */
+ 
 
   function getOrderFun() {
     Axios.get(getOrdersById, {
@@ -357,10 +832,11 @@ const Orders = () => {
       top: 10,
       left: "calc(-50% + 10px)",
       right: "calc(50% + 10px)",
+    
     },
     active: {
       "& $line": {
-        borderColor: "#003459",
+        borderColor: "#D0F7FF",
       },
     },
     completed: {
@@ -369,8 +845,8 @@ const Orders = () => {
       },
     },
     line: {
-      borderColor: "#F2994A",
-      borderTopWidth: 3,
+      borderColor: "#D0F7FF",
+      borderTopWidth: 4,
       borderRadius: 1,
     },
   })(StepConnector);
@@ -388,6 +864,7 @@ const Orders = () => {
               border: "5px solid  #003459",
               borderRadius: "50%",
               color: " #003459",
+              zIndex: "2",
             }}
           />
         ) : (
@@ -395,7 +872,7 @@ const Orders = () => {
             style={{
               width: "24px",
               height: "24px",
-              border: "5px solid #F2994A",
+              border: "5px solid #D0F7FF",
               borderRadius: "50%",
             }}
           ></div>
@@ -411,14 +888,7 @@ const Orders = () => {
   const useStyles = makeStyles((theme) => ({
     root: {
       width: "100%",
-    },
-    button: {
-      marginRight: theme.spacing(1),
-    },
-    instructions: {
-      marginTop: theme.spacing(1),
-      marginBottom: theme.spacing(1),
-    },
+    }
   }));
 
   function getSteps() {
@@ -431,12 +901,97 @@ const Orders = () => {
   }
   const classes = useStyles();
   const steps = getSteps();
-
+  const status = "Order Delivered";
   const [value, setValue] = React.useState(2);
+  
 
   return (
     <>
-      <Grid className="mt-3 ml-5 " style={{ width: "100%" }}>
+      <hr style={{borderTop: "4px solid #F6F6F6",marginTop: "0"}}></hr>
+      <div className="padding-10">
+        <h2 style={{
+          fontWeight: "600",
+          fontSize: "24px",
+          lineHeight: "30px",
+          color: "#000000",
+        }}>My Orders</h2>
+      </div>
+      <div>
+        <OrderDetailCard 
+        orderId="76-2260441-433074"
+        createdAt= "Saturday, 10 October 2020"
+        imgUrl= {SafeTwo}
+        name="Posters | Material Handling | PRD – MH0013A"
+        material="PREMIUM SELF ADHESIVE"
+        dimension="19 INCH X 27 INCH X .2 INCH"
+        originalPrice={200}
+        quantity={2}
+        totalPrice={520}
+        >
+            <div className={classes.root} >
+                    <Stepper
+                      alternativeLabel
+                      activeStep={2}
+                      connector={<QontoConnector />}
+                      className=" p-0 "
+                    >
+                      {steps.map((label) => (
+                        <Step key={label}  className=" stepperWidth">
+                          <StepLabel StepIconComponent={QontoStepIcon} >
+                            <p className="steplabel ">{label}</p>
+                          </StepLabel>
+                        </Step>
+                      ))}
+                    </Stepper>
+
+                </div>
+        </OrderDetailCard>
+         <OrderDetailCard 
+        orderId="76-2260441-433074"
+        createdAt= "Saturday, 10 October 2020"
+        imgUrl= {SafeTwo}
+        name="Posters | Material Handling | PRD – MH0013A"
+        material="PREMIUM SELF ADHESIVE"
+        dimension="19 INCH X 27 INCH X .2 INCH"
+        originalPrice={200}
+        quantity={2}
+        totalPrice={520}
+        >
+        <div className={classes.root}>
+                    <Stepper
+                      alternativeLabel
+                      activeStep={
+                        status === "Order Confirmed"
+                          ? 1
+                          :status === "Order Dispatched"
+                          ? 2
+                          : status === "Order Shipped"
+                          ? 3
+                          : status === "Order Delivered"
+                          ? 4
+                          : 1
+                      }
+                      connector={<QontoConnector />}
+                      className=" p-0 "
+                    >
+                      {steps.map((label) => (
+                        <Step key={label}  className=" stepperWidth">
+                          <StepLabel StepIconComponent={QontoStepIcon} >
+                            <p className="steplabel">{label}</p>
+                          </StepLabel>
+                        </Step>
+                      ))}
+                    </Stepper>
+
+                </div>
+        </OrderDetailCard>
+      </div>
+
+      
+
+
+
+      {/*<Grid className="mt-3 ml-5 " style={{ width: "100%" }}>
         <Grid.Row columns="2">
           <p className="perhead">My Orders</p>
         </Grid.Row>
@@ -608,7 +1163,7 @@ const Orders = () => {
                         </div>
                       </div>
                     )}
-                  </div> */}
+                  </div> 
                   </div>
                 </Grid.Row>
                 <Grid.Row>
@@ -699,8 +1254,14 @@ const Orders = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>*/}
     </>
+  );
+};
+
+const ncard = (props) => {
+  return (
+      <ProductCard src={props.src} name={props.title} startPrice={props.startPrice} rating={props.rating} itemBought={props.itemBought} catName={props.cat} subCatName={props.subCat} />
   );
 };
 
@@ -838,7 +1399,7 @@ const Wishlist = (props) => {
       .catch((err) => console.log(err));
   }
 
-  React.useEffect(() => getOrderFun(), []);
+ /* React.useEffect(() => getOrderFun(), []);*/
 
   const [bottomDet, setBottomDet] = React.useState({});
 
@@ -857,10 +1418,36 @@ const Wishlist = (props) => {
     $("#bottomCart").css("display", "block");
     props.setCartCountFun(det);
   };
-
+  const PPEPosters = [
+ 
+    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE" },
+    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE"},
+    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE"},
+    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE" },
+    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE" },
+    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE" },
+    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE"},
+    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE"},
+   
+  ];
   return (
     <>
-      <Grid className="ml-5">
+     <hr style={{borderTop: "4px solid #F6F6F6",marginTop: "0"}}></hr>
+    <div className="padding-10">
+      <h2 className="mb-3" style={{
+        fontSize: "24px",
+        lineHeight: "30px",
+        color: "#000000",
+        fontWeight: "600",
+      }}>My Wishlist</h2>
+      <div className="wishlistProducts">
+        {PPEPosters.map(ncard)}
+      </div>
+      <div className="d-flex mt-4  ">
+        <Pagination count={2} color="primary"  className="mx-auto"  />
+      </div>
+    </div>
+      {/*<Grid className="ml-5">
         <Grid.Row className="orderDet mt-2" style={{ marginLeft: "-50px" }}>
           My Wishlist
         </Grid.Row>
@@ -1172,8 +1759,182 @@ const Wishlist = (props) => {
         }}
       >
         <BottomAddedCart det={bottomDet} />
-      </div>
+      </div>*/}
     </>
+  );
+};
+
+
+
+const QuotesCard = (props) => {
+  const quoteConfirmed = () =>{
+    MySwal.fire({
+        html: <div className="d-flex mt-2">
+                   <CheckCircleIcon style={{color: "#0C9B86"}} />
+                    <div className="text-left">
+                    <p className="ml-3 " style={{color: "#0C9B86"}}>Order Confirmed!</p>
+                    <p className="ml-3" style={{
+                      fontFamily: "Source Sans Pro",
+                      fontWeight: "normal",
+                      fontStyle: "normal",
+                      fontSize: "14px",
+                      lineHeight: "18px",
+                      color: "#757575",
+                      textAlign: "left"
+                    }}>An email has been sent to you and the supplier on the registered email addresses.</p>
+                    </div>
+            </div>,
+        
+        position: "top-end",
+        timer: 3000,
+        showConfirmButton: false,
+        showCloseButton: true,
+        width: "500px",
+        height: "100px",
+        backdrop: "rgba(0, 0, 0, 0.5)",
+        
+    })
+};
+  return(
+    <div className="quoteBox mx-auto my-5">
+        <div className=" py-3 px-4 px-sm-5 quoteTopBox" style={{
+          fontFamily: "Source Sans Pro",
+          fontStyle: "normal",
+          fontWeight: "600",
+          fontSize: "14px",
+          lineHeight: "18px",
+          borderBottom: "1px solid #D2D2D2",
+          
+        }}>
+          <span className="order-2 order-sm-1 my-1 my-sm-0 " style={{color: "#000"}}>VALID TILL  Saturday, 17 October 2020</span>
+          <span className="order-3 order-sm-2 my-1 my-sm-0 text-left " style={{color: "#757575"}}>Requested on Saturday, 10 October 2020</span>
+          <span className="order-1 order-sm-3 my-1 my-sm-0  quoteAlign" style={{color: "#757575",textAlign: "center"}}>QUOTATION #76-2260441</span>
+        </div>
+        <div className="d-flex flex-sm-row flex-column">
+          <div className="px-sm-5 px-2 py-sm-4 py-5   ">
+          <div className="d-flex justify-content-between  buyerDetailBox1" style={{}}>
+              <div className=" buyerDetailBox   ml-sm-1 " style={{
+                  fontFamily: "Source Sans Pro",
+                  fontStyle: "normal",
+                  fontWeight: "600",
+                  fontSize: "14px",
+                  lineHeight: "18px",
+                  color: "#757575"
+                }}>
+                <p className="" style={{
+                  fontWeight: "bold",
+                  fontSize: "16px",
+                  lineHeight: "20px",
+                  marginBottom: "9px",
+                }}>Buyer Details</p>
+                <p className="" style={{
+                  fontWeight: "bold",
+                  fontSize: "16px",
+                  lineHeight: "20px",
+                  color: "#000",
+                  marginBottom: "9px",
+                }}>ABC Company</p>
+                <p className="" style={{
+                  marginBottom: "7px",
+                }}>
+                  Contact person name<br />
+                  Contact person phone<br />
+                  Contact person email<br />
+                </p>
+                <p style={{
+                  marginBottom: "8px",
+                }}>
+                  Address in 2 lines <br/>
+                  Address in 2 lines
+                </p>
+                <p>GST no.</p>
+              </div>
+              <div className=" buyerDetailBox  " style={{
+                  fontFamily: "Source Sans Pro",
+                  fontStyle: "normal",
+                  fontWeight: "600",
+                  fontSize: "14px",
+                  lineHeight: "18px",
+                  color: "#757575"
+                }} >
+                <p style={{
+                  fontWeight: "bold",
+                  fontSize: "16px",
+                  lineHeight: "20px",
+                  marginBottom: "9px",
+                }}>Supplier Details</p>
+                <p style={{
+                  fontWeight: "bold",
+                  fontSize: "16px",
+                  lineHeight: "20px",
+                  color: "#000",
+                  marginBottom: "9px",
+                }}>Dichroic Labs LLP</p>
+                <p style={{
+                  marginBottom: "7px",
+                }}>45,old Agrawal Nagar, Indore, 452001, IN, Madhya Pradesh</p>
+                <p>Phone no.<br/>
+                Email</p>
+              </div>
+          </div>
+          <div className="buyerDetailBox1 d-flex flex-sm-row flex-column align-items-center justify-content-sm-between">
+            <button className="my-4 my-sm-0" style={{
+            background: "#F2994A",
+            borderRadius: "4px",
+            width: "213px",
+            height: "36px",
+            fontFamily: "Source Sans Pro",
+            fontStyle: "normal",
+            fontWeight: "bold",
+            fontSize: "14px",
+            lineHeight: "34px",
+            textAlign: "center",
+            color: "#FFF",
+            border: "none",
+          }} onClick={quoteConfirmed}>Confirm Purchase</button>
+            <button className="mr-sm-3" style={{
+            background: "#FFF",
+            border: "2px solid #F2994A",
+            boxSizing: "border-box",
+            borderRadius: "4px",
+            width: "213px",
+            height: "36px",
+            fontFamily: "Source Sans Pro",
+            fontStyle: "normal",
+            fontWeight: "normal",
+            fontSize: "14px",
+            lineHeight: "32px",
+            textAlign: "center",
+            color: "#000",
+          }}>View Quotation</button>
+          </div>
+          </div>
+          <div className=" w-100 pl-3 pr-5 py-sm-4 py-3 ">
+                 <div className="d-flex flex-sm-column flex-row justify-content-between mb-4 mb-sm-0">
+                 <p className="" style={{
+                    fontStyle: "normal",
+                    fontSize: "14px",
+                    lineHeight: "18px",
+                    color: "#000",
+                    marginBottom: "5px"
+                  }}>Products: <span style={{fontWeight: "600"}}>4</span></p>
+                  <p className="" style={{
+                    fontStyle: "normal",
+                    fontSize: "14px",
+                    lineHeight: "18px",
+                    color: "#000",
+                    
+                  }}>Total Quantity: <span style={{fontWeight: "600"}}>5</span></p>
+                 </div>
+                  <div className="quotesImg ">
+                      <img src={SafeTwo} alt="quotes" width="85px" height="85px"  />
+                      <img src={SafeTwo} alt="quotes" width="85px" height="85px"  />
+                      <img src={SafeTwo} alt="quotes" width="85px" height="85px"  />
+                      <img src={SafeTwo} alt="quotes" width="85px" height="85px"  />
+                  </div>
+          </div>
+        </div>
+    </div>
   );
 };
 
@@ -1182,7 +1943,23 @@ const Quotes = () => {
 
   return (
     <>
-      <Grid className="ml-5">
+
+      <hr style={{borderTop: "4px solid #F6F6F6",marginTop: "0"}}></hr>
+      <div className="padding-10">
+        <h2 style={{
+          fontWeight: "600",
+          fontSize: "24px",
+          lineHeight: "30px",
+          color: "#000000",
+        }}>Quotes Requested</h2>
+      </div>
+        <QuotesCard  />
+        <QuotesCard  />
+
+
+
+
+      {/*<Grid className="ml-5">
         <Grid.Row
           className="orderDet mt-2 mb-3"
           style={{ marginLeft: "-50px" }}
@@ -1306,7 +2083,7 @@ const Quotes = () => {
             email addresses.
           </p>
         </Grid.Row>
-      </Grid>
+      </Grid>*/}
     </>
   );
 };
@@ -1340,18 +2117,25 @@ export default function Dashboard(props) {
       setRedirect({ one: false, two: false, three: false, four: true });
     }
   };
-
+  const breakPoints = [
+    { width: 1, itemsToShow: 2, itemsToScroll: 1 },
+    { width: 1000, itemsToShow: 5 }
+  ];
+  const dashboardCarousel = useRef();
   return (
     <div>
-      <Grid>
-        <Grid.Row columns="2">
-          <Grid.Column style={{ width: "20%" }}>
-            <div className="mt-3">
+      <div className="padding-10 d-flex pt-4 pb-4">
+          <ArrowBackIosRoundedIcon onClick={() => dashboardCarousel.current.slidePrev()} role="button" className="border d-inline-block d-sm-none  mt-auto mb-auto  shadow-sm rounded-circle " />
+          <Carousel breakPoints={breakPoints} showArrows={false} ref={dashboardCarousel} pagination={false}>
               <div
                 onClick={setRedirectFun}
                 id="one"
                 className="listanchor "
-                style={redirect.one ? { backgroundColor: "#F2F2F2" } : null}
+                style={redirect.one ? { background: "rgba(86, 204, 242, 0.2)",
+                                        border: "2px solid #2D9CDB",
+                                        boxSizing: "border-box",
+                                        borderRadius: "32px",
+                                        color: "#2D9CDB" } : null}
               >
                 PERSONAL INFORMATION
               </div>
@@ -1359,7 +2143,11 @@ export default function Dashboard(props) {
                 onClick={setRedirectFun}
                 id="two"
                 className="listanchor"
-                style={redirect.two ? { backgroundColor: "#F2F2F2" } : null}
+                style={redirect.two ? { background: "rgba(86, 204, 242, 0.2)",
+                                        border: "2px solid #2D9CDB",
+                                        boxSizing: "border-box",
+                                        borderRadius: "32px",
+                                        color: "#2D9CDB"} : null}
               >
                 MY ORDERS
               </div>
@@ -1367,7 +2155,11 @@ export default function Dashboard(props) {
                 onClick={setRedirectFun}
                 id="three"
                 className="listanchor"
-                style={redirect.three ? { backgroundColor: "#F2F2F2" } : null}
+                style={redirect.three ? { background: "rgba(86, 204, 242, 0.2)",
+                                        border: "2px solid #2D9CDB",
+                                        boxSizing: "border-box",
+                                        borderRadius: "32px",
+                                        color: "#2D9CDB" } : null}
               >
                 MY WISHLIST
               </div>
@@ -1375,128 +2167,75 @@ export default function Dashboard(props) {
                 onClick={setRedirectFun}
                 id="four"
                 className="listanchor"
-                style={redirect.four ? { backgroundColor: "#F2F2F2" } : null}
+                style={redirect.four ? { background: "rgba(86, 204, 242, 0.2)",
+                                        border: "2px solid #2D9CDB",
+                                        boxSizing: "border-box",
+                                        borderRadius: "32px",
+                                        color: "#2D9CDB"} : null}
               >
                 QUOTES REQUESTED
               </div>
               <div
                 className="listanchor text-danger"
-                style={redirect.five ? { backgroundColor: "#F2F2F2" } : null}
+                style={redirect.five ? { background: "rgba(86, 204, 242, 0.2)",
+                                        border: "2px solid #2D9CDB",
+                                        boxSizing: "border-box",
+                                        borderRadius: "32px",
+                                        color: "#2D9CDB" } : null}
                 onClick={() => {
-                  localStorage.removeItem("userDetails123");
-                  localStorage.removeItem("ehstoken12345678910");
-                  window.location.replace(
-                    "http://" + window.location.host + "/"
-                  );
+                            const onCancel = () => {
+                              MySwal.clickCancel();
+                            }
+                            const onConfirm = () => {
+                              MySwal.clickConfirm();
+                            }
+                            MySwal.fire({
+                              html: <div className="">
+                                      <div className="confirmationMsg ">
+                                      Are you sure you want to logout from EHS Prints?
+                                      </div>
+                                      <button className="confirmationBtn yesBtnMargin" onClick={onConfirm} >Yes</button>
+                                      <button className="confirmationBtn" onClick={onCancel} style={{borderColor: "#C51D1D"}}>Cancel</button>
+                                    </div>,
+                              position: "center",
+                              showConfirmButton: false,
+                              width: "700px",
+                              backdrop: "rgba(0, 0, 0, 0.5)",
+                              scrollbarPadding: false,
+                              padding: "23px 10px 22px 12px",
+                              showClass: {
+                                popup: 'animate__animated animate__zoomIn animate__faster',
+                                backdrop: 'animate__animated animate__fadeIn animate__faster'
+                              },
+                              hideClass: {
+                                popup: 'animate__animated animate__zoomOut animate__faster',
+                                backdrop: 'animate__animated animate__fadeOut animate__faster'
+                              }
+                            }).then((result)=>{
+                              if(result.isConfirmed){
+                                localStorage.removeItem("userDetails123");
+                                localStorage.removeItem("ehstoken12345678910");
+                                window.location.replace(
+                                  "http://" + window.location.host + "/"
+                                );
+                              }
+                            })
+                 
                 }}
               >
                 LOG OUT
               </div>
-            </div>
-          </Grid.Column>
-          <Grid.Column style={{ width: "80%" }}>
+          </Carousel>
+          <ArrowForwardIosRoundedIcon onClick={() => dashboardCarousel.current.slideNext()} role="button" className="border d-inline-block d-sm-none mt-auto mb-auto shadow-sm rounded-circle "  />
+      </div>  
             {redirect.one ? <PersonalInfo /> : null}
             {redirect.two ? <Orders /> : null}
             {redirect.three ? (
               <Wishlist setCartCountFun={props.setCartCountFun} />
             ) : null}
             {redirect.four ? <Quotes /> : null}
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-      <div className="mt-5" style={{ width: "100%", background: "#003459" }}>
-        <Grid style={{ paddingTop: "50px" }}>
-          <Grid.Row columns="4" className="ml-4">
-            <Grid.Column className="ml-5">
-              <ul>
-                <h3 className="footerhead">Products</h3>
-                <Link to="/posters" className="footertxt">
-                  Posters
-                </Link>
-                <Link to="/signages" className="footertxt">
-                  Signages
-                </Link>
-                <Link to="/campaigns" className="footertxt">
-                  Campaigns
-                </Link>
-                <Link to="/floor-graphics" className="footertxt">
-                  Floor Graphics
-                </Link>
-                <Link to="/asset-marking" className="footertxt">
-                  Asset Marking
-                </Link>
-                <Link to="/posters" className="footertxt">
-                  Do It Yourself(DIY)
-                </Link>
-              </ul>
-            </Grid.Column>
-            <Grid.Column className="ml-5 pl-5">
-              <ul>
-                <h3 className="footerhead">My Account</h3>
-                {authUser ? (
-                  <>
-                    <Link to="/dashboard" className="footertxt">
-                      Profile
-                    </Link>
-                  </>
-                ) : (
-                  <>
-                    <li className="footertxt">Profile</li>
-                  </>
-                )}
 
-                {authUser ? (
-                  <>
-                    <Link to="/dashboard" className="footertxt">
-                      Order History
-                    </Link>
-                  </>
-                ) : (
-                  <>
-                    <li className="footertxt">Order History</li>
-                  </>
-                )}
-
-                <Link to="/track" className="footertxt">
-                  Order Tracking
-                </Link>
-                <Link to="/signup" className="footertxt">
-                  Create An Account
-                </Link>
-                <li className="footertxt">New User Guide</li>
-              </ul>
-            </Grid.Column>
-            <Grid.Column className="ml-5 pl-5">
-              <ul>
-                <h3 className="footerhead">Contact Us</h3>
-                <li className="footertxt">Timings (Mon - Sat: 7:00 - 21:00)</li>
-                <li className="footertxt">
-                  45, old Agrawal Nagar, Indore, Madhya Pradesh, Pin: 452001
-                </li>
-                <li className="footertxt">Mobile No : +91 9632418602</li>
-                <li className="footertxt">Email ID : hello@ehsposters.com</li>
-              </ul>
-            </Grid.Column>
-            <Grid.Column className="ml-5">
-              <ul>
-                <h3 className="footerhead">About</h3>
-                <Link to="/privacy-policy" className="footertxt">
-                  Privacy Policies
-                </Link>
-                <Link to="/faq" className="footertxt">
-                  FAQ
-                </Link>
-                <Link to="/support" className="footertxt">
-                  Support
-                </Link>
-                <Link to="/affiliate" className="footertxt">
-                  Join Us (Affiliate)
-                </Link>
-              </ul>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </div>
+    
     </div>
   );
-}
+};

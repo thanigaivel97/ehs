@@ -1,18 +1,14 @@
 /*jshint esversion: 6 */
-import React, { useState } from "react";
+import React, { useState ,useEffect, useLayoutEffect} from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 import HomePage from "./components/homepage/HomePage.jsx";
 import Search from "./components/Search/Search";
 import Category from "./components/category_page/CategoryPage.jsx";
-import SignagesCategory from "./components/signages/CategoryPage.jsx";
-import AssetMarkingCategory from "./components/AssetMarking/CategoryPage.jsx";
-import CampaignsCategory from "./components/Campaigns/CategoryPage.jsx";
-import FloorGraphicsCategory from "./components/FloorGraphics/CategoryPage.jsx";
 import ProductList2 from "./components/product_list2/ProductList2.jsx";
 import NavBar from "./components/homepage/navbar/NavBar";
 import ProductDescription from "./components/productdescription/ProductDescription";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { useLocation, BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Cart from "./components/ShoppingCart/ShoppingCart";
 import Dashboard from "./components/CustomerDashboard/Dashboard";
 import Axios from "axios";
@@ -22,6 +18,7 @@ import { connect } from "react-redux";
 import Login from "./components/login/Login";
 import Signup from "./components/login/Signup.jsx";
 import Otp from "./components/login/Otp";
+import ForgotPass from "./components/login/ForgotPass";
 import PrivacyPolicy from "./components/PrivacyPolicy/PrivacyPolicy.jsx";
 import Support from "./components/Support/Support";
 import Affiliate from "./components/Affliate/Affliate";
@@ -31,7 +28,20 @@ import TrackOrder from "./components/TrackOrder/TrackOrder";
 import SignageProductPage from "./components/signages/SignageProductPage";
 import Footer from "./components/homepage/Footer";
 import PosterProductPage from "./components/category_page/PosterProductPage";
-import Contact from "./components/contact/Contact"
+import Contact from "./components/contact/Contact";
+import Checkout from "./components/ShoppingCart/Checkout";
+import About from "./components/About/About";
+import Campaigns from "./components/Campaigns/CategoryPage";
+
+const  ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 
 export const DesContext = React.createContext({});
 
@@ -77,15 +87,17 @@ function App(props) {
     <div className="App">
       <DesContext.Provider value={{ DesDetail: setDescription }}>
         <Router>
+        <ScrollToTop />
           <NavBar
-            num={cartCount}
-            setSubCat={setSubCat}
-            setSearchData={setSearchData}
-            searchData={searchData}
           />
+          
           <Switch>
             <Route exact path="/">
               <HomePage />
+            </Route>
+
+            <Route exact path="/about">
+              <About />
             </Route>
 
             <Route exact path="/track">
@@ -123,6 +135,10 @@ function App(props) {
               <Category setCartCountFun={countSetFun} />
             </Route>
 
+            <Route exact path="/campaigns">
+              <Campaigns />
+            </Route>
+
             <Route exact path="/:catName/subcat/:subCatName">
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
@@ -150,8 +166,16 @@ function App(props) {
                 setCartCountFun={countSetFun}
               />
             </Route>
+
+            <Route  path="/checkout">
+              <Checkout />
+            </Route>
             <Route exact path="/login">
               <Login />
+            </Route>
+
+            <Route exact path="/forgotpassword">
+              <ForgotPass />
             </Route>
 
             <Route exact path="/signup">
@@ -166,6 +190,7 @@ function App(props) {
               <Dashboard setCartCountFun={countSetFun} />
             </Route>
           </Switch>
+
           <Footer />
         </Router>
       </DesContext.Provider>

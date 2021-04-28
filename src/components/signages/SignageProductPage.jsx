@@ -10,12 +10,16 @@ import $ from "jquery";
 import { LinearProgress, CircularProgress, Box, Typography } from "@material-ui/core";
 import { createMuiTheme, ThemeProvider} from '@material-ui/core/styles';
 import StarIcon from '@material-ui/icons/Star';
-import BeforeStart from "../../images/BeforeStart.svg";
+import BeforeStart from "../../images/BeforeStart.png";
 import FloorImg from "../../images/floor1.svg";
 import ProductCard from "./ProductCard";
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounded';
 import Carousel from "react-elastic-carousel";
+import Button from "@material-ui/core/Button";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import AddIcon from "@material-ui/icons/Add";
+import RemoveIcon from "@material-ui/icons/Remove";
 
 const theme = createMuiTheme({
     palette: {
@@ -45,8 +49,8 @@ const theme = createMuiTheme({
         },
         MuiRating: {
             root: {
-                marginBottom: 0
-            }
+                
+            },
         }
     }
 });
@@ -92,7 +96,7 @@ const ReviewCard = () => {
 
 const ncard = (props) => {
     return (
-        <ProductCard src={props.src} name={props.title} startPrice={props.startPrice} rating={props.rating} itemBought={props.itemBought} />
+        <ProductCard src={props.src} name={props.title} startPrice={props.startPrice} rating={props.rating} itemBought={props.itemBought} catName="signages"  />
     );
 };
 
@@ -190,11 +194,11 @@ const SignageProductPage = () => {
     return(
         <div>
             <div className="container-fluid pt-3 pb-3 padding-10 d-none d-sm-block" style={{ background: "#F6F6F6", color: "#333333" }}>
-              <Link to="/" style={{color: "#333333"}}>Home </Link> / <Link style={{color: "#333333"}} to="/signages">Signages</Link> / <Link style={{color: "#333333"}} to="/signages/subcat/PRE-PRINTED">Pre-Printed Signs</Link> / 
+              <Link to="/" style={{color: "#333333"}}>Home </Link> / <Link style={{color: "#333333"}} to="/signages">Signages</Link> / <Link style={{color: "#333333"}} to="/signages/subcat/PRE PRINTED">Pre-Printed Signs</Link> / 
               <span className="font-weight-bold" > Preprinted Sign 1</span>
             </div>
             <div className="row  padding-10 mt-4" >
-                <div className="col-lg-5 pl-auto pr-auto">
+                <div className="col-lg-5  ">
                     <div className="d-block d-sm-none mb-4">
                         <h2 style={{
                             fontStyle: "normal",
@@ -203,12 +207,14 @@ const SignageProductPage = () => {
                             lineHeight: "27px",
                             color: "#000000",
                         }}>Pre-Printed Sign 1</h2>
-                        <span className="font-weight-bold">4.6</span>
-                        <Rating name="product-rating" defaultValue={4.6} precision={0.1} size="small"  readOnly/>
-                        <span className="font-weight-normal">(20)</span>
-                        <span className="text-success float-right">In Stock</span>
+                        <div className=" d-flex align-items-center">
+                            <span className="font-weight-bold">4.6</span>
+                            <Rating name="product-rating" defaultValue={4.6} precision={0.1} size="small"  readOnly/>
+                            <span className="font-weight-normal">(20)</span>
+                            <span className="text-success ml-auto">In Stock</span>
+                        </div>
                     </div>
-                    <Carousel showArrows={false}  renderPagination={({ pages, activePage, onClick }) => {
+                    <Carousel  showArrows={false}  renderPagination={({ pages, activePage, onClick }) => {
                                         return (
                                         <div className="d-flex justify-content-around mt-4 " >       
                                         {pages.map(page => {
@@ -223,7 +229,7 @@ const SignageProductPage = () => {
                                         </div>
                                         );
                                     }}>
-                        <img src={restrictedArea} alt="preprinted sign" className="productCarouselImg" />
+                        <img src={restrictedArea} alt="preprinted sign" className="productCarouselImg " />
                         <div style={{ background: "gray"}}  className="productCarouselImg"></div> 
                         <div style={{ background: "green"}}  className="productCarouselImg"></div> 
                         <div style={{ background: "black"}}  className="productCarouselImg"></div> 
@@ -239,10 +245,12 @@ const SignageProductPage = () => {
                             lineHeight: "35px",
                             color: "#000000",
                         }}>Pre-Printed Sign 1</h2>
-                        <span className="font-weight-bold">{rating}</span>
-                        <Rating name="product-rating" defaultValue={rating} precision={0.1} size="small"  readOnly/>
-                        <span className="font-weight-normal ">(20)</span>
-                        <span className="text-success ml-4 ">In Stock</span>
+                        <div className=" d-flex align-items-center">
+                            <span className="font-weight-bold ">{rating}</span>
+                            <Rating name="product-rating" className=" mb-0" defaultValue={rating} precision={0.1} size="small"  readOnly/>
+                            <span className="font-weight-normal ">(20)</span>
+                            <span className="text-success ml-4 ">In Stock</span>
+                        </div>
                         <p style={{
                             fontSize: "14px",
                             lineHeight: "18px",
@@ -264,11 +272,38 @@ const SignageProductPage = () => {
                             </div>
                         
                     </div>
-                    <p className="font-weight-bold mt-4 mb-2 mr-5 mr-sm-0 d-inline-block d-sm-block">Quantity</p>
-                    <div className="d-inline-block ml-sm-0 ml-5">
-                        <div className="pl-1 pr-1  d-inline-block qtySize" onClick={increaseQty} role="button" style={{border: "1px solid #D2D2D2",borderTopLeftRadius: "6px", borderBottomLeftRadius: "6px",color: "gray" }}>+</div>
-                        <div className="pl-3 pr-3 d-inline-block qtySize" style={{border: "1px solid #D2D2D2",borderLeft: "none", borderRight: "none" }}>{quantity}</div>
-                        <div className="pr-2 pl-2 d-inline-block qtySize" onClick={decreaseQty} role="button" style={{border: "1px solid #D2D2D2",borderTopRightRadius: "6px", borderBottomRightRadius: "6px",color: "gray" }}>-</div>
+                    <div className="d-flex flex-row flex-sm-column  align-items-sm-start align-items-center ">
+                    <p className="font-weight-bold mr-5 mt-3 mr-sm-0 d-inline-block d-sm-block " style={{lineHeight: "30px"}}>Quantity</p>
+                    <ButtonGroup
+                            size="small"
+                            className="ml-5 ml-sm-0 "
+                            aria-label="small outlined button group"
+                            style={{ width: "30px", height: "30px", }}
+                          >
+                            <Button
+                                onClick={decreaseQty}
+                              className="shadow-none  qtyBTN"
+                            >
+                              <RemoveIcon style={{ color: "grey", width: "20px" }} />
+                            </Button>
+                            <Button className="qtyBTN"
+                              style={{
+                                fontFamily: "Lato",
+                                fontStyle: "normal",
+                                fontWeight: "normal",
+                                fontSize: "16px",
+                                lineHeight: "18px",
+                                color: "#000000",
+                                paddingLeft: "14px",
+                                paddingRight: "14px",
+                              }}
+                            >
+                              {quantity}
+                            </Button>
+                            <Button onClick={increaseQty} className="p-0 qtyBTN"  >
+                              <AddIcon style={{ color: "grey", width: "20px" }} />
+                            </Button>
+                          </ButtonGroup>
                     </div>
                     <div className="mt-2 d-block d-sm-none float-right">
                         <p className="d-inline-block mt-4" style={{
@@ -473,11 +508,9 @@ const SignageProductPage = () => {
                         marginBottom: "30px"
                     }}>Similar items</h2>
                     
-                     {visible===4 ? (
-              <Link role="button" className="seemore d-inline-block float-right" style={{lineHeight: "24px", fontWeight: "600"}} to="/">View All</Link>
-            ):(
-              <p role="button" className="seemore d-inline-block float-right" style={{lineHeight: "24px", fontWeight: "600"}} onClick={showLessCards}>View Less</p>
-            ) }
+
+              <Link role="button" className="seemore d-inline-block float-right" style={{lineHeight: "24px", fontWeight: "600"}} to="/signages/subcat/Pre Printed">View All</Link>
+           
             <span className="float-right d-none d-sm-block mr-3">Page 1-6</span>
 
                    {/* <ProductCard src={BeforeStart} name="Floor Graphics | Printable Catalog | PRD-FG009" startPrice={219} rating={rating} itemBought={473} /> */} 
@@ -530,15 +563,14 @@ const SignageProductPage = () => {
             
            
 
-            <div className="row padding-10">
-            <div className="didNotFindBottomBanner">
+          
+            <div className="didNotFindBottomBanner mx-auto">
                 <p className="text1 d-inline-block ">Did not find what you were looking for?</p>
                 <div className="d-inline-block float-none float-sm-right">
                     <p className="text2 ">Contact us and get the perfect print made for you</p>
                     <p className="text3 ">Share your design or slogan with us, and our designers will create one for you!</p>
                 </div>
             </div>       
-            </div> 
            
         </div>
     );

@@ -1,48 +1,65 @@
-.promoCard{
-    width: 270px;
-    border: none;
-}
 .promo{
-    padding: 30px;
+    margin-bottom: 57px;
     display: grid;
     grid-template-columns: auto auto auto auto;
-    justify-content: space-evenly;
+    justify-content: space-between;
 }
+.promoCard{
+    width: 270px;
+    
+    border: none;
+}
+.promoCardImg{
+        width: 270px;
+        height: 270px;
+}
+.cardTitle{
+    width: 270px;
+    height: 70px;
+    font-family: "Source Sans Pro";
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 34px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+.cardText{
+    font-family: "Source Sans Pro";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
 
-#card-title{
-    font-family: "Source Sans Pro";
-font-style: normal;
-font-weight: bold;
-font-size: 19px;
-height: 40px;
-text-align: center;
-align-items: center;
-}
-#card-text{
-    font-family: "Source Sans Pro";
-font-style: normal;
-font-weight: normal;
-    font-size: 14px;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
 }
 @media (max-width: 480px){
-    .promoCard{
-        width: 150px;
+    .cardTitle{
+        width: 162px;
+        height: 42px;
+        font-size: 14px;
+        line-height: 20px;
     }
-    .card-body{
-        padding: 10px;
+    .cardText{
+        font-size: 11px;
+    }
+    .promoCard{
+        width: 162px;
+    }
+    .promoCardImg{
+        width: 162px;
+        height: 162px;
     }
     .promo{
+        margin-bottom: 28px;
         grid-template-columns: auto auto;
-        grid-template-rows: auto auto;
-        grid-gap: 30px 20px;
-    }
-    #card-title{
-        font-weight: 700;
-        font-size: 11px;
-        height: 25px;
-    }
-    #card-text{
-        font-size: 9px;
-        line-height: 5%;
+        grid-gap: 42px 19px;
     }
 }

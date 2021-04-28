@@ -52,7 +52,7 @@ const Signup = (props) => {
           <Otp token={token} />
         </div>
       ) : (
-        <div className="loginPage p-1 pt-5 pb-5 p-sm-5 mx-auto mt-5 mb-5 d-block">
+        <div className="loginPage p-1 pt-5 pb-5 p-sm-3 mx-auto mt-5 mt-sm-4 mb-5 mb-sm-4 d-block">
         <div className="d-flex justify-content-center align-items-center">
           <AccountBoxIcon id="accountIcon" />
           <img
@@ -169,7 +169,7 @@ const Signup = (props) => {
 
             <button
               id="loginBtn"
-              className="mt-3"
+              className="mt-4"
               style={{ marginLeft: "13px" }}
               type="submit"
             >

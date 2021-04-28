@@ -69,17 +69,20 @@ const NavBar = (props) => {
       .catch((err) => console.log(err));
   }
 
-  $(document).ready(()=>{
+  $(window).on("load", function(){
     $(".hamburger, .menuRemove").click(()=>{
-      $("#navbarNav").toggleClass('show');
-      $("#navbarContainer").toggleClass('addDisplay');
+      $("#navbarNav").toggleClass('slideSubMenu');
       $('.overlay').toggleClass('menuBackBlur');
-      
+      $(".posterDropdown").removeClass('slideSubMenu');
+      $(".signageDropdown").removeClass('slideSubMenu');
+      $(".floorDropdown").removeClass('slideSubMenu');
+      $(".campaignDropdown").removeClass('slideSubMenu');
+      /*if( ($('.overlay').hasClass('menuBlackBlur')) && ($('#searchBoxMobile').hasClass('slideSearchBox'))  )*/
   });
 
   $(".searchIcon").click(()=>{
-    $(".searchInput").toggleClass('open');
-    $(".searchIcon").toggleClass('rightSide');
+    $("#searchBoxMobile").toggleClass('slideSearchBox');
+    $('.overlay').toggleClass('menuBackBlur');
   })
   $(".posterDropdownArrow").click(()=>{
     $(".posterDropdown").toggleClass('slideSubMenu');
@@ -94,17 +97,26 @@ const NavBar = (props) => {
     $(".campaignDropdown").toggleClass('slideSubMenu');
   });
   $(".overlay").click(()=>{
-    $("#navbarNav").toggleClass('show');
-    $("#navbarContainer").toggleClass('addDisplay');
+    $("#navbarNav").toggleClass('slideSubMenu');
+    $(".posterDropdown").removeClass('slideSubMenu');
+    $(".signageDropdown").removeClass('slideSubMenu');
+    $(".floorDropdown").removeClass('slideSubMenu');
+    $(".campaignDropdown").removeClass('slideSubMenu');
     $('.overlay').toggleClass('menuBackBlur');
   });
+  });
 
-});
+  const searchCatDropdown = () => {
+      let a = document.getElementById("searchDropCatId");
+      a.classList.add("dropCatShow");
+  }
+  
 
   return (
-    <div>
-      <nav className="container-fluid navbar navbar-expand-lg navbar-dark "  id="navBarTop">
-      <div className="navbar-toggler p-0 border-none hamburger" >
+    <div >
+        <div className="d-sm-none d-block" style={{width: "100%", height: "58px"}}></div>
+        <nav className="container-fluid  navbar navbar-expand-sm navbar-dark d-flex "  id="navBarTop"> 
+        <div className="d-block d-sm-none p-0 border-none hamburger" >
         <MenuIcon className=" ml-1 mr-1" style={{color: "white",transform: "scale(1.5,1.9)"}} />
       </div>
         <Link className="navbar-brand ehsLogoImg" to="/">
@@ -116,13 +128,8 @@ const NavBar = (props) => {
                 style={{ color: "white", border: "0px", width: "10%",height: "8%" }}
                 onClick={() => (find ? findArt() : null)}
               />
-            <input
-              type="text"
-              className="form-control bg-white shadow-none searchInput"
-              placeholder="Search for posters, signages and more"
-              onChange={(e) => setFind(e.target.value)}
-            />
-        <li className="nav-item mb-0 mr-0 mt-1 d-block d-sm-none" style={{ marginTop: "-2px" }}>
+           
+        <li className="nav-item mb-0 mr-0 mt-1 d-block  d-sm-none" style={{ marginTop: "-2px" }}>
               <Link
                 to="/cart"
                 className="nav-link text-white textColorAndWeight"
@@ -139,37 +146,27 @@ const NavBar = (props) => {
                     width: "17px",
                     height: "17px",
                     paddingTop: "1.5px",
+                  
                   }}
                 >
                   {props.num}
                 </span>
               </Link>
             </li>
-        <div className="navbar-expand-lg collapse navbar-collapse">
-          <div className="form-inline input-group ml-auto" style={{ width: "51rem" }}>
-            <div className="input-group-prepend">
-              <button
-                className="btn btn-secondary bg-white textColorAndWeight shadow-none"
-                style={{
-                  color: "#757575",
-                  paddingRight: "65px",
-                  width: "200px",
-                  height: "40px",
-                  borderRight: "1px solid lightgrey",
-                }}
+        <div className="d-flex flex-column  flex-sm-row  mt-1 mt-sm-0  align-items-center" id="searchBoxMobile" style={{width: "100%"}}>
+          <div className="form-inline input-group  mx-auto  p-0 searchBar" >
+            <div  className="input-group-prepend   dropdown ">
+              <button className="btn btn-secondary bg-white textColorAndWeight shadow-none searchDropBtn"
                 type="button"
                 id="dropdownMenuButton"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
               >
-                <img src={Vector} className="mr-2" alt="" />
+                <img src={Vector} className="mr-sm-2 mr-1 " onClick={searchCatDropdown} alt="" />
                 {searchCat}
               </button>
               <div
-                className="dropdown-menu p-3"
-                aria-labelledby="dropdownMenuButton"
-              >
+                className="dropdown-menu dropdown-content px-2 pb-2 pt-0 searchDropCat "
+                id="searchDropCatId"
+                >
                 {search_catogories.map((v, i) =>
                   v === "All Categories" ? (
                     <>
@@ -178,6 +175,8 @@ const NavBar = (props) => {
                         to="/"
                         onClick={searchCatogoriesOnClick}
                         className="searchCategory dropdown-item"
+                        style={{color: "#757575"}}
+                        
                       >
                         {v}
                       </Link>
@@ -185,9 +184,11 @@ const NavBar = (props) => {
                   ) : (
                     <Link
                       key={v}
-                      to={"/" + v.toLowerCase()}
+                      to={"/cat/" + v.toLowerCase()}
                       onClick={searchCatogoriesOnClick}
-                      className="searchCategory dropdown-item"
+                      className="searchCategory  dropdown-item"
+                      style={{color: "#757575"}}
+                      
                     >
                       {v}
                     </Link>
@@ -195,37 +196,43 @@ const NavBar = (props) => {
                 )}
               </div>
             </div>
-            <div className="bg-white" style={{ height: "38px", marginTop: "1px" }} >
               <SearchIcon
-                className="mt-2 ml-3"
+                className="pl-3 bg-white d-none d-sm-block"
                 aria-hidden="true"
-                style={{ color: "grey", border: "0px" }}
+                style={{ color: "grey", height: "35px",width: "40px", borderTop: "1px solid #757575",borderBottom: "1px solid #757575" }}
                 onClick={() => (find ? findArt() : null)}
               />
-            </div>
+            
 
             <input
               type="text"
-              className="form-control bg-white shadow-none border"
+              className="form-control bg-white shadow-none searchBarInput"
               placeholder="Search for posters, signages and more"
-              style={{
-                borderLeft: "none",
-                border: "0px",
-                marginTop: "1px",
-                width: "470px",
-                marginRight: "5px"
-              }}
               onChange={(e) => setFind(e.target.value)}
             />
+         
           </div>
+          <button className="d-block d-sm-none float-right ml-auto mt-2" style={{
+              width: "100px",
+              height: "35px",
+              border: "1px solid #F2994A",
+              boxSizing: "border-box",
+              borderRadius: "4px",
+              fontFamily: "Source Sans Pro",
+              fontStyle: "normal",
+              fontWeight: "600",
+              fontSize: "14px",
+              lineHeight: "14px",
+              textAlign: "center",
+              letterSpacing: "0.2px",
+              color: "#F2994A",
+              background: "transparent",
+            }} >Search</button>
          <div
-              className="nav-item d-none d-lg-block"
+              className="nav-item d-none d-lg-block  mx-auto"
               style={{
-                marginTop: "2px",
                 display: "inline-block",
-                marginLeft: "10px",
                 color: "#F2994A",
-                width: "100px"
               }}
             >
               {authUser ? (
@@ -255,7 +262,7 @@ const NavBar = (props) => {
             </div>
             {authUser ? (
               <>
-                <div className="nav-item ml-4">
+                <div className="nav-item d-none ml-4">
                   <Link
                     to="/dashboard"
                     className="nav-link text-white textColorAndWeight btn shadow-none border-0"
@@ -267,17 +274,17 @@ const NavBar = (props) => {
               </>
             ) : (
               <>
-                <div className="nav-item ml-4">
-                  <p>{"                   "}</p>
+                <div className="nav-item border d-none ">
+                  <p>{"          "}</p>
                 </div>
               </>
             )}
-          <div className="nav-item  d-none d-lg-block" style={{ marginTop: "-2px" }}>
+          <div className="nav-item   d-none d-sm-block" style={{ marginTop: "-2px" }}>
               <Link
                 to="/cart"
                 className="nav-link text-white textColorAndWeight"
               >
-                <img className="ml-1" src={ShopCart} alt="Shop" />
+                <img className="" src={ShopCart} alt="Shop" />
                 <span
                   className="text-center"
                   style={{
@@ -298,10 +305,19 @@ const NavBar = (props) => {
        </div>
       </nav>
       
-      <nav className="navbar navbar-expand-lg mt-0 pt-0" id="navbarContainer">
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ml-auto mr-auto ">
-            <li className="nav-item ml-5">
+
+
+
+
+
+
+
+
+
+      <nav className="navbar navbar-expand-sm mt-0  pt-0 pb-0 pb-sm-2 " id="navbarContainer">
+        <div className="collapse navbar-collapse   " id="navbarNav">
+          <ul className="navbar-nav  d-flex justify-content-between " style={{width: "100%"}}>
+            <li className="nav-item mb-0  mt-5 mt-sm-0">
               <div class="dropdown">
                 <Link
                   to="/cat/posters"
@@ -311,7 +327,7 @@ const NavBar = (props) => {
                 >
                   Posters
                 </Link><ArrowForwardIosRoundedIcon className="float-right mt-1 d-sm-none d-inline-block posterDropdownArrow" style={{width: "15px", color: "white"}} />
-                <div className="dropdown-content p-3 posterDropdown">
+                <div className="dropdown-content p-sm-2 p-0 posterDropdown">
                 <Link
                   className="dropdown-item d-block d-sm-none posterDropdownArrow backMenu mt-2"
                   ><ArrowBackIosRoundedIcon className="mt-1 pb-2 float-left d-sm-none d-inline-block" style={{width: "15px", color: "white"}} />
@@ -407,7 +423,7 @@ const NavBar = (props) => {
                 </div>
               </div>
             </li>
-            <li className="nav-item ml-5">
+            <li className="nav-item mb-0  ">
               <div class="dropdown">
                 <Link
                   to="/cat/signages"
@@ -417,7 +433,7 @@ const NavBar = (props) => {
                 >
                   Signages
                 </Link><ArrowForwardIosRoundedIcon className="mt-1 float-right d-sm-none d-inline-block signageDropdownArrow" style={{width: "15px", color: "white"}} />
-                <div className="dropdown-content signageDropdown p-3">
+                <div className="dropdown-content signageDropdown  p-sm-3 p-0">
                   <Link
                   className="dropdown-item d-block d-sm-none signageDropdownArrow backMenu  mt-3"
                   ><ArrowBackIosRoundedIcon className="mt-1 pb-2 float-left d-sm-none d-inline-block" style={{width: "15px", color: "white"}} />
@@ -447,7 +463,7 @@ const NavBar = (props) => {
                 </div>
               </div>
             </li>
-            <li className="nav-item ml-5">
+            <li className="nav-item mb-0 ">
               <div class="dropdown">
                 <Link
                   to="/cat/floor-graphics"
@@ -457,7 +473,7 @@ const NavBar = (props) => {
                 >
                   Floor Graphics
                 </Link><ArrowForwardIosRoundedIcon className="float-right mt-1 d-sm-none d-inline-block floorDropdownArrow" style={{width: "15px", color: "white"}} />
-                <div className="dropdown-content p-3 floorDropdown">
+                <div className="dropdown-content  p-sm-3 p-0 floorDropdown">
                 <Link
                   className="dropdown-item floorDropdownArrow d-block d-sm-none backMenu  mt-3"
                   ><ArrowBackIosRoundedIcon className="mt-1 pb-2 float-left d-sm-none d-inline-block" style={{width: "15px", color: "white"}} />
@@ -487,7 +503,7 @@ const NavBar = (props) => {
                 </div>
               </div>
             </li>
-            <li className="nav-item ml-5">
+            <li className="nav-item mb-0 ">
               <Link
                 to="/cat/asset-marking"
                 className="nav-link text-white textColorAndWeight btn shadow-none border-0 menuRemove"
@@ -496,7 +512,7 @@ const NavBar = (props) => {
                 Asset Marking
               </Link>
             </li>
-            <li className="nav-item ml-5">
+            <li className="nav-item mb-0 ">
               <div class="dropdown">
                 <Link
                   to="/campaigns"
@@ -506,7 +522,7 @@ const NavBar = (props) => {
                 >
                   Campaigns
                 </Link><ArrowForwardIosRoundedIcon className="float-right mt-1 d-sm-none d-inline-block campaignDropdownArrow" style={{width: "15px", color: "white"}} />
-                <div className="dropdown-content p-3 campaignDropdown">
+                <div className="dropdown-content  p-sm-3 p-0 campaignDropdown">
                 <Link
                   className="dropdown-item campaignDropdownArrow d-block d-sm-none  backMenu  mt-3"
                   ><ArrowBackIosRoundedIcon className="mt-1 pb-2 float-left d-sm-none d-inline-block campaignDropdownArrow" style={{width: "15px", color: "white"}} />
@@ -557,17 +573,35 @@ const NavBar = (props) => {
                 </div>
               </div>
             </li>
-            <li className="nav-item ml-5">
+            <li className="nav-item mb-0 ">
               <Link className="nav-link text-white textColorAndWeight menuRemove" to="/#">
                 Create your own
               </Link>
             </li>
-            <li className="nav-item ml-5">
+            <li className="nav-item mb-0 ">
               <Link className="nav-link text-white textColorAndWeight menuRemove" to="/#">
                 Resources
               </Link>
             </li>
-            <div className="nav-item mt-5 d-block d-sm-none" >
+            <li className="nav-item mb-0">
+              <Link
+                to="/about"
+                className="nav-link text-white textColorAndWeight btn shadow-none border-0"
+                style={{ backgroundColor: "#003459", border: "0px" }}
+              >
+                About
+              </Link>
+              </li>
+            <li className="nav-item mb-0 ">
+              <Link
+                to="/contact"
+                className="nav-link text-white textColorAndWeight btn shadow-none border-0"
+                style={{ backgroundColor: "#003459", border: "0px" }}
+              >
+                Contact
+              </Link>
+              </li>
+            <div className="nav-item mt-auto d-block d-sm-none" >
             <li
               className="nav-item ml-4 mt-5 menuRemove"
               style={{
@@ -621,7 +655,7 @@ const NavBar = (props) => {
                 </li>
               </>
             )}
-            <li className="nav-item ml-4 d-block d-sm-none mt-2 menuRemove">
+            <li className="nav-item ml-4 mt-2 d-block d-sm-none menuRemove">
               <Link
                 to="/contact"
                 className="nav-link text-white textColorAndWeight btn shadow-none border-0"
@@ -633,9 +667,9 @@ const NavBar = (props) => {
               </div>
           </ul>
         </div>
-        
+        <div className="overlay"></div>
       </nav>
-      <div className="overlay"></div>
+   
 
        
 

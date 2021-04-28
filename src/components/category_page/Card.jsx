@@ -4,11 +4,10 @@ import { Link } from "react-router-dom";
 const Card = (props) => {
   const title = props.title;
   return (
-
-    <div>
+    <div className="">
       <Link className="catCardContainer" to={`/${props.cat}/subcat/${title.toUpperCase()}`} >
       <img
-        className="mx-auto d-block catCardImg"
+        className=" d-block catCardImg"
         src={props.src}
         alt=""
       />

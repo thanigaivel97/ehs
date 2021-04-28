@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useRef} from "react";
 import "./bestsellers.css"
 import $ from "jquery";
 import "bootstrap";
@@ -7,19 +7,21 @@ import WearMask from "../../../images/WearMask.svg";
 import Fire from "../../../images/Fire.svg";
 import NoTouch from "../../../images/NoTouch.svg";
 
-import SafeTwo from "../../../images/BeSafe.svg";
-import Mind from "../../../images/Mind.svg";
-import BeforeStart from "../../../images/BeforeStart.svg";
+import SafeTwo from "../../../images/BeSafe.png";
+import Mind from "../../../images/Mind.png";
+import BeforeStart from "../../../images/BeforeStart.png";
 
 import FootPrint from "../../../images/FootPrint.svg";
 import OvalTwoMen from "../../../images/OvalTwoMen.svg";
 import RoundTwoMen from "../../../images/RoundTwoMen.svg";
 import RoundMask from "../../../images/RoundMask.svg";
 
-import FloorImg from "../../../images/floor1.svg";
+import FloorImg from "../../../images/FloorImg.png";
 
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounded';
+import Carousel from "react-elastic-carousel";
+import { Link } from "react-router-dom";
 
 const ncard = (val) => {
     return (
@@ -29,97 +31,20 @@ const ncard = (val) => {
 
 const ImgBox = (props) => {
   return (
-    <div className="text-center imgBox">
-      <img className="imgBoxImg" src={props.src} alt="poster" />
-      <p
-        className="imgBoxTitle"
-      >
+    <div className="  imgBox ">
+      <img className="  m-0" id="imgBoxImage" src={props.src} alt="poster" />
+      <p className=" mt-sm-1 mt-0 mb-0 " id="imgBoxTitle">
         {props.title}
       </p>
     </div>
   );
 };
 
-$(document).ready(()=>{
-
-  $(".carousel").carousel({
-    interval: false
-  });
-
-
-  $('#nextBtn').click(()=>{
-    $('#myCarousel').carousel('next');
-    if($('#first').hasClass('active')){
-      $('#first').toggleClass('active');
-    $('#second').toggleClass('active');
-    }
-    else if($('#second').hasClass('active')){
-      $('#second').toggleClass('active');
-      $('#third').toggleClass('active');
-    }
-    else if($('#third').hasClass('active')){
-      $('#third').toggleClass('active');
-      $('#fourth').toggleClass('active');
-    } else{
-      $('#fourth').toggleClass('active');
-      $('#first').toggleClass('active');
-    }
-  });
-
-  $('#prevBtn').click(()=>{
-    $('#myCarousel').carousel('prev');
-    if($('#first').hasClass('active')){
-      $('#first').toggleClass('active');
-    $('#fourth').toggleClass('active');
-    }
-    else if($('#second').hasClass('active')){
-      $('#second').toggleClass('active');
-      $('#first').toggleClass('active');
-    }
-    else if($('#third').hasClass('active')){
-      $('#third').toggleClass('active');
-      $('#second').toggleClass('active');
-    } else{
-      $('#fourth').toggleClass('active');
-      $('#third').toggleClass('active');
-    }
-  });
-
-  $('#first').click(()=>{
-    $('#myCarousel').carousel(0);
-    $('#first').addClass('active');
-    $('#second').removeClass('active');
-    $('#third').removeClass('active');
-    $('#fourth').removeClass('active');
-  });
-
-  $('#second').click(()=>{
-    $('#myCarousel').carousel(1);
-    $('#first').removeClass('active');
-    $('#second').addClass('active');
-    $('#third').removeClass('active');
-    $('#fourth').removeClass('active');
-    
-  });
-
-  $('#third').click(()=>{
-    $('#myCarousel').carousel(2);
-    $('#first').removeClass('active');
-    $('#second').removeClass('active');
-    $('#third').addClass('active');
-    $('#fourth').removeClass('active');
-  });
-  $('#fourth').click(()=>{
-    $('#myCarousel').carousel(3);
-    $('#first').removeClass('active');
-    $('#second').removeClass('active');
-    $('#third').removeClass('active');
-    $('#fourth').addClass('active');
-  });
-
-});
+  
 
 const Bestsellers = () => {
+
+  const [category,setCategory] = useState('Posters');
 
     const warnImgTitle = [
         { src: NoSmoke, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
@@ -154,53 +79,69 @@ const Bestsellers = () => {
         { src: RoundMask, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
       ];
 
-      const [visible, setVisible] = useState(4);
-      
-      const showMoreCards = () =>{
-        setVisible(9);
-      }
-      const showLessCards = () =>{
-        setVisible(4);
-      }
+      const breakPoints = [
+        { width: 1, itemsToShow: 1, itemsToScroll: 1 },
+        { width: 780, itemsToShow: 1}
+      ];
 
+      const bestseller = useRef();
+
+      const pagination = ({ pages, activePage, onClick }) => {
+        
+        return (
+        <div className="  bestsellerPagination "  >  
+             
+        {pages.map(page => {
+            const isActivePage = activePage === page
+            return (
+              <>
+                <div role="button" id="sellerH"  key={page} onClick={(e) => {onClick(page)
+                  setCategory(e.target.innerHTML);
+                }} active={isActivePage}  className={isActivePage ? "active sellerHead" : " "} >
+                {
+                  (page===0)? <span className="sellerHead "  role="button" >Posters </span>
+                   : ((page===1) ? <span className="sellerHead "  role="button" >Signages</span> : 
+                   ((page===2) ? <span className="sellerHead "  role="button" >Floor Graphics </span> : 
+                                 <span className="sellerHead "  role="button" >Asset Markings </span>))
+                }
+                </div>
+              </>
+              )
+            })}
+        </div>
+        );
+    };
 
     return(
       <>
-          <div className="sellerContainer">
-              <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
-                  <h2 className="promiseHeading mb-5">Our Bestsellers</h2>
-                  <div className="d-flex justify-content-around mb-4">
-                    <ArrowBackIosRoundedIcon id="prevBtn"  role="button" data-slide="prev" className="border shadow-sm rounded-circle pointer" />
-                    <span className="sellerHead active"  role="button" id="first">POSTERS</span>
-                    <span className="sellerHead"  role="button" id="second">Signages</span>
-                    <span className="sellerHead"  role="button" id="third">Floor Graphics</span>
-                    <span className="sellerHead"  role="button" id="fourth">Asset Markings</span>
-                    <ArrowForwardIosRoundedIcon id="nextBtn" role="button" data-slide="next" className="border shadow-sm rounded-circle pointer "  />
-                  </div>
-              <div className="carousel-inner   " style={{backgroundColor: "#F6F6F6"}}>
-                <div className="carousel-item  active">
-                  {FloorGraphicsImgTitle.slice(0,visible).map(ncard)}
+        <div className="sellerContainer ">
+                <h2 className="promiseHeading mb-sm-5 mb-3">Our Bestsellers</h2>
+                <div className="d-flex justify-content-between  mx-sm-5 mx-2 mb-4">
+                  <ArrowBackIosRoundedIcon id="prevBtn"  role="button" onClick={() => bestseller.current.slidePrev()} />
+                  <ArrowForwardIosRoundedIcon id="nextBtn" role="button" onClick={() => bestseller.current.slideNext()}  />
                 </div>
-                <div className="carousel-item  ">
-                  {warnImgTitle.slice(0,visible).map(ncard)}
-                </div>
-                <div className="carousel-item">
-                  {FloorGraphicsImgTitle.slice(0,visible).map(ncard)}
-                </div>
-                <div className="carousel-item">
-                  {awareImgTitle.slice(0,visible).map(ncard)}
-                </div>
-              </div>
-            </div>
-            {visible===4 ? (
-              <p role="button" className="seemore" onClick={showMoreCards}>See More</p>
-            ):(
-              <p role="button" className="seemore" onClick={showLessCards}>See Less</p>
-            ) }
+                <div className="" style={{background: "#F6F6F6"}}>
+                <Carousel className=" w-100  "  breakPoints={breakPoints}  showArrows={false} ref={bestseller} style={{opacity: "1!important"}} 
+                renderPagination={pagination}>
+                    <div className="  active   "  id="carouselItem">
+                      {FloorGraphicsImgTitle.slice(0,4).map(ncard)}
+                    </div>
+                    <div id="carouselItem" className="">
+                      {warnImgTitle.slice(0,4).map(ncard)}
+                      
+                    </div>
+                    <div id="carouselItem" className="">
+                      {FloorGraphicsImgTitle.slice(0,4).map(ncard)}
+                    </div>
+                    <div id="carouselItem" className="">
+                      {awareImgTitle.slice(0,4).map(ncard)}
+                    </div>
+                </Carousel>
+                <Link to={`${category}/subcat/Bestsellers`}><p role="button" className="seemore" >See More</p></Link>
             
-            
+          </div>          
         </div>
-        </>
+      </>
     );
 };
 

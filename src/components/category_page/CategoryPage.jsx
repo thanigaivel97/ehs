@@ -21,17 +21,17 @@ import Hindi from "../../images/posterCategory/HINDI.png";
 import English from "../../images/posterCategory/ENGLISH.png";
 import Bilingual from "../../images/posterCategory/BILINGUAL.png";
 import Upto50 from "../../images/Upto50Offer.svg";
-import Card2 from "./Card2";
 import { connect } from "react-redux";
 import { getBestSeller,config} from "../../helper/apiPath";
 import Axios from "axios";
 import $ from "jquery";
 import Card from "./Card";
 import "./category.css"
-import SafeTwo from "../../images/BeSafe.svg";
-import Mind from "../../images/Mind.svg";
-import BeforeStart from "../../images/BeforeStart.svg";
-import FloorImg from "../../images/floor1.svg";
+import "../homepage/bestsellers/bestsellers.css";
+import SafeTwo from "../../images/BeSafe.png";
+import Mind from "../../images/Mind.png";
+import BeforeStart from "../../images/BeforeStart.png";
+import FloorImg from "../../images/FloorImg.png";
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounded';
 import Carousel,  { consts } from "react-elastic-carousel";
@@ -51,11 +51,9 @@ const mcard = (val) => {
 
 const ImgBox = (props) => {
   return (
-    <div className="text-center bestsellerBox">
-      <img className="bestsellerBoxImg" src={props.src} alt="poster" />
-      <p
-        className="bestsellerBoxTitle"
-      >
+    <div className="  imgBox ">
+      <img className="  m-0" id="imgBoxImage" src={props.src} alt="poster" />
+      <p className=" mt-sm-1 mt-0 mb-0 " id="imgBoxTitle">
         {props.title}
       </p>
     </div>
@@ -66,21 +64,20 @@ const CategoryPage = (props) => {
 
   const shopByCategoryPosters = [
     {cat: "posters", src: Ppe, title: "PPE" },
-    {cat: "posters", src: Electrical, title: "Electrical-Hazard" },
-    {cat: "posters", src: Material, title: "Material-Handling" },
-    {cat: "posters", src: Chemical, title: "Chemical-Hazards" },
-    {cat: "posters", src: Fire, title: "Fire" },
-    {cat: "posters", src: Housekeeping, title: "House-Keeping" },
+    {cat: "posters", src: Electrical, title: "Electrical Hazard" },
+    {cat: "posters", src: Material, title: "Material Handling" },
+    {cat: "posters", src: Chemical, title: "Chemical Hazards" },
+    {cat: "posters", src: Fire, title: "Fire Safety" },
+    {cat: "posters", src: Housekeeping, title: "Housekeeping" },
     {cat: "posters", src: Quality, title: "Quality" },
     {cat: "posters", src: Environment, title: "Environment" },
     {cat: "posters", src: Covid, title: "Covid-19" },
   ];
 
   const shopByCategorySignages = [
-    {cat: "signages", src: PPE, title: "Pre-Printed" },
+    {cat: "signages", src: PPE, title: "Pre Printed" },
     {cat: "signages",  src: SignalTemplate, title: "Signal Template Sheets" },
     {cat: "signages",  src: Pictograms, title: "Pictograms" },
-    {cat: "signages",  src: DIY, title: "Do-It-Yourself" },
   ];
   const shopByCategoryFloor = [
     {cat: "floor-graphics", src: Public, title: "Public Places" },
@@ -158,80 +155,89 @@ const CategoryPage = (props) => {
   
   
   });
+      
+
 
   const breakPoints = [
-    { width: 1, itemsToShow: 2, itemsToScroll: 1 },
-    { width: 1000, itemsToShow: 5 }
+    { width: 1, itemsToShow: 2, itemsToScroll: 2 },
+    { width: 1000, itemsToShow: 5, itemsToScroll: 4  }
+  ];
+  const breakPointsBestseller = [
+    { width: 1, itemsToShow: 1, itemsToScroll: 1 },
+    { width: 1000, itemsToShow: 1, itemsToScroll: 1 }
   ];
     const posterCatCarousel = useRef();
     const posterCat2Carousel = useRef();
+    const bestseller = useRef();
   return (
     <>
         <div className="container-fluid pb-lg-5 padding-10" style={{ background: "#F6F6F6" }}>
           <div className="pt-2 pb-lg-2">
-              <Link to="/" className="text-dark">Home </Link>/<span className="font-weight-bold text-capitalize" >{catName}</span>
+              <Link to="/" className="text-dark">Home </Link>/<span className="font-weight-bold text-capitalize" > {catName}</span>
           </div>
           <div className="d-flex mt-lg-2">
             <h1 className="mt-2 catHead text-capitalize" >
             {catName}
             </h1>
-            <img src={Upto50} className="ml-auto d-none d-sm-block" style={{width: "640px"}} />
+            <img src={Upto50} className="ml-auto d-none d-sm-block" style={{width: "640px",height: "96px"}} />
           </div>
         </div>
-        <div  className="padding-10  ">
-          <h2 className="shopByHead d-inline-block" >Shop by Category</h2>
-          <div className="d-flex float-right mt-4 align-items-center ">
-          <ArrowBackIosRoundedIcon onClick={() => posterCatCarousel.current.slidePrev()} role="button" className="border mt-auto mb-auto mr-4 shadow-sm rounded-circle " />
-          <ArrowForwardIosRoundedIcon onClick={() => posterCatCarousel.current.slideNext()} role="button" className="border mt-auto mb-auto shadow-sm rounded-circle "  />
+        <div  className="margin-9  ">
+          <h2 className="shopByHead d-inline-block " >Shop by Category</h2>
+          <div className=" carouselArrow ">
+          <ArrowBackIosRoundedIcon onClick={() => posterCatCarousel.current.slidePrev()} role="button" className=" mt-auto mb-auto mr-4 " id="prevBtn" />
+          <ArrowForwardIosRoundedIcon onClick={() => posterCatCarousel.current.slideNext()} role="button" className="mt-auto mb-auto " id="nextBtn" />
          
           </div>
-           <div className="" style={{opacity: "1"}}>       
-            <Carousel className="d-flex justify-content-start" itemPosition={consts.START} breakPoints={breakPoints}  pagination={false} showArrows={false} ref={posterCatCarousel} style={{opacity: "1!important"}} showEmptySlots>
+               
+            <Carousel className=" shopByCategoryCarousel   p-0 " outerSpacing={0}  itemPosition={consts.START}  breakPoints={breakPoints}  pagination={false} showArrows={false} ref={posterCatCarousel} style={{opacity: "1!important"}} showEmptySlots>
                 {shopByCategoryCards.map(ncard)}
             </Carousel>                
-          </div>
+          
         </div>
         <div style={{
         borderTop: "6px solid #F6F6F6",
         margin: "50px 0 20px 0"
       }}></div>
-       <div  className="padding-10">
-          <h2 className="shopByHead d-inline-block mb-3" >Shop by Language</h2>
-          <div className="d-flex float-right mt-4 align-items-center d-block d-sm-none">
-          <ArrowBackIosRoundedIcon onClick={() => posterCat2Carousel.current.slidePrev()} role="button" className="border mt-auto mb-auto mr-4 shadow-sm rounded-circle " />
-          <ArrowForwardIosRoundedIcon onClick={() => posterCat2Carousel.current.slideNext()} role="button" className="border mt-auto mb-auto shadow-sm rounded-circle "  />
+       <div  className="margin-9 ">
+          <h2 className="shopByHead   d-inline-block" >Shop by Language</h2>
+          <div className="carouselArrow d-block d-sm-none">
+          <ArrowBackIosRoundedIcon onClick={() => posterCat2Carousel.current.slidePrev()} role="button" className=" mt-auto mb-auto mr-4  " id="prevBtn" />
+          <ArrowForwardIosRoundedIcon onClick={() => posterCat2Carousel.current.slideNext()} role="button" className=" mt-auto mb-auto " id="prevBtn"  />
          
-          </div>
-           <div className="" style={{opacity: "1"}}>       
-            <Carousel className="d-flex " itemPosition={consts.START} breakPoints={breakPoints}  pagination={false} showArrows={false} ref={posterCat2Carousel} style={{opacity: "1!important"}} showEmptySlots>
+          </div>       
+            <Carousel className="d-flex  shopByCategoryCarousel px-0 mx-0" itemPosition={consts.START} breakPoints={breakPoints}  pagination={false} showArrows={false} ref={posterCat2Carousel} style={{opacity: "1!important"}} showEmptySlots>
                 {shopByLanguageCards.map(ncard)}
             </Carousel>                
-          </div>
         </div>
 
 
-        <div>
-        <div id="myCarousel" class="carousel slide padding-10 mt-5" data-ride="carousel" data-interval="false" style={{backgroundColor: "#F6F6F6"}}>
-                  <h2 className="shopByHead d-inline-block mt-4 ">Bestsellers</h2>
-                  <div className="d-inline-block float-right mt-4  align-middle">
-                    <ArrowBackIosRoundedIcon id="prevBtn"  role="button" data-slide="prev" className="border shadow-sm m-3 rounded-circle pointer" />
-                    <ArrowForwardIosRoundedIcon id="nextBtn" role="button" data-slide="next" className="border shadow-sm m-3 rounded-circle pointer "  />
-                  </div>
-              <div className="carousel-inner " >
-                <div className="carousel-item active ">
-                  {FloorGraphicsImgTitle.slice(0,4).map(mcard)}
+       
+          <div className="bestSellerCarouselItem" style={{background: "#F6F6F6"}}>
+                <h2 className="promiseHeading1  d-inline-block">Bestsellers</h2>
+                <div className="carouselArrow mt-4">
+                  <ArrowBackIosRoundedIcon id="prevBtn1"  role="button" className="mr-4 " onClick={() => bestseller.current.slidePrev()} />
+                  <ArrowForwardIosRoundedIcon id="prevBtn1" role="button" onClick={() => bestseller.current.slideNext()}  />
                 </div>
-                <div className="carousel-item ">
-                  {FloorGraphicsImgTitle.slice(4,9).map(mcard)}
-                </div>
-              </div>
-            </div>
-        </div>
+                <Carousel className="px-2 px-sm-0" pagination={false}  breakPoints={breakPointsBestseller}  showArrows={false} ref={bestseller} style={{opacity: "1!important"}} 
+                >
+                    <div className="active"  id="carouselItem2">
+                      {FloorGraphicsImgTitle.slice(0,4).map(mcard)}
+                    </div>
+                    
+                    <div id="carouselItem2" className="">
+                      {FloorGraphicsImgTitle.slice(0,4).map(mcard)}
+                    </div>
+                   
+                </Carousel>
+            <Link to={`/${catName}/subcat/Bestsellers`}><p role="button" className="seemore">View All</p></Link>
+          </div>          
+        
         
 
-        <div className="p-lg-5 mt-4 mb-0">
-            <img src={Upto50} className="ml-auto mr-auto d-block w-75 "  /> 
-        </div>
+        
+            <img src={Upto50} className="mx-auto d-block  bottomBanner50"  /> 
+        
         
 
 
