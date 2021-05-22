@@ -1,6 +1,6 @@
 import Rating from "@material-ui/lab/Rating";
-import React, { useRef, useState } from "react";
-import { Link , useParams} from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { Link , useParams , useHistory} from "react-router-dom";
 import restrictedArea from "../../images/restrictedArea.png";
 import dimension1 from "../../images/Dimension1.svg"
 import "bootstrap";
@@ -23,6 +23,13 @@ import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
+import Axios from "axios";
+import {API} from "../../backend";
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import Swal from "sweetalert2";
+import withReactContent from 'sweetalert2-react-content';
+const MySwal = withReactContent(Swal);
 
 const theme = createMuiTheme({
     palette: {
@@ -115,16 +122,250 @@ $(document).ready(()=>{
 });
 
 const PosterProductPage = (props) => {
-
-    const {posterCatName, productName} = useParams();
+    const [authUser, setAuthUser] = React.useState("");
+    const {catSlug,subCatSlug,productSlug,productId} = useParams();
+    let subCatName = subCatSlug.replace("-"," ");
+    let catName = catSlug.replace("-"," ");
     const [rating,setRating] = useState(3.7);
     const [quantity, setQuantity] = useState(1);
-    const [initialAmount, setInitialAmount] = useState(200);
-    const [amount, setAmount] = useState(initialAmount);
     const [visible, setVisible] = useState(4);
-    const [material,setMaterial] = useState("Self-Adhesive");
+    const [material,setMaterial] = useState("125 Micron (non-tearable)");
+    const [dim,setDim] = useState("16” x 24”");
+    const [finalMatDim,setFinalMatDim] = useState("");
     const [dimension,setDimension] = useState([24,36]);
-      
+    const [product,setProduct] = useState({
+        imgUrl: [],name: "",description: "",category: [{title: ""}], subCategory: [{title: ""}],tags: [],sku: "",materialDimension: []
+    });
+    const [youMayLike, setYouMayLike] = useState([]);
+    const [similarItems, setSimilarItems] = useState([]);
+    const [initialAmount, setInitialAmount] = useState(NaN);
+    const [amount, setAmount] = useState(initialAmount);
+    let history = useHistory();
+     
+    useEffect(()=>{
+        Axios.get(`${API}posters/getPosterById`,{params: {poster_obj_id: productId}}).then((res)=>{
+            setProduct(res.data.data.posterDetails[0]);
+            //console.log(res.data.data.posterDetails[0])
+            setYouMayLike(res.data.data.youMayAlsoLike);
+            setSimilarItems(res.data.data.realtedPosters);
+        }).catch((err)=> {
+            console.log(err)
+        });
+
+
+        if (JSON.parse(localStorage.getItem("userDetails123")))
+        setAuthUser(
+          JSON.parse(localStorage.getItem("userDetails123")).emailid ||
+            JSON.parse(localStorage.getItem("userDetails123")).phonenumber
+        );
+       // console.log(authUser,localStorage.getItem("userDetails123"),product);
+    },[productId]);
+
+    useEffect(()=>{
+        calculateAmount();
+    },[material,dim,quantity]);
+
+    const addToCart = () =>{
+        //console.log(localStorage.getItem("ehstoken12345678910"));
+        if(authUser){
+            Axios.post(`${API}auth/update_user_cart`,{
+                poster_obj_id: product._id,
+                material_obj_id: finalMatDim,
+                quantity: quantity,
+            },
+            {   
+                headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
+                params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
+            })
+            .then((res)=>{
+               // console.log(res);
+                MySwal.fire(
+                    {
+                        html: <div className="d-flex">
+                                <HighlightOffIcon onClick={MySwal.close} role="button" style={{
+                                position: "absolute",
+                                top: "2px",
+                                right: "2px",
+                                color: "#000"
+                                }} />
+                                <CheckCircleIcon style={{
+                                    color: "#F2994A",
+                                    position: "absolute",
+                                    top: "18px",
+                                    left: "23px",
+                                    background: "#FFF",
+                                    borderRadius: "50%",
+                                    border: "none",
+                                }} />
+                                <img src={product.imgUrl[0]} alt="productImage" className="toastImg " />
+                                <div className="ml-2 ">
+                                <p className="toastAddedText">Added to Cart</p>
+                                <p className="qtyPopupText text-left font-weight-normal mb-1" >{product.name}</p>
+                                <p className="qtyPopupText text-left mb-0" style={{fontWeight: "600"}}>Quantity: {quantity}</p>
+                                <a href="/cart"><p className="mb-0" style={{
+                                    fontWeight: "bold",
+                                    fontSize: "18px",
+                                    lineHeight: "20px",
+                                    textDecorationLine: "underline",
+                                    color: "#F2994A",
+                                    textAlign: "right"
+                                }}>View Cart</p></a>
+                                </div>
+                        </div>,
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        scrollbarPadding: false,
+                        timer: 3000,
+                        showClass: {
+                        popup: 'animate__animated animate__fadeIn  animate__faster',
+                        backdrop: 'swal2-noanimation'
+                        },
+                        hideClass: {
+                        popup: 'animate__animated animate__slideOutRight  animate__faster',
+                        backdrop: 'swal2-noanimation'
+                        },
+                        customClass: "toastStructure"
+                    })
+                    window.location.reload(false);
+            }).catch((err)=>{
+                console.log(err);
+            })
+        }
+        else{
+            history.push("/login");
+        }
+    }
+
+    const calculateAmount = () => {
+        let flag = true;
+        product.materialDimension.map((val,i)=> {
+            if(dim === val.dimension_title && material === val.material_title){
+                setAmount(val.price * quantity);
+                setFinalMatDim(val._id);
+                flag= false;
+            }
+        });
+        if(flag)
+            setAmount(NaN);
+    }
+
+    const addToWishlist = () => {
+        if(authUser){
+            Axios.post(`${API}auth/add_user_details`,{
+                poster_obj_id: product._id,
+                add: 1
+            },{   
+                headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
+                params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
+            }).then((res)=>{
+               // console.log(res);
+                MySwal.fire(
+                    {
+                        html: <div className="d-flex">
+                                <HighlightOffIcon onClick={MySwal.close} role="button" style={{
+                                position: "absolute",
+                                top: "2px",
+                                right: "2px",
+                                color: "#000"
+                                }} />
+                                <CheckCircleIcon style={{
+                                    color: "#F2994A",
+                                    position: "absolute",
+                                    top: "18px",
+                                    left: "23px",
+                                    background: "#FFF",
+                                    borderRadius: "50%",
+                                    border: "none",
+                                }} />
+                                <img src={product.imgUrl[0]} alt="productImage" className="toastImg " />
+                                <div className="ml-2 ">
+                                <p className="toastAddedText">Added to Wishlist</p>
+                                <p className="qtyPopupText text-left font-weight-normal mb-1" >{product.name}</p>
+                                <p className="qtyPopupText text-left mb-0" style={{fontWeight: "600"}}>Quantity: {quantity}</p>
+                                <a href="/dashboard"><p className="mb-0" style={{
+                                    fontWeight: "bold",
+                                    fontSize: "18px",
+                                    lineHeight: "20px",
+                                    textDecorationLine: "underline",
+                                    color: "#F2994A",
+                                    textAlign: "right"
+                                }}>View Wishlist</p></a>
+                                </div>
+                        </div>,
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        scrollbarPadding: false,
+                        timer: 3000,
+                        showClass: {
+                        popup: 'animate__animated animate__fadeIn  animate__faster',
+                        backdrop: 'swal2-noanimation'
+                        },
+                        hideClass: {
+                        popup: 'animate__animated animate__slideOutRight  animate__faster',
+                        backdrop: 'swal2-noanimation'
+                        },
+                        customClass: "toastStructure"
+                    })
+            }).catch((err)=>{
+                console.log(err);
+            })
+        }else{
+            history.push("/login");
+        }
+    }
+
+    const changeMaterialTo1 = () =>{
+        setMaterial("125 Micron (non-tearable)")
+         $("#m1").addClass("selected");
+         $("#m2").removeClass("selected");
+         $("#m3").removeClass("selected");
+         calculateAmount();
+    };
+const changeMaterialTo2 = () =>{
+    setMaterial("Self-adhesive (premium)");
+    $("#m1").removeClass("selected");
+    $("#m2").addClass("selected");
+    $("#m3").removeClass("selected");
+    calculateAmount();
+};
+const changeMaterialTo3 = () =>{
+    setMaterial("Self-adhesive 3mm sunboard (premium)");
+    $("#m1").removeClass("selected");
+    $("#m2").removeClass("selected");
+    $("#m3").addClass("selected");
+    calculateAmount();
+};
+const changeDimensionToS = () =>{
+    const d = [16,24];
+    setDimension(d);
+    setDim("16” x 24”");
+    $("#d1").addClass("selected");
+    $("#d2").removeClass("selected");
+    $("#d3").removeClass("selected");
+    calculateAmount();
+};
+const changeDimensionToM = () =>{
+    const d = [19,27];
+    setDimension(d);
+    setDim("19” x 27”");
+    $("#d1").removeClass("selected");
+    $("#d2").addClass("selected");
+    $("#d3").removeClass("selected");
+    calculateAmount();
+};
+const changeDimensionToL = () =>{
+    const d = [24,36];
+    setDimension(d);
+    setDim("24” x 36”");
+    $("#d1").removeClass("selected");
+    $("#d2").removeClass("selected");
+    $("#d3").addClass("selected");
+    calculateAmount();
+};
+
+
     const showMoreCards = () =>{
       setVisible(9);
     }
@@ -145,45 +386,7 @@ const PosterProductPage = (props) => {
             }
     }
 
-    const changeMaterialTo1 = () =>{
-            setMaterial("125 Micron")
-             $("#m1").addClass("selected");
-             $("#m2").removeClass("selected");
-             $("#m3").removeClass("selected");
-    };
-    const changeMaterialTo2 = () =>{
-        setMaterial("Self-Adhesive");
-        $("#m1").removeClass("selected");
-        $("#m2").addClass("selected");
-        $("#m3").removeClass("selected");
-    };
-    const changeMaterialTo3 = () =>{
-        setMaterial("Self-Adhesive 3mm sunboard");
-        $("#m1").removeClass("selected");
-        $("#m2").removeClass("selected");
-        $("#m3").addClass("selected");
-    };
-    const changeDimensionToS = () =>{
-        const d = [16,24];
-        setDimension(d);
-        $("#d1").addClass("selected");
-        $("#d2").removeClass("selected");
-        $("#d3").removeClass("selected");
-    };
-    const changeDimensionToM = () =>{
-        const d = [19,27];
-        setDimension(d);
-        $("#d1").removeClass("selected");
-        $("#d2").addClass("selected");
-        $("#d3").removeClass("selected");
-    };
-    const changeDimensionToL = () =>{
-        const d = [24,36];
-        setDimension(d);
-        $("#d1").removeClass("selected");
-        $("#d2").removeClass("selected");
-        $("#d3").addClass("selected");
-    };
+    
     const similarProductInfo = [
         { src: BeforeStart, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473 },
         { src: BeforeStart, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473 },
@@ -209,14 +412,20 @@ const PosterProductPage = (props) => {
         { width: 780, itemsToShow: 4 }
       ];
 
+      let name = product.name.split("|");
+      let desc = product.description.split("|");
+
+
       const likecarousel = useRef(null);
       const similarCarousel = useRef(null);
       const carousel = useRef(null);
     return(
         <div>
             <div className="container-fluid pt-3 pb-3 padding-10 d-none d-sm-block " style={{ background: "#F6F6F6", color: "#333333" }}>
-              <Link to="/" style={{color: "#333333"}}>Home </Link> / <Link style={{color: "#333333"}} to="/posters">Posters</Link> / <Link style={{color: "#333333"}} to="/posters/subcat/PPE">{posterCatName}</Link> / 
-              <span className="font-weight-bold" > {productName}</span>
+              <Link to="/" style={{color: "#333333"}}>Home </Link>/ 
+              <Link style={{color: "#333333"}} className="text-capitalize" to={`/cat/${catSlug}`}> {catName}</Link> / 
+              <Link style={{color: "#333333"}} className="text-capitalize" to={`/${catSlug}/subcat/${subCatSlug}`}> {subCatName}</Link> / 
+              <span className="font-weight-bold" > {product.name}</span>
             </div>
             <div className="row  padding-10 mt-4 " >
                 <div className="col-lg-5 pl-auto pr-auto ">
@@ -227,36 +436,46 @@ const PosterProductPage = (props) => {
                             fontSize: "22px",
                             lineHeight: "27px",
                             color: "#000000",
-                        }}>{productName}</h2>
-                        <span className="font-weight-bold">4.6</span>
-                        <Rating name="product-rating" defaultValue={rating} precision={0.1} size="small"  readOnly style={{zIndex: "-1" }}/>
-                        <span className="font-weight-normal">(20)</span>
-                        <span className="text-success float-right">In Stock</span>
+                        }}>{product.name}</h2>
+                       <div className="d-flex align-items-center ">
+                       <span className="font-weight-bold ">4.6</span>
+                        <Rating name="product-rating " defaultValue={rating} precision={0.1} size="small"  readOnly style={{zIndex: "-1" }}/>
+                        <span className="font-weight-normal ">(20)</span>
+                        {product.stocks ? (<span className=" ml-auto" style={{color: "#27AE60",}}>In Stock</span>):
+                                            (<span className=" ml-auto text-danger" style={{}}>Out of Stock</span>)
+                        }
+                       </div>
                     </div>
                     
-                    <Carousel showArrows={false}  renderPagination={({ pages, activePage, onClick }) => {
+                    <Carousel  className=" " showArrows={false}  renderPagination={({ pages, activePage, onClick }) => {
                                         return (
                                         <div className="d-flex justify-content-around mt-4 " >       
                                         {pages.map(page => {
                                             const isActivePage = activePage === page
                                             return (
                                                 <div role="button"  key={page} onClick={() => onClick(page)} active={isActivePage}  className={isActivePage ? "paginationActive productIndicators" : "paginationInactive productIndicators"} >
-                                                    <img className="d-none d-sm-block"  src={restrictedArea} alt="preprinted sign" style={{width: "50px", height: "50px"}} />
                                                     <div className="d-sm-none" style={{width: "10px", height: "10px", background: "gray", borderRadius: "50%"}}></div>
+                                                    {(page===0)? (<img className="d-none d-sm-block"  src={product.imgUrl[0]} alt="preprinted sign" style={{width: "50px", height: "50px"}} />
+                                                                )
+                                                    : (page===1) ? (<img className="d-none d-sm-block"  src={product.imgUrl[1]} alt="preprinted sign" style={{width: "50px", height: "50px"}} />)
+                                                    : (page===2) ? (<img className="d-none d-sm-block"  src={product.imgUrl[2]} alt="preprinted sign" style={{width: "50px", height: "50px"}} />)
+                                                    : (<img className="d-none d-sm-block"  src={product.imgUrl[3]} alt="preprinted sign" style={{width: "50px", height: "50px"}} />)
+                                                    }
+                                                    
                                                 </div>
                                                 )
                                             })}
                                         </div>
                                         );
                                     }}>
-                        <img src={restrictedArea} alt="preprinted sign" className="productCarouselImg" />
-                        <div style={{ background: "gray"}}  className="productCarouselImg"></div> 
-                        <div style={{ background: "green"}}  className="productCarouselImg"></div> 
-                        <div style={{ background: "black"}}  className="productCarouselImg"></div> 
+                        <img src={product.imgUrl[0]} alt="preprinted sign" className="productCarouselImg " />
+                        <img src={product.imgUrl[1]} alt="preprinted sign" className="productCarouselImg " />
+                        <img src={product.imgUrl[2]} alt="preprinted sign" className="productCarouselImg " />
+                        <img src={product.imgUrl[3]} alt="preprinted sign" className="productCarouselImg " />
                     </Carousel>
             
-                    <hr className="mt-5 mb-4 d-none d-sm-block" style={{borderTop: "1px solid rgba(130, 130, 130, 0.5)"}} />
-                    <div className="d-none d-sm-block">
+                    <hr className="mt-5 mb-4 d-none d-sm-block " style={{borderTop: "1px solid rgba(130, 130, 130, 0.5)"}} />
+                    <div className="d-none ">
                         <img src={designerProfile} alt="profile" />
                         <span style={{
                             fontStyle: "normal",
@@ -297,46 +516,81 @@ const PosterProductPage = (props) => {
                     </div>
                 </div>
                 <div className="col-lg-3  ">
-                    <div className="d-none d-sm-block">
+                    <div className="d-none d-sm-block " style={{
+                        marginBottom: "49px"
+                    }} >
                         <h2 style={{
                             fontStyle: "normal",
                             fontWeight: "normal",
                             fontSize: "28px",
                             lineHeight: "35px",
                             color: "#000000",
-                        }}>{productName}</h2>
-                        <span className="font-weight-bold">{rating}</span>
-                        <Rating name="product-rating" defaultValue={rating} precision={0.1} size="small"  readOnly/>
-                        <span className="font-weight-normal">(20)</span>
-                        <span className="text-success ml-4">In Stock</span>
-                        <p style={{
+                        }}>{name[0]}</h2>
+                        <div className="d-flex align-items-center " style={{marginTop: "5px"}}>
+                        <span className=" " style={{
+                            fontWeight: "600",
+                            fontSize: "16px",
+                            lineHeight: "20px",
+                            color: "#000"
+                        }}>{rating}</span>
+                        <Rating name="product-rating " defaultValue={rating}  precision={0.1} size="small"  readOnly/>
+                        <span className="" style={{
+                            fontWeight: "600",
+                            fontSize: "14px",
+                            lineHeight: "18px",
+                            color: "#000",
+                        }}>(20)</span>
+                        { (product.stocks) ? (
+                            <span className=" ml-4" style={{
+                            fontWeight: "600",
+                            fontSize: "14px",
+                            lineHeight: "18px",
+                            color: "#27AE60",
+                        }}>In Stock</span>
+                        
+                        ): (
+                            <span className="text-danger ml-4" style={{
+                            fontWeight: "600",
+                            fontSize: "14px",
+                            lineHeight: "18px",
+                        }}>Out of Stock</span>
+                        
+                        )}
+                       </div>
+                        <p className="" style={{
+                            marginTop: "7px",
+                            marginBottom: "0px",
+                            fontWeight: "normal",
                             fontSize: "14px",
                             lineHeight: "18px",
                             color: "#757575"
                         }}>
-                        473 bought this
+                        {product.bought} bought this
                         </p>
                     </div>
                     
-                    <div className="mb-4 mt-5 d-flex flex-sm-column flex-row justify-content-between">
-                        <p className="mt-sm-4 mb-2 font-weight-bold  align-self-sm-start align-self-center selectHead">Select Material</p>
-                        <div className="d-flex justify-content-between mr-0 ">
+                    <div className="mb-4 mt-5 mt-sm-0 d-flex flex-sm-column flex-row justify-content-between ">
+                        <p className="mt-sm-0 mb-2  align-self-sm-start align-self-center selectHead  ">Select Material</p>
+                        <div className="d-flex justify-content-between mr-0  ">
                             <div className="posterMaterialDimension selected" id="m1" role="button" onClick={changeMaterialTo1} >
                                 <img src={Material2} className="materialImg1Dimension " alt="material" ></img>
                                 <p className="text-center materialTextDimension">125 Micron (non-tearable)</p>
                             </div>
                             <div className="posterMaterialDimension " id="m2" role="button" onClick={changeMaterialTo2} >
-                                <img src={Material1} className="materialImg2Dimension ml-sm-3 ml-2 mt-sm-2 mt-0" alt="material"></img>
+                                <img src={Material1} className="materialImg2Dimension  " alt="material"></img>
                                 <p className="text-center materialTextDimension">Self-adhesive (premium)</p>
                             </div>
                             <div className="posterMaterialDimension" id="m3" role="button" onClick={changeMaterialTo3} >
-                                <img src={Material1} className="materialImg2Dimension ml-sm-3 ml-2 mt-sm-2 mt-0" alt="material"></img>
+                                <img src={Material1} className="materialImg2Dimension" alt="material"></img>
                                 <p className="text-center materialTextDimension ">Self-adhesive 3mm sunboard (premium)</p>
                             </div>
                         </div>
                     </div>
-                    <div className="mb-5 mt-5 d-flex flex-sm-column flex-row justify-content-between">
-                        <p className="font-weight-bold align-self-sm-start align-self-center selectHead">Select Dimensions</p>
+                    <div className=" d-flex flex-sm-column flex-row justify-content-between" style={{
+                        marginTop: "56px",
+                        marginBottom: "77px"
+                    }}>
+                        <p className=" align-self-sm-start align-self-center selectHead">Select Dimensions</p>
                         <div className="d-flex justify-content-between">
                             <div className=" ml-sm-0 posterMaterialDimension selected" id="d1" role="button" onClick={changeDimensionToS} >
                                 <img src={dimension1} className="posterDimension1 mt-2" ></img>
@@ -352,11 +606,11 @@ const PosterProductPage = (props) => {
                             </div>
                         </div>
                     </div>
-                    <div className="d-flex flex-row flex-sm-column  align-items-sm-start align-items-center">
-                    <p className="font-weight-bold mr-5 mt-3 mr-sm-0 d-inline-block d-sm-block " style={{lineHeight: "30px"}}>Quantity</p>
+                    <div className="d-flex flex-row flex-sm-column  align-items-sm-start align-items-center ">
+                    <p className=" mr-5  mr-sm-0 d-inline-block d-sm-block my-auto mb-sm-2" style={{fontWeight: "500"}}>Quantity</p>
                     <ButtonGroup
                             size="small"
-                            className=" "
+                            className="ml-5 ml-sm-0 "
                             aria-label="small outlined button group"
                             style={{ width: "30px", height: "30px", }}
                           >
@@ -390,18 +644,18 @@ const PosterProductPage = (props) => {
                         fontFamily: "Source Sans Pro",
                             fontStyle: "normal",
                             fontWeight: "bold",
-                            fontSize: "36px",
+                            fontSize: "24px",
                             color: "#757575",
-                            lineHeight: "45px",  
+                            lineHeight: "29px",  
                             color: "#003459",
                         }}>&#8377;{amount}</p>
                         <span className="ml-2" style={{
                             fontFamily: "Source Sans Pro",
                             fontStyle: "normal",
                             fontWeight: "500",
-                            fontSize: "14px",
+                            fontSize: "12px",
                             color: "#757575",
-                            lineHeight: "14px"                        
+                            lineHeight: "15px"                        
                         }}>(Inclusive of All Taxes)</span>
                     </div>
                     <button className="d-block d-sm-none w-100 p-2 mt-4" style={{
@@ -411,35 +665,49 @@ const PosterProductPage = (props) => {
                         color: "white",
                     }}>Add To Cart</button>
                     <div className="mt-4 pl-3 pl-sm-0">
-                        <Link className="text-dark " style={{textDecoration: "underline",fontSize: "0.9rem"}}>Add to Wishlist<FavoriteBorderIcon className="ml-1" style={{transform: "scale(0.8)"}} /></Link>
+                        <Link onClick={addToWishlist} className="text-dark " style={{textDecoration: "underline",fontSize: "0.9rem"}}>Add to Wishlist<FavoriteBorderIcon className="ml-1" style={{transform: "scale(0.8)"}} /></Link>
                         <Link className="text-dark ml-5" style={{textDecoration: "underline" , fontSize: "0.9rem"}}>Share<ShareOutlinedIcon className="ml-1" style={{transform: "scale(0.7)"}} /></Link>
                     </div>              
                 </div>
-                <div className="col-lg-4">
-                    <div className="d-none d-sm-block" style={{
+                <div className="col-lg-4 ">
+                    <div className="d-none " style={{
                         fontFamily: "Lato",
                         fontStyle: "normal",
                         fontWeight: "600",
                         color: "#000000",
                         marginBottom: "5px",
-                        marginTop: "165px"
+                        marginTop: "145px"
                     }}>
-                        <p className="" style={{fontSize: "14px", lineHeight: "16px"}}>Product Details</p>
-                        <p style={{fontSize: "12px", lineHeight: "12px"}}>Material: <span style={{fontWeight: "500"}}>{material}</span></p>
-                        <p style={{fontSize: "12px", lineHeight: "12px"}}>Dimension: <span style={{fontWeight: "500"}}>{dimension[0]}inches by {dimension[1]}inches</span></p>
-                        <p className="mb-0" style={{fontSize: "12px", lineHeight: "10px"}}>Weight: <span style={{fontWeight: "500"}}>100g</span></p>
+                        <p className=" " style={{fontSize: "16px", lineHeight: "19px"}}>Product Details</p>
+                        <p className=" my-2" style={{fontSize: "12px", lineHeight: "12px"}}>Material: <span style={{fontWeight: "500"}}>{material}</span></p>
+                        <p  className=" my-2" style={{fontSize: "12px", lineHeight: "12px"}}>Dimension: <span style={{fontWeight: "500"}}>{dimension[0]}inches by {dimension[1]}inches</span></p>
+                        <p className="mb-0 " style={{fontSize: "12px", lineHeight: "10px"}}>Weight: <span style={{fontWeight: "500"}}>100g</span></p>
                     </div>
-                    <div className="productInfo mt-4 mt-sm-2">
-                        <li>Both Interior and Exterior warranty is of three years.</li>
-                        <li>Prices are inclusive of G.S.T</li>
-                        <li>Performa Invoice can be generated at checkout.</li>
+                    <div className="productInfo " >
+                        <p className=" d-none d-sm-block" style={{fontSize: "16px", lineHeight: "19px",fontFamily: "Lato",
+                        fontStyle: "normal",
+                        fontWeight: "600",
+                        color: "#000000",}}>Product Details</p>
+                        {
+                            desc.map((val,i)=> {
+                                return(
+                                    <li key={i}>{val}</li>
+                                )
+                            })
+                        }
                     </div>
-                    <div className="mt-0 mt-sm-5 pt-4 pt-sm-5  mt-sm-5 catTagSKU">
-                        <p><span style={{fontWeight: "600"}}>Category: </span>Chemical Hazards, PPE</p>
-                        <p><span style={{fontWeight: "600"}}>Tags: </span>Using Safety Gloves .. is all in Your Hands.</p>
-                        <p><span style={{fontWeight: "600"}}>SKU: </span>posters-chemical-hazard-sku-1114021234-prd-ch001g</p>
+                    <div className=" pt-4 pt-sm-0  catTagSKU ">
+                        <p><span style={{fontWeight: "600"}}>Category: </span>{product.category[0].title}, {product.subCategory[0].title}</p>
+                        <p><span style={{fontWeight: "600"}}>Tags: </span>{
+                            product.tags.map((val,i)=>{
+                                return(
+                                    <span key={i}>{val}...</span>
+                                )
+                            })
+                        }</p>
+                        <p><span style={{fontWeight: "600"}}>SKU: </span>{product.sku}</p>
                     </div>
-                    <div className="mt-5 d-none d-sm-block">
+                    <div className=" d-none d-sm-block">
                         <p className="d-inline-block mt-4" style={{
                         fontFamily: "Source Sans Pro",
                             fontStyle: "normal",
@@ -449,23 +717,26 @@ const PosterProductPage = (props) => {
                             lineHeight: "45px",  
                             color: "#003459",
                         }}>&#8377;{amount}</p>
-                        <span className="ml-5" style={{
+                        <span className="ml-3" style={{
                             fontFamily: "Source Sans Pro",
                             fontStyle: "normal",
                             fontWeight: "500",
-                            fontSize: "14px",
+                            fontSize: "12px",
                             color: "#757575",
-                            lineHeight: "14px"                        
+                            lineHeight: "15px"                        
                         }}>(Inclusive of All Taxes)</span>
                     </div>
-                    <button className=" d-none d-sm-block w-100 p-2 mt-4" style={{
+                    <button 
+                    onClick={addToCart}
+                    className=" d-none d-sm-block w-100 p-2 mt-2"
+                     style={{
                         border: "none",
                         background: "#003459",
                         borderRadius: "6px",
                         color: "white",
                     }}>Add To Cart</button>
                     
-                    <div className="d-block d-sm-none mt-4">
+                    <div className="d-none mt-4">
                         <img src={designerProfile} alt="profile" />
                         <span style={{
                             fontStyle: "normal",
@@ -507,13 +778,10 @@ const PosterProductPage = (props) => {
                 </div>
             </div>
             
-            <div style={{
-                        borderTop: "6px solid #F6F6F6",
-                        margin: "30px 0px"
-                    }}></div>
+            <div className="separator"></div>
             
 
-            <div className="row padding-10">
+            <div className="row padding-10 ">
                     <div className="col-4  d-none d-sm-block">
                         <h2 style={{
                             fontStyle: "normal",
@@ -561,14 +829,7 @@ const PosterProductPage = (props) => {
                             lineHeight: "30px",
                         }}>Reviews</h2>
 
-                        <p className="d-inline-block float-right" style={{
-                            fontStyle: "normal",
-                            fontWeight: "600",
-                            fontSize: "18px",
-                            lineHeight: "30px",
-                            textDecoration: "underline",
-                            color: "#40CEFC"
-                        }}>View All</p>
+                        <p className="d-none float-right viewAll" >View All</p>
 
                         <div className="d-flex  col-12 pl-0 pr-0">
                             <ReviewCard />
@@ -578,21 +839,9 @@ const PosterProductPage = (props) => {
                         </div>
                     </div>
                     <div className="d-block d-sm-none padding-10">
-                            <h2 className="d-inline-block" style={{
-                                    fontStyle: "normal",
-                                    fontWeight: "600",
-                                    fontSize: "24px",
-                                    lineHeight: "30px",
-                                }}>Reviews</h2>
+                            <h2 className="d-inline-block otherCarouselHead" >Reviews</h2>
 
-                                <p className="d-inline-block float-right" style={{
-                                    fontStyle: "normal",
-                                    fontWeight: "600",
-                                    fontSize: "18px",
-                                    lineHeight: "30px",
-                                    textDecoration: "underline",
-                                    color: "#40CEFC"
-                                }}>View All</p>
+                                <p className="d-inline-block float-right viewAll" >View All</p>
                                 <div className="row ">
                                 <div className="col-4 d-block d-sm-none mt-auto">
                                         <Box position="relative" display="inline-flex">
@@ -624,67 +873,118 @@ const PosterProductPage = (props) => {
             </div>
 
 
-            <div style={{
-                        borderTop: "6px solid #F6F6F6",
-                        margin: "30px 0px"
-                    }}></div>
-
-            <div className="padding-10">
-                    <h2 className=" d-inline-block" style={{
-                        fontStyle: "normal",
-                        fontWeight: "600",
-                        fontSize: "24px",
-                        lineHeight: "30px",
-                        color: "#000000",
-                        marginBottom: "30px"
-                    }}>Similar items</h2>
+            <div className="separator"></div>
+            <div className="padding-10 similarCarouselMargin1">
+                    <h2 className=" d-inline-block otherCarouselHead " >Similar items</h2>
                     
-                     {visible===4 ? (
-             <Link to="/posters/subcat/PPE"> <p role="button" className="seemore d-inline-block float-right" style={{lineHeight: "24px", fontWeight: "600"}} >View All</p></Link>
-            ):(
-              <p role="button" className="seemore d-inline-block float-right" style={{lineHeight: "24px", fontWeight: "600"}} onClick={showLessCards}>View Less</p>
-            ) }
-            <span className="float-right d-none d-sm-block mr-3">Page 1-6</span>
+             <Link to={`/${catSlug}/subcat/${subCatSlug}`}> <p role="button" className=" d-inline-block float-right viewAll "  >View All</p></Link>
+   
 
                    {/* <ProductCard src={BeforeStart} name="Floor Graphics | Printable Catalog | PRD-FG009" startPrice={219} rating={rating} itemBought={473} /> */} 
-                <div className=" d-sm-flex d-none" style={{opacity: "1"}}>
-                    <ArrowBackIosRoundedIcon onClick={() => similarCarousel.current.slidePrev()} role="button" className="border mt-auto mb-auto shadow-sm rounded-circle d-none d-sm-block" />
+                <div className=" d-sm-flex d-none " style={{opacity: "1"}}>
+                    <ArrowBackIosRoundedIcon onClick={() => similarCarousel.current.slidePrev()} role="button" id="prevBtn" className="my-auto d-none d-sm-block" />
                     <Carousel className="d-flex justify-content-around" breakPoints={breakPoints}  pagination={false} showArrows={false} ref={similarCarousel} style={{opacity: "1!important"}}>
-                        {similarProductInfo.map(ncard)}
+                        {similarItems.map((ncard,i)=>{
+                            return(
+                            <ProductCard 
+                                    src={ncard.imgUrl[0]} 
+                                    name={ncard.name} 
+                                    slug={ncard.slug} 
+                                    startPrice={ncard.originalPrice} 
+                                    rating={ncard.rating} 
+                                    itemBought={ncard.bought} 
+                                    catName={catName} 
+                                    subCatName={subCatName} 
+                                    catId= {ncard.category[0]._id} 
+                                    subCatId={ncard.subCategory[0]._id}
+                                    catSlug = {ncard.category[0].cat_slug}
+                                    subCatSlug = {ncard.subCategory[0].sub_cat_slug}
+                                    id={ncard._id} 
+                                    key={i} 
+                                />
+                           )
+                        })}
                     </Carousel>  
-                    <ArrowForwardIosRoundedIcon onClick={() => similarCarousel.current.slideNext()} role="button" className="border mt-auto mb-auto shadow-sm rounded-circle d-none d-sm-block"  />
+                    <ArrowForwardIosRoundedIcon onClick={() => similarCarousel.current.slideNext()} role="button" id="prevBtn" className="my-auto d-none d-sm-block"  />
                 </div>
                 <div className="d-sm-none productsOnMobile">
-                    {similarProductInfo.slice(0,4).map(ncard)}
+                    {similarItems.slice(0,4).map((ncard,i)=>{
+                        
+                           return(
+                            <ProductCard 
+                                    src={ncard.imgUrl[0]} 
+                                    name={ncard.name} 
+                                    slug={ncard.slug} 
+                                    startPrice={ncard.originalPrice} 
+                                    rating={ncard.rating} 
+                                    itemBought={ncard.bought} 
+                                    catName={catName}
+                                    catId= {ncard.category[0]._id} 
+                                    subCatId={ncard.subCategory[0]._id}
+                                    catSlug = {ncard.category[0].cat_slug}
+                                    subCatSlug = {ncard.subCategory[0].sub_cat_slug}
+                                    subCatName={subCatName} 
+                                    id={ncard._id} 
+                                    key={i} 
+                                />
+                           )
+                        })}
                 </div>
             </div>            
-            <div className="padding-10 mt-5">
-                    <h2 className=" d-inline-block" style={{
-                        fontStyle: "normal",
-                        fontWeight: "600",
-                        fontSize: "24px",
-                        lineHeight: "30px",
-                        color: "#000000",
-                        marginBottom: "40px"
-                    }}>You may also like</h2>
-                    
-                     {visible===4 ? (
-                        <Link to="/posters/subcat/PPE"> <p role="button" className="seemore d-inline-block float-right" style={{lineHeight: "24px", fontWeight: "600"}} >View All</p></Link>
-            ):(
-              <p role="button" className="seemore d-inline-block float-right" style={{lineHeight: "24px", fontWeight: "600"}} onClick={showLessCards}>View Less</p>
-            ) }
-            <span className="float-right d-none d-sm-block mr-3">Page 1-6</span>
+            <div className="padding-10 similarCarouselMargin" >
+                    <h2 className=" d-inline-block  otherCarouselHead">You may also like</h2>
+                   
+                        <Link to="/posters/subcat/PPE"> <p role="button" className="viewAll d-inline-block float-right"  >View All</p></Link>
+          
 
                    {/* <ProductCard src={BeforeStart} name="Floor Graphics | Printable Catalog | PRD-FG009" startPrice={219} rating={rating} itemBought={473} /> */} 
                 <div className=" d-sm-flex d-none" style={{opacity: "1"}}>
-                    <ArrowBackIosRoundedIcon onClick={() => likecarousel.current.slidePrev()} role="button" className="border mt-auto mb-auto shadow-sm rounded-circle d-none d-sm-block" />
+                    <ArrowBackIosRoundedIcon onClick={() => likecarousel.current.slidePrev()} role="button" id="prevBtn" className="my-auto d-none d-sm-block" />
                     <Carousel className="d-flex justify-content-around" breakPoints={breakPoints}  pagination={false} showArrows={false} ref={likecarousel} style={{opacity: "1!important"}}>
-                        {similarProductInfo.map(ncard)}
+                        {youMayLike.map((ncard,i)=>{
+                           return(
+                            <ProductCard 
+                                    src={ncard.imgUrl[0]} 
+                                    name={ncard.name} 
+                                    slug={ncard.slug} 
+                                    startPrice={ncard.originalPrice} 
+                                    rating={ncard.rating} 
+                                    itemBought={ncard.bought} 
+                                    catName={catName} 
+                                    subCatName={subCatName} 
+                                    catId= {ncard.category[0]._id} 
+                                    subCatId={ncard.subCategory[0]._id}
+                                    catSlug = {ncard.category[0].cat_slug}
+                                    subCatSlug = {ncard.subCategory[0].sub_cat_slug}
+                                    id={ncard._id} 
+                                    key={i} 
+                                />
+                           )
+                        })}
                     </Carousel>  
-                    <ArrowForwardIosRoundedIcon onClick={() => likecarousel.current.slideNext()} role="button" className="border mt-auto mb-auto shadow-sm rounded-circle d-none d-sm-block"  />
+                    <ArrowForwardIosRoundedIcon onClick={() => likecarousel.current.slideNext()} role="button"  id="prevBtn" className="my-auto d-none d-sm-block"  />
                 </div>
                 <div className="d-sm-none productsOnMobile">
-                    {similarProductInfo.slice(0,4).map(ncard)}
+                    {youMayLike.slice(0,4).map((ncard,i)=>{
+                           return(
+                            <ProductCard 
+                                    src={ncard.imgUrl[0]} 
+                                    name={ncard.name} 
+                                    slug={ncard.slug} 
+                                    startPrice={ncard.originalPrice} 
+                                    rating={ncard.rating} 
+                                    itemBought={ncard.bought} 
+                                    catName={catName} 
+                                    subCatName={subCatName} 
+                                    catId= {ncard.category[0]._id} 
+                                    subCatId={ncard.subCategory[0]._id}
+                                    catSlug = {ncard.category[0].cat_slug}
+                                    subCatSlug = {ncard.subCategory[0].sub_cat_slug}
+                                    id={ncard._id} 
+                                    key={i} 
+                                />
+                           )
+                        })}
                 </div>
             
             </div> 

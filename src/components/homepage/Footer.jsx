@@ -1,6 +1,11 @@
 import React from "react";
 import { Grid } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+import fb from "../../images/fbIcon.png";
+import insta from "../../images/instaIcon.png";
+import linkedIn from "../../images/linkedIcon.png";
+import PhoneIcon from '@material-ui/icons/Phone';
+import MailIcon from '@material-ui/icons/Mail';
 
 const Footer = (props) => {
     const [authUser, setAuthUser] = React.useState("");
@@ -12,9 +17,75 @@ const Footer = (props) => {
        );
    }, [props.loginResponse]);
     return (
-        <div className="p-2 p-sm-0  pt-sm-0 mt-3  " style={{ background: "#003459" , position: "relative", bottom: "0",right:"0",left: "0"}}>
-        <Grid className=" d-none d-sm-block padding-10  " style={{paddingTop: "42px" , paddingBottom: "21px"}}>
-          <Grid.Row columns="4" className="d-flex justify-content-between ">
+        <div className="mt-3  pt-3 pt-sm-0" style={{ background: "#003459" , position: "relative", bottom: "0",right:"0",left: "0"}}>
+          <div className="padding-10 pt-5 pb-4 d-none d-sm-block ">
+              <div className="d-flex align-items-center ">
+                  <h3 className="footerhead  my-0">Our Products: </h3>
+                  <div className="d-flex ml-5 mr-auto r justify-content-between " style={{color: "#FFF", width: "60%"}}>
+                  <Link to="/cat/posters" className="footertxt ">
+                  Posters
+                </Link>|
+                <Link to="/cat/signages" className="footertxt">
+                  Signages
+                </Link>|
+                <Link to="/cat/campaigns" className="footertxt">
+                  Campaigns
+                </Link>|
+                <Link to="/cat/floor-graphics" className="footertxt">
+                  Floor Graphics
+                </Link>|
+                <Link to="/cat/asset-markings" className="footertxt">
+                  Asset Marking
+                </Link>|
+                <Link to="/" className="footertxt">
+                  Create Your Own
+                </Link>
+                  </div>
+              </div>
+              <div className="d-flex align-items-center mt-3">
+                  <h3 className="footerhead  my-0">Our Policies: </h3>
+                  <div className="d-flex ml-5 mr-auto justify-content-between" style={{color: "#FFF", width: "50%",paddingLeft: "12px"}}>
+                  <Link to="/privacy-policy" className="footertxt">
+                  Privacy Policy
+                </Link>|
+                <Link to="/termsandconditions" className="footertxt">
+                  Terms and Conditions
+                </Link>|
+                <Link to="/termsandconditions" className="footertxt">
+                  Shipping Policy
+                </Link>|
+                <Link to="/termsandconditions" className="footertxt">
+                  Return Policy
+                </Link>
+                  </div>
+              </div>
+              <div className="d-flex align-items-center mt-3 ">
+                  <h3 className="footerhead  my-0">Know More: </h3>
+                  <div className="d-flex ml-5 mr-auto justify-content-between " style={{color: "#FFF", width: "25%",paddingLeft: "19px"}}>
+                  <Link to="/about" className="footertxt">
+                  About Us
+                </Link>|
+                <Link to="/faq" className="footertxt">
+                  FAQ
+                </Link>|
+                <Link to="/contact" className="footertxt">
+                  Contact Us
+                </Link>
+                  </div>
+              </div>
+              <div className="d-flex align-items-center mt-3 ">
+                  <h3 className="footerhead  my-0">Office: </h3>
+                  <div className="d-flex ml-5 mr-auto justify-content-between " style={{color: "#FFF", width: "70%",paddingLeft: "70px"}}>
+                  <li className="footertxt">Timings (Mon-Sat: 09:00 - 17:00)</li>|
+                    <li className="footertxt">
+                      45, old Agrawal Nagar, Indore, Madhya Pradesh, Pin: 452001
+                    </li>
+                  </div>
+              </div>
+          </div>
+        
+        <Grid className=" d-none padding-10  " style={{paddingTop: "42px" , paddingBottom: "21px"}}>
+          <Grid.Row columns="4" className="d-flex justify-content-between border">
             <Grid.Column >          
                 <h3 className="footerhead">Products</h3>
                 <Link to="/cat/posters" className="footertxt">
@@ -37,42 +108,18 @@ const Footer = (props) => {
                 </Link>            
             </Grid.Column>
             <Grid.Column >
-                <h3 className="footerhead">My Account</h3>
-                {authUser ? (
-                  <>
-                    <Link to="/dashboard" className="footertxt">
-                      Profile
-                    </Link>
-                  </>
-                ) : (
-                  <>
-                    <li className="footertxt">Profile</li>
-                  </>
-                )}
-
-                {authUser ? (
-                  <>
-                    <Link to="/dashboard" className="footertxt">
-                      Order History
-                    </Link>
-                  </>
-                ) : (
-                  <>
-                    <li className="footertxt">Order History</li>
-                  </>
-                )}
-
-                <Link to="/track" className="footertxt">
-                  Order Tracking
+                <Link to="/privacy-policy" className="footertxt">
+                  Privacy Policy
                 </Link>
-                <Link to="/signup" className="footertxt">
-                  Create An Account
+                <Link to="/termsandconditions" className="footertxt">
+                  Terms and Conditions
                 </Link>
-              
+                <Link to="/termsandconditions" className="footertxt">
+                  Shipping Policy
+                </Link>
             </Grid.Column>
             <Grid.Column >
-                <h3 className="footerhead">Contact Us</h3>
-                <li className="footertxt">Timings (Mon-Sat: 09:00 - 18:00)</li>
+                <li className="footertxt">Timings (Mon-Sat: 09:00 - 17:00)</li>
                 <li className="footertxt">
                   45, old Agrawal Nagar, Indore, Madhya Pradesh, Pin: 452001
                 </li>
@@ -81,31 +128,21 @@ const Footer = (props) => {
               
             </Grid.Column>
             <Grid.Column >
-              
-                <h3 className="footerhead">About</h3>
-                <Link to="/privacy-policy" className="footertxt">
-                  Privacy Policies
+                <Link to="/about" className="footertxt">
+                  About Us
                 </Link>
                 <Link to="/faq" className="footertxt">
                   FAQ
                 </Link>
-                <Link to="/support" className="footertxt">
+                <Link to="/contact" className="footertxt">
                   Contact Us
                 </Link>
               
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <div className="d-block d-sm-none mb-2 mx-3">
-                <h3 className="text-center mb-0" style={{
-                  fontFamily: "Source Sans Pro",
-                  fontWeight: "600",
-                  fontSize: "20px",
-                  letterSpacing: "0px",
-                  color: "#ffffff",
-                  opacity: "1",
-                  }}>About</h3>
-            <div className="text-center d-flex justify-content-around align-items-center" style={{color: "#FFFFFF"}}>
+        <div className="d-block d-sm-none  mx-3 ">
+            <div className="text-center d-flex justify-content-around align-items-center mx-auto" style={{color: "#FFFFFF", width: "300px"}}>
                 <Link to="/privacy-policy" style={{
                   fontFamily: "Source Sans Pro",
                   fontWeight: "normal",
@@ -139,58 +176,23 @@ const Footer = (props) => {
                 
               </div>
             </div>
-        <div className="d-block d-sm-none text-center ">
-                <h3 className="mx-auto text-center mb-1" style={{
-                  fontFamily: "Source Sans Pro",
-                  fontWeight: "600",
-                  fontSize: "20px",
-                  letterSpacing: "0px",
-                  color: "#FFFFFF",
-                  opacity: "1",
-                  }}>Contact Us</h3>
-                <li className=" mb-1" style={{
-                  fontFamily: "Source Sans Pro",
-                  fontWeight: "normal",
-                  fontSize: "10px",
-                  lineHeight: "12px",
-                  letterSpacing: "0px",
-                  color: "#FFFFFF",
-                  opacity: "1",
-                  listStyleType: "none"
-                  }}>Timings (Mon - Sat: 09:00 - 18:00)</li>
-                <li className=" mb-1" style={{
-                  fontFamily: "Source Sans Pro",
-                  fontWeight: "normal",
-                  fontSize: "10px",
-                  lineHeight: "12px",
-                  letterSpacing: "0px",
-                  color: "#FFFFFF",
-                  opacity: "1",
-                  listStyleType: "none"
-                  }}>
-                  45, Old Agrawal Nagar, Indore, Madhya Pradesh, Pin: 452001
-                </li>
-                <li  style={{
-                  fontFamily: "Source Sans Pro",
-                  fontWeight: "normal",
-                  fontSize: "10px",
-                  lineHeight: "12px",
-                  letterSpacing: "0px",
-                  color: "#FFFFFF",
-                  opacity: "1",
-                  listStyleType: "none"
-                  }}>Mobile No : +91 9632418602</li>
-                <li  style={{
-                  fontFamily: "Source Sans Pro",
-                  fontWeight: "normal",
-                  fontSize: "10px",
-                  lineHeight: "12px",
-                  letterSpacing: "0px",
-                  color: "#FFFFFF",
-                  opacity: "1",
-                  listStyleType: "none"
-                  }}>Email ID : hello@ehsposters.com</li>
+        <div className="d-sm-none d-flex justify-content-between align-items-center mx-auto my-2 " style={{width: "200px", height: "48px"}}>
+            <img src={fb} alt="facebook" style={{width: "32px", height: "32px"}} />
+            <img src={insta} alt="instagram" style={{width: "32px", height: "32px"}} />
+            <img src={linkedIn} alt="linkedin" style={{width: "32px", height: "32px"}} />
+        </div>
+        <div className="padding-10  d-flex align-items-center " style={{height: "48px" , background: "rgba(0, 0, 0, 0.2)"}}>
+            <div className="d-none d-sm-inline-flex justify-content-between align-items-center " style={{width: "160px", height: "48px"}}>
+              <img src={fb} alt="facebook" style={{width: "32px", height: "32px"}} />
+              <img src={insta} alt="instagram" style={{width: "32px", height: "32px"}} />
+              <img src={linkedIn} alt="linkedin" style={{width: "32px", height: "32px"}} />
             </div>
+            <span className="copyrightText  mt-0" >
+              © 2021 Copyright. All Rights Reserved | EHSPrints.com
+            </span>
+            <span className="copyrightText d-none d-sm-block  ml-auto float-right"><PhoneIcon style={{color: "#FFF"}} />: +91 9632418602</span>
+            <span className="copyrightText d-none d-sm-block ml-3 float-right"><MailIcon style={{color: "#FFF"}} />: hello@ehsposters.com</span>
+        </div>
       </div>
     );
 };

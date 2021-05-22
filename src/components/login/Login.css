@@ -106,10 +106,10 @@ color: #56CCF2;
   border-radius: 8px;
   color: #003459;
   font-family: Lato;
-font-style: normal;
-font-weight: 500;
-font-size: 24px;
-text-align: center;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  text-align: center;
 
 }
 
@@ -256,12 +256,12 @@ textarea {
 .note{
   width: 490px;
   font-family: Lato;
-font-style: normal;
-font-weight: normal;
-font-size: 14px;
-line-height: 17px;
-margin: 0 auto;
-color: #000000;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  margin: 0 auto;
+  color: #000000;
 }
 .registerAs{
   font-family: Lato;
@@ -273,17 +273,37 @@ text-align: center;
 text-decoration-line: underline;
 color: #0962A2;
 }
-.otpBoxHide{
-  display: none;
-}
-.otpBoxShow{
-  display: block;
-}
+
 .resendOTP{
-  position: relative;
-  top: -34px;
-  right: -400px;
+  position: absolute;
+  top: 14px;
+  right: 30px;
+  
 }
+
+
+
+.errorMsg{
+  font-size: 12px;
+  font-family: Lato;
+}
+.passMatch{
+  color: rgb(32, 212, 32);
+  position: absolute;
+  top: 10px;
+  right: 15px;
+}
+.passNotMatch{
+  color: rgb(182, 7, 7);
+  position: absolute;
+  top: 10px;
+  right: 15px;
+}
+.showError{
+  display: block!important;
+}
+
+
 @media screen and (max-width: 480px){
   .loginPage{
     width: 348px;
@@ -333,8 +353,7 @@ color: #0962A2;
   text-align: center;
 }
 .resendOTP{
-  right: -225px;
-  top: -32px;
+  font-size: 12px!important;
 }
 
 }
@@ -345,12 +364,11 @@ color: #0962A2;
 
 .forgotBox{
   width: 570px;
-  height: 497px;
   background: #FFFFFF;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
   border-radius: 15px;
-  margin-top: 45px;
-  margin-bottom: 45px;
+  margin-top: 55px;
+  margin-bottom: 58px;
   padding: 18px 34px 24px 33px;
 }
 .forgotHead{
@@ -407,11 +425,14 @@ color: #0962A2;
   color: #FFFFFF;
   
 }
-
+#OTP, #PASSWORD, #C_PASSWORD, #SUBMITBTN{
+  display: none;
+}
 @media screen and (max-width: 480px) {
     .forgotBox{
       width: 350px;
-      height: 430px;
+      margin-top: 45px;
+      margin-bottom: 45px;
       padding: 18px 30px 24px 30px;
     }
     .forgotHead{

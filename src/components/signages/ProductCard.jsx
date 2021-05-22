@@ -3,7 +3,6 @@ import StarIcon from '@material-ui/icons/Star';
 import {Link} from "react-router-dom";
 import Swal from "sweetalert2";
 import withReactContent from 'sweetalert2-react-content';
-import SafeTwo from "../../images/BeSafe.svg";
 import Material1 from "../../images/Fold.svg";
 import Material2 from "../../images/Hand.svg";
 import dimension1 from "../../images/Dimension1.svg"
@@ -13,48 +12,68 @@ import ButtonGroup from "@material-ui/core/ButtonGroup";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import $ from "jquery";
+import Axios from "axios";
+import {API} from "../../backend";
 const MySwal = withReactContent(Swal);
+
 
 
 
 const ProductCard = (props) =>{
 
-    const [material, setMaterial] = useState("hello");
-    const [dimension, setDimension] = useState("Bye");
-    const [quantity, setQuantity] = useState(1)
+    const [material, setMaterial] = useState("");
+    const [dimension, setDimension] = useState("");
+    const [quantity, setQuantity] = useState(1);
+    const [render,setRender] = useState(false);
+    
    
     const addToCartPopUp = () => {
-
-    
         
-        const MaterialSelect = (e) => {  
-            e.preventDefault();         
+        
+        
+        const MaterialSelect =  (e) => {           
             e.target.classList.add('popupSelect');
+           // console.log(e.target.id);
+            if(e.target.id === "m1")
+            {
+                setMaterial("125 Micron (non-tearable)");
+            }else if(e.target.id === "m2"){
+                setMaterial("Self-adhesive (premium)");
+            }else{
+                setMaterial("Self-adhesive 3mm sunboard (premium)");
+            }
             setTimeout(()=>{
                 MySwal.clickConfirm();
             },500);
-            setMaterial(e.target.children[1].innerText);
-           
         }
         const dimensionSelect = (e) => {
-            e.preventDefault();
             e.target.classList.add('popupSelect');
+            if(e.target.id === "m1")
+            {
+                setDimension("16in by 24in");
+            }else if(e.target.id === "m2"){
+                setDimension("19in by 27in");
+            }else{
+                setDimension("24in by 36in");
+            }
             setTimeout(()=>{
                 MySwal.clickConfirm();
             },500);
-            setDimension(e.target.children[1].innerText)
+            
+//const forceUpdate = React.useCallback(() => updateState({}), []);
+            setRender(true);
         }
         const qtySelect = () => {
             MySwal.clickConfirm();
+            console.log(dimension);
+            console.log(material);
         }
         MySwal.mixin(
             {
                 padding: "10px",
                 backdrop: "rgba(0, 0, 0, 0.6)",
                 showConfirmButton: false,
-                scrollbarPadding: false, 
-                 
+                scrollbarPadding: false,    
             }
         ).queue([
             {  
@@ -268,22 +287,25 @@ const ProductCard = (props) =>{
                         popup: 'animate__animated animate__slideOutRight  animate__faster',
                         backdrop: 'swal2-noanimation'
                         },
-                        
+                        customClass: "toastStructure"
                     }
                 )
             }
         })
     };
+
     return(
-        <div className="productCardBox">
+    <div className="productCardBox">
+        <Link  to={`/${props.catSlug}/${props.subCatSlug}/${props.slug}/id=${props.id}`}  >
             <img src={props.src} className="" alt="productImage" className="productCardImg"/>
-            <div className=" p-0">
-                <div className=" productCardTitle"><Link className=" productCardTitle " to={`/${props.catName}/PPE/ProductName`} >{props.name}</Link></div>
-                <p className="mb-0 mb-sm-2 mt-1 productCardDetail  ">Starts from Rs. {props.startPrice}<span className="float-right d-flex" style={{color: "#757575" , height: "12px"}}>{props.rating}<StarIcon className="d-none d-sm-inline-block " style={{width: "16px",height: "18px", color: "#F2C94C"}}  /><StarIcon className="d-inline-block d-sm-none mt-0 " style={{width: "12px",height: "12px", color: "#F2C94C"}}  /></span></p>
-                <div className="d-inline-block productCardAddToCart  " role="button" onClick={addToCartPopUp}>Add to Cart</div>
-                <span className="productCardDetail2  d-inline-block  mt-2 mt-sm-0">{props.itemBought} bought this</span>
-            </div>
+        </Link>
+        <div className=" p-0">
+            <div className=" productCardTitle"><Link className=" productCardTitle " to={`/${props.catSlug}/${props.subCatSlug}/${props.slug}/id=${props.id}`} >{props.name}</Link></div>
+            <p className="mb-0 mb-sm-2 mt-1 productCardDetail  ">Starts from Rs. {props.startPrice}<span className="float-right d-flex" style={{color: "#757575" , height: "12px"}}>{props.rating}<StarIcon className="d-none d-sm-inline-block " style={{width: "16px",height: "18px", color: "#F2C94C"}}  /><StarIcon className="d-inline-block d-sm-none mt-0 " style={{width: "12px",height: "12px", color: "#F2C94C"}}  /></span></p>
+            <div className="d-inline-block productCardAddToCart  " role="button" onClick={addToCartPopUp}>Add to Cart</div>
+            <span className="productCardDetail2  d-inline-block  mt-2 mt-sm-0">{props.itemBought} bought this</span>
         </div>
+    </div>
     );
 };
 

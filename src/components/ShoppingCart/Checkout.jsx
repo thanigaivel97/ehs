@@ -6,6 +6,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Swal from "sweetalert2";
 import withReactContent from 'sweetalert2-react-content';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import {useForm} from "react-hook-form";
 
 const MySwal = withReactContent(Swal);
 
@@ -26,13 +27,17 @@ const ProductDetailCardInCheckout = (props) => {
 const Checkout = () => {
     const login=0;
 
-    const orderConfirm= () =>{
+    const { register, handleSubmit, formState: {errors}} = useForm({
+        mode: "onTouched"
+    });
+
+    const onSubmit = (data) => {
         MySwal.fire({
             html: <div className="d-flex mt-2">
                     <CheckCircleIcon style={{color: "#0C9B86"}} />
                     <p className="ml-2" style={{color: "#0C9B86"}}>Order Confirmed!</p>
                 </div>,
-            
+            timer: 3000,
             position: "top-end",
             showConfirmButton: false,
             showCloseButton: true,
@@ -102,22 +107,118 @@ const Checkout = () => {
                         </div>
                     </div>
 
-                    <button className="shippingDetailProceedBtn mt-4 " onClick={orderConfirm}>Proceed to Payment</button>
+                    <button className="shippingDetailProceedBtn mt-4 " >Proceed to Payment</button>
                 </div>
             ): (
                 <div className="shippingDetailBox p-4  mr-sm-5  mb-4 mb-sm-0">
                     <p className="perHead">Shipping Details</p>
-                    <hr style={{borderTop: "1px solid #D2D2D2"}}></hr>
-                    <input type="text" className="shippingDetailInput" placeholder="First Name" />
-                    <input type="text" className="shippingDetailInput" placeholder="Last Name" />
-                    <input type="text" className="shippingDetailInput" placeholder="Address Line 1" />
-                    <input type="text" className="shippingDetailInput" placeholder="Address Line 2" />
-                    <input type="text" className="shippingDetailInput" placeholder="City" />
-                    <input type="text" className="shippingDetailInput" placeholder="State" />
-                    <input type="number" className="shippingDetailInput" placeholder="PIN Code" />
-                    <input type="number" className="shippingDetailInput" placeholder="Contact Number" />
-                    <input type="email" className="shippingDetailInput" placeholder="Email" />
-                    <button className="shippingDetailProceedBtn " onClick={orderConfirm} >Proceed to Payment</button>
+                    <hr className=" mb-0" style={{borderTop: "1px solid #D2D2D2"}}></hr>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <input 
+                            type="text" 
+                            className="shippingDetailInput shippingDetailInput1 mr-sm-2" 
+                            placeholder="First Name" 
+                            name="firstName"
+                            {...register("firstName",{
+                                required: "**this field is required"
+                            })}
+                            />  
+                             {errors.firstName && (<span className="text-danger ml-2 d-sm-none d-block  mt-0 errorMsgCheckout">{errors.firstName.message}</span>)}
+                        <input 
+                            type="text" 
+                            className="shippingDetailInput shippingDetailInput1 ml-sm-1" 
+                            placeholder="Last Name" 
+                            name="lastName"
+                            {...register("lastName")}
+                            />
+                        {errors.firstName && (<span className="text-danger ml-2 d-sm-block d-none  mt-0 errorMsgCheckout">{errors.firstName.message}</span>)}
+                        <input 
+                            type="text" 
+                            className="shippingDetailInput" 
+                            placeholder="Address Line 1"
+                            name="address1"
+                            {...register("address1",{
+                                required: "**this field is required"
+                            })}
+                             />
+                              {errors.address1 && (<span className="text-danger ml-2 d-block  mt-0 errorMsgCheckout">{errors.address1.message}</span>)}
+                        <input 
+                            type="text" 
+                            className="shippingDetailInput" 
+                            placeholder="Address Line 2" 
+                            name="address2"
+                            {...register("address2")}
+                            />
+                        <div className="d-flex flex-sm-row flex-column justify-content-between ">
+                            <div className="d-flex flex-column shippingDetailInput1">
+                                <input 
+                                    type="text" 
+                                    className="shippingDetailInput   mr-sm-2" 
+                                    placeholder="City" 
+                                    name="city"
+                                    {...register("city",{
+                                        required: "**this field is required"
+                                    })}
+                                    />
+                                    {errors.city && (<span className="text-danger ml-2 d-inline-block  mt-0 errorMsgCheckout">{errors.city.message}</span>)}
+                            </div>
+                            <div className="d-flex flex-column shippingDetailInput1 ">
+                                <input 
+                                    type="number" 
+                                    className="shippingDetailInput  ml-sm-1" 
+                                    placeholder="PIN Code"
+                                    name="pincode"
+                                    {...register("pincode",{
+                                        required: "**this field is required",
+                                        minLength: {
+                                            value: 6,
+                                            message: "**enter valid pincode"
+                                        },
+                                        maxLength: {
+                                            value: 6,
+                                            message: "**enter valid pincode"
+                                        }
+                                    })}
+                                />
+                                {errors.pincode && (<span className="text-danger ml-2 d-inline-block   mt-0 errorMsgCheckout">{errors.pincode.message}</span>)}
+                            </div>
+                        </div>
+                        <input 
+                            type="text" 
+                            className="shippingDetailInput" 
+                            placeholder="State" 
+                            name="state"
+                            {...register("state",{
+                                required: "**this field is required"
+                            })}
+                            />
+                             {errors.state && (<span className="text-danger ml-2 d-block  mt-0 errorMsgCheckout">{errors.state.message}</span>)}
+                        <input 
+                            type="number" 
+                            className="shippingDetailInput" 
+                            placeholder="Contact Number" 
+                            name="mobile"
+                            {...register("mobile",{
+                                required: "**this field is required"
+                            })}
+                            />
+                             {errors.mobile && (<span className="text-danger ml-2 d-block  mt-0 errorMsgCheckout">{errors.mobile.message}</span>)}
+                        <input 
+                            type="email" 
+                            className="shippingDetailInput" 
+                            placeholder="Email" 
+                            name="email"
+                            {...register("email",{
+                                required: "**this field is required",
+                                pattern: {
+                                    value: /^(?:\w+@\w+\.\w{2,3})$/,
+                                    message: "**enter valid email"
+                                }
+                            })}
+                            />
+                             {errors.email && (<span className="text-danger ml-2 d-block  mt-0 errorMsgCheckout">{errors.email.message}</span>)}
+                        <button type="submit" className="shippingDetailProceedBtn "  >Proceed to Payment</button>
+                    </form>
                 </div>
             )}
            

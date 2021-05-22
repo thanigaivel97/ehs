@@ -1,8 +1,6 @@
 /*jshint esversion: 6 */
-import React, {useRef, useState,useEffect, useLayoutEffect } from "react";
+import React, {useRef, useState,useEffect } from "react";
 import { Link ,useParams} from "react-router-dom";
-import SafeTwo from "../../images/BeSafe.png";
-import Mind from "../../images/Mind.png";
 import Upto50 from "../../images/Upto50Offer.svg";
 import ProductCard from "../signages/ProductCard";
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
@@ -10,7 +8,8 @@ import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounde
 import Carousel  from "react-elastic-carousel";
 import Pagination from '@material-ui/lab/Pagination';
 import { createMuiTheme, ThemeProvider} from '@material-ui/core/styles';
-import $ from "jquery";
+import Axios from "axios";
+import {API} from "../../backend";
 
 const theme = createMuiTheme({
   palette: {
@@ -20,139 +19,59 @@ const theme = createMuiTheme({
   }
 });
 
-const ncard = (props) => {
-  return (
-      <ProductCard src={props.src} name={props.title} startPrice={props.startPrice} rating={props.rating} itemBought={props.itemBought} catName={props.cat} subCatName={props.subCat} />
-  );
-};
-
 const ProductList2 = (props) => {
-  const [path, setPath] = useState();
-  const [authUser, setAuthUser] = useState("");
+  const [posterData, setPosterData] = useState([]);
   const  posterIndividualCatCarousel= useRef();
-  const {catName,subCatName} = useParams();
-  const PPEPosters = [
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE" },
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE" },
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE" },
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE" },
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE"},
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE"},
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE" },
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE" },
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE" },
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE"},
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE"},
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE"},
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE"},
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE"},
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE"},
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE"},
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE"},
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE"},
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE"},
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE"},
-  ];
-  const FirePosters = [
-    { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "signages" , subCat: "PPE" },
-    { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "signages" , subCat: "PPE" },
-    { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "signages" , subCat: "PPE" },
-    { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "signages" , subCat: "PPE" },
-    { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "signages" , subCat: "PPE"},
-    { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "signages" , subCat: "PPE"},
-    { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "signages" , subCat: "PPE" },
-    { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "signages" , subCat: "PPE" },
-    { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "signages" , subCat: "PPE" },
-    { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "signages" , subCat: "PPE"},
-    { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "signages" , subCat: "PPE"},
-    { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "signages" , subCat: "PPE"},
-    { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "signages" , subCat: "PPE"},
-    { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "signages" , subCat: "PPE"},
-    { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "signages" , subCat: "PPE"},
-    { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "signages" , subCat: "PPE"},
-    { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "signages" , subCat: "PPE"},
-    { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "signages" , subCat: "PPE"},
-    { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "signages" , subCat: "PPE"},
-    { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "signages" , subCat: "PPE"},
-  ]
-  const [posters,setPosters] = useState(PPEPosters); 
+  const {catSlug,subCatSlug} = useParams();
+  const [shopBySubCategoryCards,setShopBySubCategoryCards] = useState([]);
+  const [bestSeller, setBestSeller] = useState([]);
+  let subCatName = subCatSlug.replace("-"," ");
+  let catName = catSlug.replace("-"," ");
 
-  const [category,setCategory] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(0);
-  
-  useLayoutEffect(()=>{
-  
-    setActiveIndex(CurrentActiveCat());
-  
-  });
+  useEffect(() => { 
+    
+      Axios.get(`${API}category/getCategoryById`,{params: {cat_slug: catSlug}}).then((res)=>{
+          setShopBySubCategoryCards(res.data.data[0].sub_category);
+          //console.log(res.data.data[0].sub_category)
+      }).catch((err)=> {
+          console.log(err);
+      });
+     
 
-  
-  useEffect(() => {
-
-    setPath(props.subCat);
-    if (JSON.parse(localStorage.getItem("userDetails123")))
-      setAuthUser(
-        JSON.parse(localStorage.getItem("userDetails123")).emailid ||
-          JSON.parse(localStorage.getItem("userDetails123")).phonenumber
-      );
-        /*get poster BY category here and use setPosters onClick event*/
-        if(catName==="posters"){
-          setCategory([
-            "PPE","Fire Safety","Environment","Housekeeping","Electrical Hazard","Material Handling","Chemical Hazards","Quality","Covid-19","Bestsellers"
-          ]);
-          setPosters(PPEPosters);
-        }else if(catName==="signages"){
-          setCategory([
-            "Pre Printed","Pictograms","Signal Temp Sheet","Bestsellers"
-          ]);
-          setPosters(FirePosters);
-        }else {
-          setCategory([
-            "Road Safety","Warehouse","Public Places","Covid-19","Bestsellers"
-          ]);
-          setPosters(FirePosters);
-        }
+      if(subCatSlug=== "bestsellers"){
+        Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: catSlug, bestseller: 1}}).then((res)=>{
+          setBestSeller(res.data.data);
+        }).catch((err)=> {
+          console.log(err);
+        });
+      }else{
+        Axios.get(`${API}posters/getPosterByCatSubCat`,{params: {subCategorySlug: subCatSlug}}).then((res) => {
+          setPosterData(res.data.data);
+          //console.log(res);
+        }).catch((err) => console.log("ERROR:",err)); 
+      }
       
-  }, [props.subCat]);
 
- 
- 
+      
+    
+  }, [catSlug,subCatSlug]);
+
 
   const breakPoints = [
     {width: 1, itemsToShow: 2,itemsToScroll: 2},
     {width: 780, itemsToShow: 5,itemsToScroll: 3}
   ]
-  
-  const setActiveCat = (e) => {
-    let cat = document.getElementsByClassName("posterCatIndividual");
-    for(let i=0; i< cat.length; i++ ){
-      cat[i].classList.remove("currentCatPoster");
-    }
-    e.target.classList.add("currentCatPoster");  
-  }
-  const CurrentActiveCat = () =>{
-    let cat = document.getElementsByClassName("posterCatIndividual");
-    for(let i=0; i< cat.length; i++ ){
-      if(subCatName.toLowerCase() === cat[i].innerText.toLowerCase()){
-        cat[i].classList.add("currentCatPoster");
-        return i;
-      }
-    }
-  }
- 
 
-
-  
     
 
   return (
     <div>
       <div className="container-fluid pb-lg-5 padding-10 " style={{ background: "#F6F6F6" }}>
           <div className="pt-2 pb-lg-2">
-              <Link to="/" className="text-dark">Home </Link>/<Link to={`/cat/${catName}/`} className="text-dark text-capitalize"> {catName} </Link>/<span className="font-weight-bold" > {subCatName}</span>
+              <Link to="/" className="text-dark">Home </Link>/<Link to={`/cat/${catSlug}/`} className="text-dark text-capitalize"> {catName} </Link>/<span className="font-weight-bold text-uppercase" > {subCatName}</span>
           </div>
           <div className="d-flex mt-lg-2">
-            <h1 className="mt-2 catHead " >
+            <h1 className="mt-2 catHead text-uppercase " >
             {subCatName}
             </h1>
             <img src={Upto50} alt="upto50%" className="ml-auto d-none d-sm-block" style={{width: "640px"}} />
@@ -162,12 +81,27 @@ const ProductList2 = (props) => {
       <div className="padding-10 subCatHeadCarousel ">
         <div className="d-flex align-items-center   " >
               <ArrowBackIosRoundedIcon id="prevBtn1" onClick={() =>  posterIndividualCatCarousel.current.slidePrev()} role="button" className="border mt-auto mb-auto shadow-sm rounded-circle" />               
-              <Carousel className="d-flex justify-content-center " initialActiveIndex={activeIndex}  breakPoints={breakPoints}  pagination={false} showArrows={false} ref={ posterIndividualCatCarousel} >
-                {category.map((i)=>{
+              <Carousel className="d-flex justify-content-center " initialActiveIndex={0}  breakPoints={breakPoints}  pagination={false} showArrows={false} ref={ posterIndividualCatCarousel} >
+                {shopBySubCategoryCards.map((i,index)=>{
                   return(
-                    <Link to={`/${catName}/subcat/${i}`} className="posterCatIndividual " onClick={setActiveCat}  >{i}</Link>
+                   <>
+                   {(i.sub_cat_slug === subCatSlug)?
+                    (
+                      <Link to={`/${catSlug}/subcat/${i.sub_cat_slug}`} className="posterCatIndividual text-capitalize currentCatPoster"  key={index} >{i.title}</Link>
+                    ):(
+                      <Link to={`/${catSlug}/subcat/${i.sub_cat_slug}`} className="posterCatIndividual text-capitalize"  key={index} >{i.title}</Link>
+                    )}
+                   </>
+                   
                   )
                 })}
+                {(subCatSlug === 'bestsellers')?(
+                  <Link to={`/${catSlug}/subcat/bestsellers`} className="posterCatIndividual text-capitalize currentCatPoster"  >Bestsellers</Link>
+                ):(
+                  <Link to={`/${catSlug}/subcat/bestsellers`} className="posterCatIndividual text-capitalize" >Bestsellers</Link>
+                )
+                }
+                
               </Carousel>  
               <ArrowForwardIosRoundedIcon id="prevBtn1" onClick={() => posterIndividualCatCarousel.current.slideNext()} role="button" className="border mt-auto mb-auto shadow-sm rounded-circle"  />
                 
@@ -178,11 +112,56 @@ const ProductList2 = (props) => {
 
       <div className="padding-10  ">
         <div className="productListing ">
-          {posters.map(ncard)}
+        
+       {(subCatSlug === "bestsellers")? (
+        bestSeller.map((ncard,i) =>{
+   
+            return(
+              <ProductCard 
+                src={ncard.imgUrl[0]} 
+                name={ncard.name} 
+                slug={ncard.slug} 
+                startPrice={ncard.originalPrice} 
+                rating={ncard.rating} 
+                itemBought={ncard.bought} 
+                catName={catName} 
+                subCatName={subCatName} 
+                catSlug={catSlug} 
+                subCatSlug={subCatSlug}
+                catId= {ncard.category[0]._id} 
+                subCatId={ncard.subCategory[0]._id}
+                id={ncard._id} 
+                key={i} 
+              />
+            )
+          })
+       ):(
+        posterData.map((ncard,i) =>{
+         
+            return(
+              <ProductCard 
+                src={ncard.imgUrl[0]} 
+                name={ncard.name} 
+                slug={ncard.slug} 
+                startPrice={ncard.originalPrice} 
+                rating={ncard.rating} 
+                itemBought={ncard.bought} 
+                catName={catName} 
+                subCatName={subCatName}
+                catSlug={catSlug} 
+                subCatSlug={subCatSlug} 
+                catId= {ncard.category[0]._id} 
+                subCatId={ncard.subCategory[0]._id}
+                id={ncard._id} 
+                key={i} 
+              />
+            )
+          })
+       )}
         </div>
       </div>
       <ThemeProvider theme={theme}>
-        <div className="d-flex   " style={{ marginTop: "60px"}}>
+        <div className="d-flex  paginationMargin ">
           <Pagination count={10} color="primary"  className="mx-auto"  />
         </div>
       </ThemeProvider>
@@ -200,13 +179,7 @@ const ProductList2 = (props) => {
             
       
             <img src={Upto50} className="mx-auto d-block d-sm-none bottomBanner50 " alt="footerBanner" /> 
-        
 
-
-
-
-
-     
 
     </div>
   );

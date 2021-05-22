@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /*jshint esversion: 9 */
-import React, { useRef } from "react";
+import React, { useRef,useState,  useEffect } from "react";
 import Blank from "../../images/blank.svg";
 import { Link, useHistory } from "react-router-dom";
 import Back from "../../images/back.svg";
@@ -9,7 +9,6 @@ import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
-import { useEffect, useState } from "react";
 import Tape from "../../images/tape.svg";
 import Pay from "../../images/payment.svg";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
@@ -26,6 +25,13 @@ import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounde
 import Carousel from "react-elastic-carousel";
 import FloorImg from "../../images/floor1.svg";
 import ProductCard from "../signages/ProductCard";
+import razorpayLogo from "../../images/razorparLogo.png"
+import {API} from "../../backend";
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import Swal from "sweetalert2";
+import withReactContent from 'sweetalert2-react-content';
+const MySwal = withReactContent(Swal);
 
 
 const ncard = (props) => {
@@ -63,6 +69,12 @@ const Tables = (props) => {
   const [state, setState] = React.useState("");
   const [pincode, setPincode] = React.useState("");
 
+  //Neww
+  const [cartItem,setCartItem] = useState([])
+  const [wishlist,setWishlist] = useState([]);
+  const [totalPay,setTotalPay] = useState(0);
+ 
+
   function session(r) {
     localStorage.setItem("userDetails123", JSON.stringify(r));
   }
@@ -75,9 +87,7 @@ const Tables = (props) => {
 
   const [num, setNum] = useState(props.navCount || 2);
 
-  const [totalPay, setTotalPay] = React.useState(0);
-
-  const [shipping, setShipping] = React.useState(220);
+  const [shipping, setShipping] = React.useState(0);
 
   function calculate(e) {
     let temp = 0;
@@ -188,17 +198,38 @@ const Tables = (props) => {
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    setUserJson(
-      JSON.parse(localStorage.getItem("userDetails123")) || {
-        user: {},
-      }
-    );
-    if (JSON.parse(localStorage.getItem("userDetails123")))
-      setAuthUser(
-        JSON.parse(localStorage.getItem("userDetails123")).emailid ||
-          JSON.parse(localStorage.getItem("userDetails123")).phonenumber
+      setUserJson(
+        JSON.parse(localStorage.getItem("userDetails123")) || {
+          user: {},
+        }
       );
-  }, []);
+      if (JSON.parse(localStorage.getItem("userDetails123"))){
+
+
+        Axios.get(`${API}auth/get_user_details_by_id`,{   
+            headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
+            params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
+          }).then((res)=>{
+            console.log(res);
+            setCartItem(res.data.data[0].cart);
+            setWishlist(res.data.data[0].wishList);
+            console.log(res.data.data[0].wishlist);
+            console.log(res.data.data[0].cart)
+          }).catch((err)=>{ 
+            console.log(err);
+          })
+        }
+
+        
+
+        setTotalPay( cartItem.reduce((totalPay, c) => totalPay + c, 0))
+        
+        setAuthUser(
+          JSON.parse(localStorage.getItem("userDetails123")).emailid ||
+            JSON.parse(localStorage.getItem("userDetails123")).phonenumber
+        );
+     
+  }, [totalPay]);
 
   useEffect(() => {
     setTotalPay(calculate(numCart));
@@ -290,41 +321,6 @@ const Tables = (props) => {
     setTotalPay(calculate(cartLocal.cartList));
   };
 
-  function check() {
-    if (numCart.length > 0) {
-      userJson.emailid || userJson.phonenumber
-        ? setModalCarousel({
-            one: false,
-            two: true,
-          })
-        : setModalCarousel({
-            one: true,
-            two: false,
-          });
-      paymentFun();
-    } else {
-      swal("Oops", "No Items in Your Cart", "warning");
-    }
-  }
-  // const cardDet = {
-  //   src: DisInfect,
-  //   title: "Floor Graphics | Printable Catalog | PRD-FG009",
-  //   by: "By Pankaj Jadhav",
-  //   isInStock: true,
-  //   rate: 4.6,
-  //   bought: "473",
-  //   price: 400,
-  // };
-
-  const [bottomDet] = React.useState({});
-
-  // const addToCart = (det) => {
-  //   setBottomDet(det);
-  //   $("#bottomCart").css("display", "block");
-  //   props.setCartCountFun(det);
-  // };
-
-
   const similarProductInfo = [
     { src: FloorImg, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473 },
     { src: FloorImg, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473 },
@@ -340,19 +336,97 @@ const Tables = (props) => {
     { width: 780, itemsToShow: 4 }
   ];
 
+  const addToWishlist = (productId,imgUrl,name,quantity) => {
+    if(authUser){
+        Axios.post(`${API}auth/add_user_details`,{
+            poster_obj_id: productId,
+            add: 1
+        },{   
+            headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
+            params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
+        }).then((res)=>{
+            //console.log(res);
+            MySwal.fire(
+                {
+                    html: <div className="d-flex">
+                            <HighlightOffIcon onClick={MySwal.close} role="button" style={{
+                            position: "absolute",
+                            top: "2px",
+                            right: "2px",
+                            color: "#000"
+                            }} />
+                            <CheckCircleIcon style={{
+                                color: "#F2994A",
+                                position: "absolute",
+                                top: "18px",
+                                left: "23px",
+                                background: "#FFF",
+                                borderRadius: "50%",
+                                border: "none",
+                            }} />
+                            <img src={imgUrl} alt="productImage" className="toastImg " />
+                            <div className="ml-2 ">
+                            <p className="toastAddedText">Added to Wishlist</p>
+                            <p className="qtyPopupText text-left font-weight-normal mb-1" >{name}</p>
+                            <p className="qtyPopupText text-left mb-0" style={{fontWeight: "600"}}>Quantity: {quantity}</p>
+                            <a href="/dashboard"><p className="mb-0" style={{
+                                fontWeight: "bold",
+                                fontSize: "18px",
+                                lineHeight: "20px",
+                                textDecorationLine: "underline",
+                                color: "#F2994A",
+                                textAlign: "right"
+                            }}>View Wishlist</p></a>
+                            </div>
+                    </div>,
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    scrollbarPadding: false,
+                    timer: 3000,
+                    showClass: {
+                    popup: 'animate__animated animate__fadeIn  animate__faster',
+                    backdrop: 'swal2-noanimation'
+                    },
+                    hideClass: {
+                    popup: 'animate__animated animate__slideOutRight  animate__faster',
+                    backdrop: 'swal2-noanimation'
+                    },
+                    customClass: "toastStructure"
+                })
+
+                window.location.reload(false);
+        }).catch((err)=>{
+            console.log(err);
+        })
+    }
+}
+
+  const removeFromCart = (productId) => {
+    if(authUser){
+      Axios.post(`${API}auth/update_user_cart`,{
+          poster_obj_id: productId,
+          removeCart: 1
+      },
+      {   
+          headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
+          params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
+      })
+      .then((res)=>{
+          //console.log(res);
+            window.location.reload(false);
+      }).catch((err)=>{
+          console.log(err);
+      })
+  }
+  }
+
   const wishlistCarousel = useRef();
 
-  const cartItem = [
-    {imgUrl: FloorImg, name: "Posters | Material Handling | PRD – MH0013A", Material: "PREMIUM SELF ADHESIVE", Dimension: "12x26", originalPrice: "200", quantity: "2"},
-    {imgUrl: FloorImg, name: "Posters | Material Handling | PRD – MH0013A", Material: "PREMIUM SELF ADHESIVE", Dimension: "12x26", originalPrice: "200", quantity: "2"},
-    {imgUrl: FloorImg, name: "Posters | Material Handling | PRD – MH0013A", Material: "PREMIUM SELF ADHESIVE", Dimension: "12x26", originalPrice: "200", quantity: "2"},
-    {imgUrl: FloorImg, name: "Posters | Material Handling | PRD – MH0013A", Material: "PREMIUM SELF ADHESIVE", Dimension: "12x26", originalPrice: "200", quantity: "2"},
-  ]
+  let totalAmount = 0;
   
   return (
     <div>
-
-
         <div className="container-fluid pb-lg-5 padding-10" style={{ background: "#F6F6F6" }}>
           <div className="pt-2 pb-lg-2">
               <Link to="/" className="text-dark "><ArrowBackIosRoundedIcon  style={{width: "12px",marginBottom: "2px" }} /> Back to Shopping </Link>
@@ -379,7 +453,8 @@ const Tables = (props) => {
           </div>
         </div>
 
-        { num>0 ? (
+        { (cartItem.length > 0) ? (
+          
           <div>
             <div className="row padding-10 mt-5">
               <div className="col-sm-8 col">
@@ -398,34 +473,39 @@ const Tables = (props) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {cartItem.map((v, i) => (
+                    {cartItem.map((v, i) => {
+                      //console.log(v);
+                     // setTotalPay(totalPay => totalPay + v.total);
+                    // cartItem.reduce((totalPay, { v.total }) => totalPay + v.total, 0)
+                      totalAmount=totalAmount+ parseInt(v.total);
+                     return(
                       <tr key={i} >
-                        <td className="mr-0 " style={{ width: "460px" }}>
+                       <td className="mr-0 " style={{ width: "460px" }}>
                           <Grid>
                             <Grid.Row columns="2">
                               <Grid.Column>
                                 <img
-                                  src={v.imgUrl}
+                                  src={v.poster_details.imgUrl[0]}
                                   className="productImgInCart"
-                                  alt={v.name}
+                                  alt={v.poster_details.slug}
                                 />
                               </Grid.Column>
                               <Grid.Column className="ml-2 ml-sm-4 mt-0 mt-sm-2 mr-0">
                                 <p
                                   className="tabletitle p-0 mb-0 mb-sm-2 "
                                 >
-                                  {v.name}
+                                  {v.poster_details.name}
                                 </p>
                                 <p
                                   className="tabledata p-0 m-0"
                                 >
-                                  Material : <span style={{fontWeight: "600"}}>{v.Material}</span>
+                                  Material : <span style={{fontWeight: "600"}}>{v.materialDimension.material_title}</span>
                                 </p>
                                 <p
                                   className="tabledata p-0 m-0"
                                 >
                                   Dimension :{" "}
-                                  <span style={{fontWeight: "600"}}>{v.Dimension}</span>
+                                  <span style={{fontWeight: "600"}}>{v.materialDimension.dimension_title}</span>
                                 </p>
                                 <div className="d-sm-none d-inline-block mt-1 ml-1 mb-0">
                                 <ButtonGroup
@@ -460,21 +540,23 @@ const Tables = (props) => {
                           </ButtonGroup>
                                 </div>
                                 <p className="font-weight-bold d-inline-block d-sm-none p-0 m-0 float-right" style={{color: "#003459"}}>
-                                  ₹ {v.originalPrice * v.quantity}
+                                  ₹ {v.total}
                                 </p>
                                 <p className="tabledata p-0 m-0 d-none d-sm-block">
-                                  Price : <span style={{fontWeight: "600"}}>₹ {v.originalPrice}</span>
+                                  Price : <span style={{fontWeight: "600"}}>₹ {v.poster_details.originalPrice}</span>
                                 </p>
                                 <div className="mt-sm-1 mt-0 p-0  " style={{marginTop: "0", padding: "0", lineHeight: "12px"}}>
                                 <p
                                     className="tabledata p-0 m-0 d-inline-block mr-4"
                                     style={{ cursor: "pointer", textDecoration: "underline" }}
+                                    onClick={() => addToWishlist(v.poster_details._id,v.poster_details.imgUrl[0],v.poster_details.name,v.quantity)}
                                   >
                                     Add to Wishlist
                                   </p>
                                   <p
                                     className="tabledata  p-0 m-0 d-inline-block"
                                     style={{ cursor: "pointer", textDecoration: "underline" }}
+                                    onClick={()=> removeFromCart(v.poster_details._id)}
                                   >
                                     Remove
                                   </p>
@@ -516,11 +598,11 @@ const Tables = (props) => {
                         </td>
                         <td>
                           <p className="mt-5  font-weight-bold  d-none d-sm-block">
-                            ₹ {v.originalPrice * v.quantity}
+                            ₹ {v.total}
                           </p>
                         </td>
-                      </tr>
-                    ))}
+                      </tr>)
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -563,7 +645,7 @@ const Tables = (props) => {
                   <tbody>
                     <tr height="30px">
                       <td className="pri left">Price</td>
-                      <td className="pri right">₹{totalPay}</td>
+                      <td className="pri right">₹{totalAmount}</td>
                     </tr>
                     <tr height="30px">
                       <td className="shi left">Shipping</td>
@@ -582,7 +664,7 @@ const Tables = (props) => {
                       }}
                     >
                       <td className="pri left" style={{fontSize: "18px", lineHeight: "23px"}}>Total Price</td>
-                      <td className="pri right" style={{fontSize: "18px", lineHeight: "23px"}}>₹{totalPay + shipping}</td>
+                      <td className="pri right" style={{fontSize: "18px", lineHeight: "23px"}}>₹{totalAmount + shipping}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -619,8 +701,11 @@ const Tables = (props) => {
                 </Button>
                 </Link>
                 
-
-                <table
+                  <div className="razorpayBox">
+                    <span className="poweredBy mr-2">Powered by</span>
+                    <img src={razorpayLogo} alt="razorpay" className="razorpayLogo " />
+                  </div>
+                <table className="d-none"
                   width="100%"
                   style={{
                     marginTop: "20px"
@@ -676,31 +761,60 @@ const Tables = (props) => {
         }}></div>
 
 
-              <div className="padding-10 mb-5">
-                    <h2 className=" d-inline-block" style={{
-                        fontStyle: "normal",
-                        fontWeight: "600",
-                        fontSize: "24px",
-                        lineHeight: "30px",
-                        color: "#000000",
-                        marginBottom: "30px"
-                    }}>My Wishlist</h2>
+              <div className="padding-10 wishlistCarouselMargin">
+                    <h2 className=" d-inline-block otherCarouselHead" >My Wishlist</h2>
                     
                      
-                    <Link role="button" to="/" className="seemore d-inline-block float-right" style={{lineHeight: "24px", fontWeight: "600"}} >View All</Link>
+                    <Link role="button" to="/dashboard" className=" d-inline-block float-right viewAll" >View All</Link>
        
-            <span className="float-right d-none d-sm-block mr-3">Page 1-6</span>
 
                    {/* <ProductCard src={BeforeStart} name="Floor Graphics | Printable Catalog | PRD-FG009" startPrice={219} rating={rating} itemBought={473} /> */} 
                 <div className=" d-sm-flex d-none" style={{opacity: "1"}}>
-                    <ArrowBackIosRoundedIcon onClick={() => wishlistCarousel.current.slidePrev()} role="button" className="border mt-auto mb-auto shadow-sm rounded-circle d-none d-sm-block" />
+                    <ArrowBackIosRoundedIcon onClick={() => wishlistCarousel.current.slidePrev()} role="button" id="prevBtn1" className="border my-auto d-none d-sm-block" />
                     <Carousel className="d-flex justify-content-around" breakPoints={breakPoints}  pagination={false} showArrows={false} ref={wishlistCarousel} style={{opacity: "1!important"}}>
-                        {similarProductInfo.map(ncard)}
+                    {wishlist.map((ncard,i)=>{
+                           return(
+                            <ProductCard 
+                                    src={ncard.imgUrl[0]} 
+                                    name={ncard.name} 
+                                    slug={ncard.slug} 
+                                    startPrice={ncard.originalPrice} 
+                                    rating={ncard.rating} 
+                                    itemBought={ncard.bought} 
+
+                                    catId= {ncard.category[0]._id} 
+                                    subCatId={ncard.subCategory[0]._id}
+                                    catSlug = {ncard.category[0].cat_slug}
+                                    subCatSlug = {ncard.subCategory[0].sub_cat_slug}
+                                    id={ncard._id} 
+                                    key={i} 
+                                />
+                           )
+                        })}
+                        
                     </Carousel>  
-                    <ArrowForwardIosRoundedIcon onClick={() => wishlistCarousel.current.slideNext()} role="button" className="border mt-auto mb-auto shadow-sm rounded-circle d-none d-sm-block"  />
+                    <ArrowForwardIosRoundedIcon onClick={() => wishlistCarousel.current.slideNext()} role="button" id="prevBtn1" className="border my-auto  d-none d-sm-block"  />
                 </div>
                 <div className="d-sm-none productsOnMobile">
-                    {similarProductInfo.slice(0,4).map(ncard)}
+                    {wishlist.slice(0,4).map((ncard,i)=>{
+                           return(
+                            <ProductCard 
+                                    src={ncard.imgUrl[0]} 
+                                    name={ncard.name} 
+                                    slug={ncard.slug} 
+                                    startPrice={ncard.originalPrice} 
+                                    rating={ncard.rating} 
+                                    itemBought={ncard.bought} 
+                                    
+                                    catId= {ncard.category[0]._id} 
+                                    subCatId={ncard.subCategory[0]._id}
+                                    catSlug = {ncard.category[0].cat_slug}
+                                    subCatSlug = {ncard.subCategory[0].sub_cat_slug}
+                                    id={ncard._id} 
+                                    key={i} 
+                                />
+                           )
+                        })}
                 </div>
             </div>            
 

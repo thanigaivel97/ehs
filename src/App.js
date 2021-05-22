@@ -20,6 +20,7 @@ import Signup from "./components/login/Signup.jsx";
 import Otp from "./components/login/Otp";
 import ForgotPass from "./components/login/ForgotPass";
 import PrivacyPolicy from "./components/PrivacyPolicy/PrivacyPolicy.jsx";
+import TermsAndConditions from "./components/TermsAndConditions/TermAndConditions";
 import Support from "./components/Support/Support";
 import Affiliate from "./components/Affliate/Affliate";
 import Faq from "./components/Faq/Faq";
@@ -72,14 +73,14 @@ function App(props) {
   React.useEffect(() => {
     document.title = "Ehs prints";
 
-    Axios.post(login, { emailid: "naveen@gmail.com", password: "1234" })
+    /*Axios.post(login, { emailid: "naveen@gmail.com", password: "1234" })
       .then((res) => {
         props.setLoginResponse(res.data.token);
         localStorage.setItem("ehstoken12345678910", res.data?.token);
       })
       .catch((err) => {
         console.log(err);
-      });
+      });*/
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchData]);
 
@@ -112,6 +113,10 @@ function App(props) {
               <PrivacyPolicy />
             </Route>
 
+            <Route eact path="/termsandconditions">
+              <TermsAndConditions />
+            </Route>
+
             <Route exact path="/quotation">
               <Quotation />
             </Route>
@@ -131,7 +136,7 @@ function App(props) {
               <Contact />
             </Route>
 
-            <Route exact path="/cat/:catName">
+            <Route exact path="/cat/:catSlug">
               <Category setCartCountFun={countSetFun} />
             </Route>
 
@@ -139,11 +144,11 @@ function App(props) {
               <Campaigns />
             </Route>
 
-            <Route exact path="/:catName/subcat/:subCatName">
+            <Route exact path="/:catSlug/subcat/:subCatSlug">
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
 
-            <Route exact path="/posters/:posterCatName/:productName">
+            <Route exact path="/:catSlug/:subCatSlug/:productSlug/id=:productId">
               <PosterProductPage  />
             </Route>
 

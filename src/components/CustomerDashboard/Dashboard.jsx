@@ -39,6 +39,7 @@ import Swal from "sweetalert2";
 import withReactContent from 'sweetalert2-react-content';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import {useForm} from "react-hook-form";
 
 
 const MySwal = withReactContent(Swal);
@@ -242,6 +243,18 @@ const PersonalInfo = () => {
   const [oldPassword, setOldPassword] = React.useState("");
   const [newPassword, setNewPassword] = React.useState("");
   const [address, setAddress] = React.useState("");
+  const [email,setEmail] = useState("");
+  const [phone,setPhone] = useState("");
+
+  useEffect(()=>{
+    if (JSON.parse(localStorage.getItem("userDetails123"))){
+      setName( JSON.parse(localStorage.getItem("userDetails123")).name);
+      setEmail(JSON.parse(localStorage.getItem("userDetails123")).emailid);
+      setPhone(JSON.parse(localStorage.getItem("userDetails123")).phonenumber);
+    }
+  },[]);
+
+  const { register,handleSubmit } = useForm();
 
   function updatePassword() {
     Axios.post(updateUser, {
@@ -261,7 +274,6 @@ const PersonalInfo = () => {
       })
       .catch((err) => swal(err));
   }
-
   function updateAddress() {
     Axios.post(updateUser, {
       address: address,
@@ -272,16 +284,7 @@ const PersonalInfo = () => {
         return;
       })
       .catch((err) => swal(err));
-  }
-
-  const breakPoints = [
-    { width: 1, itemsToShow: 1, itemsToScroll: 1 },
-    { width: 360, itemsToShow: 2}
-  ];
-
-  const addressCarousel =useRef();
-  const paymentCarousel =useRef();
-
+  };
   const profileUpdate = () =>{
     MySwal.fire({
         html: <div className="d-flex mt-2">
@@ -307,7 +310,6 @@ const PersonalInfo = () => {
         }
     })
 };
-
 const confirmDeleteAccount = () => {
   const onCancel = () => {
     MySwal.clickCancel();
@@ -343,20 +345,26 @@ const addAddress = () => {
   const onConfirm = () => {
     MySwal.clickConfirm();
   }
+  const onSubmit = (data) =>{
+    console.log(data);
+  }
+
   MySwal.fire({
     html: <div className="">
             <p className="addAddressHead">Add Address</p>
             <hr style={{color: "#D2D2D2",marginBottom: "10px",marginTop: "0"}} />
-            <input type="text" placeholder="First Name" className="addAddressInput" required/>
-            <input type="text" placeholder="Last Name" className="addAddressInput" />
-            <input type="text" placeholder="Address Line 1" className="addAddressInput" required/>
-            <input type="text" placeholder="Address Line 2" className="addAddressInput" />
-            <input type="text" placeholder="City" className="addAddressInput" required/>
-            <input type="text" placeholder="State" className="addAddressInput" required/>
-            <input type="number" placeholder="Pin Code" className="addAddressInput" required/>
-            <input type="number" placeholder="Contact Number" className="addAddressInput" required/>
-            <input type="email" placeholder="Email" className="addAddressInput" required/>
-            <button onClick={onConfirm} className="saveBtn">Save</button>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <input type="text" name="firstName" {...register("firstName")} placeholder="First Name" className="addAddressInput" required/>
+              <input type="text" name="lastName" {...register("lastName")} placeholder="Last Name" className="addAddressInput" />
+              <input type="text" name="address1" {...register("address1")} placeholder="Address Line 1" className="addAddressInput" required/>
+              <input type="text" name="address2" {...register("address2")} placeholder="Address Line 2" className="addAddressInput" />
+              <input type="text" name="city" {...register("city")} placeholder="City" className="addAddressInput" required/>
+              <input type="text" name="state" {...register("state")} placeholder="State" className="addAddressInput" required/>
+              <input type="number" name="pincode" {...register("pincode")} placeholder="Pin Code" className="addAddressInput" required/>
+              <input type="number" name="phonenumber" {...register("phonenumber")} placeholder="Contact Number" className="addAddressInput" required/>
+              <input type="email" name="emailid" {...register("emailid")} placeholder="Email" className="addAddressInput" required/>
+              <button type="submit"  className="saveBtn">Save</button>
+            </form>
           </div>,
           showConfirmButton: false,
           padding: "10px 0px 5px 0px",
@@ -400,8 +408,12 @@ const addAddress = () => {
     }
   })
 };
-
-
+const breakPoints = [
+  { width: 1, itemsToShow: 1, itemsToScroll: 1 },
+  { width: 360, itemsToShow: 2}
+];
+  const addressCarousel =useRef();
+  const paymentCarousel =useRef();
   return (
     <>
 
@@ -411,15 +423,15 @@ const addAddress = () => {
             <p className="perTag ">Updating email address or phone number would require verification after making changes here.</p>
             <div className="perInput">
               <label htmlFor="NAME " className="perLabel ">NAME</label>
-              <input type="text" id="NAME"  placeholder="Abc Xyz"/>
+              <input type="text" id="NAME"  placeholder={name}/>
             </div>
             <div className="perInput">
               <label htmlFor="EMAIL"  className="perLabel">EMAIL</label>
-              <input type="email" pattern="^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$" id="EMAIL" placeholder="Abc@gmail.com" />
+              <input type="email" pattern="^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$" id="EMAIL" placeholder={email} />
             </div>
             <div className="perInput">
               <label htmlFor="MOBILE" className="perLabel">MOBILE</label>
-              <input type="number" id="MOBILE" placeholder="+91 8992376000" />
+              <input type="number" id="MOBILE" placeholder={phone} />
             </div>
             <div className="perInput">
               <label htmlFor="NEWPASSWORD" className="perLabel">NEW PASSWORD</label>
@@ -435,7 +447,7 @@ const addAddress = () => {
             </div>
             <div className="updateBtn mx-auto mt-5" role="button" onClick={profileUpdate} >UPDATE</div>
             </div>
-        <div className=" border">
+        <div className=" ">
           <div className=" addressBox mb-4  p-3 ">
             <div className=" perInput mb-3 ">
               <p className="perHead  d-inline-block ml-sm-5 ml-0" style={{ lineHeight: "38px"}}>Addresses</p>
@@ -451,7 +463,7 @@ const addAddress = () => {
               <ArrowForwardIosRoundedIcon onClick={() => addressCarousel.current.slideNext()} role="button" className="border  mt-auto mb-auto  shadow-sm rounded-circle " />
             </div>
           </div>
-          <div className=" addressBox p-3">
+          <div className="d-none addressBox p-3">
               <div className="perInput mb-4 ">
                 <p className="perHead  d-inline-block ml-sm-5 ml-0" style={{ lineHeight: "38px"}}>Payment Preferences</p>
                 <span className="passForgot float-right" style={{fontSize: "14px",lineHeight: "38px"}}>Add Payment Option</span>
@@ -1784,7 +1796,7 @@ const QuotesCard = (props) => {
                     }}>An email has been sent to you and the supplier on the registered email addresses.</p>
                     </div>
             </div>,
-        
+        scrollbarPadding: false,
         position: "top-end",
         timer: 3000,
         showConfirmButton: false,
@@ -1792,7 +1804,14 @@ const QuotesCard = (props) => {
         width: "500px",
         height: "100px",
         backdrop: "rgba(0, 0, 0, 0.5)",
-        
+        showClass: {
+          popup: 'animate__animated animate__zoomIn  animate__faster',
+          backdrop: 'animate__animated animate__fadeIn  animate__faster'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__slideOutRight  animate__faster',
+          backdrop: 'animate__animated animate__fadeOut  animate__faster'
+        }
     })
 };
   return(
@@ -1878,7 +1897,7 @@ const QuotesCard = (props) => {
               </div>
           </div>
           <div className="buyerDetailBox1 d-flex flex-sm-row flex-column align-items-center justify-content-sm-between">
-            <button className="my-4 my-sm-0" style={{
+            <button className="my-4 my-sm-0 d-none" style={{
             background: "#F2994A",
             borderRadius: "4px",
             width: "213px",

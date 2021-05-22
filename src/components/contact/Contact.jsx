@@ -5,6 +5,7 @@ import tag3 from "../../images/tag6.png";
 import EmailIcon from '@material-ui/icons/Email';
 import Swal from "sweetalert2";
 import withReactContent from 'sweetalert2-react-content';
+import { useForm } from "react-hook-form";
 
 const MySwal = withReactContent(Swal);
 
@@ -29,22 +30,29 @@ const CardL = (props) => {
 
 const Contact = () => {
 
-    const messageSent = () =>{
+   
+
+    const { register, handleSubmit, formState: {errors} } = useForm({
+        mode: "onTouched"
+    })
+
+    const onSubmit = (data) => {
+        //console.log(data);
         MySwal.fire({
             html: <div className="d-flex mt-2">
                     <EmailIcon style={{color: "#003459"}} />
                     <p className="ml-2" style={{color: "#003459"}}>Message Sent!</p>
                 </div>,
-            
+                timer: 3000,
+            scrollbarPadding: false,
             position: "top-end",
             showConfirmButton: false,
             showCloseButton: true,
             width: "500px",
-            height: "100px",
             backdrop: "rgba(0, 0, 0, 0.5)",
             
         })
-    };
+    }
 
     return (
        <>
@@ -56,28 +64,81 @@ const Contact = () => {
             <CardL imgsrc={tag3} title="Location" desc="45, old Agarwal Nagar, Indore, MP" />
             </div>
         </div>
-        <form className="contactFormBox p-sm-5 p-4 mx-auto mt-sm-5 mt-3 mb-sm-5 mb-3">
-            <input type="text" className="contactFormInput mr-sm-4 mr-0 mb-4" placeholder="First Name" required/>
-            <input type="text" className="contactFormInput mb-4" placeholder="Last Name" />
-            <input type="email" className="contactFormInput mr-sm-4 mr-0 mb-4" placeholder="Email" required/>
-            <input type="number" className="contactFormInput mb-4" placeholder="Mobile Number" required/>
+        <form className="contactFormBox p-sm-5 p-4 mx-auto mt-sm-5 mt-3 mb-sm-5 mb-3" onSubmit={handleSubmit(onSubmit)}>
+            <div className="d-inline-flex flex-column mr-sm-4 mr-0 mb-4 contactFormInputBox " >
+            <input 
+                type="text" 
+                className="contactFormInput  w-100" 
+                placeholder="First Name" 
+                name="firstName"
+                {...register("firstName",{
+                            required: "**this field is required"
+                })}
+                />
+                {errors.firstName && (<span className="text-danger ml-2   mt-0 errorMsgCheckout">{errors.firstName.message}</span>)}
+            </div>
+            <input 
+                type="text" 
+                className="contactFormInput mb-4" 
+                placeholder="Last Name" 
+                name="lastName"
+                {...register("lastName")}
+                 />
+            <div className="d-flex flex-sm-row flex-column justify-content-between ">
+                <div className="d-inline-flex flex-column mr-sm-4 mr-0 mb-4 contactFormInputBox" >
+                <input 
+                    type="email" 
+                    className="contactFormInput  w-100" 
+                    placeholder="Email"
+                    name="email"
+                    {...register("email",{
+                        required: "**this field is required",
+                        pattern: {
+                            value: /^(?:\w+@\w+\.\w{2,3})$/,
+                            message: "**enter valid email"
+                        }
+                    })}
+                    />
+                    {errors.email && (<span className="text-danger ml-2   mt-0 errorMsgCheckout">{errors.email.message}</span>)}
+                    </div>
+                <div  className="d-inline-flex flex-column  mr-0 mb-4 contactFormInputBox" >
+            <input 
+                type="number" 
+                className="contactFormInput w-100" 
+                placeholder="Mobile Number"
+                name="mobile"
+                {...register("mobile",{
+                    required: "**this field is required",
+                    minLength: {
+                        value: 10,
+                        message: "**please enter valid 10 digit mobile number"
+                    },
+                    maxLength: {
+                        value: 10,
+                        message: "**please enter valid 10 digit mobile number"
+                    }
+                })}
+                />
+                {errors.mobile && (<span className="text-danger ml-2   mt-0 errorMsgCheckout">{errors.mobile.message}</span>)}
+            </div>
+            </div>
             <div className="contactFormLabel">
                 <label className="mb-3">You are : </label><br />
                 <div className="d-flex justify-content-between flex-sm-row flex-column" style={{fontWeight: "500"}}>
                     <div className="mb-2">
-                        <input type="radio" id="customer" className="align-baseline"  name="He/She is" value="customer" />
+                        <input type="radio" id="customer" className="align-baseline"  name="sender" value="customer" {...register("sender")} />
                         <label for="customer">Customer</label>
                     </div>
                     <div className="mb-2">
-                        <input type="radio" id="Rcustomer" className="align-baseline" name="He/She is" value="Returning Customer" />
+                        <input type="radio" id="Rcustomer" className="align-baseline" name="sender" value="Returning Customer" {...register("sender")} />
                         <label  for="Rcustomer">Returning Customer</label>
                     </div>
                     <div className="mb-2">
-                        <input type="radio" id="Enthusiast" className="align-baseline" name="He/She is" value="Enthusiast" />
+                        <input type="radio" id="Enthusiast" className="align-baseline" name="sender" value="Enthusiast" {...register("sender")} />
                         <label for="Enthusiast">Enthusiast</label>
                     </div>
                     <div className="mb-2">
-                        <input type="radio" id="CasualVisitor" className="align-baseline" name="He/She is" value="CasualVisitor" />
+                        <input type="radio" id="CasualVisitor" className="align-baseline" name="sender" value="CasualVisitor" {...register("sender")} />
                         <label for="CasualVisitor">Casual Visitor</label>
                     </div>
                 </div>
@@ -86,19 +147,19 @@ const Contact = () => {
                 <label className="mb-3">Subject Line : </label><br />
                 <div className="d-flex justify-content-between flex-sm-row flex-column" style={{fontWeight: "500"}}>
                     <div className="mb-2">
-                        <input type="radio" id="price" className="align-baseline"  name="Subject" value="Price and price list" />
+                        <input type="radio" id="price" className="align-baseline"  name="Subject" value="Price and price list" {...register("subject")} />
                         <label for="price">Price and Price List</label>
                     </div>
                     <div className="mb-2">
-                        <input type="radio" id="quotation" className="align-baseline" name="Subject" value="Quotation" />
+                        <input type="radio" id="quotation" className="align-baseline" name="Subject" value="Quotation" {...register("subject")} />
                         <label  for="quotation">Quotation</label>
                     </div>
                     <div className="mb-2">
-                        <input type="radio" id="invoice" className="align-baseline" name="Subject" value="Proforma Invoice" />
+                        <input type="radio" id="invoice" className="align-baseline" name="Subject" value="Proforma Invoice" {...register("subject")} />
                         <label for="invoice">Proforma Invoice</label>
                     </div>
                     <div className="mb-2">
-                        <input type="radio" id="general" className="align-baseline" name="Subject" value="General" />
+                        <input type="radio" id="general" className="align-baseline" name="Subject" value="General" {...register("subject")} />
                         <label for="general">General</label>
                     </div>
                 </div>
@@ -107,11 +168,19 @@ const Contact = () => {
                 <label className="mb-3">Attachment : </label><br />
                 <input type="file" />
             </div>
-            <div className="contactFormLabel mt-4 mb-4">
+            <div className="contactFormLabel mt-4 mb-4 ">
                 <label className="mb-3" for="message">Message : </label><br />
-                <textarea id="message" name="message"  className="contactMessage"></textarea>
+                <textarea 
+                    id="message" 
+                    name="message"  
+                    className="contactMessage mb-0 " 
+                    {...register("message",{
+                        required: "**this field is required",
+                    })}>
+                    </textarea>
+                    {errors.message && (<span className="text-danger ml-2  mt-0 errorMsgCheckout">{errors.message.message}</span>)}
             </div>
-            <button type="submit" onSubmit={messageSent} value="send" style={{
+            <button type="submit"  value="send" style={{
                 width: "100%",
                 height: "45px",
                 color: "#FFF",

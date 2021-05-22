@@ -515,11 +515,11 @@ const SignageProductPage = () => {
 
                    {/* <ProductCard src={BeforeStart} name="Floor Graphics | Printable Catalog | PRD-FG009" startPrice={219} rating={rating} itemBought={473} /> */} 
                 <div className=" d-sm-flex d-none" style={{opacity: "1"}}>
-                    <ArrowBackIosRoundedIcon onClick={() => similarCarousel.current.slidePrev()} role="button" className="border mt-auto mb-auto shadow-sm rounded-circle d-none d-sm-block" />
+                    <ArrowBackIosRoundedIcon onClick={() => similarCarousel.current.slidePrev()} role="button" id="prevBtn" className="d-none  d-sm-block my-auto" />
                     <Carousel className="d-flex justify-content-around" breakPoints={breakPoints}  pagination={false} showArrows={false} ref={similarCarousel} style={{opacity: "1!important"}}>
                         {similarProductInfo.map(ncard)}
                     </Carousel>  
-                    <ArrowForwardIosRoundedIcon onClick={() => similarCarousel.current.slideNext()} role="button" className="border mt-auto mb-auto shadow-sm rounded-circle d-none d-sm-block"  />
+                    <ArrowForwardIosRoundedIcon onClick={() => similarCarousel.current.slideNext()} role="button" id="prevBtn" className="my-auto d-none d-sm-block"  />
                 </div>
                 <div className="d-sm-none productsOnMobile">
                     {similarProductInfo.slice(0,4).map(ncard)}
@@ -544,11 +544,11 @@ const SignageProductPage = () => {
 
                    {/* <ProductCard src={BeforeStart} name="Floor Graphics | Printable Catalog | PRD-FG009" startPrice={219} rating={rating} itemBought={473} /> */} 
                 <div className=" d-sm-flex d-none" style={{opacity: "1"}}>
-                    <ArrowBackIosRoundedIcon onClick={() => likecarousel.current.slidePrev()} role="button" className="border mt-auto mb-auto shadow-sm rounded-circle d-none d-sm-block" />
+                    <ArrowBackIosRoundedIcon onClick={() => likecarousel.current.slidePrev()} role="button" id="prevBtn" className="my-auto d-none d-sm-block" />
                     <Carousel className="d-flex justify-content-around" breakPoints={breakPoints}  pagination={false} showArrows={false} ref={likecarousel} style={{opacity: "1!important"}}>
                         {similarProductInfo.map(ncard)}
                     </Carousel>  
-                    <ArrowForwardIosRoundedIcon onClick={() => likecarousel.current.slideNext()} role="button" className="border mt-auto mb-auto shadow-sm rounded-circle d-none d-sm-block"  />
+                    <ArrowForwardIosRoundedIcon onClick={() => likecarousel.current.slideNext()} role="button" id="prevBtn" className="my-auto  d-none d-sm-block"  />
                 </div>
                 <div className="d-sm-none productsOnMobile">
                     {similarProductInfo.slice(0,4).map(ncard)}

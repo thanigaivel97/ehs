@@ -586,7 +586,7 @@ body .ui.cards > .card {
 }
 .paymentBox{
   width: 382px;
-  height: 617px;
+  height: 580px;
   background: #FFFFFF;
   border: 1px solid #D2D2D2;
   box-sizing: border-box;
@@ -668,7 +668,7 @@ body .ui.cards > .card {
   color: #757575;
   position: absolute;
   right: 55px;
-  top: 55%;
+  top: 68%;
 }
 .productImgInCart{
   width: 120px;
@@ -682,6 +682,7 @@ body .ui.cards > .card {
 @media screen and (max-width: 480px){
   .paymentBox{
     width: 330px;
+    height: 550px;
   }
   .productImgInCart{
     width: 95px;
@@ -805,6 +806,7 @@ color: #000000;
   border-radius: 5px;
   float: right;
   color: #000000;
+  text-indent: 12px;
 }
 .passForgot{
   font-family: Source Sans Pro;
@@ -951,7 +953,16 @@ color: #000000;
   border-radius: 8px;
   padding-left: 20px;
   font-size: 18px;
-  margin-bottom: 20px;
+  margin-Top: 20px;
+}
+.errorMsgCheckout{
+  font-size: 12px;
+  font-family: Lato;
+  
+}
+.shippingDetailInput1{
+  width: 49%;
+
 }
 .shippingDetailProceedBtn{
   width: 50%;
@@ -964,6 +975,7 @@ color: #000000;
   text-align: center;
   font-family: Lato;
   float: right;
+  margin-top: 20px;
 }
 .summaryBox{
   width: 382px;
@@ -1030,6 +1042,9 @@ color: #000000;
   .shippingDetailInput{
     height: 40px;
     font-size: 16px;
+  }
+  .shippingDetailInput1{
+    width: 100%;
   }
   .shippingDetailProceedBtn{
     width: 100%;
@@ -1268,29 +1283,12 @@ color: #000000;
   color: #757575;
 }
 
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f1f1f1;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-.dropdown:hover .searchDropBtnHover{
-  border-bottom-left-radius: none!important;
-  border-bottom-right-radius: none!important;
-}
-
 .footertxt {
   font-family: "Source Sans Pro";
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
-  line-height: 22px;
+  line-height: 27px;
   display: flex;
   align-items: center;
   letter-spacing: 0.2px;
@@ -1299,14 +1297,33 @@ color: #000000;
 .footerhead {
   font-family: "Source Sans Pro";
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 22px;
-  line-height: 14px;
+  line-height: 27px;
   display: flex;
   align-items: center;
   letter-spacing: 0.2px;
   color: #FFFFFF;
-  margin-bottom: 25px;
+}
+.copyrightText{
+  font-family: "Source Sans Pro";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  letter-spacing: 0.2px;
+  color: #FFFFFF;
+  margin-left: 260px;
+  
+}
+@media screen and (max-width: 480px){
+  .copyrightText{
+    font-size: 12px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 .privacy {
   color: #0d375d;
@@ -1337,15 +1354,14 @@ color: #000000;
   transform: scale(1.1);
 }
 .quotation {
-  box-shadow: 0px 0px 30px #a8a8a8;
-  z-index: 1;
-  display: block;
+  box-shadow: 0px 0px 10px #a8a8a8;
   border-radius: 15px;
   width: 660px;
 }
 
 .quotation1 {
-  margin-left: 10px !important;
+  display: flex;
+  justify-content: center;
 }
 .choose {
   font-family: Lato;
@@ -1415,20 +1431,15 @@ color: #000000;
   opacity: 1;
 }
 .productCarouselImg{
-  width: 490px;
-  height: 490px;
+  width: 470px;
+  height: 470px;
 }
 .qtySize{
   font-size: 30px;
 
 }
-.productInfo{
-  font-family: "Source Sans Pro";
-  font-weight: normal;
-  font-weight: 600;
-  font-size: 14px;
-  margin-top: 100px; 
-}
+
+
 .catTagSKU{
       font-family: "Source Sans Pro";
       font-style: normal;
@@ -1436,6 +1447,7 @@ color: #000000;
       font-size: 13px;
       color: #757575;
       line-height: 4px;  
+      margin-bottom: 120px;
 }
 
 .didNotFindBottomBanner{
@@ -1519,6 +1531,7 @@ color: #FFFFFF;
   }
   .catTagSKU{
     font-size: 11px;
+    margin-bottom: 0;
   }
   .didNotFindBottomBanner{
     width: 343px;
@@ -1527,7 +1540,7 @@ padding: 2px;
 margin-top: 40px;
 margin-left: auto;
 margin-right: auto;
-margin-bottom: 40px;
+margin-bottom: 20px;
 
   }
   .text1{
@@ -1566,8 +1579,8 @@ margin-top: 10px;
 /* Poster Product Page CSS */
 
 .posterMaterialDimension{
-  width: 75px;
-  height: 110px;
+  width: 85px;
+  height: 130px;
   border: 2px solid #D2D2D2;
   border-radius: 6px;
   box-sizing: border-box;
@@ -1578,40 +1591,40 @@ margin-top: 10px;
 }
 .selectHead{
   font-size: 16px;
+  line-height: 19px;
+  font-weight: 500;
+  margin-bottom: 10px;
 }
 .materialImg1Dimension{
-  width: 53px;
-  height: 55px;
-  margin-left: 11px;
-  margin-top: 8px;
+  transform: scale(0.8,0.9);
 }
 .materialImg2Dimension{
-  width: 40px;
-  height: 55px;
+  transform: scale(0.8,0.8);
+  margin-left: 11px;
 }
 .materialTextDimension{
-  font-size: 10px;
-  line-height: 11px;
-  font-weight: 600;
-  margin-top: 8px;
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: 500;
+  margin-top: 5px;
 }
 .posterDimension1{
-  width: 35px;
+  width: 40px;
   margin-left: 20px;
 }
 .posterDimension2{
-  width: 45px;
+  width: 50px;
   margin-left: 15px;
 }
 .posterDimension3{
-  width: 55px;
+  width: 60px;
   margin-left: 10px;
 }
 .posterDimensionText{
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   position: absolute;
-  bottom: -16px;
+  bottom: -12px;
   left: 15px;
 }
 .paginationActive{
@@ -1626,7 +1639,129 @@ margin-top: 10px;
   max-height: 40px;
   min-height: 40px;
 }
+.viewAll{
+  font-family: "Source Sans Pro";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 30px;
+ 
+  letter-spacing: 0.2px;
+  color: #40CEFC;
+  text-decoration-line: underline;
+  margin-bottom: 54px;
+}
+.otherCarouselHead{
+  font-family: "Source Sans Pro";
+font-style: normal;
+font-weight: 600;
+font-size: 24px;
+line-height: 30px;
+color: #000000;
+margin-bottom: 54px;
+}
+.similarCarouselMargin{
+  margin-top: 75px;
+}
+.similarCarouselMargin1{
+  margin-top: 70px;
+}
+.separator{
+  border-top: 8px solid #F6F6F6;
+  margin-top: 75px;
+  margin-bottom: 60px;
+}
+.wishlistCarouselMargin{
+  margin-bottom: 78px;
+}
+.catTagSKU{
+  font-family: "Source Sans Pro";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  color: #757575;
+  line-height: 4px;  
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+.productInfo{
+  font-family: "Source Sans Pro";
+  font-weight: normal;
+  font-weight: 600;
+  font-size: 16px;
+  margin-top: 100px;
+  font-weight: 500;
+margin-bottom: 5px;
+margin-top: 145px;
+line-height: 28px;
+width: 100%;
+height: 175px;
+}
+.poweredBy{
+  
+font-family: Source Sans Pro;
+font-style: normal;
+font-weight: normal;
+font-size: 16px;
+line-height: 20px;
+
+color: #000000;
+}
+.razorpayLogo{
+  width: 116px;
+height: 25px;
+}
+.razorpayBox{
+  margin-top: 35px;
+  margin-bottom: 26px;
+}
 @media screen and (max-width: 480px){
+  .razorpayBox{
+    margin-top: 35px;
+    margin-bottom: 32px;
+  }
+  .razorpayLogo{
+    width: 100.53px;
+height: 21.67px;
+  }
+  .poweredBy{
+    font-size: 14px;
+line-height: 18px;
+  }
+  .productInfo{
+    font-size: 14px;
+    margin-top: 30px;
+    line-height: 24px;
+    height: 125px;
+  }
+  .catTagSKU{
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+  .wishlistCarouselMargin{
+    margin-bottom: 42px;
+  }
+  .separator{
+    border-top: 4px solid #F6F6F6;
+    margin-top: 39px;
+    margin-bottom: 24px;
+  }
+  .similarCarouselMargin{
+    margin-top: 40px;
+  }
+  .similarCarouselMargin1{
+    margin-top: 24px;
+  }
+  .viewAll{
+    font-size: 14px;
+    margin-bottom: 24px;
+    line-height: 23px;
+  }
+  .otherCarouselHead{
+    margin-bottom: 24px;
+    font-size: 18px;
+line-height: 23px;
+  }
   .qtyBTN{
   max-width: 30px;
   min-width: 30px;
@@ -1644,18 +1779,20 @@ margin-top: 10px;
     font-size: 14px;
   }
   .materialImg1Dimension{
-    width: 35px;
-    margin-left: 7px;
+    width: 50px;
+    margin-left: 0px;
     margin-top: 0px;
   }
   .materialImg2Dimension{
-    width: 28px;
+    width: 40px;
+    margin-left: 5px;
   }
   .materialTextDimension{
     font-size: 7px;
     line-height: 8px;
     font-weight: 600;
-    margin-top: -3px;
+    position: relative;
+    bottom: 6px;
   }
   .posterDimension1{
       width: 27px;
@@ -1794,7 +1931,13 @@ line-height: 10px;
   margin-bottom: 70px;
   margin-top: 33px;
 }
+.paginationMargin{
+  margin-top: 60px;
+}
 @media screen and (max-width: 480px){
+  .paginationMargin{
+    margin-top: 30px;
+  }
   .subCatHeadCarousel{
     margin-bottom: 28px;
     margin-top: 19px;
@@ -1922,6 +2065,9 @@ line-height: 10px;
   box-sizing: border-box;
   border-radius: 8px;
 }
+.contactFormInputBox{
+  width: 48%;
+}
 .contactFormLabel{
   font-family: Lato;
   font-style: normal;
@@ -1950,6 +2096,9 @@ line-height: 10px;
 
 
 @media screen and (max-width: 480px) {
+  .contactFormInputBox{
+    width: 100%;
+  }
   .contactTopBox{
     padding-top: 24px;
     padding-bottom: 35px;
@@ -2096,12 +2245,15 @@ color: #757575;
   height: 125px;
 }
 .toastAddedText{
-  font-family: Source Sans Pro;
+  font-family: "Source Sans Pro";
 font-style: normal;
 font-weight: bold;
 font-size: 18px;
 line-height: 23px;
 color: #003459;
+}
+.toastStructure{
+  box-shadow: 0px 4px 10px 2px rgba(0, 0, 0, 0.25)!important;
 }
 @media screen and (max-width: 480px) {
   .toastAddedText{
@@ -2383,8 +2535,31 @@ div.quotesImg::-webkit-scrollbar-thumb {
     justify-content: space-between;
     grid-row-gap: 60px;
   }
-
+  .comingSoon{
+    font-family: "Source Sans Pro";
+    font-style: normal;
+    font-weight: bold;
+    font-size: 48px;
+    line-height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    letter-spacing: 0.2px;
+    text-transform: capitalize;
+    color: #ABABAB;
+  }
+  .comingSoonImg{
+    width: 91px;
+    height: 91px;
+  }
+  .comingSoonBox{
+    margin: 81px;
+  }
   @media screen and (max-width: 480px) {
+    .comingSoonBox{
+      margin: 125px 0;
+    }
     .moreCampaigns{
       margin-top: 38px;
       margin-bottom: 40px;
@@ -2542,102 +2717,89 @@ div.quotesImg::-webkit-scrollbar-thumb {
     }
 }
 
+/* Privacy Policy */
 
-/*
-
- $(document).ready(()=>{
-    if(posterCatName === "PPE"){
-      $("#pc1").addClass("currentCatPoster");
-      $("#pc2").removeClass("currentCatPoster");
-      $("#pc3").removeClass("currentCatPoster");
-      $("#pc4").removeClass("currentCatPoster");
-      $("#pc5").removeClass("currentCatPoster");
-      $("#pc6").removeClass("currentCatPoster");
-      $("#pc7").removeClass("currentCatPoster");
-      $("#pc8").removeClass("currentCatPoster");
-      $("#pc9").removeClass("currentCatPoster");
-    }
-    else if(posterCatName === "FIRE"){
-      $("#pc1").removeClass("currentCatPoster");
-      $("#pc2").addClass("currentCatPoster");
-      $("#pc3").removeClass("currentCatPoster");
-      $("#pc4").removeClass("currentCatPoster");
-      $("#pc5").removeClass("currentCatPoster");
-      $("#pc6").removeClass("currentCatPoster");
-      $("#pc7").removeClass("currentCatPoster");
-      $("#pc8").removeClass("currentCatPoster");
-      $("#pc9").removeClass("currentCatPoster");
-    } else if(posterCatName === "ENVIRONMENT"){
-      $("#pc1").removeClass("currentCatPoster");
-      $("#pc2").removeClass("currentCatPoster");
-      $("#pc3").addClass("currentCatPoster");
-      $("#pc4").removeClass("currentCatPoster");
-      $("#pc5").removeClass("currentCatPoster");
-      $("#pc6").removeClass("currentCatPoster");
-      $("#pc7").removeClass("currentCatPoster");
-      $("#pc8").removeClass("currentCatPoster");
-      $("#pc9").removeClass("currentCatPoster");
-    } else if(posterCatName === "HOUSE-KEEPING"){
-      $("#pc1").removeClass("currentCatPoster");
-      $("#pc2").removeClass("currentCatPoster");
-      $("#pc3").removeClass("currentCatPoster");
-      $("#pc4").addClass("currentCatPoster");
-      $("#pc5").removeClass("currentCatPoster");
-      $("#pc6").removeClass("currentCatPoster");
-      $("#pc7").removeClass("currentCatPoster");
-      $("#pc8").removeClass("currentCatPoster");
-      $("#pc9").removeClass("currentCatPoster");
-    } else if(posterCatName === "ELECTRICAL-HAZARD"){
-      $("#pc1").removeClass("currentCatPoster");
-      $("#pc2").removeClass("currentCatPoster");
-      $("#pc3").removeClass("currentCatPoster");
-      $("#pc4").removeClass("currentCatPoster");
-      $("#pc5").addClass("currentCatPoster");
-      $("#pc6").removeClass("currentCatPoster");
-      $("#pc7").removeClass("currentCatPoster");
-      $("#pc8").removeClass("currentCatPoster");
-      $("#pc9").removeClass("currentCatPoster");
-    } else if(posterCatName === "MATERIAL-HANDLING"){
-      $("#pc1").removeClass("currentCatPoster");
-      $("#pc2").removeClass("currentCatPoster");
-      $("#pc3").removeClass("currentCatPoster");
-      $("#pc4").removeClass("currentCatPoster");
-      $("#pc5").removeClass("currentCatPoster");
-      $("#pc6").addClass("currentCatPoster");
-      $("#pc7").removeClass("currentCatPoster");
-      $("#pc8").removeClass("currentCatPoster");
-      $("#pc9").removeClass("currentCatPoster");
-    } else if(posterCatName === "CHEMICAL-HAZARDS"){
-      $("#pc1").removeClass("currentCatPoster");
-      $("#pc2").removeClass("currentCatPoster");
-      $("#pc3").removeClass("currentCatPoster");
-      $("#pc4").removeClass("currentCatPoster");
-      $("#pc5").removeClass("currentCatPoster");
-      $("#pc6").removeClass("currentCatPoster");
-      $("#pc7").addClass("currentCatPoster");
-      $("#pc8").removeClass("currentCatPoster");
-      $("#pc9").removeClass("currentCatPoster");
-    } else if(posterCatName === "QUALITY"){
-      $("#pc1").removeClass("currentCatPoster");
-      $("#pc2").removeClass("currentCatPoster");
-      $("#pc3").removeClass("currentCatPoster");
-      $("#pc4").removeClass("currentCatPoster");
-      $("#pc5").removeClass("currentCatPoster");
-      $("#pc6").removeClass("currentCatPoster");
-      $("#pc7").removeClass("currentCatPoster");
-      $("#pc8").addClass("currentCatPoster");
-      $("#pc9").removeClass("currentCatPoster");
-    } else if(posterCatName === "COVID-19"){
-      $("#pc1").removeClass("currentCatPoster");
-      $("#pc2").removeClass("currentCatPoster");
-      $("#pc3").removeClass("currentCatPoster");
-      $("#pc4").removeClass("currentCatPoster");
-      $("#pc5").removeClass("currentCatPoster");
-      $("#pc6").removeClass("currentCatPoster");
-      $("#pc7").removeClass("currentCatPoster");
-      $("#pc8").removeClass("currentCatPoster");
-      $("#pc9").addClass("currentCatPoster");
-    }
-
-  });
-*/
+.privacyText{
+  font-family: "Source Sans Pro";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 30px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.2px;
+  color: #4F4F4F;
+}
+.privacySubhead{
+  font-family: "Source Sans Pro";
+font-style: normal;
+font-weight: 600;
+font-size: 24px;
+line-height: 30px;
+letter-spacing: 0.2px;
+color: #4F4F4F;
+list-style-type: square;
+}
+.privacyText1{
+  font-family: "Source Sans Pro";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 30px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.2px;
+  color: #4F4F4F;
+  padding: 0px 33px
+}
+.privacyTextBox{
+  margin-bottom: 40px;
+}
+.termsText{
+  font-family: "Source Sans Pro";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 30px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.2px;
+  color: #4F4F4F;
+}
+.termsSubHead{
+  font-family: "Source Sans Pro";
+font-style: normal;
+font-weight: 600;
+font-size: 20px;
+line-height: 30px;
+letter-spacing: 0.2px;
+color: #4F4F4F;
+list-style-type: square;
+}
+@media screen and (max-width: 480px) {
+  .privacyText{
+    font-size: 14px;
+    line-height: 18px;
+  }
+  .privacySubhead{
+    font-size: 18px;
+    line-height: 24px;
+  }
+  .privacyText1{
+    font-size: 14px;
+    line-height: 18px;
+    padding:  0px 0px 0px 25px ;
+    text-justify: inherit;
+  }
+  .privacyTextBox{
+    margin-bottom: 20px;
+  }
+  .termsSubHead{
+    font-size: 18px;
+    line-height: 24px;
+  }
+  .termsText{
+    font-size: 14px;
+    line-height: 18px;
+  }
+}
