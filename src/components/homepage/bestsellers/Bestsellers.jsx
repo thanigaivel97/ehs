@@ -1,4 +1,4 @@
-import React, { useState , useRef} from "react";
+import React, { useState , useRef, useEffect} from "react";
 import "./bestsellers.css"
 import $ from "jquery";
 import "bootstrap";
@@ -22,10 +22,12 @@ import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounded';
 import Carousel from "react-elastic-carousel";
 import { Link } from "react-router-dom";
+import Axios from "axios";
+import {API} from "../../../backend";
 
 const ncard = (val) => {
     return (
-        <ImgBox src={val.src} title={val.title} />
+        <ImgBox src={val.imgUrl[0]} title={val.name} />
     );
 };
 
@@ -44,7 +46,39 @@ const ImgBox = (props) => {
 
 const Bestsellers = () => {
 
-  const [category,setCategory] = useState('Posters');
+  const [category,setCategory] = useState('posters');
+  const [postersBestselller,setPostersBestseller] = useState([]);
+  const [signagesBestselller,setSignagesBestseller] = useState([]);
+  const [floorgraphicsBestselller,setFloorgraphicsBestseller] = useState([]);
+  const [assetmarkingsBestselller,setAssetmarkingsBestseller] = useState([]);
+
+    useEffect(()=>{
+      
+      Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: "posters", bestseller: 1}}).then((res)=>{
+        setPostersBestseller(res.data.data);
+       //console.log("bestseller",res);
+      }).catch((err)=> {
+        console.log(err);
+      });
+      Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: "signages", bestseller: 1}}).then((res)=>{
+       setSignagesBestseller(res.data.data);
+      // console.log("bestseller",res);
+      }).catch((err)=> {
+        console.log(err);
+      });
+      Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: "floor-graphics", bestseller: 1}}).then((res)=>{
+        setFloorgraphicsBestseller(res.data.data);
+       //console.log("bestseller",res);
+      }).catch((err)=> {
+        //console.log(err);
+      });
+      Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: "asset-markings", bestseller: 1}}).then((res)=>{
+        setAssetmarkingsBestseller(res.data.data);
+      // console.log("bestseller",res);
+      }).catch((err)=> {
+       // console.log(err);
+      });
+    },[])
 
     const warnImgTitle = [
         { src: NoSmoke, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
@@ -96,7 +130,7 @@ const Bestsellers = () => {
             return (
               <>
                 <div role="button" id="sellerH"  key={page} onClick={(e) => {onClick(page)
-                  setCategory(e.target.innerHTML);
+                  setCategory(e.target.innerHTML.toLowerCase());
                 }} active={isActivePage}  className={isActivePage ? "active sellerHead" : " "} >
                 {
                   (page===0)? <span className="sellerHead "  role="button" >Posters </span>
@@ -124,20 +158,20 @@ const Bestsellers = () => {
                 <Carousel className=" w-100  "  breakPoints={breakPoints}  showArrows={false} ref={bestseller} style={{opacity: "1!important"}} 
                 renderPagination={pagination}>
                     <div className="  active   "  id="carouselItem">
-                      {FloorGraphicsImgTitle.slice(0,4).map(ncard)}
+                      {postersBestselller && postersBestselller.slice(0,4).map(ncard)}
                     </div>
                     <div id="carouselItem" className="">
-                      {warnImgTitle.slice(0,4).map(ncard)}
+                      {signagesBestselller && signagesBestselller.slice(0,4).map(ncard)}
                       
                     </div>
                     <div id="carouselItem" className="">
-                      {FloorGraphicsImgTitle.slice(0,4).map(ncard)}
+                      {floorgraphicsBestselller && floorgraphicsBestselller.slice(0,4).map(ncard)}
                     </div>
                     <div id="carouselItem" className="">
-                      {awareImgTitle.slice(0,4).map(ncard)}
+                      {assetmarkingsBestselller && assetmarkingsBestselller.slice(0,4).map(ncard)}
                     </div>
                 </Carousel>
-                <Link to={`${category}/subcat/Bestsellers`}><p role="button" className="seemore" >See More</p></Link>
+                <Link to={`${category}/subcat/bestsellers`}><p role="button" className="seemore" >See More</p></Link>
             
           </div>          
         </div>

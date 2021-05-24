@@ -63,6 +63,7 @@ const CategoryPage = (props) => {
 
         Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: catSlug, bestseller: 1}}).then((res)=>{
           setBestSeller(res.data.data);
+         //console.log("bestseller",res);
         }).catch((err)=> {
           console.log(err);
         });
@@ -126,18 +127,17 @@ const CategoryPage = (props) => {
         <div  className="margin-9  ">
           <h2 className="shopByHead d-inline-block " >Shop by Category</h2>
           {
-            (shopBySubCategoryCards.length > 5)?(
+            (shopBySubCategoryCards && shopBySubCategoryCards.length > 5)?(
               <div className=" carouselArrow ">
-          <ArrowBackIosRoundedIcon onClick={() => posterCatCarousel.current.slidePrev()} role="button" className=" mt-auto mb-auto mr-4 " id="prevBtn" />
-          <ArrowForwardIosRoundedIcon onClick={() => posterCatCarousel.current.slideNext()} role="button" className="mt-auto mb-auto " id="nextBtn" />
-         
-          </div>
+              <ArrowBackIosRoundedIcon onClick={() => posterCatCarousel.current.slidePrev()} role="button" className=" mt-auto mb-auto mr-4 " id="prevBtn" />
+              <ArrowForwardIosRoundedIcon onClick={() => posterCatCarousel.current.slideNext()} role="button" className="mt-auto mb-auto " id="nextBtn" />
+              </div>
             ): ""
           }
          
                
             <Carousel className=" shopByCategoryCarousel   p-0 " outerSpacing={0}  itemPosition={consts.START}  breakPoints={breakPoints}  pagination={false} showArrows={false} ref={posterCatCarousel} style={{opacity: "1!important"}} showEmptySlots>
-                {shopBySubCategoryCards.map((val,i) => {
+                {shopBySubCategoryCards && shopBySubCategoryCards.map((val,i) => {
                     
                               return (
                                   <Card src={val.imgUrl} title={val.title} cat={catSlug}  sub_cat_slug={val.sub_cat_slug} key={i} />
@@ -163,7 +163,7 @@ const CategoryPage = (props) => {
          
           </div>       
             <Carousel className="d-flex  shopByCategoryCarousel px-0 mx-0" itemPosition={consts.START} breakPoints={breakPoints}  pagination={false} showArrows={false} ref={posterCat2Carousel} style={{opacity: "1!important"}} showEmptySlots>
-                {shopByLanguageCards.map(ncard)}
+                {shopByLanguageCards && shopByLanguageCards.map(ncard)}
             </Carousel>                
         </div>
           </>
@@ -178,7 +178,7 @@ const CategoryPage = (props) => {
           <Carousel className="px-2 px-sm-0" pagination={false}  breakPoints={breakPointsBestseller}  showArrows={false} ref={bestseller} style={{opacity: "1!important"}} 
           >
               <div className="active"  id="carouselItem2">
-                {bestSeller.slice(0,4).map((val,i) => {
+                {bestSeller && bestSeller.slice(0,4).map((val,i) => {
                                           return (
                                               <ImgBox src={val.imgUrl[0]} title={val.name} catSlug={catSlug} key={i} />
                                           );
@@ -186,7 +186,7 @@ const CategoryPage = (props) => {
               </div>
               
               <div id="carouselItem2" className="">
-                {bestSeller.slice(4,8).map((val,i) => {
+                { bestSeller && bestSeller.slice(4,8).map((val,i) => {
                                           return (
                                               <ImgBox src={val.imgUrl[0]} title={val.name} catSlug={catSlug} key={i} />
                                           );
@@ -194,7 +194,7 @@ const CategoryPage = (props) => {
               </div>
               
           </Carousel>
-          <Link to={`/${catName}/subcat/bestsellers`}><p role="button" className="seemore">View All</p></Link>
+          <Link to={`/${catSlug}/subcat/bestsellers`}><p role="button" className="seemore">View All</p></Link>
       </div>          
       <img src={Upto50} className="mx-auto d-block  bottomBanner50" alt="banner" /> 
     </>

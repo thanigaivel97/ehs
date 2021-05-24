@@ -16,6 +16,7 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 import $ from "jquery";
 import DisInfect from "../../images/DisInfectant.svg";
 import Axios from "axios";
+import {API} from "../../backend"
 import { Link } from "react-router-dom";
 import ProductCard from "../signages/ProductCard";
 import Typography from '@material-ui/core/Typography';
@@ -32,7 +33,7 @@ import swal from "sweetalert";
 import Carousel, {consts} from "react-elastic-carousel";
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounded';
-import { Tune } from "@material-ui/icons";
+import { ContactMailSharp, Tune } from "@material-ui/icons";
 import Pagination from '@material-ui/lab/Pagination';
 import SafeTwo from "../../images/BeSafe.svg";
 import Swal from "sweetalert2";
@@ -45,24 +46,69 @@ import {useForm} from "react-hook-form";
 const MySwal = withReactContent(Swal);
 
 const AddressCard = (props) => {
-  const updateAddressPopup = () => {
-    const onConfirm = () => {
-        MySwal.clickConfirm();
+  const { register, handleSubmit } = useForm();
+  const updateAddressPopup = (houseDetails,pincode,state,country) => {
+    let address = houseDetails.split("|");
+    const onSubmitEdit =(data)=>{
+        let addressBody = {
+        houseDetails: `${data.firstName}|${data.address1}|${data.address2}|${data.city}|${data.phonenumber}|${data.emailid}`,
+        pincode: data.pincode,
+        state: data.state,
+        country: data.country
+      }
+        Axios.post(`${API}auth/add_user_details`,{
+            address: addressBody,
+           // add: 1
+        },{   
+            headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
+            params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
+        }).then((res)=>{
+           console.log(res);
+           MySwal.fire({
+            html: <div className="d-flex mt-2">
+                    <CheckCircleIcon style={{color: "#003459"}} />
+                    <p className="ml-2" style={{color: "#003459"}}>Address Sucessfully Updated!</p>
+                </div>,
+            
+            position: "top-end",
+            timer: 2000,
+            showConfirmButton: false,
+            showCloseButton: true,
+            width: "500px",
+            height: "100px",
+            backdrop: "rgba(0, 0, 0, 0.5)",
+            scrollbarPadding: false,
+            showClass: {
+              popup: 'animate__animated animate__zoomIn  animate__faster',
+              backdrop: 'swal2-noanimation'
+            },
+            hideClass: {
+              popup: 'animate__animated animate__slideOutRight  animate__faster',
+              backdrop: 'animate__animated animate__fadeOut  animate__faster'
+            }
+            
+        });
+        }).catch((err)=>{
+            console.log(err);
+        })
     }
     MySwal.fire({
       html: <div className="">
               <p className="addAddressHead">Add Address</p>
               <hr style={{color: "#D2D2D2",marginBottom: "10px",marginTop: "0"}} />
-              <input type="text" placeholder="First Name" className="addAddressInput" required/>
-              <input type="text" placeholder="Last Name" className="addAddressInput" />
-              <input type="text" placeholder="Address Line 1" className="addAddressInput" required/>
-              <input type="text" placeholder="Address Line 2" className="addAddressInput" />
-              <input type="text" placeholder="City" className="addAddressInput" required/>
-              <input type="text" placeholder="State" className="addAddressInput" required/>
-              <input type="number" placeholder="Pin Code" className="addAddressInput" required/>
-              <input type="number" placeholder="Contact Number" className="addAddressInput" required/>
-              <input type="email" placeholder="Email" className="addAddressInput" required/>
-              <button onClick={onConfirm} className="saveBtn">Update</button>
+              <form onSubmit={handleSubmit(onSubmitEdit)}>
+              <input type="text" name="firstName" {...register("firstName")} defaultValue={address[0]} className="addAddressInput" required/>
+              <input type="text" name="lastName" {...register("lastName")} placeholder="Last Name" className="addAddressInput d-none" />
+              <input type="text" name="address1" {...register("address1")} defaultValue={address[1]} placeholder="address line 1" className="addAddressInput" required/>
+              <input type="text" name="address2" {...register("address2")} defaultValue={address[2]} placeholder="address line 2" className="addAddressInput" />
+              <input type="text" name="city" {...register("city")} defaultValue={address[3]} placeholder="City" className="addAddressInput" required/>
+              <input type="text" name="state" {...register("state")} defaultValue={state} placeholder="State" className="addAddressInput" required/>
+              <input type="text" name="country" {...register("country")} defaultValue={country} placeholder="Country" className="addAddressInput" required/>
+              <input type="number" name="pincode" {...register("pincode")} defaultValue={pincode} placeholder="pincode" className="addAddressInput" required/>
+              <input type="number" name="phonenumber" {...register("phonenumber")} defaultValue={address[4]} placeholder="Mobile" className="addAddressInput" />
+              <input type="email" name="emailid" {...register("emailid")} defaultValue={address[5]} placeholder="Email" className="addAddressInput" />
+              <button type="submit"  className="saveBtn">Save</button>
+            </form>
             </div>,
             showConfirmButton: false,
             padding: "10px 0px 5px 0px",
@@ -77,36 +123,8 @@ const AddressCard = (props) => {
               popup: '',
               backdrop: ''
             }
-    }).then((result)=>{
-      if(result.isConfirmed){
-        MySwal.fire({
-          html: <div className="d-flex mt-2">
-                  <CheckCircleIcon style={{color: "#003459"}} />
-                  <p className="ml-2" style={{color: "#003459"}}>Address Sucessfully Updated!</p>
-              </div>,
-          
-          position: "top-end",
-          timer: 2000,
-          showConfirmButton: false,
-          showCloseButton: true,
-          width: "500px",
-          height: "100px",
-          backdrop: "rgba(0, 0, 0, 0.5)",
-          scrollbarPadding: false,
-          showClass: {
-            popup: 'animate__animated animate__zoomIn  animate__faster',
-            backdrop: 'swal2-noanimation'
-          },
-          hideClass: {
-            popup: 'animate__animated animate__slideOutRight  animate__faster',
-            backdrop: 'animate__animated animate__fadeOut  animate__faster'
-          }
-          
-      });
-      }
     })
   };
-
   const confirmDeleteAddress = () => {
     const onCancel = () => {
       MySwal.clickCancel();
@@ -138,6 +156,13 @@ const AddressCard = (props) => {
       }
     })
   };
+
+  const {houseDetails,pincode,state,country} = props;
+  let address = houseDetails.split("|");
+
+  //console.log(country);
+  //console.log(address);
+
   return(
       <div className="p-3" style={ props.default ? {
         width: "157px",
@@ -161,14 +186,14 @@ const AddressCard = (props) => {
           fontSize: "14px",
           lineHeight: "18px",
           color: "#000000",
-          marginBottom: "8px"
-        }}>{props.name}</p>
-        <p className="addressLine">Address line 1</p>
-        <p className="addressLine">Address line 2</p>
-        <p className="addressLine">Address line 3</p>
-        <p className="addressLine">{props.mobile}</p>
+          marginBottom: "5px"
+        }}>{address[0]}</p>
+        <p className="addressLine">{address[1]}</p>
+        <p className="addressLine">{address[2]},{address[3]}</p>
+        <p className="addressLine">{state}, {country}, {pincode}</p>
+        <p className="addressLine">{address[4]}</p>
         <div className="mt-1">
-          <span onClick={updateAddressPopup} className="passForgot">Edit</span>
+          <span onClick={() => updateAddressPopup(houseDetails,pincode,state,country)} className="passForgot">Edit</span>
           <span onClick={confirmDeleteAddress} className="passForgot float-right">Remove</span>
         </div>
         {  props.default ? (
@@ -240,6 +265,7 @@ const PaymentCard = (props) => {
 
 const PersonalInfo = () => {
   const [name, setName] = React.useState("");
+  const [authUser, setAuthUser] = React.useState("");
   const [oldPassword, setOldPassword] = React.useState("");
   const [newPassword, setNewPassword] = React.useState("");
   const [address, setAddress] = React.useState("");
@@ -248,10 +274,18 @@ const PersonalInfo = () => {
 
   useEffect(()=>{
     if (JSON.parse(localStorage.getItem("userDetails123"))){
-      setName( JSON.parse(localStorage.getItem("userDetails123")).name);
+      setAuthUser(
+        JSON.parse(localStorage.getItem("userDetails123")).emailid ||
+        JSON.parse(localStorage.getItem("userDetails123")).phonenumber
+        );
+      setName(JSON.parse(localStorage.getItem("userDetails123")).name);
       setEmail(JSON.parse(localStorage.getItem("userDetails123")).emailid);
       setPhone(JSON.parse(localStorage.getItem("userDetails123")).phonenumber);
+      setAddress(JSON.parse(localStorage.getItem("userDetails123")).address);
     }
+
+    
+
   },[]);
 
   const { register,handleSubmit } = useForm();
@@ -342,11 +376,52 @@ const confirmDeleteAccount = () => {
   })
 };
 const addAddress = () => {
-  const onConfirm = () => {
-    MySwal.clickConfirm();
-  }
   const onSubmit = (data) =>{
-    console.log(data);
+      let addressBody = {
+      houseDetails: `${data.firstName}|${data.address1}|${data.address2}|${data.city}|${data.phonenumber}|${data.emailid}`,
+      pincode: data.pincode,
+      state: data.state,
+      country: data.country
+    }
+    if(authUser){
+      Axios.post(`${API}auth/add_user_details`,{
+          address: addressBody,
+          add: 1
+      },{   
+          headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
+          params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
+      }).then((res)=>{
+         // console.log(res);
+         MySwal.fire({
+          html: <div className="d-flex mt-2">
+                  <CheckCircleIcon style={{color: "#003459"}} />
+                  <p className="ml-2" style={{color: "#003459"}}>Address Sucessfully Added!</p>
+              </div>,
+          
+          position: "top-end",
+          timer: 2000,
+          showConfirmButton: false,
+          showCloseButton: true,
+          width: "500px",
+          height: "100px",
+          backdrop: "rgba(0, 0, 0, 0.5)",
+          scrollbarPadding: false,
+          showClass: {
+            popup: 'animate__animated animate__zoomIn  animate__faster',
+            backdrop: 'swal2-noanimation'
+          },
+          hideClass: {
+            popup: 'animate__animated animate__slideOutRight  animate__faster',
+            backdrop: 'animate__animated animate__fadeOut  animate__faster'
+          }
+          
+      });
+      }).catch((err)=>{
+          console.log(err);
+      })
+  }else{
+     // history.push("/login");
+  }
   }
 
   MySwal.fire({
@@ -354,15 +429,16 @@ const addAddress = () => {
             <p className="addAddressHead">Add Address</p>
             <hr style={{color: "#D2D2D2",marginBottom: "10px",marginTop: "0"}} />
             <form onSubmit={handleSubmit(onSubmit)}>
-              <input type="text" name="firstName" {...register("firstName")} placeholder="First Name" className="addAddressInput" required/>
-              <input type="text" name="lastName" {...register("lastName")} placeholder="Last Name" className="addAddressInput" />
+              <input type="text" name="firstName" {...register("firstName")} placeholder="Full Name" className="addAddressInput" required/>
+              <input type="text" name="lastName" {...register("lastName")} placeholder="Last Name" className="addAddressInput d-none" />
               <input type="text" name="address1" {...register("address1")} placeholder="Address Line 1" className="addAddressInput" required/>
               <input type="text" name="address2" {...register("address2")} placeholder="Address Line 2" className="addAddressInput" />
               <input type="text" name="city" {...register("city")} placeholder="City" className="addAddressInput" required/>
               <input type="text" name="state" {...register("state")} placeholder="State" className="addAddressInput" required/>
+              <input type="text" name="country" {...register("country")} placeholder="Country" className="addAddressInput" required/>
               <input type="number" name="pincode" {...register("pincode")} placeholder="Pin Code" className="addAddressInput" required/>
-              <input type="number" name="phonenumber" {...register("phonenumber")} placeholder="Contact Number" className="addAddressInput" required/>
-              <input type="email" name="emailid" {...register("emailid")} placeholder="Email" className="addAddressInput" required/>
+              <input type="number" name="phonenumber" {...register("phonenumber")} placeholder="Contact Number" className="addAddressInput" />
+              <input type="email" name="emailid" {...register("emailid")} placeholder="Email" className="addAddressInput" />
               <button type="submit"  className="saveBtn">Save</button>
             </form>
           </div>,
@@ -379,33 +455,6 @@ const addAddress = () => {
             popup: '',
             backdrop: ''
           }
-  }).then((result)=>{
-    if(result.isConfirmed){
-      MySwal.fire({
-        html: <div className="d-flex mt-2">
-                <CheckCircleIcon style={{color: "#003459"}} />
-                <p className="ml-2" style={{color: "#003459"}}>Address Sucessfully Added!</p>
-            </div>,
-        
-        position: "top-end",
-        timer: 2000,
-        showConfirmButton: false,
-        showCloseButton: true,
-        width: "500px",
-        height: "100px",
-        backdrop: "rgba(0, 0, 0, 0.5)",
-        scrollbarPadding: false,
-        showClass: {
-          popup: 'animate__animated animate__zoomIn  animate__faster',
-          backdrop: 'swal2-noanimation'
-        },
-        hideClass: {
-          popup: 'animate__animated animate__slideOutRight  animate__faster',
-          backdrop: 'animate__animated animate__fadeOut  animate__faster'
-        }
-        
-    });
-    }
   })
 };
 const breakPoints = [
@@ -453,15 +502,28 @@ const breakPoints = [
               <p className="perHead  d-inline-block ml-sm-5 ml-0" style={{ lineHeight: "38px"}}>Addresses</p>
               <span onClick={addAddress} className="passForgot float-right" style={{fontSize: "14px",lineHeight: "38px"}}>Add Address</span>
             </div>
-            <div className="d-flex " style={{height: "212px"}} >
+            
+           {
+             (address && address.length>0)?(
+              <div className="d-flex " style={{height: "212px"}} >
               <ArrowBackIosRoundedIcon onClick={() => addressCarousel.current.slidePrev()} role="button" className="border  mt-auto mb-auto  shadow-sm rounded-circle " />
               <Carousel ref={addressCarousel} breakPoints={breakPoints}  showArrows={false} pagination={false}>
-                <AddressCard name="Name" mobile="9849065486" default={true} />
-                <AddressCard name="Shubham" mobile="9849065486" default={false} />
-                <AddressCard name="Shubham" mobile="9849065486" default={false} />
+                {
+                  address.map((val,i)=>{
+                    return(
+                      <AddressCard houseDetails={val.houseDetails} pincode={val.pincode} state={val.state} country={val.country} default={false} />
+                          )
+                        })
+                }
               </Carousel>
               <ArrowForwardIosRoundedIcon onClick={() => addressCarousel.current.slideNext()} role="button" className="border  mt-auto mb-auto  shadow-sm rounded-circle " />
             </div>
+             ):(
+              <div>
+                No Address Found
+              </div>
+             )
+           }
           </div>
           <div className="d-none addressBox p-3">
               <div className="perInput mb-4 ">
@@ -714,7 +776,7 @@ const breakPoints = [
 };
 
 const OrderDetailCard = (props) => {
-  return(
+ return(
     <div className="orderDetailBox mx-auto mt-4">
         <div className="d-flex justify-content-sm-between flex-column flex-sm-row p-3 pl-sm-5 pl-2 pr-5" style={{
           fontFamily: "Source Sans Pro",
@@ -726,20 +788,26 @@ const OrderDetailCard = (props) => {
           borderBottom: "1px solid #D2D2D2"
         }}>
           <span className="mb-1 mb-sm-0">ORDER # {props.orderId}</span>
-          <span className="float-sm-right">Ordered on {props.createdAt}</span>
+          <span className="float-sm-right">Ordered on {props.createdAt.split("T")[0]}</span>
         </div>
         <div className="p-sm-3 p-2  pr-sm-5">
             <div className="d-inline-block">
-              <div className="productDetails  d-flex">
-                <img src={props.imgUrl} alt="product" className="myOrderProductImg" />
-                <div className="ml-sm-3 ml-2">
-                  <p className="myOrderProductName ">{props.name}</p>
-                  <p className="myOrderProductDetail ">Material: <span style={{fontWeight: "600"}}>{props.material}</span> </p>
-                  <p className="myOrderProductDetail">Dimension: <span style={{fontWeight: "600"}}>{props.dimension}</span> </p>
-                  <pre className="myOrderProductDetail">Price: <span style={{fontWeight: "600"}}>₹{props.originalPrice}     </span>  Quantity: <span style={{fontWeight: "600"}}>{props.quantity}</span> </pre>
-                  <p className="myOrderProductDetail">Seller: <span style={{fontWeight: "600"}}>Dichroic Lab</span></p>
-                </div>
-              </div>
+            {
+              props.items && props.items.map((product,i)=>{
+                return(
+                  <div className="productDetails my-3 d-flex">
+                    <img src={product.poster_details.imgUrl ? product.poster_details.imgUrl[0] : "" } alt="product" className="myOrderProductImg" />
+                    <div className="ml-sm-3 ml-2">
+                      <p className="myOrderProductName ">{product.poster_details.name}</p>
+                      <p className="myOrderProductDetail ">Material: <span style={{fontWeight: "600"}}>{product.materialDimension.material_title}</span> </p>
+                      <p className="myOrderProductDetail">Dimension: <span style={{fontWeight: "600"}}>{product.materialDimension.dimension_title}</span> </p>
+                      <pre className="myOrderProductDetail">Price: <span style={{fontWeight: "600"}}>₹{product.materialDimension.price}     </span>  Quantity: <span style={{fontWeight: "600"}}>{product.quantity}</span> </pre>
+                      <p className="myOrderProductDetail">Seller: <span style={{fontWeight: "600"}}>Dichroic Lab</span></p>
+                    </div>
+                  </div>
+                )
+              })
+            }
               <p className="  mt-3 d-block d-sm-none" style={{
                 fontFamily: "Lato",
                 fontStyle: "normal",
@@ -753,7 +821,7 @@ const OrderDetailCard = (props) => {
                   {props.children}
               </div>
             </div>
-            <div className=" d-inline-block float-sm-right float-left text-sm-right text-left " style={{
+            <div className=" d-inline-block float-sm-right float-none text-sm-right text-left " style={{
               fontWeight: "bold",
               fontSize: "14px",
               lineHeight: "18px",
@@ -786,25 +854,12 @@ const OrderDetailCard = (props) => {
 const Orders = () => {
   const [orderData, setOrderData] = React.useState([]);
   const [authUser,setAuthUser] = React.useState("");
-
+  
   
   /*Dummy Order */
  
 
-  function getOrderFun() {
-    Axios.get(getOrdersById, {
-      params: {
-        emailid: JSON.parse(localStorage.getItem("userDetails123")).emailid,
-        phonenumber: JSON.parse(localStorage.getItem("userDetails123"))
-          .phonenumber,
-      },
-    })
-      .then((res) => {
-        setOrderData(res.data.orders);
-        console.log(res.data.orders);
-      })
-      .catch((err) => console.log(err));
-  }
+  
 
   React.useEffect(() => {
     if (JSON.parse(localStorage.getItem("userDetails123"))) {
@@ -812,7 +867,17 @@ const Orders = () => {
         JSON.parse(localStorage.getItem("userDetails123")).emailid ||
           JSON.parse(localStorage.getItem("userDetails123")).phonenumber
       );
-      getOrderFun();
+
+      Axios.get(`${API}orders/getOrderUser`,{
+        headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
+            params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
+      }).then((res)=>{
+        //console.log(res);
+        setOrderData(res.data.data);
+      }).catch((err)=>{
+        console.log(err)
+      })
+      
     }
   }, []);
 
@@ -928,345 +993,40 @@ const Orders = () => {
           color: "#000000",
         }}>My Orders</h2>
       </div>
-      <div>
-        <OrderDetailCard 
-        orderId="76-2260441-433074"
-        createdAt= "Saturday, 10 October 2020"
-        imgUrl= {SafeTwo}
-        name="Posters | Material Handling | PRD – MH0013A"
-        material="PREMIUM SELF ADHESIVE"
-        dimension="19 INCH X 27 INCH X .2 INCH"
-        originalPrice={200}
-        quantity={2}
-        totalPrice={520}
-        >
-            <div className={classes.root} >
-                    <Stepper
-                      alternativeLabel
-                      activeStep={2}
-                      connector={<QontoConnector />}
-                      className=" p-0 "
-                    >
-                      {steps.map((label) => (
-                        <Step key={label}  className=" stepperWidth">
-                          <StepLabel StepIconComponent={QontoStepIcon} >
-                            <p className="steplabel ">{label}</p>
-                          </StepLabel>
-                        </Step>
-                      ))}
-                    </Stepper>
-
-                </div>
-        </OrderDetailCard>
-         <OrderDetailCard 
-        orderId="76-2260441-433074"
-        createdAt= "Saturday, 10 October 2020"
-        imgUrl= {SafeTwo}
-        name="Posters | Material Handling | PRD – MH0013A"
-        material="PREMIUM SELF ADHESIVE"
-        dimension="19 INCH X 27 INCH X .2 INCH"
-        originalPrice={200}
-        quantity={2}
-        totalPrice={520}
-        >
-        <div className={classes.root}>
-                    <Stepper
-                      alternativeLabel
-                      activeStep={
-                        status === "Order Confirmed"
-                          ? 1
-                          :status === "Order Dispatched"
-                          ? 2
-                          : status === "Order Shipped"
-                          ? 3
-                          : status === "Order Delivered"
-                          ? 4
-                          : 1
-                      }
-                      connector={<QontoConnector />}
-                      className=" p-0 "
-                    >
-                      {steps.map((label) => (
-                        <Step key={label}  className=" stepperWidth">
-                          <StepLabel StepIconComponent={QontoStepIcon} >
-                            <p className="steplabel">{label}</p>
-                          </StepLabel>
-                        </Step>
-                      ))}
-                    </Stepper>
-
-                </div>
-        </OrderDetailCard>
-      </div>
-
-      
-
-
-
-      {/*<Grid className="mt-3 ml-5 " style={{ width: "100%" }}>
-        <Grid.Row columns="2">
-          <p className="perhead">My Orders</p>
-        </Grid.Row>
-
-        {orderData.map((v, i) => (
-          <Grid.Row
-            style={{
-              border: "1px solid #D2D2D2",
-              borderRadius: "10px",
-              width: "80%",
-              padding: "30px",
-            }}
-            className="mt-3"
-            key={i}
-          >
-            <div>
-              <div className="row">
-                <p
-                  className=" perhead ml-3"
-                  style={{ fontSize: "14px", lineHeight: "17px" }}
-                >
-                  {v.orderId}
-                </p>
-                <p
-                  className="perhead "
-                  style={{
-                    fontSize: "14px",
-                    lineHeight: "17px",
-                    marginLeft: "420px",
-                  }}
-                >
-                  Ordered on {v.created_at}
-                </p>
-              </div>
-              <Grid className="ml-3">
-                <Grid.Row columns="2">
-                  <Grid.Column className="ml-3">
-                    {v.itemDetails.map((val, ind) => (
-                      <Grid.Row key={ind} className="mt-4">
-                        <Grid.Column>
-                          <img
-                            src={val.imgUrl}
-                            width="120px"
-                            height="140px"
-                            alt=""
-                          />
-                        </Grid.Column>
-                        <Grid.Column className="ml-4 mt-2 mr-0">
-                          <p
-                            className="tabletitle p-0 mb-2"
-                            style={{ width: "230px" }}
+      {
+        orderData ? orderData.map((order,i)=>{
+          //console.log(orderData)
+          return(
+            <>
+            <OrderDetailCard 
+              orderId={order.orderId}
+              createdAt= {order.created_at}
+              items={order.itemDetails}
+              totalPrice={order.sumPriceToPay}
+              >
+                  <div className={classes.root} >
+                          <Stepper
+                            alternativeLabel
+                            activeStep={order.orderStatus}
+                            connector={<QontoConnector />}
+                            className=" p-0 "
                           >
-                            {val.name}
-                          </p>
-                          <p
-                            className="tabledata p-0 m-0"
-                            style={{ width: "300px" }}
-                          >
-                            Material : <span>{findMat(val.Material)}</span>
-                          </p>
-                          <p
-                            className="tabledata p-0 m-0"
-                            style={{ width: "300px" }}
-                          >
-                            Dimension : <span>{findDim(val.Dimension)}</span>
-                          </p>
-                          <p className="tabledata p-0 m-0">
-                            Price : <span>₹{val.originalPrice}</span>
-                          </p>
-                          <p className="tabledata p-0 m-0">
-                            Quantity : <span>{val.quantity}</span>
-                          </p>
-                        </Grid.Column>
-                      </Grid.Row>
-                    ))}
-                  </Grid.Column>
-                  <Grid.Column
-                    className="mt-3"
-                    style={{ textAlign: "end", marginLeft: "239px" }}
-                  >
-                    <p className="def" style={{ marginTop: "-5px" }}>
-                      View Quotation
-                    </p>
-                    <p className="def" style={{ marginTop: "-5px" }}>
-                      Request Cancellation{" "}
-                    </p>
-                    <button
-                      type="button"
-                      className="def"
-                      data-toggle="modal"
-                      data-target="#exampleModal"
-                      id="modalOpen"
-                      style={{
-                        marginTop: "-5px",
-                        border: "0px none",
-                        backgroundColor: "white",
-                      }}
-                    >
-                      Review Product
-                    </button>
-                  </Grid.Column>
-                </Grid.Row>
+                            {steps.map((label) => (
+                              <Step key={label}  className=" stepperWidth">
+                                <StepLabel StepIconComponent={QontoStepIcon} >
+                                  <p className="steplabel ">{label}</p>
+                                </StepLabel>
+                              </Step>
+                            ))}
+                          </Stepper>
 
-                <Grid.Row>
-                  <div className={classes.root}>
-                    <Stepper
-                      alternativeLabel
-                      activeStep={
-                        v.status === "Order Confirmed"
-                          ? 1
-                          : v.status === "Order Dispatched"
-                          ? 2
-                          : v.status === "Order Shipped"
-                          ? 3
-                          : v.status === "Order Delivered"
-                          ? 4
-                          : 1
-                      }
-                      connector={<QontoConnector />}
-                    >
-                      {steps.map((label) => (
-                        <Step key={label}>
-                          <StepLabel StepIconComponent={QontoStepIcon}>
-                            <p className="steplabel">{label}</p>
-                          </StepLabel>
-                        </Step>
-                      ))}
-                    </Stepper>
-
-                    {/* Stepper Button Controls */}
-
-                    {/* 
-                   <div>
-                    {activeStep === steps.length ? (
-                      <div>
-                        <Typography className={classes.instructions}>
-                          All steps completed - you&apos;re finished
-                        </Typography>
-                        <Button
-                          onClick={handleReset}
-                          className={classes.button}
-                        >
-                          Reset
-                        </Button>
                       </div>
-                    ) : (
-                      <div>
-                        <Typography className={classes.instructions}>
-                          {getStepContent(activeStep)}
-                        </Typography>
-                        <div>
-                          <Button
-                            disabled={activeStep === 0}
-                            onClick={handleBack}
-                            className={classes.button}
-                          >
-                            Back
-                          </Button>
-                          <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleNext}
-                            className={classes.button}
-                          >
-                            {activeStep === steps.length - 1
-                              ? "Finish"
-                              : "Next"}
-                          </Button>
-                        </div>
-                      </div>
-                    )}
-                  </div> 
-                  </div>
-                </Grid.Row>
-                <Grid.Row>
-                  <p
-                    className="perhead"
-                    style={{
-                      fontSize: "14px",
-                      lineHeight: "17px",
-                      marginLeft: "717px",
-                    }}
-                  >
-                    Order Total:{v.total}
-                  </p>
-                </Grid.Row>
-              </Grid>
-            </div>
-          </Grid.Row>
-        ))}
-      </Grid>
-
-      <div
-        className="modal fade"
-        id="exampleModal"
-        tabIndex="-1"
-        role="dialog"
-        aria-labelledby="exampleModalLabel"
-      >
-        <div className="modal-dialog" role="document">
-          <div className="modal-content pt-3">
-            <div className="modal-header border-0">
-              <h5
-                className="modal-title"
-                id="exampleModalLabel"
-                style={{ marginLeft: "35px" }}
-              >
-                Edit Review
-              </h5>
-              <button
-                type="button"
-                id="modalClose"
-                className="btn shadow-none mr-2 p-0 m-0"
-                data-dismiss="modal"
-                aria-label="Close"
-                style={{
-                  width: "25px",
-                  height: "25px",
-                  background: "white",
-                }}
-              >
-                <img src={CloseBtn} alt="close" />
-              </button>
-            </div>
-            <div className="modal-body border-0">
-              <p
-                className="tabledata"
-                style={{ marginTop: "-30px", marginLeft: "35px" }}
-              >
-                Reviewed on Tuesday, 27 October 2020
-              </p>
-              <Grid className="pl-5 pr-5">
-                <Grid.Row className="mb-2">
-                  <Rating
-                    name="simple-controlled"
-                    value={value}
-                    onChange={(event, newValue) => {
-                      setValue(newValue);
-                    }}
-                    size="large"
-                  />
-                </Grid.Row>
-                <Grid.Row className="mb-2">
-                  <input
-                    type="text"
-                    defaultValue="Great poster!"
-                    style={{ width: "100%" }}
-                  ></input>
-                </Grid.Row>
-                <Grid.Row className="mb-2">
-                  <textarea
-                    defaultValue="High Quality posters as described! Happy with the purchase!!"
-                    style={{ width: "100%", height: "100px" }}
-                  ></textarea>
-                </Grid.Row>
-                <Grid.Row style={{ float: "right" }} className="pb-3">
-                  <Button className="perbut1 text-white">Share Review</Button>
-                </Grid.Row>
-              </Grid>
-            </div>
-          </div>
-        </div>
-      </div>*/}
+              </OrderDetailCard>
+            </>
+          )
+        }):
+        <div>No Orders Found</div>
+      }
     </>
   );
 };
@@ -1278,170 +1038,21 @@ const ncard = (props) => {
 };
 
 const Wishlist = (props) => {
-  const [orderData, setOrderData] = React.useState([]);
+  const [wishlist,setWishlist] = useState([])
 
-  const [selectedModal, setSelectedModal] = React.useState({});
-
-  const [selectMatDim, setMatDim] = useState({
-    Material: { one: false, two: false, three: false },
-    Dimension: { one: false, two: false, three: false },
-  });
-
-  let card1Det, card2Det;
-  try {
-    card1Det = {
-      select: "Material",
-      box: [
-        {
-          src:
-            "http://35.238.118.121:8080/assets/uploads/imgUrl-1610371399266.jpg",
-          title: "125 Micron (non-tearable)",
-          name: "one",
-          select: "Material",
-        },
-        {
-          src:
-            "http://35.238.118.121:8080/assets/uploads/imgUrl-1610371464860.jpg",
-          title: "Self-adhesive (premium)",
-          name: "two",
-          select: "Material",
-        },
-        {
-          src:
-            "http://35.238.118.121:8080/assets/uploads/imgUrl-1610371489961.jpg",
-          title: "Self-adhesive 3mm sunboard (premium)",
-          name: "three",
-          select: "Material",
-        },
-      ],
-    };
-    card2Det = {
-      select: "Dimension",
-      box: [
-        {
-          src:
-            "http://35.238.118.121:8080/assets/uploads/imgUrl-1610371522669.jpg",
-          title: "16in by 24in",
-          cus: true,
-          cusWidth: "90",
-          cusHeight: "50",
-          name: "one",
-          select: "Dimension",
-        },
-        {
-          src:
-            "http://35.238.118.121:8080/assets/uploads/imgUrl-1610371522669.jpg",
-          title: "19in by 27in",
-          cus: true,
-          cusWidth: "100",
-          cusHeight: "60",
-          name: "two",
-          select: "Dimension",
-        },
-        {
-          src:
-            "http://35.238.118.121:8080/assets/uploads/imgUrl-1610371522669.jpg",
-          title: "24in by 36in",
-          cus: true,
-          cusWidth: "120",
-          cusHeight: "80",
-          name: "three",
-          select: "Dimension",
-        },
-      ],
-    };
-  } catch (e) {}
-
-  const card3Det = {
-    select: "Quantity",
-    quantity: 1,
-    material: "Material: " + findMat(selectMatDim.Material),
-    dimension: "Dimensions:" + findDim(selectMatDim.Dimension),
-    price: selectedModal.originalPrice,
-  };
-
-  const ModalDet = {
-    src: selectedModal.imgUrl,
-    title: selectedModal.name,
-    select: "Select Material",
-    selectedMatDim: selectMatDim,
-    card1: card1Det,
-    card2: card2Det,
-    card3: card3Det,
-  };
-
-  const [modalCarousel, setModalCar] = useState({
-    one: true,
-    two: false,
-    three: false,
-  });
-
-  const setModalCarousel = (e) => {
-    if (e.target.id === "one") {
-      setModalCar({ one: true, two: false, three: false });
-    } else if (e.target.id === "two") {
-      setModalCar({ one: false, two: true, three: false });
-    } else if (e.target.id === "three") {
-      setModalCar({ one: false, two: false, three: true });
-    }
-  };
-
-  const setModalCarouselb = (e) => {
-    if (e.target.id === "oneb") {
-      setModalCar({ one: true, two: false, three: false });
-    } else if (e.target.id === "twob") {
-      setModalCar({ one: false, two: true, three: false });
-    } else if (e.target.id === "threeb") {
-      setModalCar({ one: false, two: false, three: true });
-    }
-  };
-
-  const selectedModalCard = (data) => {
-    setSelectedModal(data);
-    $("#modalOpen").trigger("click");
-  };
-
-  function getOrderFun() {
-    Axios.get(
-      getUserById + "/" + JSON.parse(localStorage.getItem("userDetails123"))._id
-    )
-      .then((res) => {
-        setOrderData(res.data.users.wishList);
-      })
-      .catch((err) => console.log(err));
-  }
-
- /* React.useEffect(() => getOrderFun(), []);*/
-
-  const [bottomDet, setBottomDet] = React.useState({});
-
-  function removeWishList(id) {
-    Axios.post(updateUser, {
-      wishList: id,
-      operation_type: 2,
-      userObjId: JSON.parse(localStorage.getItem("userDetails123"))._id,
-    }).then((data) => {
-      getOrderFun();
-    });
-  }
-
-  const addToCart = (det) => {
-    setBottomDet(det);
-    $("#bottomCart").css("display", "block");
-    props.setCartCountFun(det);
-  };
-  const PPEPosters = [
- 
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE" },
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE"},
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE"},
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE" },
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE" },
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE" },
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE"},
-    { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: 3.7, itemBought: 413 ,cat: "posters" , subCat: "PPE"},
-   
-  ];
+  useEffect(()=>{
+    Axios.get(`${API}auth/get_user_details_by_id`,{   
+      headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
+      params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id,onlywish: 1}
+    }).then((res)=>{
+      //console.log(res);
+      setWishlist(res.data.data[0].wishList);
+      //console.log(res.data.data[0].wishlist);
+    }).catch((err)=>{ 
+      console.log(err);
+    })
+  })
+  
   return (
     <>
      <hr style={{borderTop: "4px solid #F6F6F6",marginTop: "0"}}></hr>
@@ -1452,326 +1063,40 @@ const Wishlist = (props) => {
         color: "#000000",
         fontWeight: "600",
       }}>My Wishlist</h2>
-      <div className="wishlistProducts">
-        {PPEPosters.map(ncard)}
+      {(wishlist && wishlist.length>0)?(
+        <>
+        <div className="wishlistProducts">
+        {wishlist.map((ncard,i)=>{
+            return(
+            <ProductCard 
+            product={ncard}
+                    src={ncard.imgUrl[0]} 
+                    name={ncard.name} 
+                    slug={ncard.slug} 
+                    startPrice={ncard.originalPrice} 
+                    rating={ncard.average_rating} 
+                    itemBought={ncard.bought} 
+
+                    catId= {ncard.category[0]._id} 
+                    subCatId={ncard.subCategory[0]._id}
+                    catSlug = {ncard.category[0].cat_slug}
+                    subCatSlug = {ncard.subCategory[0].sub_cat_slug}
+                    id={ncard._id} 
+                    key={i} 
+                />
+            )
+        })}
       </div>
       <div className="d-flex mt-4  ">
         <Pagination count={2} color="primary"  className="mx-auto"  />
       </div>
-    </div>
-      {/*<Grid className="ml-5">
-        <Grid.Row className="orderDet mt-2" style={{ marginLeft: "-50px" }}>
-          My Wishlist
-        </Grid.Row>
-        <Grid.Row className="mt-3">
-          {orderData.map((v, i) => (
-            <Grid.Column key={i} className={i !== 0 ? "ml-3" : "m-0 p-0"}>
-              <Card2
-                data={v}
-                addToCart={addToCart}
-                isCardClickAvail={true}
-                selectedModalCard={selectedModalCard}
-              />
-              <button
-                style={{
-                  backgroundColor: "#F2994A",
-                  border: "none",
-                  color: "white",
-                  padding: "8px",
-                  borderRadius: "8px",
-                }}
-                onClick={() => removeWishList(v._id)}
-              >
-                Remove
-              </button>
-            </Grid.Column>
-          ))}
-        </Grid.Row>
-      </Grid>
-
-      <button
-        type="button"
-        className="btn btn-primary"
-        data-toggle="modal"
-        data-target="#exampleModal"
-        id="modalOpen"
-        style={{ display: "none" }}
-      >
-        {""}
-      </button>
-
-      <div
-        className="modal fade"
-        id="exampleModal"
-        tabIndex="-1"
-        role="dialog"
-        aria-labelledby="exampleModalLabel"
-      >
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header border-0">
-              <h5 className="modal-title" id="exampleModalLabel">
-                {""}
-              </h5>
-              <button
-                type="button"
-                id="modalClose"
-                className="btn shadow-none mr-2 p-0 m-0"
-                data-dismiss="modal"
-                aria-label="Close"
-                style={{
-                  width: "25px",
-                  height: "25px",
-                  background: "white",
-                }}
-              >
-                <img src={CloseBtn} alt="close" />
-              </button>
-            </div>
-            <div className="modal-body border-0">
-              <img
-                width="320px"
-                height="250px"
-                className="d-block mx-auto"
-                style={{ marginTop: "-30px" }}
-                src={ModalDet.src}
-                alt={ModalDet.title}
-              />
-              <p
-                className="text-center mt-1"
-                style={{
-                  fontFamily: "Lato",
-                  fontStyle: "normal",
-                  fontWeight: "bold",
-                  fontSize: "16px",
-                  lineHeight: "19px",
-
-                  color: "#000000",
-                }}
-              >
-                {ModalDet.title}
-              </p>
-              {modalCarousel.one ? (
-                <Grid>
-                  <Grid.Row className="text-center justify-content-center">
-                    <p
-                      className="text-center mt-1"
-                      style={{
-                        fontFamily: "Lato",
-                        fontStyle: "normal",
-                        fontWeight: "normal",
-                        fontSize: "18px",
-                        lineHeight: "22px",
-                        textAlign: "center",
-                        color: "#000000",
-                      }}
-                    >
-                      Select {ModalDet.card1?.select}
-                    </p>
-                  </Grid.Row>
-                  <Grid.Row className="mx-auto" columns="3">
-                    {ModalDet.card1?.box.map((v, i) => (
-                      <Grid.Column
-                        key={i}
-                        className={i !== 0 ? "ml-4" : "ml-3"}
-                      >
-                        <ModalCard
-                          setMatDim={setMatDim}
-                          selected={selectMatDim.Material}
-                          addToCart={addToCart}
-                          boxDet={v}
-                          oriDet={selectedModal}
-                          name="material"
-                        />
-                      </Grid.Column>
-                    ))}
-                  </Grid.Row>
-                </Grid>
-              ) : null}
-
-              {modalCarousel.two ? (
-                <Grid>
-                  <Grid.Row className="text-center justify-content-center">
-                    <p
-                      className="text-center mt-1"
-                      style={{
-                        fontFamily: "Lato",
-                        fontStyle: "normal",
-                        fontWeight: "normal",
-                        fontSize: "18px",
-                        lineHeight: "22px",
-                        textAlign: "center",
-                        color: "#000000",
-                      }}
-                    >
-                      Select {ModalDet.card2.select}
-                    </p>
-                  </Grid.Row>
-                  <Grid.Row className="mx-auto" columns="3">
-                    {ModalDet.card2.box.map((v, i) => (
-                      <Grid.Column
-                        key={i}
-                        className={i !== 0 ? "ml-4" : "ml-3"}
-                      >
-                        <ModalCard
-                          setMatDim={setMatDim}
-                          selected={selectMatDim.Dimension}
-                          addToCart={addToCart}
-                          boxDet={v}
-                          oriDet={selectedModal}
-                          name="dimension"
-                        />
-                      </Grid.Column>
-                    ))}
-                  </Grid.Row>
-                </Grid>
-              ) : null}
-
-              {modalCarousel.three ? (
-                <Grid>
-                  <Grid.Row className="text-center justify-content-center">
-                    <p
-                      className="text-center mt-1"
-                      style={{
-                        fontFamily: "Lato",
-                        fontStyle: "normal",
-                        fontWeight: "normal",
-                        fontSize: "18px",
-                        lineHeight: "22px",
-                        textAlign: "center",
-                        color: "#000000",
-                      }}
-                    >
-                      Select {ModalDet.card3.select}
-                    </p>
-                  </Grid.Row>
-                  <Grid.Row className="mx-auto justify-content-center">
-                    <ModelCard3
-                      det={ModalDet.card3}
-                      selectMatDim={selectMatDim}
-                      addToCart={addToCart}
-                      oriDet={selectedModal}
-                    />
-                  </Grid.Row>
-                </Grid>
-              ) : null}
-            </div>
-            <div className="modal-footer border-0 justify-content-center bg-white pt-2">
-              <div
-                style={{ position: "absolute", left: "22px", bottom: "5px" }}
-              >
-                <NavigateBeforeIcon
-                  style={
-                    modalCarousel.two
-                      ? { fontSize: "30px" }
-                      : { display: "none" }
-                  }
-                  id="oneb"
-                  onClick={setModalCarouselb}
-                />
-              </div>
-              <div
-                style={{
-                  position: "absolute",
-                  left: "22px",
-                  bottom: "5px",
-                }}
-              >
-                <NavigateBeforeIcon
-                  style={
-                    modalCarousel.three
-                      ? { fontSize: "30px" }
-                      : { display: "none" }
-                  }
-                  id="twob"
-                  onClick={setModalCarouselb}
-                />
-              </div>
-
-              <div
-                id="one"
-                className={modalCarousel.one ? "bg-secondary" : ""}
-                style={{
-                  cursor: "pointer",
-                  width: "10px",
-                  height: "10px",
-                  borderRadius: "50%",
-                  background: "#D2D2D2",
-                }}
-                onClick={setModalCarousel}
-              ></div>
-              <div
-                id="two"
-                className={modalCarousel.two ? "ml-2 bg-secondary" : "ml-2"}
-                style={{
-                  cursor: "pointer",
-                  width: "10px",
-                  height: "10px",
-                  borderRadius: "50%",
-                  background: "#D2D2D2",
-                }}
-                onClick={setModalCarousel}
-              ></div>
-              <div
-                id="three"
-                className={modalCarousel.three ? "ml-2 bg-secondary" : "ml-2"}
-                style={{
-                  cursor: "pointer",
-                  width: "10px",
-                  height: "10px",
-                  borderRadius: "50%",
-                  background: "#D2D2D2",
-                }}
-                onClick={setModalCarousel}
-              ></div>
-
-              <div
-                style={{ position: "absolute", right: "22px", bottom: "5px" }}
-              >
-                <NavigateNextIcon
-                  style={
-                    modalCarousel.one
-                      ? { fontSize: "30px" }
-                      : { display: "none" }
-                  }
-                  id="twob"
-                  onClick={setModalCarouselb}
-                />
-              </div>
-              <div
-                style={{ position: "absolute", right: "22px", bottom: "5px" }}
-              >
-                <NavigateNextIcon
-                  style={
-                    modalCarousel.two
-                      ? { fontSize: "30px" }
-                      : { display: "none" }
-                  }
-                  id="threeb"
-                  onClick={setModalCarouselb}
-                />
-              </div>
-            </div>
-          </div>
+        </>
+      ):(
+        <div>
+          No Products in Your Wishlist...
         </div>
-      </div>
-      <div
-        id="bottomCart"
-        className="pt-3 pl-4"
-        style={{
-          width: "320px",
-          height: "150px",
-          backgroundColor: "white",
-          zIndex: "22",
-          position: "fixed",
-          bottom: "30px",
-          right: "30px",
-          boxShadow: "0px 2px 20px 4px rgba(0, 0, 0, 0.25)",
-          display: "none",
-        }}
-      >
-        <BottomAddedCart det={bottomDet} />
-      </div>*/}
+      )}
+    </div>
     </>
   );
 };

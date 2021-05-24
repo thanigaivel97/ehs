@@ -289,7 +289,7 @@ const NavBar = (props) => {
                 className="px-sm-2 pb-sm-2 pt-sm-1 dropdown-item dropdown-content animate__animated animate__faster"
                 id="searchDropCatId" 
                 >
-                {search_catogories.map((v, i) =>
+                {search_catogories && search_catogories.map((v, i) =>
                   v === "All Categories" ? (
                     <>
                       <Link
@@ -432,7 +432,7 @@ const NavBar = (props) => {
                   ><ArrowBackIosRoundedIcon className="mt-1 pb-2 float-left d-sm-none d-inline-block" style={{width: "15px", color: "white"}} />
                     Back to Main Menu
                   </Link>
-                  {(categories[0].sub_category).map((val,i)=>{
+                  {categories && (categories[0].sub_category).map((val,i)=>{
                     return(
                       <Link
                          className="searchCategory dropdown-item posterDropdownArrow menuRemove text-capitalize   " 
@@ -466,7 +466,7 @@ const NavBar = (props) => {
                   ><ArrowBackIosRoundedIcon className="mt-1 pb-2 float-left d-sm-none d-inline-block" style={{width: "15px", color: "white"}} />
                     Back to Main Menu
                   </Link>
-                  {(categories[1].sub_category).map((val,i)=>{
+                  {categories && (categories[1].sub_category).map((val,i)=>{
                     return(
                       <Link
                          className="searchCategory dropdown-item signageDropdownArrow menuRemove text-capitalize   " 
@@ -497,7 +497,7 @@ const NavBar = (props) => {
                   ><ArrowBackIosRoundedIcon className="mt-1 pb-2 float-left d-sm-none d-inline-block" style={{width: "15px", color: "white"}} />
                     Back to Main Menu
                   </Link>
-                  {(categories[2].sub_category).map((val,i)=>{
+                  {categories && (categories[2].sub_category).map((val,i)=>{
                     return(
                       <Link
                          className="searchCategory dropdown-item floorDropdownArrow menuRemove text-capitalize   " 
@@ -529,7 +529,7 @@ const NavBar = (props) => {
                   ><ArrowBackIosRoundedIcon className="mt-1 pb-2 float-left d-sm-none d-inline-block" style={{width: "15px", color: "white"}} />
                     Back to Main Menu
                   </Link>
-                  {(categories[3].sub_category).map((val,i)=>{
+                  {categories && (categories[3].sub_category).map((val,i)=>{
                     return(
                       <Link
                          className="searchCategory dropdown-item assetDropdownArrow menuRemove text-capitalize   " 

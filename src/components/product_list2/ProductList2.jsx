@@ -118,11 +118,12 @@ const ProductList2 = (props) => {
    
             return(
               <ProductCard 
+                product={ncard}
                 src={ncard.imgUrl[0]} 
                 name={ncard.name} 
                 slug={ncard.slug} 
                 startPrice={ncard.originalPrice} 
-                rating={ncard.rating} 
+                rating={ncard.average_rating} 
                 itemBought={ncard.bought} 
                 catName={catName} 
                 subCatName={subCatName} 
@@ -140,11 +141,12 @@ const ProductList2 = (props) => {
          
             return(
               <ProductCard 
+                product={ncard}
                 src={ncard.imgUrl[0]} 
                 name={ncard.name} 
                 slug={ncard.slug} 
                 startPrice={ncard.originalPrice} 
-                rating={ncard.rating} 
+                rating={ncard.average_rating} 
                 itemBought={ncard.bought} 
                 catName={catName} 
                 subCatName={subCatName}

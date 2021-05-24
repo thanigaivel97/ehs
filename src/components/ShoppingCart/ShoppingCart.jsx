@@ -1,24 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /*jshint esversion: 9 */
 import React, { useRef,useState,  useEffect } from "react";
-import Blank from "../../images/blank.svg";
 import { Link, useHistory } from "react-router-dom";
-import Back from "../../images/back.svg";
 import { Grid } from "semantic-ui-react";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
-import Tape from "../../images/tape.svg";
 import Pay from "../../images/payment.svg";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-// import Card2 from "../category_page/Card2";
 import Axios from "axios";
 import { createOrder, updateUser } from "../../helper/apiPath";
 import { findMat, findDim } from "../../helper/apiPath";
 import $ from "jquery";
-import { Input } from "@material-ui/core";
-import EhsLogo from "../../images/EhsLogo.svg";
 import swal from "sweetalert";
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounded';
@@ -32,13 +25,6 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import Swal from "sweetalert2";
 import withReactContent from 'sweetalert2-react-content';
 const MySwal = withReactContent(Swal);
-
-
-const ncard = (props) => {
-  return (
-      <ProductCard src={props.src} name={props.title} startPrice={props.startPrice} rating={props.rating} itemBought={props.itemBought} />
-  );
-};
 
 function loadScript(src) {
   return new Promise((resolve) => {
@@ -194,6 +180,21 @@ const Tables = (props) => {
     displayRazorpay();
   }
 
+  function getCartItem(){
+    Axios.get(`${API}auth/get_user_details_by_id`,{   
+      headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
+      params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
+    }).then((res)=>{
+     /// console.log(res);
+      setCartItem(res.data.data[0].cart);
+      setWishlist(res.data.data[0].wishList);
+     // console.log(res.data.data[0].wishlist);
+     // console.log(res.data.data[0].cart)
+    }).catch((err)=>{ 
+      console.log(err);
+    })
+  }
+
   const [authUser, setAuthUser] = React.useState("");
 
   useEffect(() => {
@@ -205,22 +206,9 @@ const Tables = (props) => {
       );
       if (JSON.parse(localStorage.getItem("userDetails123"))){
 
-
-        Axios.get(`${API}auth/get_user_details_by_id`,{   
-            headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
-            params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
-          }).then((res)=>{
-            console.log(res);
-            setCartItem(res.data.data[0].cart);
-            setWishlist(res.data.data[0].wishList);
-            console.log(res.data.data[0].wishlist);
-            console.log(res.data.data[0].cart)
-          }).catch((err)=>{ 
-            console.log(err);
-          })
+        getCartItem();
+       
         }
-
-        
 
         setTotalPay( cartItem.reduce((totalPay, c) => totalPay + c, 0))
         
@@ -400,7 +388,7 @@ const Tables = (props) => {
             console.log(err);
         })
     }
-}
+  };
 
   const removeFromCart = (productId) => {
     if(authUser){
@@ -419,6 +407,31 @@ const Tables = (props) => {
           console.log(err);
       })
   }
+  };
+
+  const updateQuantity = (productId,matId,presentQty,qtyUpdater) =>{
+    let qty=presentQty;
+    if(qtyUpdater===0 && presentQty>0){
+      qty= qty-1;
+    }else{
+      qty=qty+1;
+    }
+    if(authUser && qty!==presentQty){
+      Axios.post(`${API}auth/update_user_cart`,{
+          poster_obj_id: productId,
+          material_obj_id: matId,
+          quantity: qty,
+      },
+      {   
+          headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
+          params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
+      }).then((res)=>{
+        console.log(res)
+       // window.location.reload(false);
+        getCartItem();
+      }).catch((err)=>{
+        console.log();
+      })}
   }
 
   const wishlistCarousel = useRef();
@@ -435,7 +448,11 @@ const Tables = (props) => {
             <h1 className="mt-2 catHead text-capitalize" >
             Shopping Cart
             </h1>
-            <Link to="/login" className="d-none d-sm-block" style={{
+            {
+              (authUser)?(
+                ""
+              ):(
+                <Link to="/login" className="d-none d-sm-block" style={{
               width: "235px",
               height: "85px",
               background: "#FFFFFF",
@@ -450,6 +467,8 @@ const Tables = (props) => {
               color: "#003459",
               paddingTop: "21px"
             }}>Login or Sign up to save your Shopping Cart</Link>
+              )
+            }
           </div>
         </div>
 
@@ -478,6 +497,7 @@ const Tables = (props) => {
                      // setTotalPay(totalPay => totalPay + v.total);
                     // cartItem.reduce((totalPay, { v.total }) => totalPay + v.total, 0)
                       totalAmount=totalAmount+ parseInt(v.total);
+                    
                      return(
                       <tr key={i} >
                        <td className="mr-0 " style={{ width: "460px" }}>
@@ -515,10 +535,11 @@ const Tables = (props) => {
                             style={{ width: "20px", height: "25px" }}
                           >
                             <Button
+                              onClick={()=>updateQuantity(v.poster_details._id,v.materialDimension._id,v.quantity,0)}
                               className="shadow-none "
                               style={{maxWidth: '25px', maxHeight: '25px', minWidth: '25px', minHeight: '25px'}}
                             >
-                              <RemoveIcon style={{ color: "grey", width: "20px" }} />
+                              <RemoveIcon  style={{ color: "grey", width: "20px" }} />
                             </Button>
                             <Button
                               style={{
@@ -534,8 +555,11 @@ const Tables = (props) => {
                             >
                               {v.quantity}
                             </Button>
-                            <Button className="p-0" style={{maxWidth: '25px', maxHeight: '25px', minWidth: '25px', minHeight: '25px'}} >
-                              <AddIcon style={{ color: "grey", width: "20px" }} />
+                            <Button 
+                             onClick={()=>updateQuantity(v.poster_details._id,v.materialDimension._id,v.quantity,1)}
+                            className="p-0" 
+                            style={{maxWidth: '25px', maxHeight: '25px', minWidth: '25px', minHeight: '25px'}} >
+                              <AddIcon  style={{ color: "grey", width: "20px" }} />
                             </Button>
                           </ButtonGroup>
                                 </div>
@@ -543,7 +567,7 @@ const Tables = (props) => {
                                   ₹ {v.total}
                                 </p>
                                 <p className="tabledata p-0 m-0 d-none d-sm-block">
-                                  Price : <span style={{fontWeight: "600"}}>₹ {v.poster_details.originalPrice}</span>
+                                  Price : <span style={{fontWeight: "600"}}>₹ {v.materialDimension.price}</span>
                                 </p>
                                 <div className="mt-sm-1 mt-0 p-0  " style={{marginTop: "0", padding: "0", lineHeight: "12px"}}>
                                 <p
@@ -573,6 +597,7 @@ const Tables = (props) => {
                             style={{ width: "20px", height: "30px" }}
                           >
                             <Button
+                            onClick={()=>updateQuantity(v.poster_details._id,v.materialDimension._id,v.quantity,0)}
                               className="shadow-none"
                             >
                               <RemoveIcon style={{ color: "grey" }} />
@@ -591,7 +616,7 @@ const Tables = (props) => {
                             >
                               {v.quantity}
                             </Button>
-                            <Button >
+                            <Button onClick={()=>updateQuantity(v.poster_details._id,v.materialDimension._id,v.quantity,1)} >
                               <AddIcon style={{ color: "grey" }} />
                             </Button>
                           </ButtonGroup>
@@ -645,15 +670,15 @@ const Tables = (props) => {
                   <tbody>
                     <tr height="30px">
                       <td className="pri left">Price</td>
-                      <td className="pri right">₹{totalAmount}</td>
+                      <td className="pri right">₹ {totalAmount}</td>
                     </tr>
                     <tr height="30px">
                       <td className="shi left">Shipping</td>
-                      <td className="shi right">₹{shipping}</td>
+                      <td className="shi right">₹ 0.00</td>
                     </tr>
                     <tr height="30px">
                       <td className="shi left">Discount</td>
-                      <td className="shi right">₹0.00</td>
+                      <td className="shi right">₹ 0.00</td>
                     </tr>
 
                     <tr
@@ -664,7 +689,7 @@ const Tables = (props) => {
                       }}
                     >
                       <td className="pri left" style={{fontSize: "18px", lineHeight: "23px"}}>Total Price</td>
-                      <td className="pri right" style={{fontSize: "18px", lineHeight: "23px"}}>₹{totalAmount + shipping}</td>
+                      <td className="pri right" style={{fontSize: "18px", lineHeight: "23px"}}>₹ {totalAmount}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -775,11 +800,12 @@ const Tables = (props) => {
                     {wishlist.map((ncard,i)=>{
                            return(
                             <ProductCard 
+                            product={ncard}
                                     src={ncard.imgUrl[0]} 
                                     name={ncard.name} 
                                     slug={ncard.slug} 
                                     startPrice={ncard.originalPrice} 
-                                    rating={ncard.rating} 
+                                    rating={ncard.average_rating} 
                                     itemBought={ncard.bought} 
 
                                     catId= {ncard.category[0]._id} 
@@ -799,11 +825,12 @@ const Tables = (props) => {
                     {wishlist.slice(0,4).map((ncard,i)=>{
                            return(
                             <ProductCard 
+                            product={ncard}
                                     src={ncard.imgUrl[0]} 
                                     name={ncard.name} 
                                     slug={ncard.slug} 
                                     startPrice={ncard.originalPrice} 
-                                    rating={ncard.rating} 
+                                    rating={ncard.average_rating} 
                                     itemBought={ncard.bought} 
                                     
                                     catId= {ncard.category[0]._id} 

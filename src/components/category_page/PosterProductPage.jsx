@@ -29,6 +29,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import Swal from "sweetalert2";
 import withReactContent from 'sweetalert2-react-content';
+import { useForm } from "react-hook-form";
 const MySwal = withReactContent(Swal);
 
 const theme = createMuiTheme({
@@ -60,7 +61,18 @@ const theme = createMuiTheme({
     }
 });
 
-const ReviewCard = () => {
+const ReviewCard = (props) => {
+
+        /*Axios.get(`${API}auth/get_user_details_by_id`,{   
+            headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
+            params: {userId: props.userId}
+        }).then((res)=>{
+            console.log(res.data.data[0].name)
+        }).catch((err)=>{
+            console.log(err);
+        
+    })*/
+
     return(
         <div className="border p-2  mr-2" style={{
             width: "200px",
@@ -82,7 +94,7 @@ const ReviewCard = () => {
                     lineHeight: "18px",
                     color: "#757575",
                     
-                }}>4.0 <StarIcon style={{width: "13px",color: "#F2C94C"}}  /></span>
+                }}>{props.rating} <StarIcon style={{width: "13px",color: "#F2C94C"}}  /></span>
             </div>
           
                 <p className="" style={{
@@ -90,10 +102,9 @@ const ReviewCard = () => {
                     fontWeight: "normal",
                     fontSize: "10px",
                     lineHeight: "15px",
-                    position: "absolute",
-                    bottom: "0",
+                   
                 
-                }}>Non quod quasi. Dolorem illum ipsam omnis perferendis distinctio est. Voluptas</p>
+                }}>{props.feedback}</p>
             
         </div>
     );
@@ -126,7 +137,9 @@ const PosterProductPage = (props) => {
     const {catSlug,subCatSlug,productSlug,productId} = useParams();
     let subCatName = subCatSlug.replace("-"," ");
     let catName = catSlug.replace("-"," ");
-    const [rating,setRating] = useState(3.7);
+    const [rating,setRating] = useState(0);
+    const [ratingTotal,setRatingTotal] = useState([]);
+    const [totalNoOfRating,setTotalNoOfRating] = useState(0);
     const [quantity, setQuantity] = useState(1);
     const [visible, setVisible] = useState(4);
     const [material,setMaterial] = useState("125 Micron (non-tearable)");
@@ -138,13 +151,17 @@ const PosterProductPage = (props) => {
     });
     const [youMayLike, setYouMayLike] = useState([]);
     const [similarItems, setSimilarItems] = useState([]);
-    const [initialAmount, setInitialAmount] = useState(NaN);
+    const [initialAmount, setInitialAmount] = useState();
     const [amount, setAmount] = useState(initialAmount);
     let history = useHistory();
      
     useEffect(()=>{
         Axios.get(`${API}posters/getPosterById`,{params: {poster_obj_id: productId}}).then((res)=>{
             setProduct(res.data.data.posterDetails[0]);
+           // console.log(res);
+            setRating(res.data.data.posterDetails[0].average_rating);
+            setRatingTotal(res.data.data.ratingTotalWise);
+            setTotalNoOfRating(res.data.data.totalNoOfRating);
             //console.log(res.data.data.posterDetails[0])
             setYouMayLike(res.data.data.youMayAlsoLike);
             setSimilarItems(res.data.data.realtedPosters);
@@ -227,7 +244,20 @@ const PosterProductPage = (props) => {
                         },
                         customClass: "toastStructure"
                     })
-                    window.location.reload(false);
+                    //window.location.reload(false);
+                   
+                    Axios.get(`${API}posters/getPosterById`,{params: {poster_obj_id: productId}}).then((res)=>{
+                        setProduct(res.data.data.posterDetails[0]);
+                        console.log(res);
+                        setRating(res.data.data.posterDetails[0].average_rating);
+                        setRatingTotal(res.data.data.ratingTotalWise);
+                        setTotalNoOfRating(res.data.data.totalNoOfRating);
+                        //console.log(res.data.data.posterDetails[0])
+                        setYouMayLike(res.data.data.youMayAlsoLike);
+                        setSimilarItems(res.data.data.realtedPosters);
+                    }).catch((err)=> {
+                        console.log(err)
+                    });
             }).catch((err)=>{
                 console.log(err);
             })
@@ -250,6 +280,7 @@ const PosterProductPage = (props) => {
             setAmount(NaN);
     }
 
+   
     const addToWishlist = () => {
         if(authUser){
             Axios.post(`${API}auth/add_user_details`,{
@@ -316,6 +347,69 @@ const PosterProductPage = (props) => {
         }
     }
 
+
+    const {register,handleSubmit, getValues} = useForm();
+    const addRating = () => {
+        const submitReview=(data) =>{
+            let ratings =getValues("simple-controlled")
+            Axios.post(`${API}posters/insertUpdateRating`,{
+                rating: ratings,
+                feedback: data.feedback,
+                poster_obj_id: productId
+            },{   
+                headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
+                params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
+            }).then((res)=>{
+               // console.log(res);
+                window.location.reload(false);
+            }).catch((err)=>{
+                console.log(err)
+            })
+          
+        }
+
+        MySwal.fire({
+            html: <div>
+                <HighlightOffIcon onClick={MySwal.close} role="button" style={{
+                        position: "absolute",
+                        top: "2px",
+                        right: "2px",
+                        color: "#000"
+                    }} />
+                    <p className="reviewHead text-left"> Edit Review</p>
+                    <form onSubmit={handleSubmit(submitReview)}>
+                    <Rating
+                    className="float-left"
+                        name="simple-controlled"
+                        defaultValue ={2}
+                        {...register("simple-controlled")}
+                        />
+                    <input type="text"  
+                    className="d-block my-4 w-100" style={{
+                        height: "50px"
+                    }} 
+                    placeholder="feedback"
+                    name="feedback"
+                    {...register("feedback")}
+                     />
+                    <button type="submit" className="shareBtn">Share Review</button>
+                    </form>
+                  </div>,
+                    padding: "10px",
+                    backdrop: "rgba(0, 0, 0, 0.6)",
+                    showConfirmButton: false,
+                    scrollbarPadding: false,
+                    showClass: {
+                    popup: 'animate__animated animate__zoomIn  animate__faster',
+                    backdrop: 'animate__animated animate__fadeIn  animate__faster'
+                    },
+                    hideClass: {
+                    popup: 'swal2-noanimation',
+                    backdrop: ''
+                    },
+        })
+    }
+
     const changeMaterialTo1 = () =>{
         setMaterial("125 Micron (non-tearable)")
          $("#m1").addClass("selected");
@@ -366,13 +460,6 @@ const changeDimensionToL = () =>{
 };
 
 
-    const showMoreCards = () =>{
-      setVisible(9);
-    }
-    const showLessCards = () =>{
-      setVisible(4);
-    }
-
     const increaseQty = () => {
         setQuantity(quantity+1);
         setAmount(amount+initialAmount);
@@ -386,27 +473,6 @@ const changeDimensionToL = () =>{
             }
     }
 
-    
-    const similarProductInfo = [
-        { src: BeforeStart, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473 },
-        { src: BeforeStart, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473 },
-        { src: BeforeStart, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473},
-        { src: BeforeStart, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473},
-        { src: BeforeStart, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473 },
-        { src: BeforeStart, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473 },
-        { src: BeforeStart, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473 },
-        { src: BeforeStart, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473},
-      ];
-    const similarProductInfo2 = [
-        { src: FloorImg, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473 },
-        { src: FloorImg, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473 },
-        { src: FloorImg, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473},
-        { src: FloorImg, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473},
-        { src: FloorImg, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473 },
-        { src: FloorImg, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473 },
-        { src: FloorImg, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473 },
-        { src: FloorImg, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473},
-      ];
       const breakPoints = [
         { width: 1, itemsToShow: 2, itemsToScroll: 2 },
         { width: 780, itemsToShow: 4 }
@@ -414,11 +480,10 @@ const changeDimensionToL = () =>{
 
       let name = product.name.split("|");
       let desc = product.description.split("|");
-
-
       const likecarousel = useRef(null);
       const similarCarousel = useRef(null);
       const carousel = useRef(null);
+      let star1=0,star2=0,star3=0,star4=0,star5=0;
     return(
         <div>
             <div className="container-fluid pt-3 pb-3 padding-10 d-none d-sm-block " style={{ background: "#F6F6F6", color: "#333333" }}>
@@ -438,9 +503,9 @@ const changeDimensionToL = () =>{
                             color: "#000000",
                         }}>{product.name}</h2>
                        <div className="d-flex align-items-center ">
-                       <span className="font-weight-bold ">4.6</span>
-                        <Rating name="product-rating " defaultValue={rating} precision={0.1} size="small"  readOnly style={{zIndex: "-1" }}/>
-                        <span className="font-weight-normal ">(20)</span>
+                       <span className="font-weight-bold ">{product.average_rating}</span>
+                        <Rating name="product-rating " value={rating} precision={0.1} size="small"  readOnly style={{zIndex: "-1" }} onClick={addRating} />
+                        <span className="font-weight-normal ">({totalNoOfRating})</span>
                         {product.stocks ? (<span className=" ml-auto" style={{color: "#27AE60",}}>In Stock</span>):
                                             (<span className=" ml-auto text-danger" style={{}}>Out of Stock</span>)
                         }
@@ -526,20 +591,20 @@ const changeDimensionToL = () =>{
                             lineHeight: "35px",
                             color: "#000000",
                         }}>{name[0]}</h2>
-                        <div className="d-flex align-items-center " style={{marginTop: "5px"}}>
-                        <span className=" " style={{
+                        <div onClick={addRating} className="d-flex align-items-center " style={{marginTop: "5px"}}>
+                        <span  className=" " style={{
                             fontWeight: "600",
                             fontSize: "16px",
                             lineHeight: "20px",
                             color: "#000"
-                        }}>{rating}</span>
-                        <Rating name="product-rating " defaultValue={rating}  precision={0.1} size="small"  readOnly/>
+                        }}>{product.average_rating}</span>
+                        <Rating name="product-rating" value={rating}  precision={0.1} size="small"   readOnly/>
                         <span className="" style={{
                             fontWeight: "600",
                             fontSize: "14px",
                             lineHeight: "18px",
                             color: "#000",
-                        }}>(20)</span>
+                        }}>({totalNoOfRating})</span>
                         { (product.stocks) ? (
                             <span className=" ml-4" style={{
                             fontWeight: "600",
@@ -708,23 +773,45 @@ const changeDimensionToL = () =>{
                         <p><span style={{fontWeight: "600"}}>SKU: </span>{product.sku}</p>
                     </div>
                     <div className=" d-none d-sm-block">
-                        <p className="d-inline-block mt-4" style={{
-                        fontFamily: "Source Sans Pro",
-                            fontStyle: "normal",
-                            fontWeight: "bold",
-                            fontSize: "36px",
-                            color: "#757575",
-                            lineHeight: "45px",  
-                            color: "#003459",
-                        }}>&#8377;{amount}</p>
-                        <span className="ml-3" style={{
-                            fontFamily: "Source Sans Pro",
-                            fontStyle: "normal",
-                            fontWeight: "500",
-                            fontSize: "12px",
-                            color: "#757575",
-                            lineHeight: "15px"                        
-                        }}>(Inclusive of All Taxes)</span>
+                    {
+                                (isNaN(amount))?(
+                                    <p className="mt-4 text-danger"  style={{
+                                        fontFamily: "Source Sans Pro",
+                                        fontStyle: "normal",
+                                        fontWeight: "normal",
+                                        fontSize: "16px",
+                                        color: "#757575",
+                                        lineHeight: "45px",  
+                                        color: "#003459",
+                                    }}>
+                                         Please select Material & Dimension.....
+                                    </p>
+                                ):(
+                                    <>
+                                 
+                                    <p className="d-inline-block mt-4" style={{
+                                        fontFamily: "Source Sans Pro",
+                                        fontStyle: "normal",
+                                        fontWeight: "bold",
+                                        fontSize: "36px",
+                                        color: "#757575",
+                                        lineHeight: "45px",  
+                                        color: "#003459",
+                                    }}>
+                                     &#8377;{amount}
+                                    </p>
+                                    <span className="ml-3" style={{
+                                        fontFamily: "Source Sans Pro",
+                                        fontStyle: "normal",
+                                        fontWeight: "500",
+                                        fontSize: "12px",
+                                        color: "#757575",
+                                        lineHeight: "15px"                        
+                                    }}>(Inclusive of All Taxes)</span>
+                                    </>
+                                )
+                            }
+                       
                     </div>
                     <button 
                     onClick={addToCart}
@@ -803,20 +890,35 @@ const changeDimensionToL = () =>{
                                     alignItems="center"
                                     justifyContent="center"
                                 >
-                                    <Typography variant="caption" component="div" color="black">{rating}</Typography>
+                                    <Typography variant="caption" component="div" color="black">{product.average_rating}</Typography>
                                 </Box>
                                 </Box>
                                 <p className="mb-0" style={{
                                     fontSize: "14px"
-                                }}>20 ratings</p>
+                                }}>{totalNoOfRating} ratings</p>
                             </div>
                             <div className="col-9" style={{fontSize: "14px", fontWeight: "normal"}}>
                                 <ThemeProvider theme={theme}>
-                                <div  className="d-inline-block ">1 star </div><Box width="80%" display="inline-block" ml={1}><LinearProgress color="primary" variant="determinate" value={40} /></Box>
-                                <div  className="d-inline-block ">2 star </div><Box width="80%" display="inline-block" ml={1}><LinearProgress color="primary" variant="determinate" value={20} /></Box>
-                                <div  className="d-inline-block ">3 star </div><Box width="80%" display="inline-block" ml={1}><LinearProgress color="primary" variant="determinate" value={60} /></Box>
-                                <div  className="d-inline-block ">4 star </div><Box width="80%" display="inline-block" ml={1}><LinearProgress color="primary" variant="determinate" value={40} /></Box>
-                                <div  className="d-inline-block ">5 star </div><Box width="80%" display="inline-block" ml={1}><LinearProgress color="primary" variant="determinate" value={50} /></Box>
+                                {
+                                    ratingTotal.map((val,i)=>{
+                                        if(val.rating===1){
+                                            star1=val.count*10;
+                                        }else if(val.rating===2){
+                                            star2=val.count*10;
+                                        }else if(val.rating===3){
+                                            star3=val.count*10;
+                                        }else if(val.rating===4){
+                                            star4=val.count*10;
+                                        }else if(val.rating===5){
+                                            star5=val.count*10;
+                                        }
+                                    })
+                                }
+                                <div  className="d-inline-block ">1 star </div><Box width="80%" display="inline-block" ml={1}><LinearProgress color="primary" variant="determinate" value={star1} /></Box>
+                                <div  className="d-inline-block ">2 star </div><Box width="80%" display="inline-block" ml={1}><LinearProgress color="primary" variant="determinate" value={star2} /></Box>
+                                <div  className="d-inline-block ">3 star </div><Box width="80%" display="inline-block" ml={1}><LinearProgress color="primary" variant="determinate" value={star3} /></Box>
+                                <div  className="d-inline-block ">4 star </div><Box width="80%" display="inline-block" ml={1}><LinearProgress color="primary" variant="determinate" value={star4} /></Box>
+                                <div  className="d-inline-block ">5 star </div><Box width="80%" display="inline-block" ml={1}><LinearProgress color="primary" variant="determinate" value={star5} /></Box>
                                 </ThemeProvider>
                             </div>
                         </div>
@@ -832,10 +934,21 @@ const changeDimensionToL = () =>{
                         <p className="d-none float-right viewAll" >View All</p>
 
                         <div className="d-flex  col-12 pl-0 pr-0">
-                            <ReviewCard />
-                            <ReviewCard />
-                            <ReviewCard />
-                            <ReviewCard />
+                            {
+                                (product.rating && product.rating.length>0)?(
+                                    <>
+                                    {
+                                        product.rating.map((val,i)=>{
+                                            return(
+                                                <ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />
+                                            )
+                                        })
+                                    }
+                                    </>
+                                ):(
+                                    <div>No Reviews</div>
+                                )
+                            }
                         </div>
                     </div>
                     <div className="d-block d-sm-none padding-10">
@@ -856,17 +969,31 @@ const changeDimensionToL = () =>{
                                                 alignItems="center"
                                                 justifyContent="center"
                                             >
-                                                <Typography variant="caption" component="div" color="black">{rating}</Typography>
+                                                <Typography variant="caption" component="div" color="black">{product.average_rating}</Typography>
                                             </Box>
                                             </Box>
                                             <p className="mb-0 mt-3 " style={{
                                                 fontWeight: "600",
                                                 fontSize: "14px",
                                                 width: "70px"
-                                            }}>20 ratings</p>
+                                            }}>{totalNoOfRating} ratings</p>
                                     </div>
                                 <div className="col-7 ml-auto ">
-                                    <ReviewCard />
+                                {
+                                (product.rating)?(
+                                    <>
+                                    {
+                                        product.rating.slice(0,1).map((val,i)=>{
+                                            return(
+                                                <ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />
+                                            )
+                                        })
+                                    }
+                                    </>
+                                ):(
+                                    <div>No Reviews</div>
+                                )
+                            }
                                 </div>
                         </div>
                     </div>
@@ -887,11 +1014,12 @@ const changeDimensionToL = () =>{
                         {similarItems.map((ncard,i)=>{
                             return(
                             <ProductCard 
+                            product={ncard}
                                     src={ncard.imgUrl[0]} 
                                     name={ncard.name} 
                                     slug={ncard.slug} 
                                     startPrice={ncard.originalPrice} 
-                                    rating={ncard.rating} 
+                                    rating={ncard.average_rating} 
                                     itemBought={ncard.bought} 
                                     catName={catName} 
                                     subCatName={subCatName} 
@@ -912,11 +1040,12 @@ const changeDimensionToL = () =>{
                         
                            return(
                             <ProductCard 
+                            product={ncard}
                                     src={ncard.imgUrl[0]} 
                                     name={ncard.name} 
                                     slug={ncard.slug} 
                                     startPrice={ncard.originalPrice} 
-                                    rating={ncard.rating} 
+                                    rating={ncard.average_rating} 
                                     itemBought={ncard.bought} 
                                     catName={catName}
                                     catId= {ncard.category[0]._id} 
@@ -944,11 +1073,12 @@ const changeDimensionToL = () =>{
                         {youMayLike.map((ncard,i)=>{
                            return(
                             <ProductCard 
+                            product={ncard}
                                     src={ncard.imgUrl[0]} 
                                     name={ncard.name} 
                                     slug={ncard.slug} 
                                     startPrice={ncard.originalPrice} 
-                                    rating={ncard.rating} 
+                                    rating={ncard.average_rating} 
                                     itemBought={ncard.bought} 
                                     catName={catName} 
                                     subCatName={subCatName} 
@@ -968,11 +1098,12 @@ const changeDimensionToL = () =>{
                     {youMayLike.slice(0,4).map((ncard,i)=>{
                            return(
                             <ProductCard 
+                            product={ncard}
                                     src={ncard.imgUrl[0]} 
                                     name={ncard.name} 
                                     slug={ncard.slug} 
                                     startPrice={ncard.originalPrice} 
-                                    rating={ncard.rating} 
+                                    rating={ncard.average_rating} 
                                     itemBought={ncard.bought} 
                                     catName={catName} 
                                     subCatName={subCatName} 

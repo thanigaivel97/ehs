@@ -8,8 +8,9 @@ import AssetImg from "../../../images/AssetMarking.svg";
 import { Link } from "react-router-dom";
 
 const Card = (props) => {
+ let  title= props.title.replace(" ","-")
   return (
-    <Link to={"/cat/" + props.title.toLowerCase()}>
+    <Link to={"/cat/" + title.toLowerCase()}>
       <div
         className="posterCard " >
         <div className="  d-block ">
@@ -35,7 +36,7 @@ const Collections = () => {
           <Card src={PosterImg} alt="Posters" title="Posters" />
           <Card src={Signages} alt="Signages" title="Signages" />
           <Card src={FloorImg} alt="Floor Graphics" title="Floor Graphics"/>
-          <Card src={AssetImg} alt="Asset Markings" title="Asset Marking" />
+          <Card src={AssetImg} alt="Asset Markings" title="Asset Markings" />
         </div>
   );
 };
