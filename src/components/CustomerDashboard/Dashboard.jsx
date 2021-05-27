@@ -925,6 +925,7 @@ const Orders = () => {
       borderColor: "#D0F7FF",
       borderTopWidth: 4,
       borderRadius: 1,
+      
     },
   })(StepConnector);
 

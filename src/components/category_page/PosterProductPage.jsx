@@ -153,6 +153,7 @@ const PosterProductPage = (props) => {
     const [similarItems, setSimilarItems] = useState([]);
     const [initialAmount, setInitialAmount] = useState();
     const [amount, setAmount] = useState(initialAmount);
+    const [price, setPrice] = useState(0);
     let history = useHistory();
      
     useEffect(()=>{
@@ -182,6 +183,57 @@ const PosterProductPage = (props) => {
         calculateAmount();
     },[material,dim,quantity]);
 
+    const addToCartConfirmPopup = () =>{
+        MySwal.fire(
+            {
+                html: <div className="d-flex">
+                        <HighlightOffIcon onClick={MySwal.close} role="button" style={{
+                        position: "absolute",
+                        top: "2px",
+                        right: "2px",
+                        color: "#000"
+                        }} />
+                        <CheckCircleIcon style={{
+                            color: "#F2994A",
+                            position: "absolute",
+                            top: "18px",
+                            left: "23px",
+                            background: "#FFF",
+                            borderRadius: "50%",
+                            border: "none",
+                        }} />
+                        <img src={product.imgUrl[0]} alt="productImage" className="toastImg " />
+                        <div className="ml-2 ">
+                        <p className="toastAddedText">Added to Cart</p>
+                        <p className="qtyPopupText text-left font-weight-normal mb-1" >{product.name}</p>
+                        <p className="qtyPopupText text-left mb-0" style={{fontWeight: "600"}}>Quantity: {quantity}</p>
+                        <a href="/cart"><p className="mb-0" style={{
+                            fontWeight: "bold",
+                            fontSize: "18px",
+                            lineHeight: "20px",
+                            textDecorationLine: "underline",
+                            color: "#F2994A",
+                            textAlign: "right"
+                        }}>View Cart</p></a>
+                        </div>
+                </div>,
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                scrollbarPadding: false,
+                timer: 3000,
+                showClass: {
+                popup: 'animate__animated animate__fadeIn  animate__faster',
+                backdrop: 'swal2-noanimation'
+                },
+                hideClass: {
+                popup: 'animate__animated animate__slideOutRight  animate__faster',
+                backdrop: 'swal2-noanimation'
+                },
+                customClass: "toastStructure"
+            })
+    }
+
     const addToCart = () =>{
         //console.log(localStorage.getItem("ehstoken12345678910"));
         if(authUser){
@@ -196,54 +248,7 @@ const PosterProductPage = (props) => {
             })
             .then((res)=>{
                // console.log(res);
-                MySwal.fire(
-                    {
-                        html: <div className="d-flex">
-                                <HighlightOffIcon onClick={MySwal.close} role="button" style={{
-                                position: "absolute",
-                                top: "2px",
-                                right: "2px",
-                                color: "#000"
-                                }} />
-                                <CheckCircleIcon style={{
-                                    color: "#F2994A",
-                                    position: "absolute",
-                                    top: "18px",
-                                    left: "23px",
-                                    background: "#FFF",
-                                    borderRadius: "50%",
-                                    border: "none",
-                                }} />
-                                <img src={product.imgUrl[0]} alt="productImage" className="toastImg " />
-                                <div className="ml-2 ">
-                                <p className="toastAddedText">Added to Cart</p>
-                                <p className="qtyPopupText text-left font-weight-normal mb-1" >{product.name}</p>
-                                <p className="qtyPopupText text-left mb-0" style={{fontWeight: "600"}}>Quantity: {quantity}</p>
-                                <a href="/cart"><p className="mb-0" style={{
-                                    fontWeight: "bold",
-                                    fontSize: "18px",
-                                    lineHeight: "20px",
-                                    textDecorationLine: "underline",
-                                    color: "#F2994A",
-                                    textAlign: "right"
-                                }}>View Cart</p></a>
-                                </div>
-                        </div>,
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        scrollbarPadding: false,
-                        timer: 3000,
-                        showClass: {
-                        popup: 'animate__animated animate__fadeIn  animate__faster',
-                        backdrop: 'swal2-noanimation'
-                        },
-                        hideClass: {
-                        popup: 'animate__animated animate__slideOutRight  animate__faster',
-                        backdrop: 'swal2-noanimation'
-                        },
-                        customClass: "toastStructure"
-                    })
+                    addToCartConfirmPopup();
                     //window.location.reload(false);
                    
                     Axios.get(`${API}posters/getPosterById`,{params: {poster_obj_id: productId}}).then((res)=>{
@@ -263,7 +268,41 @@ const PosterProductPage = (props) => {
             })
         }
         else{
-            history.push("/login");
+            let ehsCart = [];
+            let mat={
+                material_title: material,
+                dimension_title: dim,
+                price: price
+            }
+            let finalProduct={
+                productId: product._id,
+                poster_details: product,
+                materialDimension: mat,
+                quantity: quantity,
+                total: amount
+            }
+                let flag=false;
+                if(localStorage.getItem("ehsCart")){
+                    ehsCart=JSON.parse(localStorage.getItem("ehsCart"));
+                    const i = ehsCart.findIndex(product=> product.productId===finalProduct.productId) 
+                    if(i>=0){
+                        ehsCart[i]=finalProduct;
+                        flag=true;
+                        addToCartConfirmPopup();
+                        setTimeout(()=>{
+                            window.location.reload(false);
+                        },1000);
+                    }
+                }
+                if(flag === false){
+                    ehsCart.push(finalProduct)
+                    addToCartConfirmPopup();
+                    setTimeout(()=>{
+                        window.location.reload(false);
+                    },1000);
+                }
+                localStorage.setItem("ehsCart",JSON.stringify(ehsCart));
+            
         }
     }
 
@@ -272,6 +311,7 @@ const PosterProductPage = (props) => {
         product.materialDimension.map((val,i)=> {
             if(dim === val.dimension_title && material === val.material_title){
                 setAmount(val.price * quantity);
+                setPrice(val.price);
                 setFinalMatDim(val._id);
                 flag= false;
             }
@@ -723,7 +763,9 @@ const changeDimensionToL = () =>{
                             lineHeight: "15px"                        
                         }}>(Inclusive of All Taxes)</span>
                     </div>
-                    <button className="d-block d-sm-none w-100 p-2 mt-4" style={{
+                    <button
+                     onClick={addToCart}
+                     className="d-block d-sm-none w-100 p-2 mt-4" style={{
                         border: "none",
                         background: "#003459",
                         borderRadius: "6px",

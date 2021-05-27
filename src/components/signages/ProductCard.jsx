@@ -21,7 +21,7 @@ const reducer = (state,action)=> {
     if(action.type === "inc"){
         return state+1;
     }
-    if(action.type === "dec" && state>0){
+    if(action.type === "dec" && state>1){
         return state-1;
     }
     return state;
@@ -32,7 +32,6 @@ const FinalPopup = (props) => {
     const [authUser,setAuthUser] = useState("");
     const [finalMatDim,setFinalMatDim] = useState(props.finalMatDim);
     const [amount,setAmount] = useState(props.price);
-    console.log(props.finalMatDim,"ggg",props.price)
     useEffect(()=>{
         if (JSON.parse(localStorage.getItem("userDetails123")))
     setAuthUser(
@@ -59,7 +58,56 @@ const FinalPopup = (props) => {
     },[state])
 
    
-   
+    const addToCartConfirmPopup = ()=>{
+        MySwal.fire(
+            {
+                html: <div className="d-flex">
+                        <HighlightOffIcon onClick={MySwal.close} role="button" style={{
+                        position: "absolute",
+                        top: "2px",
+                        right: "2px",
+                        color: "#000"
+                        }} />
+                        <CheckCircleIcon style={{
+                            color: "#F2994A",
+                            position: "absolute",
+                            top: "18px",
+                            left: "23px",
+                            background: "#FFF",
+                            borderRadius: "50%",
+                            border: "none",
+                        }} />
+                        <img src={props.product.imgUrl[0]} alt="productImage" className="toastImg " />
+                        <div className="ml-2 ">
+                        <p className="toastAddedText">Added to Cart</p>
+                        <p className="qtyPopupText text-left font-weight-normal mb-1" >{props.product.name}</p>
+                        <p className="qtyPopupText text-left mb-0" style={{fontWeight: "600"}}>Quantity: {state}</p>
+                        <a href="/cart"><p className="mb-0" style={{
+                            fontWeight: "bold",
+                            fontSize: "18px",
+                            lineHeight: "20px",
+                            textDecorationLine: "underline",
+                            color: "#F2994A",
+                            textAlign: "right"
+                        }}>View Cart</p></a>
+                        </div>
+                </div>,
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                scrollbarPadding: false,
+                timer: 3000,
+                showClass: {
+                popup: 'animate__animated animate__fadeIn  animate__faster',
+                backdrop: 'swal2-noanimation'
+                },
+                hideClass: {
+                popup: 'animate__animated animate__slideOutRight  animate__faster',
+                backdrop: 'swal2-noanimation'
+                },
+                customClass: "toastStructure"
+            })
+    }
     
       
 
@@ -79,59 +127,48 @@ const FinalPopup = (props) => {
             })
             .then((res)=>{
                 console.log(res);
-                MySwal.fire(
-                    {
-                        html: <div className="d-flex">
-                                <HighlightOffIcon onClick={MySwal.close} role="button" style={{
-                                position: "absolute",
-                                top: "2px",
-                                right: "2px",
-                                color: "#000"
-                                }} />
-                                <CheckCircleIcon style={{
-                                    color: "#F2994A",
-                                    position: "absolute",
-                                    top: "18px",
-                                    left: "23px",
-                                    background: "#FFF",
-                                    borderRadius: "50%",
-                                    border: "none",
-                                }} />
-                                <img src={props.product.imgUrl[0]} alt="productImage" className="toastImg " />
-                                <div className="ml-2 ">
-                                <p className="toastAddedText">Added to Cart</p>
-                                <p className="qtyPopupText text-left font-weight-normal mb-1" >{props.product.name}</p>
-                                <p className="qtyPopupText text-left mb-0" style={{fontWeight: "600"}}>Quantity: {state}</p>
-                                <a href="/cart"><p className="mb-0" style={{
-                                    fontWeight: "bold",
-                                    fontSize: "18px",
-                                    lineHeight: "20px",
-                                    textDecorationLine: "underline",
-                                    color: "#F2994A",
-                                    textAlign: "right"
-                                }}>View Cart</p></a>
-                                </div>
-                        </div>,
-                        toast: true,
-                        position: "top-end",
-                        showConfirmButton: false,
-                        scrollbarPadding: false,
-                        timer: 3000,
-                        showClass: {
-                        popup: 'animate__animated animate__fadeIn  animate__faster',
-                        backdrop: 'swal2-noanimation'
-                        },
-                        hideClass: {
-                        popup: 'animate__animated animate__slideOutRight  animate__faster',
-                        backdrop: 'swal2-noanimation'
-                        },
-                        customClass: "toastStructure"
-                    })
+               addToCartConfirmPopup();
                     window.location.reload(false);
                    
             }).catch((err)=>{
                 console.log(err);
             })
+        }else{
+            let ehsCart = [];
+            let mat={
+                material_title: props.mat,
+                dimension_title: props.dim,
+                price: price
+            }
+            let finalProduct={
+                productId: props.productId,
+                poster_details: props.product,
+                materialDimension: mat,
+                quantity: state,
+                total: amount
+            }
+                let flag=false;
+                if(localStorage.getItem("ehsCart")){
+                    ehsCart=JSON.parse(localStorage.getItem("ehsCart"));
+                    const i = ehsCart.findIndex(product=> product.productId===finalProduct.productId) 
+                    if(i>=0){
+                        ehsCart[i]=finalProduct;
+                        flag=true;
+                        addToCartConfirmPopup();
+                        setTimeout(()=>{
+                            window.location.reload(false);
+                        },1000);
+                    }
+                }
+                if(flag === false){
+                    ehsCart.push(finalProduct)
+                    addToCartConfirmPopup();
+                    setTimeout(()=>{
+                        window.location.reload(false);
+                    },1000);
+                }
+                localStorage.setItem("ehsCart",JSON.stringify(ehsCart));
+            
         }
     }
 
@@ -275,8 +312,6 @@ const ProductCard = (props) =>{
 
         
         let flag = true;
-        
-     console.log(props.product)
         props.product && props.product.materialDimension.map((val,i)=> {
             if(dim === val.dimension_title && mat === val.material_title){
                 setAmount(val.price * quantity);

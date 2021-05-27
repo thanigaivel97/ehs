@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /*jshint esversion: 9 */
 import React, { useRef,useState,  useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link ,useHistory} from "react-router-dom";
 import { Grid } from "semantic-ui-react";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
@@ -39,6 +39,8 @@ function loadScript(src) {
     document.body.appendChild(script);
   });
 }
+
+
 
 const __DEV__ = document.domain === "localhost";
 
@@ -181,6 +183,7 @@ const Tables = (props) => {
   }
 
   function getCartItem(){
+   if(authUser){
     Axios.get(`${API}auth/get_user_details_by_id`,{   
       headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
       params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
@@ -193,6 +196,11 @@ const Tables = (props) => {
     }).catch((err)=>{ 
       console.log(err);
     })
+   }else{
+     if(!JSON.parse(localStorage.getItem("userDetails123")) && JSON.parse(localStorage.getItem("ehsCart"))){
+       setCartItem(JSON.parse(localStorage.getItem("ehsCart"))); 
+     }
+   }
   }
 
   const [authUser, setAuthUser] = React.useState("");
@@ -205,19 +213,17 @@ const Tables = (props) => {
         }
       );
       if (JSON.parse(localStorage.getItem("userDetails123"))){
-
-        getCartItem();
-       
-        }
-
-        setTotalPay( cartItem.reduce((totalPay, c) => totalPay + c, 0))
-        
         setAuthUser(
           JSON.parse(localStorage.getItem("userDetails123")).emailid ||
             JSON.parse(localStorage.getItem("userDetails123")).phonenumber
         );
+       
+        }
+        getCartItem();
+        
+        
      
-  }, [totalPay]);
+  }, [totalPay,authUser]);
 
   useEffect(() => {
     setTotalPay(calculate(numCart));
@@ -309,20 +315,33 @@ const Tables = (props) => {
     setTotalPay(calculate(cartLocal.cartList));
   };
 
-  const similarProductInfo = [
-    { src: FloorImg, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473 },
-    { src: FloorImg, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473 },
-    { src: FloorImg, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473},
-    { src: FloorImg, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473},
-    { src: FloorImg, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473 },
-    { src: FloorImg, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473 },
-    { src: FloorImg, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473 },
-    { src: FloorImg, title: "Floor Graphics | Printable Catalog | PRD-FG009", startPrice: 219, rating: rating, itemBought: 473},
-  ];
+
   const breakPoints = [
     { width: 1, itemsToShow: 2, itemsToScroll: 2 },
     { width: 780, itemsToShow: 4 }
   ];
+  let history= useHistory();
+
+  const LoginMsg = ()=>{
+  
+    return(
+      <>
+        <div className="">
+          <div className="confirmationMsg text-center ">
+            For adding products in wishlist you need to login...
+          </div>
+          <button className="confirmationBtn yesBtnMargin" onClick={()=>{
+            history.push("/login");
+            MySwal.clickConfirm();
+          }}  >Login</button>
+          <button className="confirmationBtn" onClick={()=>{
+            history.push("/signup");
+            MySwal.clickConfirm();
+          }} >Register</button>
+        </div>
+      </>
+    )
+  }
 
   const addToWishlist = (productId,imgUrl,name,quantity) => {
     if(authUser){
@@ -387,6 +406,24 @@ const Tables = (props) => {
         }).catch((err)=>{
             console.log(err);
         })
+    }else{
+      MySwal.fire({
+        html: <LoginMsg />,
+        position: "center",
+        showConfirmButton: false,
+        width: "700px",
+        backdrop: "rgba(0, 0, 0, 0.5)",
+        scrollbarPadding: false,
+        padding: "23px 10px 22px 12px",
+        showClass: {
+          popup: 'animate__animated animate__zoomIn animate__faster',
+          backdrop: 'animate__animated animate__fadeIn animate__faster'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__zoomOut animate__faster',
+          backdrop: 'animate__animated animate__fadeOut animate__faster'
+        }
+      })
     }
   };
 
@@ -406,12 +443,24 @@ const Tables = (props) => {
       }).catch((err)=>{
           console.log(err);
       })
+  }else{
+    let ehsCart=[];
+    if(localStorage.getItem("ehsCart")){
+      ehsCart = JSON.parse(localStorage.getItem("ehsCart"));
+      ehsCart && ehsCart.map((val,i) => {
+        if(val.productId === productId){
+          ehsCart.splice(i,1);
+        }
+      })
+      localStorage.setItem("ehsCart",JSON.stringify(ehsCart));
+      window.location.reload(false);
+    }
   }
   };
 
   const updateQuantity = (productId,matId,presentQty,qtyUpdater) =>{
     let qty=presentQty;
-    if(qtyUpdater===0 && presentQty>0){
+    if(qtyUpdater===0 && presentQty>1){
       qty= qty-1;
     }else{
       qty=qty+1;
@@ -431,7 +480,22 @@ const Tables = (props) => {
         getCartItem();
       }).catch((err)=>{
         console.log();
-      })}
+      })}else{
+        let ehsCart;
+        if(localStorage.getItem("ehsCart") && qty!==presentQty){
+               ehsCart=JSON.parse(localStorage.getItem("ehsCart"));
+              const i = ehsCart.findIndex(product=> product.productId===productId) 
+              if(i>=0){
+                  ehsCart[i].quantity=qty;
+                  ehsCart[i].total= ehsCart[i].materialDimension.price * qty;
+                  
+                      
+               
+              }
+          }
+          localStorage.setItem("ehsCart",JSON.stringify(ehsCart));
+          getCartItem();
+      }
   }
 
   const wishlistCarousel = useRef();
@@ -631,7 +695,7 @@ const Tables = (props) => {
                   </tbody>
                 </table>
               </div>
-              <div className="col-sm-4 col">
+              <div className="col-sm-4 col mb-4">
               <div className="paymentBox mx-auto p-4 pt-sm-5  pb-sm-5 " >
                 <Button
                   className="text-white"
@@ -702,7 +766,7 @@ const Tables = (props) => {
                 >
                   Apply
                 </a>
-                <Link to="/checkout"  style={{textDecorationLine: "none"}}>
+                <Link to={authUser? "/checkout": "/login"}  style={{textDecorationLine: "none"}}>
                 <Button
                   className="text-white"
                   style={{
@@ -771,6 +835,7 @@ const Tables = (props) => {
              
               </div>
             </div>
+
           </div>
         ): (
           <div className="cartEmpty mx-auto my-5">
@@ -779,8 +844,9 @@ const Tables = (props) => {
           </div>
         )
         }
-
-        <div style={{
+        {(authUser)?(
+          <>
+          <div style={{
         borderTop: "6px solid #F6F6F6",
         margin: "50px 0 50px 0"
         }}></div>
@@ -845,7 +911,12 @@ const Tables = (props) => {
                 </div>
             </div>            
 
-            </div>
+          </>
+        ):(
+          ""
+        )}
+        
+    </div>
    
   );
 };

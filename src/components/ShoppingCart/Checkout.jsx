@@ -1,4 +1,5 @@
 import React, { useState,useEffect } from "react";
+import { useHistory } from "react-router-dom"
 import EhsLogo from "../../images/EhsLogo.svg";
 import {Link} from "react-router-dom";
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
@@ -39,17 +40,22 @@ const Checkout = () => {
               JSON.parse(localStorage.getItem("userDetails123")).phonenumber
               );
             setAddress(JSON.parse(localStorage.getItem("userDetails123")).address);
+            Axios.get(`${API}auth/get_user_details_by_id`,{   
+                headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
+                params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
+              }).then((res)=>{
+               // console.log(res);
+                setCartItem(res.data.data[0].cart);
+              }).catch((err)=>{ 
+                console.log(err);
+              })
+          }else{
+            if(JSON.parse(localStorage.getItem("ehsCart"))){
+                setCartItem(JSON.parse(localStorage.getItem("ehsCart"))); 
+              }
           }
 
-          Axios.get(`${API}auth/get_user_details_by_id`,{   
-            headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
-            params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
-          }).then((res)=>{
-           // console.log(res);
-            setCartItem(res.data.data[0].cart);
-          }).catch((err)=>{ 
-            console.log(err);
-          })
+         
         
     }, [])
 
@@ -126,7 +132,7 @@ const Checkout = () => {
             cartItemNew.push(cart);
         }
 
-        const result = await Axios.post("http://localhost:8080/orders/create_order",{
+        const result = await Axios.post(`${API}orders/create_order`,{
             cart_item: cartItemNew,
             delivery_address: selectedAddress,
             user_type: 1
@@ -160,7 +166,7 @@ const Checkout = () => {
                     razorpay_signature: response.razorpay_signature,
                 };
 
-                const result = await Axios.post("http://localhost:8080/orders/on_success_payment", data,
+                const result = await Axios.post(`${API}orders/on_success_payment`, data,
                 {
                     headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")}
                 });
@@ -184,6 +190,7 @@ const Checkout = () => {
         paymentObject.open();
     }
 
+    let history = useHistory();
 
     return(
         <>

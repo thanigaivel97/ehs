@@ -47,6 +47,12 @@ const NavBar = (props) => {
           JSON.parse(localStorage.getItem("userDetails123")).emailid ||
             JSON.parse(localStorage.getItem("userDetails123")).phonenumber
         );
+    }else{
+      
+        if(localStorage.getItem("ehsCart")){
+          setCart(JSON.parse(localStorage.getItem("ehsCart")))
+        }
+      
     }
       
   }, [props.loginResponse]);
