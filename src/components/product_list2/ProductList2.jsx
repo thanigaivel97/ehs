@@ -28,22 +28,44 @@ const ProductList2 = (props) => {
   let subCatName = subCatSlug.replace("-"," ");
   let catName = catSlug.replace("-"," ");
 
+  let language = [
+    {title: "hindi",sub_cat_slug: "hindi"},
+    {title: "english",sub_cat_slug: "english"},
+    {title: "Bilingual",sub_cat_slug: "bilingual"},
+  ]
+
   useEffect(() => { 
     
+    if(subCatSlug === "english" || subCatSlug === "hindi" || subCatSlug === "bilingual"){
+      setShopBySubCategoryCards(language);
+    }else{
       Axios.get(`${API}category/getCategoryById`,{params: {cat_slug: catSlug}}).then((res)=>{
-          setShopBySubCategoryCards(res.data.data[0].sub_category);
-          //console.log(res.data.data[0].sub_category)
-      }).catch((err)=> {
-          console.log(err);
-      });
+        setShopBySubCategoryCards(res.data.data[0].sub_category);
+        //console.log(res.data.data[0].sub_category)
+    }).catch((err)=> {
+        console.log(err);
+    });
+    }
+    
+     
      
 
-      if(subCatSlug=== "bestsellers"){
+      if(subCatSlug === "bestsellers"){
         Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: catSlug, bestseller: 1}}).then((res)=>{
           setBestSeller(res.data.data.postersExists);
         }).catch((err)=> {
           console.log(err);
         });
+      }else if(subCatSlug === "english" || subCatSlug === "hindi" || subCatSlug === "bilingual"){
+          let lang = (subCatSlug === "english") ? 1 : (subCatSlug === "hindi") ? 2 : 3
+          Axios.get(`${API}posters/get_poster_by_language`,{
+            params: {language: lang}
+          }).then((res)=>{
+           // console.log(res)
+            setPosterData(res.data.data.postersExists);
+          }).catch((err)=>{
+            console.log(err);
+          })
       }else{
         Axios.get(`${API}posters/getPosterByCatSubCat`,{params: {subCategorySlug: subCatSlug}}).then((res) => {
           setPosterData(res.data.data.postersExists);
@@ -54,7 +76,7 @@ const ProductList2 = (props) => {
 
       
     
-  }, [catSlug,subCatSlug]);
+  }, [catSlug,subCatSlug,language]);
 
 
   const breakPoints = [
@@ -95,6 +117,7 @@ const ProductList2 = (props) => {
                    
                   )
                 })}
+               
                 {(subCatSlug === 'bestsellers')?(
                   <Link to={`/${catSlug}/subcat/bestsellers`} className="posterCatIndividual text-capitalize currentCatPoster"  >Bestsellers</Link>
                 ):(

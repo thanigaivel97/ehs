@@ -65,7 +65,7 @@ const Checkout = () => {
     });
 
     const onSubmit = (data) => {
-        console.log(data)
+      //  console.log(data)
         let addressBody = {
             houseDetails: `${data.firstName}|${data.lastName}|${data.address1}|${data.address2}|${data.city}|${data.mobile}|${data.emailid}`,
             pincode: data.pincode,
@@ -79,8 +79,7 @@ const Checkout = () => {
             history.push("/login")
           }
         
-    }
-
+    };
     const selectAddress = (e,selectedAddress) => {
        let address = {
            houseDetails: selectedAddress.houseDetails,
@@ -97,7 +96,7 @@ const Checkout = () => {
         }
        e.target.style.border = "2px solid #2D9CDB";
        
-    }
+    };
     function loadScript(src) {
         return new Promise((resolve) => {
             const script = document.createElement("script");
@@ -110,7 +109,8 @@ const Checkout = () => {
             };
             document.body.appendChild(script);
         });
-    }
+    };
+
     let price=0
     for(let i=0;cartItem && i<cartItem.length; i++){
         price+=parseInt(cartItem[i].total);
@@ -147,10 +147,7 @@ const Checkout = () => {
         if(result.data.success!==1){
             alert(result.data.message);
             return;
-        }
-        
-
-        
+        };
 
         const { email,phoneNumber,userName,order_id,amount,currency,receipt,address } = result.data.data;
 
@@ -169,7 +166,6 @@ const Checkout = () => {
                     razorpay_order_id: response.razorpay_order_id,
                     razorpay_signature: response.razorpay_signature,
                 };
-
                 const result = await Axios.post(`${API}orders/on_success_payment`, data,
                 {
                     headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")}
@@ -189,7 +185,7 @@ const Checkout = () => {
                     width: "500px",
                     backdrop: "rgba(0, 0, 0, 0.5)",
                     scrollbarPadding: false,
-                })
+                });
                 //alert(result.data.message+result.data.data.info + "For more information visit your dashboard");
             },
             prefill: {
