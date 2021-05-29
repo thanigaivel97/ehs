@@ -62,7 +62,7 @@ const CategoryPage = (props) => {
      
 
         Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: catSlug, bestseller: 1}}).then((res)=>{
-          setBestSeller(res.data.data.postersExists);
+          setBestSeller(res.data.data);
          //console.log("bestseller",res);
         }).catch((err)=> {
           console.log(err);
