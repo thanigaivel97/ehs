@@ -52,7 +52,7 @@ const ProductList2 = (props) => {
 
       if(subCatSlug === "bestsellers"){
         Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: catSlug, bestseller: 1}}).then((res)=>{
-          setBestSeller(res.data.data);
+          setBestSeller(res.data.data.postersExists);
         }).catch((err)=> {
           console.log(err);
         });
@@ -62,14 +62,14 @@ const ProductList2 = (props) => {
             params: {language: lang}
           }).then((res)=>{
            // console.log(res)
-            setPosterData(res.data.data);
+            setPosterData(res.data.data.postersExists);
           }).catch((err)=>{
             console.log(err);
           })
       }else{
         Axios.get(`${API}posters/getPosterByCatSubCat`,{params: {subCategorySlug: subCatSlug}}).then((res) => {
-          setPosterData(res.data.data);
-          //console.log(res);
+          setPosterData(res.data.data.postersExists);
+         // console.log(res);
         }).catch((err) => console.log("ERROR:",err)); 
       }
       

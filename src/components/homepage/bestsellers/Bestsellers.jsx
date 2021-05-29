@@ -33,25 +33,25 @@ const Bestsellers = () => {
     useEffect(()=>{
       
       Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: "posters", bestseller: 1}}).then((res)=>{
-        setPostersBestseller(res.data.data);
+        setPostersBestseller(res.data.data.postersExists);
        //console.log("bestseller",res);
       }).catch((err)=> {
         console.log(err);
       });
       Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: "signages", bestseller: 1}}).then((res)=>{
-       setSignagesBestseller(res.data.data);
+       setSignagesBestseller(res.data.data.postersExists);
       // console.log("bestseller",res);
       }).catch((err)=> {
         console.log(err);
       });
       Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: "floor-graphics", bestseller: 1}}).then((res)=>{
-        setFloorgraphicsBestseller(res.data.data);
+        setFloorgraphicsBestseller(res.data.data.postersExists);
        //console.log("bestseller",res);
       }).catch((err)=> {
         //console.log(err);
       });
       Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: "asset-markings", bestseller: 1}}).then((res)=>{
-        setAssetmarkingsBestseller(res.data.data);
+        setAssetmarkingsBestseller(res.data.data.postersExists);
       // console.log("bestseller",res);
       }).catch((err)=> {
        // console.log(err);
