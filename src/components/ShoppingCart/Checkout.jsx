@@ -39,12 +39,13 @@ const Checkout = () => {
               JSON.parse(localStorage.getItem("userDetails123")).emailid ||
               JSON.parse(localStorage.getItem("userDetails123")).phonenumber
               );
-            setAddress(JSON.parse(localStorage.getItem("userDetails123")).address);
+           // setAddress(JSON.parse(localStorage.getItem("userDetails123")).address);
             Axios.get(`${API}auth/get_user_details_by_id`,{   
                 headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
                 params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
               }).then((res)=>{
-               // console.log(res);
+                console.log(res);
+                setAddress(res.data.data[0].address)
                 setCartItem(res.data.data[0].cart);
               }).catch((err)=>{ 
                 console.log(err);
@@ -64,20 +65,20 @@ const Checkout = () => {
     });
 
     const onSubmit = (data) => {
-        MySwal.fire({
-            html: <div className="d-flex mt-2">
-                    <CheckCircleIcon style={{color: "#0C9B86"}} />
-                    <p className="ml-2" style={{color: "#0C9B86"}}>Order Confirmed!</p>
-                </div>,
-            timer: 3000,
-            position: "top-end",
-            showConfirmButton: false,
-            showCloseButton: true,
-            width: "500px",
-            height: "100px",
-            backdrop: "rgba(0, 0, 0, 0.5)",
-            scrollbarPadding: false,
-        })
+        console.log(data)
+        let addressBody = {
+            houseDetails: `${data.firstName}|${data.lastName}|${data.address1}|${data.address2}|${data.city}|${data.mobile}|${data.emailid}`,
+            pincode: data.pincode,
+            state: data.state,
+            country: data.country
+          }
+          setSelectedAddress(addressBody)
+          if(authUser){
+            displayRazorpay();
+          }else{
+            history.push("/login")
+          }
+        
     }
 
     const selectAddress = (e,selectedAddress) => {
@@ -88,9 +89,12 @@ const Checkout = () => {
            country: selectedAddress.country
        }
        setSelectedAddress(address);
-       //console.log(e)
+      // console.log(e)
        //console.log(address);
-       //document.getElementsByClassName("selectAddress").style = "2px solid #D2D2D2";
+        let add = document.getElementsByClassName("selectAddress");
+        for(let i=0;i<add.length;i++){
+            add[i].style.border = "2px solid #D2D2D2";
+        }
        e.target.style.border = "2px solid #2D9CDB";
        
     }
@@ -170,8 +174,23 @@ const Checkout = () => {
                 {
                     headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")}
                 });
-
-                alert(result.data.message+result.data.data.info + "For more information visit your dashboard");
+                MySwal.fire({
+                    html: <div className="d-flex mt-2">
+                            <div className="d-flex mb-0">
+                            <CheckCircleIcon style={{color: "#0C9B86"}} />
+                            <p className="ml-2" style={{color: "#0C9B86"}}>{result.data.message}</p>
+                            </div>
+                            <p className="" style={{color: "#0C9B86"}}>For more information visit your dashboard</p>
+                        </div>,
+                    timer: 3000,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                    width: "500px",
+                    backdrop: "rgba(0, 0, 0, 0.5)",
+                    scrollbarPadding: false,
+                })
+                //alert(result.data.message+result.data.data.info + "For more information visit your dashboard");
             },
             prefill: {
                 name: userName,
@@ -204,52 +223,167 @@ const Checkout = () => {
             </div>
             <div className="d-flex justify-content-center align-items-center align-items-sm-start flex-sm-row flex-column-reverse p-sm-5 ">
             {(authUser) ? (
+                
                 <div className="shippingDetailBox p-4 mr-sm-5  mb-4 mb-sm-0">
                     <p className="perHead">Shipping Details</p>
                     <hr style={{borderTop: "1px solid #D2D2D2"}}></hr>
                     <p className="orderHead">Select Shipping Address</p>
-                    <div className="checkoutAddressBox">
+                    {address && address.length>0 ? (
+                        <>
+                        <div className="checkoutAddressBox">
                       
-                        {
-                            address && address.map((val,i)=>{
-                                
-                               return(
-                                <div onClick={(e)=> selectAddress(e,val)} className="p-3  selectAddress" id="selectAddress" style={{
-                                fontSize: "14px",
-                                fontWeight: "400",
-                                lineHeight: "18px",
-                                border: "2px solid #D2D2D2",
-                                boxSizing: "border-box",
-                                borderRadius: "5px",
-                                width: "147px",
-                                cursor: "pointer",
-                            }}>
-                            <p className=" my-0" style={{fontWeight: "600"}}>{val.houseDetails.split("|")[0]}</p>
-                            <p className=" my-0" style={{fontWeight: "600"}}>{val.houseDetails.split("|")[1]}</p>
-                            <p className="my-0"  style={{fontWeight: "600"}}>{val.houseDetails.split("|")[2]}</p>
-                            <p className="my-0" style={{fontWeight: "600"}}>{val.houseDetails.split("|")[3]}</p>
-                            <p className="my-0" style={{fontWeight: "600"}}>{val.pincode}</p>
-                            <p className="my-0" style={{fontWeight: "600"}}>{val.state}</p>
-                            <p className="my-0" style={{fontWeight: "600"}}>{val.country}</p>
-                        </div>
-                               )
-                            })
-                        }
-                        <div className="p-3 d-inline-block " style={{
-                        fontSize: "14px",
-                        lineHeight: "18px",
-                        border: "1px solid #D2D2D2",
-                        boxSizing: "border-box",
-                        borderRadius: "5px",
-                        width: "127px",
-                        height: "171px",
+                      { 
+                          address.map((val,i)=>{
+                              
+                             return(
+                              <div onClick={(e)=> selectAddress(e,val)} className="p-3  selectAddress" id="selectAddress" style={{
+                              fontSize: "14px",
+                              fontWeight: "400",
+                              lineHeight: "18px",
+                              border: "2px solid #D2D2D2",
+                              boxSizing: "border-box",
+                              borderRadius: "5px",
+                              width: "147px",
+                              cursor: "pointer",
+                          }}>
+                          <p className=" my-0" style={{fontWeight: "600"}}>{val.houseDetails.split("|")[0]}</p>
+                          <p className=" my-0" style={{fontWeight: "600"}}>{val.houseDetails.split("|")[1]}</p>
+                          <p className="my-0"  style={{fontWeight: "600"}}>{val.houseDetails.split("|")[2]}</p>
+                          <p className="my-0" style={{fontWeight: "600"}}>{val.houseDetails.split("|")[3]}</p>
+                          <p className="my-0" style={{fontWeight: "600"}}>{val.pincode}</p>
+                          <p className="my-0" style={{fontWeight: "600"}}>{val.state}</p>
+                          <p className="my-0" style={{fontWeight: "600"}}>{val.country}</p>
+                      </div>
+                             )
+                          })
+                      }
+                      <div className="p-3 d-inline-block " style={{
+                      fontSize: "14px",
+                      lineHeight: "18px",
+                      border: "1px solid #D2D2D2",
+                      boxSizing: "border-box",
+                      borderRadius: "5px",
+                      width: "127px",
+                      height: "171px",
 
-                        }}>
-                            <AddIcon style={{color: "#D2D2D2" , borderRadius: "50%",width: "50px" , height: "50px"}} className="border mx-auto d-flex justify-content-center mt-5"/>
+                      }}>
+                          <AddIcon style={{color: "#D2D2D2" , borderRadius: "50%",width: "50px" , height: "50px"}} className="border mx-auto d-flex justify-content-center mt-5"/>
+                      </div>
+                      
+                  </div>
+                  <button className="shippingDetailProceedBtn mt-4 " onClick={()=>displayRazorpay()} >Proceed to Payment</button>
+                  </>
+                    ):(
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                        <input 
+                            type="text" 
+                            className="shippingDetailInput shippingDetailInput1 mr-sm-2" 
+                            placeholder="First Name" 
+                            name="firstName"
+                            {...register("firstName",{
+                                required: "**this field is required"
+                            })}
+                            />  
+                             {errors.firstName && (<span className="text-danger ml-2 d-sm-none d-block  mt-0 errorMsgCheckout">{errors.firstName.message}</span>)}
+                        <input 
+                            type="text" 
+                            className="shippingDetailInput shippingDetailInput1 ml-sm-1" 
+                            placeholder="Last Name" 
+                            name="lastName"
+                            {...register("lastName")}
+                            />
+                        {errors.firstName && (<span className="text-danger ml-2 d-sm-block d-none  mt-0 errorMsgCheckout">{errors.firstName.message}</span>)}
+                        <input 
+                            type="text" 
+                            className="shippingDetailInput" 
+                            placeholder="Address Line 1"
+                            name="address1"
+                            {...register("address1",{
+                                required: "**this field is required"
+                            })}
+                             />
+                              {errors.address1 && (<span className="text-danger ml-2 d-block  mt-0 errorMsgCheckout">{errors.address1.message}</span>)}
+                        <input 
+                            type="text" 
+                            className="shippingDetailInput" 
+                            placeholder="Address Line 2" 
+                            name="address2"
+                            {...register("address2")}
+                            />
+                        <div className="d-flex flex-sm-row flex-column justify-content-between ">
+                            <div className="d-flex flex-column shippingDetailInput1">
+                                <input 
+                                    type="text" 
+                                    className="shippingDetailInput   mr-sm-2" 
+                                    placeholder="City" 
+                                    name="city"
+                                    {...register("city",{
+                                        required: "**this field is required"
+                                    })}
+                                    />
+                                    {errors.city && (<span className="text-danger ml-2 d-inline-block  mt-0 errorMsgCheckout">{errors.city.message}</span>)}
+                            </div>
+                            <div className="d-flex flex-column shippingDetailInput1 ">
+                                <input 
+                                    type="number" 
+                                    className="shippingDetailInput  ml-sm-1" 
+                                    placeholder="PIN Code"
+                                    name="pincode"
+                                    {...register("pincode",{
+                                        required: "**this field is required",
+                                        minLength: {
+                                            value: 6,
+                                            message: "**enter valid pincode"
+                                        },
+                                        maxLength: {
+                                            value: 6,
+                                            message: "**enter valid pincode"
+                                        }
+                                    })}
+                                />
+                                {errors.pincode && (<span className="text-danger ml-2 d-inline-block   mt-0 errorMsgCheckout">{errors.pincode.message}</span>)}
+                            </div>
                         </div>
-                    </div>
+                        <input 
+                            type="text" 
+                            className="shippingDetailInput" 
+                            placeholder="State" 
+                            name="state"
+                            {...register("state",{
+                                required: "**this field is required"
+                            })}
+                            />
+                             {errors.state && (<span className="text-danger ml-2 d-block  mt-0 errorMsgCheckout">{errors.state.message}</span>)}
+                        <input 
+                            type="number" 
+                            className="shippingDetailInput" 
+                            placeholder="Contact Number" 
+                            name="mobile"
+                            {...register("mobile",{
+                                required: "**this field is required"
+                            })}
+                            />
+                             {errors.mobile && (<span className="text-danger ml-2 d-block  mt-0 errorMsgCheckout">{errors.mobile.message}</span>)}
+                        <input 
+                            type="email" 
+                            className="shippingDetailInput" 
+                            placeholder="Email" 
+                            name="email"
+                            {...register("email",{
+                                required: "**this field is required",
+                                pattern: {
+                                    value: /^(?:\w+@\w+\.\w{2,3})$/,
+                                    message: "**enter valid email"
+                                }
+                            })}
+                            />
+                             {errors.email && (<span className="text-danger ml-2 d-block  mt-0 errorMsgCheckout">{errors.email.message}</span>)}
+                        <button type="submit" className="shippingDetailProceedBtn "   >Proceed to Payment</button>
+                    </form>
+                    )}
+                   
 
-                    <button className="shippingDetailProceedBtn mt-4 " onClick={()=>displayRazorpay()} >Proceed to Payment</button>
+                   
                 </div>
             ): (
                 <div className="shippingDetailBox p-4  mr-sm-5  mb-4 mb-sm-0">

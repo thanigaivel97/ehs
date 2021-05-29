@@ -27,7 +27,7 @@ const NavBar = (props) => {
       //console.log(res.data.data)
     }).catch((err)=> {
         console.log(err);
-    });
+    },[]);
     
     
 
@@ -93,8 +93,8 @@ const NavBar = (props) => {
         $("#navbarNav").removeClass('animate__slideOutLeft');
       }
     }else{
-      let url = e.target.href.split('/');
-      let cat = url[url.length-1];
+      // let url = e.target.href.split('/');
+      // let cat = url[url.length-1];
       //if(cat === "posters" || cat === "signages" || cat === "floor-graphics" || cat === "asset-markings")
            //window.location.replace(`/cat/${cat}`)
     }
@@ -432,7 +432,7 @@ const NavBar = (props) => {
                 >
                   Posters
                 </Link><ArrowForwardIosRoundedIcon className="float-right mt-1 d-sm-none d-inline-block posterDropdownArrow" onClick={posterDropdownArrow} style={{width: "15px", color: "white"}} />
-                <div className="dropdown-content p-sm-2 p-0 posterDropdown animate__animated  animate__faster">
+                <div className="dropdown-content p-sm-3 p-0 posterDropdown animate__animated  animate__faster">
                 <Link
                   className="dropdown-item d-block d-sm-none posterDropdownArrow backMenu mt-2  animate__animated  animate__faster" onClick={posterDropdownArrow}
                   ><ArrowBackIosRoundedIcon className="mt-1 pb-2 float-left d-sm-none d-inline-block" style={{width: "15px", color: "white"}} />
@@ -479,9 +479,9 @@ const NavBar = (props) => {
                          onClick={signageDropdown}
                           to={`/${categories[1].cat_slug}/subcat/${val.sub_cat_slug}`}
                           key={i}
-                      >
-                    {val.title}
-                  </Link>
+                          >
+                        {val.title}
+                      </Link>
                     )
                   })}
                  </div>

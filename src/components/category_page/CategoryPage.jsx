@@ -62,7 +62,7 @@ const CategoryPage = (props) => {
      
 
         Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: catSlug, bestseller: 1}}).then((res)=>{
-          setBestSeller(res.data.data);
+          setBestSeller(res.data.data.postersExists);
          //console.log("bestseller",res);
         }).catch((err)=> {
           console.log(err);
@@ -163,7 +163,12 @@ const CategoryPage = (props) => {
          
           </div>       
             <Carousel className="d-flex  shopByCategoryCarousel px-0 mx-0" itemPosition={consts.START} breakPoints={breakPoints}  pagination={false} showArrows={false} ref={posterCat2Carousel} style={{opacity: "1!important"}} showEmptySlots>
-                {shopByLanguageCards && shopByLanguageCards.map(ncard)}
+                {shopByLanguageCards && shopByLanguageCards.map((val,i) => {
+                    
+                    return (
+                        <Card src={val.imgUrl} title={val.title} cat={catSlug}  sub_cat_slug={val.title.toLowerCase()} key={i} />
+                    );
+                  })}
             </Carousel>                
         </div>
           </>

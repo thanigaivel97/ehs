@@ -159,7 +159,7 @@ const PosterProductPage = (props) => {
     useEffect(()=>{
         Axios.get(`${API}posters/getPosterById`,{params: {poster_obj_id: productId}}).then((res)=>{
             setProduct(res.data.data.posterDetails[0]);
-           // console.log(res);
+            console.log(res);
             setRating(res.data.data.posterDetails[0].average_rating);
             setRatingTotal(res.data.data.ratingTotalWise);
             setTotalNoOfRating(res.data.data.totalNoOfRating);
@@ -388,67 +388,8 @@ const PosterProductPage = (props) => {
     }
 
 
-    const {register,handleSubmit, getValues} = useForm();
-    const addRating = () => {
-        const submitReview=(data) =>{
-            let ratings =getValues("simple-controlled")
-            Axios.post(`${API}posters/insertUpdateRating`,{
-                rating: ratings,
-                feedback: data.feedback,
-                poster_obj_id: productId
-            },{   
-                headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
-                params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
-            }).then((res)=>{
-               // console.log(res);
-                window.location.reload(false);
-            }).catch((err)=>{
-                console.log(err)
-            })
-          
-        }
+   
 
-        MySwal.fire({
-            html: <div>
-                <HighlightOffIcon onClick={MySwal.close} role="button" style={{
-                        position: "absolute",
-                        top: "2px",
-                        right: "2px",
-                        color: "#000"
-                    }} />
-                    <p className="reviewHead text-left"> Edit Review</p>
-                    <form onSubmit={handleSubmit(submitReview)}>
-                    <Rating
-                    className="float-left"
-                        name="simple-controlled"
-                        defaultValue ={2}
-                        {...register("simple-controlled")}
-                        />
-                    <input type="text"  
-                    className="d-block my-4 w-100" style={{
-                        height: "50px"
-                    }} 
-                    placeholder="feedback"
-                    name="feedback"
-                    {...register("feedback")}
-                     />
-                    <button type="submit" className="shareBtn">Share Review</button>
-                    </form>
-                  </div>,
-                    padding: "10px",
-                    backdrop: "rgba(0, 0, 0, 0.6)",
-                    showConfirmButton: false,
-                    scrollbarPadding: false,
-                    showClass: {
-                    popup: 'animate__animated animate__zoomIn  animate__faster',
-                    backdrop: 'animate__animated animate__fadeIn  animate__faster'
-                    },
-                    hideClass: {
-                    popup: 'swal2-noanimation',
-                    backdrop: ''
-                    },
-        })
-    }
 
     const changeMaterialTo1 = () =>{
         setMaterial("125 Micron (non-tearable)")
@@ -544,7 +485,7 @@ const changeDimensionToL = () =>{
                         }}>{product.name}</h2>
                        <div className="d-flex align-items-center ">
                        <span className="font-weight-bold ">{product.average_rating}</span>
-                        <Rating name="product-rating " value={rating} precision={0.1} size="small"  readOnly style={{zIndex: "-1" }} onClick={addRating} />
+                        <Rating name="product-rating " value={rating} precision={0.1} size="small"  readOnly style={{zIndex: "-1" }} />
                         <span className="font-weight-normal ">({totalNoOfRating})</span>
                         {product.stocks ? (<span className=" ml-auto" style={{color: "#27AE60",}}>In Stock</span>):
                                             (<span className=" ml-auto text-danger" style={{}}>Out of Stock</span>)
@@ -578,9 +519,26 @@ const changeDimensionToL = () =>{
                         <img src={product.imgUrl[2]} alt="preprinted sign" className="productCarouselImg " />
                         <img src={product.imgUrl[3]} alt="preprinted sign" className="productCarouselImg " />
                     </Carousel>
-            
+                    <div className="d-flex d-sm-none mx-auto justify-content-center align-items-center" style={{
+                            marginTop: "25px",
+                            width: "222px",
+                            height: "30px",
+                            background: "rgba(247, 204, 127, 0.7)",
+                            border: "2px dashed #FEA100",
+                            boxSizing: "border-box",
+                            fontFamily: "Source Sans Pro",
+                            fontStyle: "normal",
+                            fontWeight: "normal",
+                            fontSize: "14px",
+                            lineHeight: "21px",
+                            textAlign: "center",
+                            letterSpacing: "0.2px",
+                            color: "#003459",
+                       }}>
+                            Limited time offer: 10% Off
+                       </div>
                     <hr className="mt-5 mb-4 d-none d-sm-block " style={{borderTop: "1px solid rgba(130, 130, 130, 0.5)"}} />
-                    <div className="d-none ">
+                    <div className="d-none d-sm-block ">
                         <img src={designerProfile} alt="profile" />
                         <span style={{
                             fontStyle: "normal",
@@ -631,7 +589,7 @@ const changeDimensionToL = () =>{
                             lineHeight: "35px",
                             color: "#000000",
                         }}>{name[0]}</h2>
-                        <div onClick={addRating} className="d-flex align-items-center " style={{marginTop: "5px"}}>
+                        <div  className="d-flex align-items-center " style={{marginTop: "5px"}}>
                         <span  className=" " style={{
                             fontWeight: "600",
                             fontSize: "16px",
@@ -790,6 +748,38 @@ const changeDimensionToL = () =>{
                         <p  className=" my-2" style={{fontSize: "12px", lineHeight: "12px"}}>Dimension: <span style={{fontWeight: "500"}}>{dimension[0]}inches by {dimension[1]}inches</span></p>
                         <p className="mb-0 " style={{fontSize: "12px", lineHeight: "10px"}}>Weight: <span style={{fontWeight: "500"}}>100g</span></p>
                     </div>
+                    <div className=" offerBox">
+                       <div className=" mt-3 mt-sm-0 d-flex align-items-center">
+                            <p className=" d-inline-block my-auto " style={{
+                                fontFamily: "Source Sans Pro",
+                                fontStyle: "normal",
+                                fontWeight: "normal",
+                                fontSize: "14px",
+                                lineHeight: "18px",
+                                color: "#4F4F4F",
+                            }}>Also available in:</p>
+                            <div className="languageBtn mx-3">Hindi</div>
+                            <div className="languageBtn mx-3">Bilingual</div>
+                       </div>
+                       <div className="d-none d-sm-flex justify-content-center align-items-center" style={{
+                            marginTop: "30px",
+                            width: "222px",
+                            height: "30px",
+                            background: "rgba(247, 204, 127, 0.7)",
+                            border: "2px dashed #FEA100",
+                            boxSizing: "border-box",
+                            fontFamily: "Source Sans Pro",
+                            fontStyle: "normal",
+                            fontWeight: "normal",
+                            fontSize: "14px",
+                            lineHeight: "21px",
+                            textAlign: "center",
+                            letterSpacing: "0.2px",
+                            color: "#003459",
+                       }}>
+                            Limited time offer: 10% Off
+                       </div>
+                    </div>
                     <div className="productInfo " >
                         <p className=" d-none d-sm-block" style={{fontSize: "16px", lineHeight: "19px",fontFamily: "Lato",
                         fontStyle: "normal",
@@ -803,7 +793,7 @@ const changeDimensionToL = () =>{
                             })
                         }
                     </div>
-                    <div className=" pt-4 pt-sm-0  catTagSKU ">
+                    <div className=" pt-4 pt-sm-0   catTagSKU ">
                         <p><span style={{fontWeight: "600"}}>Category: </span>{product.category[0].title}, {product.subCategory[0].title}</p>
                         <p><span style={{fontWeight: "600"}}>Tags: </span>{
                             product.tags.map((val,i)=>{
@@ -865,7 +855,7 @@ const changeDimensionToL = () =>{
                         color: "white",
                     }}>Add To Cart</button>
                     
-                    <div className="d-none mt-4">
+                    <div className="d-block d-sm-none mt-4">
                         <img src={designerProfile} alt="profile" />
                         <span style={{
                             fontStyle: "normal",
@@ -993,34 +983,32 @@ const changeDimensionToL = () =>{
                             }
                         </div>
                     </div>
-                    <div className="d-block d-sm-none padding-10">
-                            <h2 className="d-inline-block otherCarouselHead" >Reviews</h2>
-
-                                <p className="d-inline-block float-right viewAll" >View All</p>
-                                <div className="row ">
-                                <div className="col-4 d-block d-sm-none mt-auto">
-                                        <Box position="relative" display="inline-flex">
-                                            <CircularProgress size="50px" variant="determinate" value={rating*20} style={{color: "green"}} />
-                                            <Box
-                                                top={0}
-                                                left={0}
-                                                bottom={0}
-                                                right={0}
-                                                position="absolute"
-                                                display="flex"
-                                                alignItems="center"
-                                                justifyContent="center"
-                                            >
-                                                <Typography variant="caption" component="div" color="black">{product.average_rating}</Typography>
-                                            </Box>
-                                            </Box>
-                                            <p className="mb-0 mt-3 " style={{
-                                                fontWeight: "600",
-                                                fontSize: "14px",
-                                                width: "70px"
-                                            }}>{totalNoOfRating} ratings</p>
-                                    </div>
-                                <div className="col-7 ml-auto ">
+                    <div className="d-block d-sm-none  col-12">
+                        <h2 className="d-inline-block otherCarouselHead" >Reviews</h2>
+                        <p className="d-inline-block float-right  viewAll" >View All</p>
+                        <div className="d-flex justify-content-between  ">
+                            <div className=" d-block d-sm-none mt-auto">
+                                    <Box position="relative" display="inline-flex">
+                                        <CircularProgress size="50px" variant="determinate" value={rating*20} style={{color: "green"}} />
+                                        <Box
+                                            top={0}
+                                            left={0}
+                                            bottom={0}
+                                            right={0}
+                                            position="absolute"
+                                            display="flex"
+                                            alignItems="center"
+                                            justifyContent="center"
+                                        >
+                                            <Typography variant="caption" component="div" color="black">{product.average_rating}</Typography>
+                                        </Box>
+                                        </Box>
+                                        <p className="mb-0 mt-3 " style={{
+                                            fontWeight: "600",
+                                            fontSize: "14px",
+                                            width: "70px"
+                                        }}>{totalNoOfRating} ratings</p>
+                                </div>
                                 {
                                 (product.rating)?(
                                     <>
@@ -1036,7 +1024,7 @@ const changeDimensionToL = () =>{
                                     <div>No Reviews</div>
                                 )
                             }
-                                </div>
+                        
                         </div>
                     </div>
             </div>

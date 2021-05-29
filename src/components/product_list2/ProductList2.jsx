@@ -40,14 +40,14 @@ const ProductList2 = (props) => {
 
       if(subCatSlug=== "bestsellers"){
         Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: catSlug, bestseller: 1}}).then((res)=>{
-          setBestSeller(res.data.data);
+          setBestSeller(res.data.data.postersExists);
         }).catch((err)=> {
           console.log(err);
         });
       }else{
         Axios.get(`${API}posters/getPosterByCatSubCat`,{params: {subCategorySlug: subCatSlug}}).then((res) => {
-          setPosterData(res.data.data);
-          //console.log(res);
+          setPosterData(res.data.data.postersExists);
+         // console.log(res);
         }).catch((err) => console.log("ERROR:",err)); 
       }
       
@@ -82,7 +82,7 @@ const ProductList2 = (props) => {
         <div className="d-flex align-items-center   " >
               <ArrowBackIosRoundedIcon id="prevBtn1" onClick={() =>  posterIndividualCatCarousel.current.slidePrev()} role="button" className="border mt-auto mb-auto shadow-sm rounded-circle" />               
               <Carousel className="d-flex justify-content-center " initialActiveIndex={0}  breakPoints={breakPoints}  pagination={false} showArrows={false} ref={ posterIndividualCatCarousel} >
-                {shopBySubCategoryCards.map((i,index)=>{
+                {shopBySubCategoryCards && shopBySubCategoryCards.map((i,index)=>{
                   return(
                    <>
                    {(i.sub_cat_slug === subCatSlug)?
@@ -113,8 +113,7 @@ const ProductList2 = (props) => {
       <div className="padding-10  ">
         <div className="productListing ">
         
-       {(subCatSlug === "bestsellers")? (
-        bestSeller.map((ncard,i) =>{
+       {(subCatSlug === "bestsellers")? (bestSeller && bestSeller.map((ncard,i) =>{
    
             return(
               <ProductCard 
@@ -137,8 +136,8 @@ const ProductList2 = (props) => {
             )
           })
        ):(
-        posterData.map((ncard,i) =>{
-         
+        posterData && posterData.map((ncard,i) =>{
+          //console.log(ncard,"Posss");
             return(
               <ProductCard 
                 product={ncard}

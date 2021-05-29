@@ -1,23 +1,6 @@
 import React, { useState , useRef, useEffect} from "react";
-import "./bestsellers.css"
-import $ from "jquery";
+import "./bestsellers.css";
 import "bootstrap";
-import NoSmoke from "../../../images/NoSmoke.svg";
-import WearMask from "../../../images/WearMask.svg";
-import Fire from "../../../images/Fire.svg";
-import NoTouch from "../../../images/NoTouch.svg";
-
-import SafeTwo from "../../../images/BeSafe.png";
-import Mind from "../../../images/Mind.png";
-import BeforeStart from "../../../images/BeforeStart.png";
-
-import FootPrint from "../../../images/FootPrint.svg";
-import OvalTwoMen from "../../../images/OvalTwoMen.svg";
-import RoundTwoMen from "../../../images/RoundTwoMen.svg";
-import RoundMask from "../../../images/RoundMask.svg";
-
-import FloorImg from "../../../images/FloorImg.png";
-
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounded';
 import Carousel from "react-elastic-carousel";
@@ -25,11 +8,6 @@ import { Link } from "react-router-dom";
 import Axios from "axios";
 import {API} from "../../../backend";
 
-const ncard = (val) => {
-    return (
-        <ImgBox src={val.imgUrl[0]} title={val.name} />
-    );
-};
 
 const ImgBox = (props) => {
   return (
@@ -55,63 +33,31 @@ const Bestsellers = () => {
     useEffect(()=>{
       
       Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: "posters", bestseller: 1}}).then((res)=>{
-        setPostersBestseller(res.data.data);
+        setPostersBestseller(res.data.data.postersExists);
        //console.log("bestseller",res);
       }).catch((err)=> {
         console.log(err);
       });
       Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: "signages", bestseller: 1}}).then((res)=>{
-       setSignagesBestseller(res.data.data);
+       setSignagesBestseller(res.data.data.postersExists);
       // console.log("bestseller",res);
       }).catch((err)=> {
         console.log(err);
       });
       Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: "floor-graphics", bestseller: 1}}).then((res)=>{
-        setFloorgraphicsBestseller(res.data.data);
+        setFloorgraphicsBestseller(res.data.data.postersExists);
        //console.log("bestseller",res);
       }).catch((err)=> {
         //console.log(err);
       });
       Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: "asset-markings", bestseller: 1}}).then((res)=>{
-        setAssetmarkingsBestseller(res.data.data);
+        setAssetmarkingsBestseller(res.data.data.postersExists);
       // console.log("bestseller",res);
       }).catch((err)=> {
        // console.log(err);
       });
     },[])
 
-    const warnImgTitle = [
-        { src: NoSmoke, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
-        { src: WearMask, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
-        { src: Fire, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
-        { src: NoTouch, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
-        { src: NoSmoke, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
-        { src: WearMask, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
-        { src: Fire, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
-        { src: NoTouch, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
-      ];
-    
-      const FloorGraphicsImgTitle = [
-        { src: FloorImg, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
-        { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
-        { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
-        { src: BeforeStart, title: "Floor Graphics | Printable Catalog | PRD-FG009"},
-        { src: FloorImg, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
-        { src: SafeTwo, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
-        { src: Mind, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
-        { src: BeforeStart, title: "Floor Graphics | Printable Catalog | PRD-FG009"},
-      ];
-    
-      const awareImgTitle = [
-        { src: FootPrint, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
-        { src: OvalTwoMen, title: "Floor Graphics | Printable Catalog | PRD-FG009"},
-        { src: RoundTwoMen, title: "Floor Graphics | Printable Catalog | PRD-FG009"},
-        { src: RoundMask, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
-        { src: FootPrint, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
-        { src: OvalTwoMen, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
-        { src: RoundTwoMen, title: "Floor Graphics | Printable Catalog | PRD-FG009"},
-        { src: RoundMask, title: "Floor Graphics | Printable Catalog | PRD-FG009" },
-      ];
 
       const breakPoints = [
         { width: 1, itemsToShow: 1, itemsToScroll: 1 },
@@ -125,11 +71,11 @@ const Bestsellers = () => {
         return (
         <div className="  bestsellerPagination "  >  
              
-        {pages.map(page => {
+        {pages.map((page,i) => {
             const isActivePage = activePage === page
             return (
               <>
-                <div role="button" id="sellerH"  key={page} onClick={(e) => {onClick(page)
+                <div  role="button" id="sellerH"  key={page} onClick={(e) => {onClick(page)
                   setCategory(e.target.innerHTML.toLowerCase());
                 }} active={isActivePage}  className={isActivePage ? "active sellerHead" : " "} >
                 {
@@ -158,17 +104,33 @@ const Bestsellers = () => {
                 <Carousel className=" w-100  "  breakPoints={breakPoints}  showArrows={false} ref={bestseller} style={{opacity: "1!important"}} 
                 renderPagination={pagination}>
                     <div className="  active   "  id="carouselItem">
-                      {postersBestselller && postersBestselller.slice(0,4).map(ncard)}
+                      {postersBestselller && postersBestselller.slice(0,4).map((val,i) => {
+                            return (
+                                <ImgBox src={val.imgUrl[0]} title={val.name} key={i} />
+                            );
+                        })}
                     </div>
                     <div id="carouselItem" className="">
-                      {signagesBestselller && signagesBestselller.slice(0,4).map(ncard)}
+                      {signagesBestselller && signagesBestselller.slice(0,4).map((val,i) => {
+                            return (
+                                <ImgBox src={val.imgUrl[0]} title={val.name} key={i} />
+                            );
+                        })}
                       
                     </div>
                     <div id="carouselItem" className="">
-                      {floorgraphicsBestselller && floorgraphicsBestselller.slice(0,4).map(ncard)}
+                      {floorgraphicsBestselller && floorgraphicsBestselller.slice(0,4).map((val,i) => {
+                            return (
+                                <ImgBox src={val.imgUrl[0]} title={val.name} key={i} />
+                            );
+                        })}
                     </div>
                     <div id="carouselItem" className="">
-                      {assetmarkingsBestselller && assetmarkingsBestselller.slice(0,4).map(ncard)}
+                      {assetmarkingsBestselller && assetmarkingsBestselller.slice(0,4).map((val,i) => {
+                            return (
+                                <ImgBox src={val.imgUrl[0]} title={val.name} key={i} />
+                            );
+                        })}
                     </div>
                 </Carousel>
                 <Link to={`${category}/subcat/bestsellers`}><p role="button" className="seemore" >See More</p></Link>

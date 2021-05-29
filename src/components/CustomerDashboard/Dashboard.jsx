@@ -20,6 +20,8 @@ import {API} from "../../backend"
 import { Link } from "react-router-dom";
 import ProductCard from "../signages/ProductCard";
 import Typography from '@material-ui/core/Typography';
+
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import {
   getOrdersById,
   getUserById,
@@ -281,7 +283,15 @@ const PersonalInfo = () => {
       setName(JSON.parse(localStorage.getItem("userDetails123")).name);
       setEmail(JSON.parse(localStorage.getItem("userDetails123")).emailid);
       setPhone(JSON.parse(localStorage.getItem("userDetails123")).phonenumber);
-      setAddress(JSON.parse(localStorage.getItem("userDetails123")).address);
+      Axios.get(`${API}auth/get_user_details_by_id`,{   
+        headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
+        params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
+      }).then((res)=>{
+        //console.log(res);
+        setAddress(res.data.data[0].address);
+      }).catch((err)=>{ 
+        console.log(err);
+      })
     }
 
     
@@ -776,6 +786,82 @@ const breakPoints = [
 };
 
 const OrderDetailCard = (props) => {
+
+  const {register,handleSubmit, getValues} = useForm();
+ // console.log(props)
+  const addRating = (productId) => {
+    const submitReview=(data) =>{
+        let ratings =getValues("simple-controlled")
+        Axios.post(`${API}posters/insertUpdateRating`,{
+            rating: ratings,
+            feedback: data.feedback,
+            poster_obj_id: productId
+        },{   
+            headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
+            params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
+        }).then((res)=>{
+           // console.log(res);
+           MySwal.fire({
+            html: <div className="d-flex mt-2">
+                    <CheckCircleIcon style={{color: "#0C9B86"}} />
+                    <p className="ml-2" style={{color: "#0C9B86"}}>Rating Added Successfully!!!</p>
+                </div>,
+            timer: 3000,
+            position: "top-end",
+            showConfirmButton: false,
+            showCloseButton: true,
+            width: "500px",
+            backdrop: "rgba(0, 0, 0, 0.5)",
+            scrollbarPadding: false,
+        })
+           // window.location.reload(false);
+        }).catch((err)=>{
+            console.log(err)
+        })
+      
+    }
+
+    MySwal.fire({
+        html: <div>
+            <HighlightOffIcon onClick={MySwal.close} role="button" style={{
+                    position: "absolute",
+                    top: "2px",
+                    right: "2px",
+                    color: "#000"
+                }} />
+                <p className="reviewHead text-left"> Share Rating & Review</p>
+                <form onSubmit={handleSubmit(submitReview)}>
+                <Rating
+                className="float-left mb-3"
+                    name="simple-controlled"
+                    defaultValue ={2}
+                    {...register("simple-controlled")}
+                    />
+                <input type="text"  
+                className="d-block my-4 w-100" style={{
+                    height: "50px"
+                }} 
+                placeholder="feedback"
+                name="feedback"
+                {...register("feedback")}
+                 />
+                <button type="submit" className="shareBtn">Submit</button>
+                </form>
+              </div>,
+                padding: "10px",
+                backdrop: "rgba(0, 0, 0, 0.6)",
+                showConfirmButton: false,
+                scrollbarPadding: false,
+                showClass: {
+                popup: 'animate__animated animate__zoomIn  animate__faster',
+                backdrop: 'animate__animated animate__fadeIn  animate__faster'
+                },
+                hideClass: {
+                popup: 'swal2-noanimation',
+                backdrop: ''
+                },
+    })
+}
  return(
     <div className="orderDetailBox mx-auto mt-4">
         <div className="d-flex justify-content-sm-between flex-column flex-sm-row p-3 pl-sm-5 pl-2 pr-5" style={{
@@ -788,21 +874,22 @@ const OrderDetailCard = (props) => {
           borderBottom: "1px solid #D2D2D2"
         }}>
           <span className="mb-1 mb-sm-0">ORDER # {props.orderId}</span>
-          <span className="float-sm-right">Ordered on {props.createdAt.split("T")[0]}</span>
+          <span className="float-sm-right">Ordered on {props.createdAt.split("T")[0]}{""}{/*props.createdAt.split("T")[1]*/}</span>
         </div>
         <div className="p-sm-3 p-2  pr-sm-5">
             <div className="d-inline-block">
             {
               props.items && props.items.map((product,i)=>{
                 return(
-                  <div className="productDetails my-3 d-flex">
+                  <div className="productDetails my-3 d-flex ">
                     <img src={product.poster_details.imgUrl ? product.poster_details.imgUrl[0] : "" } alt="product" className="myOrderProductImg" />
-                    <div className="ml-sm-3 ml-2">
+                    <div className="ml-sm-3 ml-2  pt-0">
                       <p className="myOrderProductName ">{product.poster_details.name}</p>
                       <p className="myOrderProductDetail ">Material: <span style={{fontWeight: "600"}}>{product.materialDimension.material_title}</span> </p>
                       <p className="myOrderProductDetail">Dimension: <span style={{fontWeight: "600"}}>{product.materialDimension.dimension_title}</span> </p>
                       <pre className="myOrderProductDetail">Price: <span style={{fontWeight: "600"}}>₹{product.materialDimension.price}     </span>  Quantity: <span style={{fontWeight: "600"}}>{product.quantity}</span> </pre>
                       <p className="myOrderProductDetail">Seller: <span style={{fontWeight: "600"}}>Dichroic Lab</span></p>
+                      <p className="myOrderProductDetail " style={{color: "#F2994A",cursor: "pointer"}} onClick={()=>addRating(product.poster_details._id)}>Review Product</p>
                     </div>
                   </div>
                 )

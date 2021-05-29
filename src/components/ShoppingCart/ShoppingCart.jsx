@@ -475,7 +475,7 @@ const Tables = (props) => {
           headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
           params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
       }).then((res)=>{
-        console.log(res)
+        // console.log(res)
        // window.location.reload(false);
         getCartItem();
       }).catch((err)=>{
@@ -563,20 +563,18 @@ const Tables = (props) => {
                       totalAmount=totalAmount+ parseInt(v.total);
                     
                      return(
-                      <tr key={i} >
-                       <td className="mr-0 " style={{ width: "460px" }}>
-                          <Grid>
-                            <Grid.Row columns="2">
-                              <Grid.Column>
+                      <tr key={i} className=" p-0" style={{borderTop: "1px solid #D2D2D2"}} >
+                       <td className="mr-0 px-0 d-flex justify-content-between border-none shoppingCartProduct" >
+                              <div>
                                 <img
                                   src={v.poster_details.imgUrl[0]}
                                   className="productImgInCart"
                                   alt={v.poster_details.slug}
                                 />
-                              </Grid.Column>
-                              <Grid.Column className="ml-2 ml-sm-4 mt-0 mt-sm-2 mr-0">
+                              </div>
+                              <div className="ml-2  ml-sm-3  shoppingCartItemDetail" >
                                 <p
-                                  className="tabletitle p-0 mb-0 mb-sm-2 "
+                                  className="tabletitle p-0 mb-0 mb-sm-1 "
                                 >
                                   {v.poster_details.name}
                                 </p>
@@ -593,32 +591,32 @@ const Tables = (props) => {
                                 </p>
                                 <div className="d-sm-none d-inline-block mt-1 ml-1 mb-0">
                                 <ButtonGroup
-                            size="small"
-                            className="justify-content-center ml-4   "
-                            aria-label="small outlined button group"
-                            style={{ width: "20px", height: "25px" }}
-                          >
-                            <Button
-                              onClick={()=>updateQuantity(v.poster_details._id,v.materialDimension._id,v.quantity,0)}
-                              className="shadow-none "
-                              style={{maxWidth: '25px', maxHeight: '25px', minWidth: '25px', minHeight: '25px'}}
-                            >
-                              <RemoveIcon  style={{ color: "grey", width: "20px" }} />
-                            </Button>
-                            <Button
-                              style={{
-                                fontFamily: "Lato",
-                                fontStyle: "normal",
-                                fontWeight: "normal",
-                                fontSize: "14px",
-                                lineHeight: "18px",
-                                color: "#000000",
-                                paddingLeft: "14px",
-                                paddingRight: "14px",maxWidth: '25px', maxHeight: '25px', minWidth: '25px', minHeight: '25px'
-                              }}
-                            >
-                              {v.quantity}
-                            </Button>
+                                  size="small"
+                                  className="justify-content-center ml-4   "
+                                  aria-label="small outlined button group"
+                                  style={{ width: "20px", height: "25px" }}
+                                >
+                                  <Button
+                                    onClick={()=>updateQuantity(v.poster_details._id,v.materialDimension._id,v.quantity,0)}
+                                    className="shadow-none "
+                                    style={{maxWidth: '25px', maxHeight: '25px', minWidth: '25px', minHeight: '25px'}}
+                                  >
+                                    <RemoveIcon  style={{ color: "grey", width: "20px" }} />
+                                  </Button>
+                                  <Button
+                                    style={{
+                                    fontFamily: "Lato",
+                                    fontStyle: "normal",
+                                    fontWeight: "normal",
+                                    fontSize: "14px",
+                                    lineHeight: "18px",
+                                    color: "#000000",
+                                    paddingLeft: "14px",
+                                    paddingRight: "14px",maxWidth: '25px', maxHeight: '25px', minWidth: '25px', minHeight: '25px'
+                                  }}
+                                >
+                                  {v.quantity}
+                                </Button>
                             <Button 
                              onClick={()=>updateQuantity(v.poster_details._id,v.materialDimension._id,v.quantity,1)}
                             className="p-0" 
@@ -649,11 +647,9 @@ const Tables = (props) => {
                                     Remove
                                   </p>
                                 </div>
-                              </Grid.Column>
-                            </Grid.Row>
-                          </Grid>
+                              </div>
                         </td>
-                        <td className="ml-0 d-none d-sm-table-cell" style={{ width: "170px" }}>
+                        <td className="ml-0 d-none d-sm-table-cell border-none" style={{ width: "170px" }}>
                           <ButtonGroup
                             size="small"
                             className="justify-content-center ml-5 mt-5 "
@@ -685,10 +681,8 @@ const Tables = (props) => {
                             </Button>
                           </ButtonGroup>
                         </td>
-                        <td>
-                          <p className="mt-5  font-weight-bold  d-none d-sm-block">
+                        <td className="d-none d-sm-block  font-weight-bold border-none">
                             ₹ {v.total}
-                          </p>
                         </td>
                       </tr>)
                     })}

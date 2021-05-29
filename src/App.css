@@ -546,7 +546,7 @@ body .ui.cards > .card {
   color: #003459;
 }
 .tablecart {
-  font-family: Source Sans Pro;
+  font-family: "Source Sans Pro";
   font-style: normal;
   font-weight: 600;
   font-size: 20px;
@@ -556,7 +556,7 @@ body .ui.cards > .card {
 }
 
 .tablehead {
-  font-family: Source Sans Pro;
+  font-family: "Source Sans Pro";
   font-style: normal;
   font-weight: 600;
   font-size: 18px;
@@ -566,8 +566,11 @@ body .ui.cards > .card {
 .table th {
   border-top: none !important;
 }
+.table td{
+  border: none!important;
+}
 .tabletitle {
-  font-family: Source Sans Pro;
+  font-family: "Source Sans Pro";
   font-style: normal;
   font-weight: 600;
   font-size: 18px;
@@ -672,21 +675,23 @@ body .ui.cards > .card {
 }
 .productImgInCart{
   width: 120px;
-  height: 140px;
+  height: 120px;
 }
 .paymentQuote{
   font-size: 14px;
   line-height: 17px;
   width: 70%;
 }
+
 @media screen and (max-width: 480px){
+  
   .paymentBox{
     width: 330px;
     height: 550px;
   }
   .productImgInCart{
-    width: 95px;
-    height: 105px;
+    width: 90px;
+    height: 90px;
   }
   .tabletitle{
     font-size: 16px;
@@ -872,6 +877,7 @@ color: #000000;
   line-height: 20px;
   color: #000000;
   margin-bottom: 5px;
+  margin-top: 0px;
 }
 .myOrderProductDetail{
   font-family: "Source Sans Pro";
@@ -895,7 +901,7 @@ color: #000000;
   }
   .myOrderProductName{
     font-size: 16px;
-    line-height: 20px;
+    line-height: 16px;
   }
   .myOrderProductImg{
     width: 100px;
@@ -1015,7 +1021,19 @@ color: #000000;
   grid-template-columns: auto auto auto auto;
   grid-gap: 20px;
 }
+.shoppingCartProduct{
+  width: 380px;
+}
+.shoppingCartItemDetail{
+  width: 240px;
+}
 @media screen and (max-width: 480px){
+.shoppingCartProduct{
+  width: 336px;
+}
+  .shoppingCartItemDetail{
+    width: 230px;
+  }
   .checkoutAddressBox{
     grid-template-columns: auto auto;
   }
@@ -1647,7 +1665,6 @@ margin-top: 10px;
   font-weight: 600;
   font-size: 18px;
   line-height: 30px;
- 
   letter-spacing: 0.2px;
   color: #40CEFC;
   text-decoration-line: underline;
@@ -1683,7 +1700,7 @@ margin-bottom: 54px;
   font-size: 13px;
   color: #757575;
   line-height: 4px;  
-  margin-top: 100px;
+  margin-top: 20px;
   margin-bottom: 100px;
 }
 .productInfo{
@@ -1694,10 +1711,10 @@ margin-bottom: 54px;
   margin-top: 100px;
   font-weight: 500;
 margin-bottom: 5px;
-margin-top: 145px;
+margin-top: 0px;
 line-height: 28px;
 width: 100%;
-height: 175px;
+height: 255px;
 }
 .poweredBy{
   
@@ -1717,7 +1734,32 @@ height: 25px;
   margin-top: 35px;
   margin-bottom: 26px;
 }
+.offerBox{
+  height: 145px;
+}
+.languageBtn{
+  width: 74px;
+  height: 30px;
+  border: 2px solid #F2994A;
+  box-sizing: border-box;
+  border-radius: 25px;
+  font-family: "Source Sans Pro";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 21px;
+  text-align: center;
+  letter-spacing: 0.2px;
+  color: #F2994A;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
 @media screen and (max-width: 480px){
+  .offerBox{
+    height: 45px;
+  }
   .razorpayBox{
     margin-top: 35px;
     margin-bottom: 32px;
@@ -1732,7 +1774,7 @@ line-height: 18px;
   }
   .productInfo{
     font-size: 14px;
-    margin-top: 30px;
+    margin-top: 0px;
     line-height: 24px;
     height: 125px;
   }
