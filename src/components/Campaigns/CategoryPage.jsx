@@ -288,7 +288,7 @@ const CategoryPage = (props) => {
       <p className="campaignText">Omnis corporis aperiam tenetur. Sequi blanditiis et. Magni qui debitis ratione iusto est sed. Eius ab quia minus tenetur ipsam atque quaerat ratione. Repudiandae repudiandae accusantium aut odit.  Mollitia nulla debitis. Molestiae id unde. Optio fuga dolores error dolorem. Vel mollitia itaque non in.  Soluta cupiditate natus. Nihil earum accusamus qui ut porro repellendus alias voluptatibus aut. Rem inventore qui et sed voluptatem. Qui velit nesciunt architecto labore provident delectus eius. Ut sed asperiores autem quia in.<span id="dots">...</span><span id="more">erisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum. Sed dapibus pulvinar nibh tempor porta.</span><span onClick={myFunction} id="myBtn" role="button" style={{color: "#40CEFC",textDecorationLine: "underline"}}>Read more</span></p>
       
 
-              <div className="margin-10 mt-5">
+              {/* <div className="margin-10 mt-5">
                 <div className="text-right d-none d-sm-block mb-3">
                   <span className="mr-5">Page 1-6</span>
                   <span role="button" className="seemore " style={{lineHeight: "24px", fontWeight: "600"}} >View All</span>
@@ -306,7 +306,7 @@ const CategoryPage = (props) => {
                     {similarProductInfo.slice(0,4).map(ncard)} 
                 </div>
                 <p role="button" className="seemore text-center  d-sm-none mt-3 mx-auto" style={{lineHeight: "24px", fontWeight: "600"}} >View All</p>
-                </div>
+                </div> */}
 
                 <hr className="campaignLine" />
                 <p className="campaignHead  m-0">

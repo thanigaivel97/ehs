@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import "./Login.css";
 import EhsLogo from "../../images/EhsLogo2.png";
 import { setLoginResponse } from "../../redux/actions/index.js";
@@ -10,10 +10,54 @@ import { connect } from "react-redux";
 import swal from "sweetalert";
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import { useForm } from "react-hook-form";
+import Swal from "sweetalert2";
+import Spinner from "react-loading";
+import withReactContent from 'sweetalert2-react-content';
+import ErrorIcon from '@material-ui/icons/Error';
+const MySwal = withReactContent(Swal);
+
 
 const Login = (props) => {
 
   const [name, setName] = useState("Shubh");
+  const [loading,setLoading] = useState(false);
+
+  useEffect(()=>{
+    if(loading){
+        MySwal.fire({
+            html: <div className="d-flex justify-content-around  align-items-center py-3">
+                      <div className=" ">
+                          <Spinner type="spinningBubbles" color="#2D9CDB" />  
+                      </div>
+                      <div style={{
+                          fontWeight: "600",
+                          fontSize: "24px",
+                          lineHeight: "30px",
+                          color: "#000000",
+                      }}>Loading... Please wait.</div>
+                  </div>
+            ,
+            showConfirmButton: false,
+            padding: "10px 0px 5px 0px",
+            backdrop: "rgba(0, 0, 0, 0.5)",
+            position: "center",
+            scrollbarPadding: false,
+            allowOutsideClick: false,
+            showClass: {
+              popup: 'animate__animated animate__zoomIn  animate__faster',
+              backdrop: 'animate__animated animate__fadeIn animate__faster'
+            },
+            hideClass: {
+              popup: 'animate__animated animate__zoomOut  animate__faster',
+              backdrop: 'animate__animated animate__fadeOut animate__faster'
+            }
+    })
+    }else{
+        MySwal.close()
+    }
+},[loading]);
+
+
 
   function session(r) {
     localStorage.setItem("userDetails123", JSON.stringify(r));
@@ -35,9 +79,34 @@ const Login = (props) => {
         props.setLoginResponse(res.data.data.session_token);
         localStorage.setItem("ehstoken12345678910", res.data.data.session_token);
         responseFun(res.data.message);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(`${err}`);
+        setLoading(false);
+        MySwal.fire({
+          html: <div className="d-flex mt-2">
+                  <ErrorIcon style={{color: "#003459"}} />
+                  <p className="ml-2" style={{color: "#003459"}}>Invalid Credentials!!!</p>
+              </div>,
+          
+          position: "top-end",
+          showConfirmButton: false,
+          showCloseButton: true,
+          timer: 2000,
+          width: "500px",
+          height: "100px",
+          backdrop: "rgba(0, 0, 0, 0.5)",
+          scrollbarPadding: false,
+          showClass: {
+            popup: 'animate__animated animate__zoomIn  animate__faster',
+            backdrop: 'swal2-noanimation'
+          },
+          hideClass: {
+            popup: 'animate__animated animate__slideOutRight  animate__faster',
+            backdrop: 'animate__animated animate__fadeOut  animate__faster'
+          }
+      })
       });
   }
   
@@ -56,6 +125,7 @@ const Login = (props) => {
       phone: phonenumber,
       password: data.password
     }
+    setLoading(true);
     loginReq(loginbody);
     //console.log(loginbody);
   }

@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import withReactContent from 'sweetalert2-react-content';
 import Material1 from "../../images/Fold.svg";
 import Material2 from "../../images/Hand.svg";
+import dummyImg from "../../images/noImg.png";
 import dimension1 from "../../images/Dimension1.svg"
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import Button from "@material-ui/core/Button";
@@ -126,7 +127,7 @@ const FinalPopup = (props) => {
                 params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
             })
             .then((res)=>{
-                console.log(res);
+                //console.log(res);
                addToCartConfirmPopup();
                     window.location.reload(false);
                    
@@ -686,16 +687,39 @@ const ProductCard = (props) =>{
         })
     };
 
+    const removeFromWishlist = ()=>{
+        if(authUser){
+            Axios.post(`${API}auth/add_user_details`,{
+                poster_obj_id: props.product._id,
+            },{   
+                headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
+                params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
+            }).then((res)=>{
+               // console.log(res);
+               
+            }).catch((err)=>{
+                console.log(err);
+            })
+        }else{
+            // history.push("/login");
+        }
+    }
+
     return(
     <div className="productCardBox">
-        <Link  to={`/${props.catSlug}/${props.subCatSlug}/${props.slug}/id=${props.id}`}  >
-            <img src={props.src} className="" alt="productImage" className="productCardImg"/>
+        <Link  to={`/${props.catSlug}/${props.subCatSlug}/product/id=${props.id}`}  >
+            <img src={props.product.imgUrl[0] ? props.product.imgUrl[0]:"https://dummyimage.com/400x400/003459/fff.png&text=No+Image+Available" } className="" alt="productImage" className="productCardImg"/>
         </Link>
         <div className=" p-0">
-            <div className=" productCardTitle"><Link className=" productCardTitle " to={`/${props.catSlug}/${props.subCatSlug}/${props.slug}/id=${props.id}`} >{props.name}</Link></div>
+            <div className=" productCardTitle"><Link className=" productCardTitle " to={`/${props.catSlug}/${props.subCatSlug}/product/id=${props.id}`} >{props.name}</Link></div>
             <p className="mb-0 mb-sm-2 mt-1 productCardDetail  ">Starts from Rs. {props.startPrice}<span className="float-right d-flex" style={{color: "#757575" , height: "12px"}}>{props.rating}<StarIcon className="d-none d-sm-inline-block " style={{width: "16px",height: "18px", color: "#F2C94C"}}  /><StarIcon className="d-inline-block d-sm-none mt-0 " style={{width: "12px",height: "12px", color: "#F2C94C"}}  /></span></p>
             <div className="d-inline-block productCardAddToCart  " role="button" onClick={selectMaterialPopup}>Add to Cart</div>
-            <span className="productCardDetail2  d-inline-block  mt-2 mt-sm-0">{props.itemBought} bought this</span>
+            {/* <span className="productCardDetail2  d-inline-block  mt-2 mt-sm-0">{props.itemBought} bought this</span> */}
+            {
+                props.wishlist?
+                <span onClick={removeFromWishlist} role="button" className="productCardDetail2  d-inline-block  mt-2 mt-sm-0">Remove from Wishlist</span>:
+                <span className="productCardDetail2  d-inline-block  mt-2 mt-sm-0">{props.itemBought} bought this</span>
+            }
         </div>
     </div>
     );

@@ -1,7 +1,6 @@
 import Rating from "@material-ui/lab/Rating";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link , useParams , useHistory} from "react-router-dom";
-import restrictedArea from "../../images/restrictedArea.png";
 import dimension1 from "../../images/Dimension1.svg"
 import "bootstrap";
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
@@ -10,8 +9,6 @@ import $ from "jquery";
 import { LinearProgress, CircularProgress, Box, Typography } from "@material-ui/core";
 import { createMuiTheme, ThemeProvider} from '@material-ui/core/styles';
 import StarIcon from '@material-ui/icons/Star';
-import BeforeStart from "../../images/BeforeStart.png";
-import FloorImg from "../../images/floor1.svg";
 import ProductCard from "../signages/ProductCard";
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounded';
@@ -29,7 +26,8 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import Swal from "sweetalert2";
 import withReactContent from 'sweetalert2-react-content';
-import { useForm } from "react-hook-form";
+import Spinner from "react-loading";
+import CartContext from "../../helper/cartContext";
 const MySwal = withReactContent(Swal);
 
 const theme = createMuiTheme({
@@ -110,12 +108,6 @@ const ReviewCard = (props) => {
     );
 };
 
-const ncard = (props) => {
-    return (
-        <ProductCard src={props.src} name={props.title} startPrice={props.startPrice} rating={props.rating} itemBought={props.itemBought} />
-    );
-};
-
 $(document).ready(()=>{
 
     $(".carousel").carousel({
@@ -134,14 +126,13 @@ $(document).ready(()=>{
 
 const PosterProductPage = (props) => {
     const [authUser, setAuthUser] = React.useState("");
-    const {catSlug,subCatSlug,productSlug,productId} = useParams();
+    const {catSlug,subCatSlug,productId} = useParams();
     let subCatName = subCatSlug.replace("-"," ");
     let catName = catSlug.replace("-"," ");
     const [rating,setRating] = useState(0);
     const [ratingTotal,setRatingTotal] = useState([]);
     const [totalNoOfRating,setTotalNoOfRating] = useState(0);
     const [quantity, setQuantity] = useState(1);
-    const [visible, setVisible] = useState(4);
     const [material,setMaterial] = useState("125 Micron (non-tearable)");
     const [dim,setDim] = useState("16” x 24”");
     const [finalMatDim,setFinalMatDim] = useState("");
@@ -154,18 +145,63 @@ const PosterProductPage = (props) => {
     const [initialAmount, setInitialAmount] = useState();
     const [amount, setAmount] = useState(initialAmount);
     const [price, setPrice] = useState(0);
+    const [author,setAuthor] = useState(null);
+    const [authorPosters,setAuthorPosters] = useState([]);
+    const [otherLanguagePoster,setOtherLanguagePoster] = useState([]);
+    const [cartCountN, setCartCountN] = useContext(CartContext);
     let history = useHistory();
+
+
+    const [loading,setLoading] = useState(false);
+  useEffect(()=>{
+    if(loading){
+        MySwal.fire({
+            html: <div className="d-flex justify-content-around  align-items-center py-3">
+                      <div className=" ">
+                          <Spinner type="spinningBubbles" color="#2D9CDB" />  
+                      </div>
+                      <div style={{
+                          fontWeight: "600",
+                          fontSize: "24px",
+                          lineHeight: "30px",
+                          color: "#000000",
+                      }}>Loading... Please wait.</div>
+                  </div>
+            ,
+            showConfirmButton: false,
+            padding: "10px 0px 5px 0px",
+            backdrop: "rgba(0, 0, 0, 0.5)",
+            position: "center",
+            scrollbarPadding: false,
+            allowOutsideClick: false,
+            showClass: {
+              popup: 'animate__animated animate__zoomIn  animate__faster',
+              backdrop: 'animate__animated animate__fadeIn animate__faster'
+            },
+            hideClass: {
+              popup: 'animate__animated animate__zoomOut  animate__faster',
+              backdrop: 'animate__animated animate__fadeOut animate__faster'
+            }
+    })
+    }else{
+        MySwal.close()
+    }
+},[loading]);
      
     useEffect(()=>{
+        setLoading(true);
         Axios.get(`${API}posters/getPosterById`,{params: {poster_obj_id: productId}}).then((res)=>{
             setProduct(res.data.data.posterDetails[0]);
-            console.log(res);
+            //console.log(res);
+            setAuthor(res.data.data.posterDetails[0].authors[0]);
+            setOtherLanguagePoster(res.data.data.posterDetails[0].poster_language_connector)
             setRating(res.data.data.posterDetails[0].average_rating);
             setRatingTotal(res.data.data.ratingTotalWise);
             setTotalNoOfRating(res.data.data.totalNoOfRating);
             //console.log(res.data.data.posterDetails[0])
             setYouMayLike(res.data.data.youMayAlsoLike);
             setSimilarItems(res.data.data.realtedPosters);
+            setLoading(false);
         }).catch((err)=> {
             console.log(err)
         });
@@ -178,6 +214,24 @@ const PosterProductPage = (props) => {
         );
        // console.log(authUser,localStorage.getItem("userDetails123"),product);
     },[productId]);
+
+    useEffect(()=>{
+        setLoading(true);
+       if(author){
+        Axios.get(`${API}posters/get_poster_by_author`,{
+            params: {
+                author_slug: author.author_slug,
+                limit: 4
+            }
+        }).then((res)=>{
+           // console.log(res);
+            setAuthorPosters(res.data.data.postersOfAuthor);
+            setLoading(false);
+        }).catch((err)=>{
+            console.log(err);
+        })
+       }
+    },[author])
 
     useEffect(()=>{
         calculateAmount();
@@ -247,10 +301,10 @@ const PosterProductPage = (props) => {
                 params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
             })
             .then((res)=>{
-               // console.log(res);
+                console.log(res);
                     addToCartConfirmPopup();
-                    //window.location.reload(false);
-                   
+                    window.location.reload(false);
+                    setCartCountN(res.data.data.cart.length);
                     Axios.get(`${API}posters/getPosterById`,{params: {poster_obj_id: productId}}).then((res)=>{
                         setProduct(res.data.data.posterDetails[0]);
                         console.log(res);
@@ -312,6 +366,15 @@ const PosterProductPage = (props) => {
             if(dim === val.dimension_title && material === val.material_title){
                 setAmount(val.price * quantity);
                 setPrice(val.price);
+                if(product.discountValue>0){
+                    if(product.discount_type===1){
+                        setAmount(amount=>amount-parseInt(product.discountValue))
+                    }else{
+                        let dis= ((val.price*quantity)*(parseInt(product.discountValue)))/100;
+                        setAmount((val.price * quantity)-dis);
+                    }
+                }
+                
                 setFinalMatDim(val._id);
                 flag= false;
             }
@@ -386,10 +449,6 @@ const PosterProductPage = (props) => {
             history.push("/login");
         }
     }
-
-
-   
-
 
     const changeMaterialTo1 = () =>{
         setMaterial("125 Micron (non-tearable)")
@@ -519,7 +578,10 @@ const changeDimensionToL = () =>{
                         <img src={product.imgUrl[2]} alt="preprinted sign" className="productCarouselImg " />
                         <img src={product.imgUrl[3]} alt="preprinted sign" className="productCarouselImg " />
                     </Carousel>
-                    <div className="d-flex d-sm-none mx-auto justify-content-center align-items-center" style={{
+                   
+                    {
+                           parseInt(product.discountValue)>0 && product.discount_type===1 ?                         
+                       <div className="d-flex d-sm-none mx-auto justify-content-center align-items-center" style={{
                             marginTop: "25px",
                             width: "222px",
                             height: "30px",
@@ -535,11 +597,33 @@ const changeDimensionToL = () =>{
                             letterSpacing: "0.2px",
                             color: "#003459",
                        }}>
-                            Limited time offer: 10% Off
-                       </div>
+                            Limited time offer: Flat Rs {product.discountValue} off
+                       </div>:""}
+                       {parseInt(product.discountValue)>0 && product.discount_type===2 ? 
+                       <div className="d-flex d-sm-none mx-auto justify-content-center align-items-center" style={{
+                            marginTop: "25px",
+                            width: "222px",
+                            height: "30px",
+                            background: "rgba(247, 204, 127, 0.7)",
+                            border: "2px dashed #FEA100",
+                            boxSizing: "border-box",
+                            fontFamily: "Source Sans Pro",
+                            fontStyle: "normal",
+                            fontWeight: "normal",
+                            fontSize: "14px",
+                            lineHeight: "21px",
+                            textAlign: "center",
+                            letterSpacing: "0.2px",
+                            color: "#003459",
+                       }}>
+                            Limited time offer: {product.discountValue}% Off
+                       </div>:""
+                       }
                     <hr className="mt-5 mb-4 d-none d-sm-block " style={{borderTop: "1px solid rgba(130, 130, 130, 0.5)"}} />
-                    <div className="d-none d-sm-block ">
-                        <img src={designerProfile} alt="profile" />
+                    {
+                        author ?
+                        <div className="d-none d-sm-block ">
+                        <img src={author.auth_image ? author.auth_image : designerProfile} alt="profile" />
                         <span style={{
                             fontStyle: "normal",
                             fontWeight: "600",
@@ -547,36 +631,36 @@ const changeDimensionToL = () =>{
                             lineHeight: "23px",
                             color: "#000000",
                             marginLeft: "20px"
-                        }}>By Pankaj Jadhav</span>
-                        <p className="mt-4" style={{
+                        }}>By {author.author_name ? author.author_name: "EHS Prints"}</span>
+                       <div className="d-flex mt-3 mb-2  justify-content-between align-items-center">
+                       <p className=" my-auto" style={{
                             fontWeight: "normal",
                             fontSize: "14px",
-                            lineHeight: "18px",
                             color: "#000000",
                         }}>Other Designs by the Designer</p>
-                        <div className="d-flex justify-content-between">
-                            <div style={{
-                                width: "100px",
-                                height: "100px",
-                                background: "#D2D2D2",
-                            }}></div>
-                            <div style={{
-                                width: "100px",
-                                height: "100px",
-                                background: "#D2D2D2",
-                            }}></div>
-                            <div style={{
-                                width: "100px",
-                                height: "100px",
-                                background: "#D2D2D2",
-                            }}></div>
-                            <div style={{
-                                width: "100px",
-                                height: "100px",
-                                background: "#D2D2D2",
-                            }}></div>
+                        <span><Link to={`/author/${author.author_slug}/products`}>More items...</Link></span>
+                       </div>
+                        <div className="d-flex justify-content-around align-items-center">
+                            {
+                                authorPosters && authorPosters.length>0 && authorPosters.map((val,i)=>{
+                                    return(
+                                        <img 
+                                        key={i}
+                                        src={val.imgUrl[0] ? val.imgUrl[0]: ""} 
+                                        alt="More_designs"
+                                        style={{
+                                            width: "100px",
+                                            height: "100px",
+                                            background: "#D2D2D2",
+                                        }} />
+                                    )
+                                })
+                            }
+                            
+                            
                     </div>
-                    </div>
+                    </div>: ""
+                    }
                 </div>
                 <div className="col-lg-3  ">
                     <div className="d-none d-sm-block " style={{
@@ -656,15 +740,15 @@ const changeDimensionToL = () =>{
                         <p className=" align-self-sm-start align-self-center selectHead">Select Dimensions</p>
                         <div className="d-flex justify-content-between">
                             <div className=" ml-sm-0 posterMaterialDimension selected" id="d1" role="button" onClick={changeDimensionToS} >
-                                <img src={dimension1} className="posterDimension1 mt-2" ></img>
+                                <img src={dimension1} className="posterDimension1 mt-2" alt="dimension" ></img>
                                 <p className="text-center posterDimensionText ">16” x 24”</p>
                             </div>
                             <div className=" posterMaterialDimension" role="button" id="d2" onClick={changeDimensionToM} >
-                                <img src={dimension1} className="posterDimension2 mt-2 "></img>
+                                <img src={dimension1} className="posterDimension2 mt-2 " alt="dimension"></img>
                                 <p className="text-center posterDimensionText  ">19” x 27”</p>
                             </div>
                             <div className=" posterMaterialDimension" role="button" id="d3" onClick={changeDimensionToL} >
-                                <img src={dimension1} className="posterDimension3 mt-2 "></img>
+                                <img src={dimension1} className="posterDimension3 mt-2 " alt="dimension"></img>
                                 <p className="text-center posterDimensionText">24” x 36”</p>
                             </div>
                         </div>
@@ -708,7 +792,6 @@ const changeDimensionToL = () =>{
                             fontStyle: "normal",
                             fontWeight: "bold",
                             fontSize: "24px",
-                            color: "#757575",
                             lineHeight: "29px",  
                             color: "#003459",
                         }}>&#8377;{amount}</p>
@@ -750,18 +833,33 @@ const changeDimensionToL = () =>{
                     </div>
                     <div className=" offerBox">
                        <div className=" mt-3 mt-sm-0 d-flex align-items-center">
-                            <p className=" d-inline-block my-auto " style={{
-                                fontFamily: "Source Sans Pro",
-                                fontStyle: "normal",
-                                fontWeight: "normal",
-                                fontSize: "14px",
-                                lineHeight: "18px",
-                                color: "#4F4F4F",
-                            }}>Also available in:</p>
-                            <div className="languageBtn mx-3">Hindi</div>
-                            <div className="languageBtn mx-3">Bilingual</div>
+                        {
+                            otherLanguagePoster.length>0 && otherLanguagePoster.map((val,i)=>{
+                                return(
+                                    <>
+                                    <p className=" d-inline-block my-auto " style={{
+                                        fontFamily: "Source Sans Pro",
+                                        fontStyle: "normal",
+                                        fontWeight: "normal",
+                                        fontSize: "14px",
+                                        lineHeight: "18px",
+                                        color: "#4F4F4F",
+                                    }}>Also available in:</p>
+                                    
+                                        {val.language===1?<Link to={`/${catSlug}/${subCatSlug}/product/id=${val.poster_obj_id}`} className="langLink"><div className="languageBtn mx-3">English</div></Link>
+                                        :""}
+                                       { val.language===2?<Link to={`/${catSlug}/${subCatSlug}/product/id=${val.poster_obj_id}`} className="langLink"><div className="languageBtn mx-3">Hindi</div></Link>:""}
+                                       { val.language===3?<Link to={`/${catSlug}/${subCatSlug}/product/id=${val.poster_obj_id}`} className="langLink"><div className="languageBtn mx-3">Bilingual</div></Link>:""}
+                                                                        
+                                    </>
+                                )
+                            })
+                        }
+                            
                        </div>
-                       <div className="d-none d-sm-flex justify-content-center align-items-center" style={{
+                       {
+                           parseInt(product.discountValue)>0 && product.discount_type===1 ?
+                           <div className="d-none d-sm-flex justify-content-center align-items-center" style={{
                             marginTop: "30px",
                             width: "222px",
                             height: "30px",
@@ -777,8 +875,29 @@ const changeDimensionToL = () =>{
                             letterSpacing: "0.2px",
                             color: "#003459",
                        }}>
-                            Limited time offer: 10% Off
-                       </div>
+                            Limited time offer: Flat Rs {product.discountValue} off
+                       </div>:""}
+
+                      {parseInt(product.discountValue)>0 && product.discount_type===2 ? <div className="d-none d-sm-flex justify-content-center align-items-center" style={{
+                            marginTop: "30px",
+                            width: "222px",
+                            height: "30px",
+                            background: "rgba(247, 204, 127, 0.7)",
+                            border: "2px dashed #FEA100",
+                            boxSizing: "border-box",
+                            fontFamily: "Source Sans Pro",
+                            fontStyle: "normal",
+                            fontWeight: "normal",
+                            fontSize: "14px",
+                            lineHeight: "21px",
+                            textAlign: "center",
+                            letterSpacing: "0.2px",
+                            color: "#003459",
+                       }}>
+                            Limited time offer: {product.discountValue}% Off
+                       </div>:""
+                       }
+                      
                     </div>
                     <div className="productInfo " >
                         <p className=" d-none d-sm-block" style={{fontSize: "16px", lineHeight: "19px",fontFamily: "Lato",
@@ -812,7 +931,6 @@ const changeDimensionToL = () =>{
                                         fontStyle: "normal",
                                         fontWeight: "normal",
                                         fontSize: "16px",
-                                        color: "#757575",
                                         lineHeight: "45px",  
                                         color: "#003459",
                                     }}>
@@ -826,7 +944,6 @@ const changeDimensionToL = () =>{
                                         fontStyle: "normal",
                                         fontWeight: "bold",
                                         fontSize: "36px",
-                                        color: "#757575",
                                         lineHeight: "45px",  
                                         color: "#003459",
                                     }}>
@@ -855,8 +972,10 @@ const changeDimensionToL = () =>{
                         color: "white",
                     }}>Add To Cart</button>
                     
-                    <div className="d-block d-sm-none mt-4">
-                        <img src={designerProfile} alt="profile" />
+                    {
+                        author ?
+                        <div className="d-block d-sm-none mt-4">
+                        <img src={author.auth_image ? author.auth_image : designerProfile} alt="profile" />
                         <span style={{
                             fontStyle: "normal",
                             fontWeight: "600",
@@ -864,7 +983,7 @@ const changeDimensionToL = () =>{
                             lineHeight: "18px",
                             color: "#000000",
                             marginLeft: "20px"
-                        }}>By Pankaj Jadhav</span>
+                        }}>By {author.author_name ? author.author_name: "EHS Prints"}</span>
                         <p className="mt-4" style={{
                             fontWeight: "normal",
                             fontSize: "11px",
@@ -872,34 +991,32 @@ const changeDimensionToL = () =>{
                             color: "#000000",
                         }}>Other Designs by the Designer</p>
                         <div className="d-flex justify-content-between">
-                            <div style={{
-                                width: "70px",
-                                height: "70px",
-                                background: "#D2D2D2",
-                            }}></div>
-                            <div style={{
-                                width: "70px",
-                                height: "70px",
-                                background: "#D2D2D2",
-                            }}></div>
-                            <div style={{
-                                width: "70px",
-                                height: "70px",
-                                background: "#D2D2D2",
-                            }}></div>
-                            <div style={{
-                                width: "70px",
-                                height: "70px",
-                                background: "#D2D2D2",
-                            }}></div>
+                       {
+                                authorPosters && authorPosters.length>0 && authorPosters.map((val,i)=>{
+                                    return(
+                                        <img 
+                                        key={i}
+                                        src={val.imgUrl[0] ? val.imgUrl[0]: ""} 
+                                        alt="More_designs"
+                                        style={{
+                                            width: "70px",
+                                            height: "70px",
+                                            background: "#D2D2D2",
+                                        }} />
+                                    )
+                                })
+                            }
                     </div>
-                    </div>
+                    </div>:""
+                    }
                 </div>
             </div>
             
-            <div className="separator"></div>
-            
+            {
+                product.average_rating>0 ?
 
+                <>
+                <div className="separator"></div>
             <div className="row padding-10 ">
                     <div className="col-4  d-none d-sm-block">
                         <h2 style={{
@@ -944,6 +1061,7 @@ const changeDimensionToL = () =>{
                                         }else if(val.rating===5){
                                             star5=val.count*10;
                                         }
+                                        
                                     })
                                 }
                                 <div  className="d-inline-block ">1 star </div><Box width="80%" display="inline-block" ml={1}><LinearProgress color="primary" variant="determinate" value={star1} /></Box>
@@ -1029,6 +1147,9 @@ const changeDimensionToL = () =>{
                     </div>
             </div>
 
+                </>:""
+            }
+           
 
             <div className="separator"></div>
             <div className="padding-10 similarCarouselMargin1">

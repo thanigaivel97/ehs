@@ -33,6 +33,10 @@ import Contact from "./components/contact/Contact";
 import Checkout from "./components/ShoppingCart/Checkout";
 import About from "./components/About/About";
 import Campaigns from "./components/Campaigns/CategoryPage";
+import Author from "./components/Author/ProductsByAuthor";
+import CouponInfo from "./helper/couponInfo";
+import CartContext from "./helper/cartContext";
+import Success from "./components/SuccessPage/SuccessPage";
 
 const  ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -46,16 +50,19 @@ const  ScrollToTop = () => {
 
 export const DesContext = React.createContext({});
 
+
 function App(props) {
   let cartJson = JSON.parse(localStorage.getItem("listCart12345678910")) || {
     cartList: [],
   };
 
   const [cartCount, setCartCount] = useState(cartJson.cartList.length || 0);
+  const [cartCountN, setCartCountN] = useState(0);
   const [subCat, setSubCat] = React.useState("");
   const [searchData, setSearchData] = React.useState([]);
+  const [couponDetails,setCouponDetails] = React.useState({});
 
-
+  //console.log(cartCountN)
   const countSetFun = (bottomDet) => {
     setCartCount(cartCount + 1);
 
@@ -87,6 +94,8 @@ function App(props) {
   return (
     <div className="App">
       <DesContext.Provider value={{ DesDetail: setDescription }}>
+      <CouponInfo.Provider value={[couponDetails,setCouponDetails]}>
+      <CartContext.Provider value={[cartCountN, setCartCountN]}>
         <Router>
         <ScrollToTop />
           <NavBar
@@ -148,8 +157,12 @@ function App(props) {
               <ProductList2 setCartCountFun={countSetFun} subCat={subCat} />
             </Route>
 
-            <Route exact path="/:catSlug/:subCatSlug/:productSlug/id=:productId">
+            <Route exact path="/:catSlug/:subCatSlug/product/id=:productId">
               <PosterProductPage  />
+            </Route>
+
+            <Route exact path="/author/:authorSlug/products">
+              <Author />
             </Route>
 
             <Route exact path="/signages/PPE/ProductName">
@@ -162,7 +175,7 @@ function App(props) {
                 navCount={cartCount}
               />
             </Route>
-
+            
             <Route path="/cart">
               <Cart
                 setCartCount={setCartCount}
@@ -172,9 +185,16 @@ function App(props) {
               />
             </Route>
 
+            
+            
             <Route  path="/checkout">
               <Checkout />
             </Route>
+
+            <Route path="/success">
+              <Success />
+            </Route>
+            
             <Route exact path="/login">
               <Login />
             </Route>
@@ -198,6 +218,8 @@ function App(props) {
 
           <Footer />
         </Router>
+        </CartContext.Provider>
+        </CouponInfo.Provider>
       </DesContext.Provider>
     </div>
   );

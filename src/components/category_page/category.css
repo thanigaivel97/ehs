@@ -124,7 +124,49 @@ justify-content: space-between;
     width: 971px;
     height: 145px;
 }
+.designation{
+    font-family: Source Sans Pro;
+font-style: normal;
+font-weight: 300;
+font-size: 36px;
+line-height: 57px;
+/* identical to box height, or 158% */
+
+letter-spacing: 0.2px;
+
+color: #000000;
+}
+.authorProfile{
+    width: 300px;
+    height: 300px;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+}
+.authorInfo{
+    font-family: Source Sans Pro;
+font-style: normal;
+font-weight: normal;
+font-size: 18px;
+line-height: 40px;
+/* or 222% */
+
+letter-spacing: 0.2px;
+
+color: #757575;
+}
 @media screen and (max-width: 480px){
+    .authorInfo{
+        font-size: 14px;
+line-height: 28px;
+    }
+    .authorProfile{
+        width: 110px;
+height: 110px;
+    }
+    .designation{
+        font-size: 18px;
+line-height: 40px;
+    }
     .bottomBanner50{
         margin-top: 27px;
         margin-bottom: 28px;
@@ -160,7 +202,8 @@ justify-content: space-between;
         padding-right: 5%;
     }
     .catHead{
-        font-size: 26px;
+        font-size: 24px;
+        line-height: 40px;
     }
     .shopByHead{
         font-size: 18px;

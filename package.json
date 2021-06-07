@@ -23,6 +23,7 @@
     "react-elastic-carousel": "^0.11.4",
     "react-hook-form": "^7.3.6",
     "react-icons": "^4.2.0",
+    "react-loading": "^2.0.3",
     "react-redux": "^7.2.2",
     "react-responsive-carousel": "^3.2.10",
     "react-router": "^5.2.0",

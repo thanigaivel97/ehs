@@ -10,6 +10,10 @@ import Pagination from '@material-ui/lab/Pagination';
 import { createMuiTheme, ThemeProvider} from '@material-ui/core/styles';
 import Axios from "axios";
 import {API} from "../../backend";
+import Spinner from "react-loading";
+import Swal from "sweetalert2";
+import withReactContent from 'sweetalert2-react-content';
+const MySwal = withReactContent(Swal);
 
 const theme = createMuiTheme({
   palette: {
@@ -25,6 +29,10 @@ const ProductList2 = (props) => {
   const {catSlug,subCatSlug} = useParams();
   const [shopBySubCategoryCards,setShopBySubCategoryCards] = useState([]);
   const [bestSeller, setBestSeller] = useState([]);
+  const [skip,setSkip] = useState(0)
+  const [limit,setLimit] = useState(16);
+  const [noOfPage,setNoOfPage] = useState(1);
+  const [page,setPage] = useState(1);
   let subCatName = subCatSlug.replace("-"," ");
   let catName = catSlug.replace("-"," ");
 
@@ -32,15 +40,53 @@ const ProductList2 = (props) => {
     {title: "hindi",sub_cat_slug: "hindi"},
     {title: "english",sub_cat_slug: "english"},
     {title: "Bilingual",sub_cat_slug: "bilingual"},
-  ]
+  ];
+
+  const [loading,setLoading] = useState(false);
+  useEffect(()=>{
+    if(loading){
+        MySwal.fire({
+            html: <div className="d-flex justify-content-around  align-items-center py-3">
+                      <div className=" ">
+                          <Spinner type="spinningBubbles" color="#2D9CDB" />  
+                      </div>
+                      <div style={{
+                          fontWeight: "600",
+                          fontSize: "24px",
+                          lineHeight: "30px",
+                          color: "#000000",
+                      }}>Loading... Please wait.</div>
+                  </div>
+            ,
+            showConfirmButton: false,
+            padding: "10px 0px 5px 0px",
+            backdrop: "rgba(0, 0, 0, 0.5)",
+            position: "center",
+            scrollbarPadding: false,
+            allowOutsideClick: false,
+            showClass: {
+              popup: 'animate__animated animate__zoomIn  animate__faster',
+              backdrop: 'animate__animated animate__fadeIn animate__faster'
+            },
+            hideClass: {
+              popup: 'animate__animated animate__zoomOut  animate__faster',
+              backdrop: 'animate__animated animate__fadeOut animate__faster'
+            }
+    })
+    }else{
+        MySwal.close()
+    }
+},[loading]);
 
   useEffect(() => { 
-    
+    setLoading(true);
     if(subCatSlug === "english" || subCatSlug === "hindi" || subCatSlug === "bilingual"){
       setShopBySubCategoryCards(language);
+      setLoading(false);
     }else{
       Axios.get(`${API}category/getCategoryById`,{params: {cat_slug: catSlug}}).then((res)=>{
         setShopBySubCategoryCards(res.data.data[0].sub_category);
+        setLoading(false);
         //console.log(res.data.data[0].sub_category)
     }).catch((err)=> {
         console.log(err);
@@ -53,30 +99,31 @@ const ProductList2 = (props) => {
       if(subCatSlug === "bestsellers"){
         Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: catSlug, bestseller: 1}}).then((res)=>{
           setBestSeller(res.data.data.postersExists);
+          setLoading(false);
         }).catch((err)=> {
           console.log(err);
         });
       }else if(subCatSlug === "english" || subCatSlug === "hindi" || subCatSlug === "bilingual"){
           let lang = (subCatSlug === "english") ? 1 : (subCatSlug === "hindi") ? 2 : 3
           Axios.get(`${API}posters/get_poster_by_language`,{
-            params: {language: lang}
+            params: {language: lang,skip: skip,limit: limit}
           }).then((res)=>{
-           // console.log(res)
+            // console.log(res)
+            setNoOfPage(Math.ceil(res.data.data.count/limit));
             setPosterData(res.data.data.postersExists);
+            setLoading(false);
           }).catch((err)=>{
             console.log(err);
           })
       }else{
-        Axios.get(`${API}posters/getPosterByCatSubCat`,{params: {subCategorySlug: subCatSlug}}).then((res) => {
+        Axios.get(`${API}posters/getPosterByCatSubCat`,{params: {subCategorySlug: subCatSlug,skip: skip,limit: limit}}).then((res) => {
           setPosterData(res.data.data.postersExists);
+          setNoOfPage(Math.ceil(res.data.data.count/limit));
+          setLoading(false);
          // console.log(res);
         }).catch((err) => console.log("ERROR:",err)); 
-      }
-      
-
-      
-    
-  }, [catSlug,subCatSlug]);
+      }  
+  }, [catSlug,subCatSlug,page]);
 
 
   const breakPoints = [
@@ -120,7 +167,8 @@ const ProductList2 = (props) => {
                
                 {(subCatSlug === 'bestsellers')?(
                   <Link to={`/${catSlug}/subcat/bestsellers`} className="posterCatIndividual text-capitalize currentCatPoster"  >Bestsellers</Link>
-                ):(
+                ):(subCatSlug=== "hindi" || subCatSlug ==="english" || subCatSlug==="bilingual")?(<></>):
+                (
                   <Link to={`/${catSlug}/subcat/bestsellers`} className="posterCatIndividual text-capitalize" >Bestsellers</Link>
                 )
                 }
@@ -184,11 +232,22 @@ const ProductList2 = (props) => {
        )}
         </div>
       </div>
-      <ThemeProvider theme={theme}>
+      {noOfPage>1?(
+        <ThemeProvider theme={theme}>
         <div className="d-flex  paginationMargin ">
-          <Pagination count={10} color="primary"  className="mx-auto"  />
+          <Pagination 
+            count={noOfPage} 
+            page={page}
+            onChange={(e,val)=>{
+              setPage(val);
+              setSkip((val-1)*limit);
+              }}
+            color="primary"  
+            className="mx-auto"  />
         </div>
       </ThemeProvider>
+      ):""}
+      
       
      
             <div className="didNotFindBottomBanner mx-auto mb-5 d-none d-sm-block">

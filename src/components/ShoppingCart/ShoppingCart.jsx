@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /*jshint esversion: 9 */
-import React, { useRef,useState,  useEffect } from "react";
+import React, { useRef,useState,  useEffect, useContext } from "react";
 import { Link ,useHistory} from "react-router-dom";
 import { Grid } from "semantic-ui-react";
 import Button from "@material-ui/core/Button";
@@ -24,166 +24,68 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import Swal from "sweetalert2";
 import withReactContent from 'sweetalert2-react-content';
+import CouponInfo from "../../helper/couponInfo";
+import Spinner from "react-loading";
 const MySwal = withReactContent(Swal);
 
-function loadScript(src) {
-  return new Promise((resolve) => {
-    const script = document.createElement("script");
-    script.src = src;
-    script.onload = () => {
-      resolve(true);
-    };
-    script.onerror = () => {
-      resolve(false);
-    };
-    document.body.appendChild(script);
-  });
-}
-
-
-
-const __DEV__ = document.domain === "localhost";
-
 const Tables = (props) => {
+  let totalAmount = 0;
   const [rating,setRating] = useState(3.7);
   const [name, setName] = React.useState("");
   const [addr, setAddr] = React.useState("");
   const [userJson, setUserJson] = React.useState({});
-  const [modalCarousel, setModalCarousel] = useState({
-    one: true,
-    two: false,
-  });
   const [address, setAddress] = React.useState("");
   const [state, setState] = React.useState("");
   const [pincode, setPincode] = React.useState("");
-
-  //Neww
   const [cartItem,setCartItem] = useState([])
   const [wishlist,setWishlist] = useState([]);
-  const [totalPay,setTotalPay] = useState(0);
- 
+  const [totalPay,setTotalPay] = useState(0); 
+  const [coupon,setCoupon] = useState();
+  const [discount,setDiscount] = useState(0.00);
+  const [couponError,setCouponError] = useState('');
+  const [amountAfterCoupon,setAmountAfterCoupon] = useState(totalAmount);
+  const [couponDetails,setCouponDetails] = useContext(CouponInfo);
+  
 
-  function session(r) {
-    localStorage.setItem("userDetails123", JSON.stringify(r));
-  }
-
-  const cartDet = JSON.parse(localStorage.getItem("listCart12345678910")) || {
-    cartList: [],
-  };
-
-  const [numCart, setNumCart] = useState(cartDet.cartList);
-
-  const [num, setNum] = useState(props.navCount || 2);
-
-  const [shipping, setShipping] = React.useState(0);
-
-  function calculate(e) {
-    let temp = 0;
-    e.map((v) => (temp += v.quantity * v.originalPrice));
-    setTotalPay(temp);
-    temp > 1999 ? setShipping(0) : setShipping(220);
-    return temp;
-  }
-
-  function orderPlaced(res) {
-    const orderDet = JSON.parse(localStorage.getItem("orderUser"));
-    Axios.post(createOrder, {
-      userId: userJson._id,
-      name: orderDet.name || "",
-      itemDetails: cartDet.cartList,
-      total: totalPay + shipping,
-      paymentId: res.razorpay_payment_id,
-      orderId: res.razorpay_order_id,
-      status: "Order Confirmed",
-      address: addrWithLogin || orderDet.addr,
-      emailid: userJson?.emailid,
-      phonenumber: userJson?.phonenumber || orderDet.phonenumber,
+  const [loading,setLoading] = useState(false);
+  useEffect(()=>{
+    if(loading){
+        MySwal.fire({
+            html: <div className="d-flex justify-content-around  align-items-center py-3">
+                      <div className=" ">
+                          <Spinner type="spinningBubbles" color="#2D9CDB" />  
+                      </div>
+                      <div style={{
+                          fontWeight: "600",
+                          fontSize: "24px",
+                          lineHeight: "30px",
+                          color: "#000000",
+                      }}>Loading... Please wait.</div>
+                  </div>
+            ,
+            showConfirmButton: false,
+            padding: "10px 0px 5px 0px",
+            backdrop: "rgba(0, 0, 0, 0.5)",
+            position: "center",
+            scrollbarPadding: false,
+            allowOutsideClick: false,
+            showClass: {
+              popup: 'animate__animated animate__zoomIn  animate__faster',
+              backdrop: 'animate__animated animate__fadeIn animate__faster'
+            },
+            hideClass: {
+              popup: 'animate__animated animate__zoomOut  animate__faster',
+              backdrop: 'animate__animated animate__fadeOut animate__faster'
+            }
     })
-      .then((res) => {
-        localStorage.removeItem("listCart12345678910");
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  let addrWithLogin;
-
-  function proceed() {
-    if ($("#oldAdd").is(":checked")) {
-      addrWithLogin = userJson.address;
-    } else if ($("#newAdd").is(":checked")) {
-      if (name && address && state && pincode) {
-        addrWithLogin =
-          "Door:" +
-          name +
-          "  |  Street:" +
-          address +
-          "  |  City:" +
-          state +
-          "  |  Pincode:" +
-          pincode;
-      } else {
-        swal("Oops", "Please provide complete address", "warning");
-      }
-    } else {
-      addrWithLogin = userJson.emailid || userJson.phonenumber;
+    }else{
+        MySwal.close()
     }
-
-    Axios.post(updateUser, {
-      emailid: userJson?.emailid,
-      phonenumber: userJson?.phonenumber,
-      address: addrWithLogin,
-    })
-      .then((res) => {
-        userJson["address"] = addr;
-        session(userJson);
-        $("#modalCls").trigger("click");
-        displayRazorpay();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  function proceed1() {
-    if (name && address && state && pincode) {
-      addrWithLogin =
-        "Door:" +
-        name +
-        "  |  Street:" +
-        address +
-        "  |  City:" +
-        state +
-        "  |  Pincode:" +
-        pincode;
-      Axios.post(updateUser, {
-        emailid: userJson?.emailid,
-        phonenumber: userJson?.phonenumber,
-        address: addr,
-      })
-        .then((res) => {
-          userJson["address"] = addr;
-          session(userJson);
-          $("#modalCls").trigger("click");
-          displayRazorpay();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      swal("Oops", "Please provide complete address", "warning");
-    }
-  }
-
-  function proceedWithoutLogin() {
-    $("#modalCls").trigger("click");
-    displayRazorpay();
-  }
+},[loading]);
 
   function getCartItem(){
    if(authUser){
+   
     Axios.get(`${API}auth/get_user_details_by_id`,{   
       headers: {"x-access-token": localStorage.getItem("ehstoken12345678910")},
       params: {userId: JSON.parse(localStorage.getItem("userDetails123"))._id}
@@ -191,14 +93,17 @@ const Tables = (props) => {
      /// console.log(res);
       setCartItem(res.data.data[0].cart);
       setWishlist(res.data.data[0].wishList);
+     setLoading(false);
      // console.log(res.data.data[0].wishlist);
-     // console.log(res.data.data[0].cart)
+      console.log(res.data.data[0].cart)
     }).catch((err)=>{ 
       console.log(err);
     })
    }else{
+   
      if(!JSON.parse(localStorage.getItem("userDetails123")) && JSON.parse(localStorage.getItem("ehsCart"))){
        setCartItem(JSON.parse(localStorage.getItem("ehsCart"))); 
+        setLoading(false)
      }
    }
   }
@@ -207,6 +112,7 @@ const Tables = (props) => {
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    setLoading(true);
       setUserJson(
         JSON.parse(localStorage.getItem("userDetails123")) || {
           user: {},
@@ -222,99 +128,9 @@ const Tables = (props) => {
         getCartItem();
         
         
+        
      
   }, [totalPay,authUser]);
-
-  useEffect(() => {
-    setTotalPay(calculate(numCart));
-    totalPay > 1999 ? setShipping(0) : setShipping(220);
-  }, []);
-
-  function paymentFun() {
-    $("#modalBut").trigger("click");
-  }
-
-  async function displayRazorpay() {
-    const res = await loadScript(
-      "https://checkout.razorpay.com/v1/checkout.js"
-    );
-
-    if (!res) {
-      swal("Oops", "Razorpay SDK failed to load. Are you online?", "error");
-      return;
-    }
-
-    const data = await fetch("http://35.238.118.121:8080/razorpay", {
-      method: "POST",
-      headers: {
-        Accept: "application/json, text/plain, */*",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ amount: totalPay + shipping }),
-    }).then((t) => t.json());
-
-    const options = {
-      key: __DEV__ ? "rzp_test_FvIgaLsvcCd3vG" : "rzp_test_FvIgaLsvcCd3vG",
-      currency: data.currency,
-      amount: data.amount.toString(),
-      order_id: data.id,
-      name: "Payment",
-      description: "Thank you for Shopping with us. Please visit again",
-      image:
-        "https://ehsprints.com/wp-content/uploads/2018/12/cropped-EHS_-NEW_LOGO-1-300x93.jpg",
-      handler: function (response) {
-        swal({
-          title: "Payment Success",
-          icon: "success",
-        }).then((value) => {
-          orderPlaced(response);
-        });
-      },
-      prefill: {
-        name: userJson?.firstname + userJson?.lastname,
-        email: userJson?.emailid,
-        phone_number: userJson?.phonenumber,
-      },
-    };
-    const paymentObject = new window.Razorpay(options);
-    paymentObject.open();
-  }
-
-  const updateCart = (index, type) => {
-    let temp = [...numCart];
-    let indexedCart = { ...temp[index] };
-
-    if (type) indexedCart.quantity += 1;
-    else if (indexedCart.quantity > 1) indexedCart.quantity -= 1;
-
-    temp[index] = indexedCart;
-    setNumCart(temp);
-
-    let temp2 = [...cartDet.cartList];
-    let indexedCart2 = { ...temp2[index] };
-
-    if (type) indexedCart2.quantity += 1;
-    else if (indexedCart2.quantity > 1) indexedCart2.quantity -= 1;
-
-    temp2[index] = indexedCart2;
-
-    let cartLocal = { cartList: [...temp2] };
-    localStorage.setItem("listCart12345678910", JSON.stringify(cartLocal));
-
-    calculate(cartLocal.cartList);
-  };
-
-  const remove = (index) => {
-    let result = numCart.filter((v, i) => i !== index);
-    setNumCart(result);
-
-    let cartLocal = { cartList: [...result] };
-    localStorage.setItem("listCart12345678910", JSON.stringify(cartLocal));
-    setNum(num - 1);
-    props.setCartCount(props.navCount - 1);
-    setTotalPay(calculate(cartLocal.cartList));
-  };
-
 
   const breakPoints = [
     { width: 1, itemsToShow: 2, itemsToScroll: 2 },
@@ -498,9 +314,51 @@ const Tables = (props) => {
       }
   }
 
+  const applyCoupon = () => {
+    console.log(coupon)
+    Axios.get(`${API}coupons/applyCoupon`,{params: {
+      couponCode: coupon
+    }}).then((res)=>{
+      console.log(res)
+      if(res.data.data.length>0){
+        setCouponError("")
+        let disType= res.data.data[0].coupon_discount_type;
+        let disValue= parseInt(res.data.data[0].discountValue);
+        let dis1,price;
+        if(disType===1){
+          setDiscount(disValue);
+          dis1=disValue;
+          price=totalAmount-disValue;
+          setAmountAfterCoupon(totalAmount-disValue);
+
+        }else{
+          let dis = parseFloat((totalAmount*disValue)/100);
+          setDiscount(dis);
+          setAmountAfterCoupon(totalAmount-dis);
+          dis1=dis;
+          price=totalAmount-dis;
+        }
+        setCouponDetails(couponDetails=>({
+          ...couponDetails,
+          discountType: disType,
+          discountValue: disValue,
+          couponCode: coupon,
+          discount: dis1,
+          price: price,
+        }))
+      }else{
+        setCouponError("Invalid Coupon Code!!!")
+      }
+    
+
+    }).catch((err)=>{
+      console.log(err)
+    })
+  }
+
   const wishlistCarousel = useRef();
 
-  let totalAmount = 0;
+ 
   
   return (
     <div>
@@ -558,9 +416,20 @@ const Tables = (props) => {
                   <tbody>
                     {cartItem.map((v, i) => {
                       //console.log(v);
-                     // setTotalPay(totalPay => totalPay + v.total);
-                    // cartItem.reduce((totalPay, { v.total }) => totalPay + v.total, 0)
-                      totalAmount=totalAmount+ parseInt(v.total);
+                        // setTotalPay(totalPay => totalPay + v.total);
+                        // cartItem.reduce((totalPay, { v.total }) => totalPay + v.total, 0)
+                        let indiTotal = 0;
+                        if(v.poster_details.discountValue>0){
+                        if(v.poster_details.discount_type===1){
+                          indiTotal=parseInt(v.total)-v.poster_details.discountValue;
+                        }else{
+                            let dis= (parseInt(v.total)*(parseInt(v.poster_details.discountValue)))/100;
+                            indiTotal=parseInt(v.total)-dis;
+                        }
+                    }else{
+                      indiTotal=v.total;
+                    }
+                      totalAmount=parseInt(totalAmount)+ parseInt(indiTotal);
                     
                      return(
                       <tr key={i} className=" p-0" style={{borderTop: "1px solid #D2D2D2"}} >
@@ -626,7 +495,7 @@ const Tables = (props) => {
                           </ButtonGroup>
                                 </div>
                                 <p className="font-weight-bold d-inline-block d-sm-none p-0 m-0 float-right" style={{color: "#003459"}}>
-                                  ₹ {v.total}
+                                  ₹ {indiTotal}
                                 </p>
                                 <p className="tabledata p-0 m-0 d-none d-sm-block">
                                   Price : <span style={{fontWeight: "600"}}>₹ {v.materialDimension.price}</span>
@@ -682,7 +551,7 @@ const Tables = (props) => {
                           </ButtonGroup>
                         </td>
                         <td className="d-none d-sm-block  font-weight-bold border-none">
-                            ₹ {v.total}
+                            ₹ {indiTotal}
                         </td>
                       </tr>)
                     })}
@@ -736,7 +605,7 @@ const Tables = (props) => {
                     </tr>
                     <tr height="30px">
                       <td className="shi left">Discount</td>
-                      <td className="shi right">₹ 0.00</td>
+                      <td className="shi right">₹ {discount}</td>
                     </tr>
 
                     <tr
@@ -747,19 +616,27 @@ const Tables = (props) => {
                       }}
                     >
                       <td className="pri left" style={{fontSize: "18px", lineHeight: "23px"}}>Total Price</td>
-                      <td className="pri right" style={{fontSize: "18px", lineHeight: "23px"}}>₹ {totalAmount}</td>
+                      <td className="pri right" style={{fontSize: "18px", lineHeight: "23px"}}>₹ {coupon? amountAfterCoupon: totalAmount}</td>
                     </tr>
                   </tbody>
                 </table>
                 <p className="text-left promocode mt-3">Use a Promo Code</p>
-                <input type="text" width="100%" className="position-relative" style={{width: "100%",height: "40px",border: "2px solid #757575",borderRadius: "5px"}} />
-                <a
-                  href="/#"
-                  className="apply "
-                  
-                >
-                  Apply
-                </a>
+                  <input 
+                    type="text" 
+                    width="100%" 
+                    className="position-relative" 
+                    name="couponCode"
+                    style={{width: "100%",height: "40px",border: "2px solid #757575",borderRadius: "5px"}}
+                    onChange={(e)=>setCoupon(e.target.value)}
+                     />
+                  <span
+                    role="button"
+                    className="apply"
+                    onClick={applyCoupon}
+                  >
+                    Apply
+                  </span>
+                <span className="text-danger" style={{fontSize: "14px"}}>{couponError}</span>
                 <Link to={authUser? "/checkout": "/login"}  style={{textDecorationLine: "none"}}>
                 <Button
                   className="text-white"

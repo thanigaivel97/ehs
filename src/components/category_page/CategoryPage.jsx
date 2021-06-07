@@ -19,7 +19,10 @@ import FloorImg from "../../images/FloorImg.png";
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounded';
 import Carousel,  { consts } from "react-elastic-carousel";
-
+import Spinner from "react-loading";
+import Swal from "sweetalert2";
+import withReactContent from 'sweetalert2-react-content';
+const MySwal = withReactContent(Swal);
 
 const ncard = (val,i) => {
   return (
@@ -52,10 +55,47 @@ const CategoryPage = (props) => {
   const [categoryId,setCategoryId] = useState("");
   let catName = catSlug.replace("-"," ");
 
+  const [loading,setLoading] = useState(false);
+  useEffect(()=>{
+    if(loading){
+        MySwal.fire({
+            html: <div className="d-flex justify-content-around  align-items-center py-3">
+                      <div className=" ">
+                          <Spinner type="spinningBubbles" color="#2D9CDB" />  
+                      </div>
+                      <div style={{
+                          fontWeight: "600",
+                          fontSize: "24px",
+                          lineHeight: "30px",
+                          color: "#000000",
+                      }}>Loading... Please wait.</div>
+                  </div>
+            ,
+            showConfirmButton: false,
+            padding: "10px 0px 5px 0px",
+            backdrop: "rgba(0, 0, 0, 0.5)",
+            position: "center",
+            scrollbarPadding: false,
+            allowOutsideClick: false,
+            showClass: {
+              popup: 'animate__animated animate__zoomIn  animate__faster',
+              backdrop: 'animate__animated animate__fadeIn animate__faster'
+            },
+            hideClass: {
+              popup: 'animate__animated animate__zoomOut  animate__faster',
+              backdrop: 'animate__animated animate__fadeOut animate__faster'
+            }
+    })
+    }else{
+        MySwal.close()
+    }
+},[loading]);
+
   useEffect(() => {
-     
+      setLoading(true);
          Axios.get(`${API}category/getCategoryById`,{params: {cat_slug: catSlug}}).then((res)=>{
           setShopBySubCategoryCards(res.data.data[0].sub_category);
+          setLoading(false);
         }).catch((err)=> {
             console.log(err);
         });
@@ -64,6 +104,7 @@ const CategoryPage = (props) => {
         Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: catSlug, bestseller: 1}}).then((res)=>{
           setBestSeller(res.data.data.postersExists);
          //console.log("bestseller",res);
+         setLoading(false);
         }).catch((err)=> {
           console.log(err);
         });

@@ -714,8 +714,8 @@ body .ui.cards > .card {
   }
   .apply{
     position: absolute;
-    top: 59%;
-    right: -170px;
+    top: 65.5%;
+    right: 60px;
     
   }
 }
@@ -767,7 +767,7 @@ body .ui.cards > .card {
 
 .personalInfo{
   width: 540px!important;  
-  height: 712px;  
+  
   background: #FFFFFF;
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
@@ -813,6 +813,16 @@ color: #000000;
   color: #000000;
   text-indent: 12px;
 }
+.inputUpdatefield{
+  width: 70%;
+  height: 40px;
+  border: 1px solid #D2D2D2;
+  box-sizing: border-box;
+  border-radius: 5px;
+  float: right;
+  color: #000000;
+  text-indent: 12px;
+}
 .passForgot{
   font-family: Source Sans Pro;
   font-style: normal;
@@ -836,6 +846,7 @@ color: #000000;
   line-height: 40px;
   text-align: center;
   text-transform: uppercase;
+  
 }
 .addressBox{
   width: 530px;
@@ -869,6 +880,10 @@ color: #000000;
   width: 140px;
   height: 140px;
 }
+.myOrderProductImgPopup{
+  width: 207px;
+  height: 207px;
+}
 .myOrderProductName{
   font-family: "Source Sans Pro";
   font-style: normal;
@@ -889,10 +904,58 @@ color: #000000;
   margin: 0;
 }
 .productDetails{
-  width: 390px;
+  width: 490px;
+}
+.productDetailsPopup{
+  width: 580px;
+}
+.prductDetail{
+  width: 250px;
+}
+.successText{
+  font-family: Source Sans Pro;
+font-style: normal;
+font-weight: 600;
+font-size: 39px;
+line-height: 57px;
+/* or 146% */
+
+display: flex;
+align-items: center;
+text-align: center;
+letter-spacing: 0.2px;
+text-align: center;
+color: #003459;
+}
+.successPageBtn{
+    width: 246px;
+  height: 40px;
+  border: 2px solid #F2994A;
+  box-sizing: border-box;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 23px;
+  text-align: center;
+}
+.successPageBtnBox{
+  width: 750px;
 }
 @media screen and (max-width: 480px){
-  .productDetails{
+  .successText{
+    font-size: 34px;
+    line-height: 39px;
+  }
+  .successPageBtnBox{
+    width: 350px;
+  }
+  .swal2-content{
+    padding: 0 5px!important;
+  }
+  .productDetails, .productDetailsPopup{
     width: 320px;
   }
   .myOrderProductDetail{
@@ -903,7 +966,7 @@ color: #000000;
     font-size: 16px;
     line-height: 16px;
   }
-  .myOrderProductImg{
+  .myOrderProductImg, .myOrderProductImgPopup{
     width: 100px;
     height: 100px;
   }
@@ -917,7 +980,7 @@ color: #000000;
   }
   .personalInfo{
     width: 350px!important;
-    height: 621px;
+  
     padding: 20px!important;
   }
   .perHead{
@@ -929,6 +992,9 @@ color: #000000;
     line-height: 15px;
   }
   #NEWPASSWORD, #CPASSWORD{
+    width: 55%;
+  }
+  .inputUpdatefieldPass{
     width: 55%;
   }
   .addressBox{
@@ -1194,7 +1260,23 @@ color: #000000;
   width: 600px;
   height: 100px;
 }
+.trackDetails{
+  font-family: Source Sans Pro;
+font-style: normal;
+font-weight: normal;
+font-size: 14px;
+line-height: 18px;
+color: #757575;
+text-align: left;
+}
 @media screen and (max-width: 480px) {
+  .trackDetails{
+    font-size: 12px;
+    line-height: 15px;
+  }
+  .steplabel{
+    font-size: 12px;
+  }
   .stepper{
     width: 310px;
   }
@@ -1754,6 +1836,17 @@ height: 25px;
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+}
+.langLink:hover{
+  text-decoration-line: none;
+}
+.addAddressIcon{
+  border: 1px solid #D2D2D2;
+}
+.addAddressIcon:hover{
+  border-color: #2D9CDB;
+  color: #2D9CDB!important;
   cursor: pointer;
 }
 @media screen and (max-width: 480px){
