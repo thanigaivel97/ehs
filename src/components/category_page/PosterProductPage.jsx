@@ -518,8 +518,8 @@ const changeDimensionToL = () =>{
         { width: 780, itemsToShow: 4 }
       ];
 
-      let name = product.name.split("|");
-      let desc = product.description.split("|");
+      let name = product.name ?  product.name.split("|"): "";
+      let desc = product.description ? product.description.split("|"): "";
       const likecarousel = useRef(null);
       const similarCarousel = useRef(null);
       const carousel = useRef(null);
@@ -905,11 +905,11 @@ const changeDimensionToL = () =>{
                         fontWeight: "600",
                         color: "#000000",}}>Product Details</p>
                         {
-                            desc.map((val,i)=> {
-                                return(
-                                    <li key={i}>{val}</li>
-                                )
-                            })
+                           desc?  desc.map((val,i)=> {
+                            return(
+                                <li key={i}>{val}</li>
+                            )
+                        }): ""
                         }
                     </div>
                     <div className=" pt-4 pt-sm-0   catTagSKU ">

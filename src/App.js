@@ -96,7 +96,7 @@ function App(props) {
       <DesContext.Provider value={{ DesDetail: setDescription }}>
       <CouponInfo.Provider value={[couponDetails,setCouponDetails]}>
       <CartContext.Provider value={[cartCountN, setCartCountN]}>
-        <Router>
+        <Router >
         <ScrollToTop />
           <NavBar
           />
