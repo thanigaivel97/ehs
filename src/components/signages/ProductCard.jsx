@@ -237,9 +237,9 @@ const ProductCard = (props) =>{
 
 
     // console.log("propp",props.product);
-     const [authUser, setAuthUser] = React.useState("");
-    const [material,setMaterial] = useState("125 Micron (non-tearable)");
-    const [dimension,setDimension] = useState("16” x 24”");
+    const [authUser, setAuthUser] = React.useState("");
+    const [material,setMaterial] = useState("");
+    const [dimension,setDimension] = useState("");
     const [quantity, setQuantity] = useState(1);
     const [render,setRender] = useState(false);
     const [amount,setAmount] = useState();
@@ -254,6 +254,7 @@ const ProductCard = (props) =>{
     let dim="";
     let finalMatId="";
    useEffect(()=>{
+
     if(props.product.materialDimension){
         setMatDim(props.product.materialDimension);
         filterMatDim(props.product.materialDimension);
@@ -265,7 +266,7 @@ const ProductCard = (props) =>{
     );
        // calculateAmount();
        
-   },[material,dimension]);
+   },[material,dimension,props.product]);
 
    const filterMatDim = (md)=>{
       // console.log(md)

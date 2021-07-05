@@ -127,7 +127,7 @@ const ProductList2 = (props) => {
 
 
   const breakPoints = [
-    {width: 1, itemsToShow: 2,itemsToScroll: 2},
+    {width: 1, itemsToShow: 1,itemsToScroll: 1},
     {width: 780, itemsToShow: 4,itemsToScroll: 4}
   ]
 

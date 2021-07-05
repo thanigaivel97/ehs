@@ -134,8 +134,8 @@ const PosterProductPage = (props) => {
     const [ratingTotal, setRatingTotal] = useState([]);
     const [totalNoOfRating, setTotalNoOfRating] = useState(0);
     const [quantity, setQuantity] = useState(1);
-    const [material,setMaterial] = useState("125 Micron (non-tearable)");
-    const [dim,setDim] = useState("16” x 24”");
+    const [material,setMaterial] = useState("");
+    const [dim,setDim] = useState("");
     const [finalMatDim,setFinalMatDim] = useState("");
     const [dimension,setDimension] = useState([24,36]);
     const [matDim,setMatDim] = useState([]);
