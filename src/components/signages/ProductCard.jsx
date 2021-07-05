@@ -244,6 +244,9 @@ const ProductCard = (props) =>{
     const [render,setRender] = useState(false);
     const [amount,setAmount] = useState();
     const [finalMatDim,setFinalMatDim] = useState("");
+    const [matDim,setMatDim] = useState([]);
+    const [matNew,setMatNew] = useState([]);
+    const [dimNew,setDimNew] = useState([]);
 
     const [state,dispatch] = useReducer(reducer,1);
     let price=0;
@@ -251,13 +254,39 @@ const ProductCard = (props) =>{
     let dim="";
     let finalMatId="";
    useEffect(()=>{
+    if(props.product.materialDimension){
+        setMatDim(props.product.materialDimension);
+        filterMatDim(props.product.materialDimension);
+    }
     if (JSON.parse(localStorage.getItem("userDetails123")))
     setAuthUser(
       JSON.parse(localStorage.getItem("userDetails123")).emailid ||
         JSON.parse(localStorage.getItem("userDetails123")).phonenumber
     );
        // calculateAmount();
+       
    },[material,dimension]);
+
+   const filterMatDim = (md)=>{
+      // console.log(md)
+    matNew.length=0;
+    dimNew.length=0;
+    const s = md ? md.forEach(val => {
+        const foundM= matNew ? matNew.find(title => val.material_title===title.material_title ): "";
+        const foundD= dimNew ? dimNew.find(title => val.dimension_title===title.dimension_title ): "";
+        // console.log(foundM);
+        if(!foundM){
+            matNew.push({material_title: val.material_title,material_img: ""});
+        }
+        if(!foundD){
+            dimNew.push({dimension_title: val.dimension_title,dimension_img: ""});
+        }
+        
+    }):"";
+
+    // console.log(matNew);
+    // console.log(dimNew);
+}
 
 //    const calculateAmount = () => {
 //     let flag = true;
@@ -273,6 +302,44 @@ const ProductCard = (props) =>{
 //     if(flag)
 //     setAmount(NaN);
 // }
+
+const MaterialSelectNew = (e)=> {
+    setMaterial(e.target.innerText);
+    // const m = document.getElementsByClassName("mat");
+    // for(let i=0;i<m.length;i++){
+    //     // console.log(m[i])
+    //     m[i].classList.remove("selected")
+    // }
+    mat=e.target.innerText;
+    e.target.classList.add("popupSelect");
+    setTimeout(()=>{
+        MySwal.clickConfirm();
+        selectDimensionPopup(mat);
+    },500);
+}
+const dimensionSelectNew = (e,mat) => {
+    e.target.classList.add('popupSelect');
+    dim = e.target.innerText;
+    setDimension(e.target.innerText);
+
+    let flag = true;
+        props.product && props.product.materialDimension.map((val,i)=> {
+            if(dim === val.dimension_title && mat === val.material_title){
+                setAmount(val.price * quantity);
+                setFinalMatDim(val._id);
+                finalMatId=val._id
+                price=val.price;
+                flag= false;
+            }
+        });
+        if(flag)
+        setAmount(NaN);
+    
+        setTimeout(()=>{
+            MySwal.clickConfirm();
+            selectQuantityPopup(mat,dim);
+        },500);
+}
 
    const MaterialSelect =  (e) => {           
     e.target.classList.add('popupSelect');
@@ -296,6 +363,8 @@ const ProductCard = (props) =>{
 
    
     }
+
+
     const dimensionSelect = (e,mat) => {
         e.target.classList.add('popupSelect');
        
@@ -349,7 +418,7 @@ const ProductCard = (props) =>{
                     <p className=" mt-2 popupTitle">{props.name}</p>
                     <div className=" mt-2  ">
                         <p className="popupHead  mb-3">Select Material</p>
-                        <div className="d-flex justify-content-between ">
+                        {/* <div className="d-flex justify-content-between ">
                             <div className="popupMaterialDimension selected z-index-2" id="m1" role="button"   onClick={(e)=>MaterialSelect(e)} >
                                 <img src={Material2} className="popupMaterialImg1 " alt="material" ></img>
                                 <p className="text-center popupMaterialText mt-sm-3 mt-2">125 Micron (non-tearable)</p>
@@ -362,7 +431,18 @@ const ProductCard = (props) =>{
                                 <img src={Material1} className="popupMaterialImg2 mt-2" alt="material"></img>
                                 <p className="text-center popupMaterialText mt-sm-3 mt-2">Self-adhesive 3mm sunboard (premium)</p>
                             </div>
-                        </div>
+                        </div> */}
+                        <div className="d-flex justify-content-between ">
+                        {
+                            matNew ? matNew.map((val,i)=>{
+                                return(
+                                    <div className="popupMaterialDimension mat" role="button"    onClick={(e)=>MaterialSelectNew(e)} >
+                                        <img src={val.material_img? val.material_img: ""} className="popupMaterialImg2 mt-2" alt="material"></img>
+                                        <p className="text-center popupMaterialText mt-sm-3 mt-2">{val.material_title? val.material_title: ""}</p>
+                                    </div>
+                                )
+                            }): ""
+                        }</div>
                     </div>
                     <div className="d-flex justify-content-center mt-3">
                         <div className="m-1" style={{width: "10px", height: "10px", background: "#003459", borderRadius: "50%"}}></div>
@@ -398,7 +478,7 @@ const ProductCard = (props) =>{
                     <div className=" mt-2 ">
                         <p className="popupHead  mb-3">Select Dimension</p>
                         <div className="d-flex justify-content-between ">
-                            <div className="popupMaterialDimension selected" id="m1" role="button"  onClick={(e)=>dimensionSelect(e,mat)}  >
+                            {/* <div className="popupMaterialDimension selected" id="m1" role="button"  onClick={(e)=>dimensionSelect(e,mat)}  >
                                 <img src={dimension1} className="popupDimensionImg1 mt-3 mb-sm-3 " alt="material" ></img>
                                 <p className="text-center popupMaterialText mt-sm-4 mt-4">16in by 24in</p>
                             </div>
@@ -409,7 +489,17 @@ const ProductCard = (props) =>{
                             <div className="popupMaterialDimension" id="m3" role="button"   onClick={(e)=>dimensionSelect(e,mat)} >
                                 <img src={dimension1} className="popupDimensionImg3 mt-2" alt="material"></img>
                                 <p className="text-center popupMaterialText mt-sm-3 mt-1">24in by 36in</p>
-                            </div>
+                            </div> */}
+                            {
+                                dimNew ? dimNew.map((val,i)=> {
+                                    return(
+                                        <div className="popupMaterialDimension " id="m2" role="button"  onClick={(e)=>dimensionSelectNew(e,mat)}  >
+                                            <img src={val.dimension_img? val.dimension_img: ""} className="popupDimensionImg2 mt-3 mb-1 mb-sm-0" alt="dim"></img>
+                                            <p className="text-center popupMaterialText mt-sm-4 mt-2">{val.dimension_title? val.dimension_title: ""}</p>
+                                        </div>
+                                    )
+                                }): ""
+                            }
                         </div>
                     </div>
                     <div className="d-flex justify-content-center mt-3">

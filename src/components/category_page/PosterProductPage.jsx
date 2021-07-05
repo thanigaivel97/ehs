@@ -28,6 +28,7 @@ import Swal from "sweetalert2";
 import withReactContent from 'sweetalert2-react-content';
 import Spinner from "react-loading";
 import CartContext from "../../helper/cartContext";
+import { ControlCamera } from "@material-ui/icons";
 const MySwal = withReactContent(Swal);
 
 const theme = createMuiTheme({
@@ -137,6 +138,9 @@ const PosterProductPage = (props) => {
     const [dim,setDim] = useState("16” x 24”");
     const [finalMatDim,setFinalMatDim] = useState("");
     const [dimension,setDimension] = useState([24,36]);
+    const [matDim,setMatDim] = useState([]);
+    const [matNew,setMatNew] = useState([]);
+    const [dimNew,setDimNew] = useState([]);
     const [product,setProduct] = useState({
         imgUrl: [],name: "",description: "",category: [{title: ""}], subCategory: [{title: ""}],tags: [],sku: "",materialDimension: []
     });
@@ -198,7 +202,9 @@ const PosterProductPage = (props) => {
             setRating(res.data.data.posterDetails[0].average_rating);
             setRatingTotal(res.data.data.ratingTotalWise);
             setTotalNoOfRating(res.data.data.totalNoOfRating);
+            setMatDim(res.data.data.posterDetails[0].materialDimension);
             //console.log(res.data.data.posterDetails[0])
+            filterMatDim(res.data.data.posterDetails[0].materialDimension);
             setYouMayLike(res.data.data.youMayAlsoLike);
             setSimilarItems(res.data.data.realtedPosters);
             setLoading(false);
@@ -214,6 +220,25 @@ const PosterProductPage = (props) => {
         );
        // console.log(authUser,localStorage.getItem("userDetails123"),product);
     },[productId]);
+
+    const filterMatDim = (md)=>{
+        matNew.length=0;
+        dimNew.length=0;
+        const s = md ? md.forEach(val => {
+            const foundM= matNew ? matNew.find(title => val.material_title===title.material_title ): "";
+            const foundD= dimNew ? dimNew.find(title => val.dimension_title===title.dimension_title ): "";
+            // console.log(foundM);
+            if(!foundM){
+                matNew.push({material_title: val.material_title,material_img: ""});
+            }
+            if(!foundD){
+                dimNew.push({dimension_title: val.dimension_title,dimension_img: ""});
+            }
+        }):"";
+
+        // console.log(matNew);
+        // console.log(dimNew);
+    }
 
     useEffect(()=>{
         setLoading(true);
@@ -450,54 +475,76 @@ const PosterProductPage = (props) => {
         }
     }
 
-    const changeMaterialTo1 = () =>{
-        setMaterial("125 Micron (non-tearable)")
-         $("#m1").addClass("selected");
-         $("#m2").removeClass("selected");
-         $("#m3").removeClass("selected");
-         calculateAmount();
-    };
-const changeMaterialTo2 = () =>{
-    setMaterial("Self-adhesive (premium)");
-    $("#m1").removeClass("selected");
-    $("#m2").addClass("selected");
-    $("#m3").removeClass("selected");
+// const changeMaterialTo1 = () =>{
+//     setMaterial(matNew? matNew[0].material_title: "")
+//         $("#m1").addClass("selected");
+//         $("#m2").removeClass("selected");
+//         $("#m3").removeClass("selected");
+//         calculateAmount();
+// };
+// const changeMaterialTo2 = () =>{
+//     setMaterial(matNew? matNew[1].material_title: "");
+//     $("#m1").removeClass("selected");
+//     $("#m2").addClass("selected");
+//     $("#m3").removeClass("selected");
+//     calculateAmount();
+// };
+// const changeMaterialTo3 = () =>{
+//     setMaterial(matNew? matNew[2].material_title: "");
+//     $("#m1").removeClass("selected");
+//     $("#m2").removeClass("selected");
+//     $("#m3").addClass("selected");
+//     calculateAmount();
+// };
+// const changeDimensionToS = () =>{
+//     const d = [16,24];
+//     setDimension(dimNew? dimNew[0].dimension_title: "");
+//     setDim(dimNew? dimNew[0].dimension_title: "");
+//     $("#d1").addClass("selected");
+//     $("#d2").removeClass("selected");
+//     $("#d3").removeClass("selected");
+//     calculateAmount();
+// };
+// const changeDimensionToM = () =>{
+//     const d = [19,27];
+//     setDimension(dimNew? dimNew[1].dimension_title: "");
+//     setDim(dimNew? dimNew[1].dimension_title: "");
+//     $("#d1").removeClass("selected");
+//     $("#d2").addClass("selected");
+//     $("#d3").removeClass("selected");
+//     calculateAmount();
+// };
+// const changeDimensionToL = () =>{
+//     const d = [24,36];
+//     setDimension(dimNew? dimNew[2].dimension_title: "");
+//     setDim(dimNew? dimNew[2].dimension_title: "");
+//     $("#d1").removeClass("selected");
+//     $("#d2").removeClass("selected");
+//     $("#d3").addClass("selected");
+//     calculateAmount();
+// };
+
+const changeMaterial = (e)=> {
+    setMaterial(e.target.innerText);
+    const m = document.getElementsByClassName("mat");
+    for(let i=0;i<m.length;i++){
+        // console.log(m[i])
+        m[i].classList.remove("selected")
+    }
+    e.target.classList.add("selected");
     calculateAmount();
-};
-const changeMaterialTo3 = () =>{
-    setMaterial("Self-adhesive 3mm sunboard (premium)");
-    $("#m1").removeClass("selected");
-    $("#m2").removeClass("selected");
-    $("#m3").addClass("selected");
+}
+
+const changeDimension = (e) => {
+    setDim(e.target.innerText);
+    const m = document.getElementsByClassName("dim");
+    for(let i=0;i<m.length;i++){
+        // console.log(m[i])
+        m[i].classList.remove("selected")
+    }
+    e.target.classList.add("selected");
     calculateAmount();
-};
-const changeDimensionToS = () =>{
-    const d = [16,24];
-    setDimension(d);
-    setDim("16” x 24”");
-    $("#d1").addClass("selected");
-    $("#d2").removeClass("selected");
-    $("#d3").removeClass("selected");
-    calculateAmount();
-};
-const changeDimensionToM = () =>{
-    const d = [19,27];
-    setDimension(d);
-    setDim("19” x 27”");
-    $("#d1").removeClass("selected");
-    $("#d2").addClass("selected");
-    $("#d3").removeClass("selected");
-    calculateAmount();
-};
-const changeDimensionToL = () =>{
-    const d = [24,36];
-    setDimension(d);
-    setDim("24” x 36”");
-    $("#d1").removeClass("selected");
-    $("#d2").removeClass("selected");
-    $("#d3").addClass("selected");
-    calculateAmount();
-};
+}
 
 
     const increaseQty = () => {
@@ -718,19 +765,33 @@ const changeDimensionToL = () =>{
                     
                     <div className="mb-4 mt-5 mt-sm-0 d-flex flex-sm-column flex-row justify-content-between ">
                         <p className="mt-sm-0 mb-2  align-self-sm-start align-self-center selectHead  ">Select Material</p>
-                        <div className="d-flex justify-content-between mr-0  ">
+                        {/* product.materialDimension ? (
+                            <div className="d-flex justify-content-between mr-0  ">
                             <div className="posterMaterialDimension selected" id="m1" role="button" onClick={changeMaterialTo1} >
-                                <img src={Material2} className="materialImg1Dimension " alt="material" ></img>
-                                <p className="text-center materialTextDimension">125 Micron (non-tearable)</p>
+                                <img src={matNew[0].material_img? matNew[0].material_img: ""} className="materialImg1Dimension " alt="material" ></img>
+                                <p className="text-center materialTextDimension">{matNew ? matNew[0].material_title: "No Material"}</p>
                             </div>
                             <div className="posterMaterialDimension " id="m2" role="button" onClick={changeMaterialTo2} >
-                                <img src={Material1} className="materialImg2Dimension  " alt="material"></img>
-                                <p className="text-center materialTextDimension">Self-adhesive (premium)</p>
+                                <img src={matNew[1].material_img? matNew[1].material_img: ""} className="materialImg2Dimension  " alt="material"></img>
+                                <p className="text-center materialTextDimension">{matNew[1].material_title ? matNew[1].material_title: "No Material"}</p>
                             </div>
                             <div className="posterMaterialDimension" id="m3" role="button" onClick={changeMaterialTo3} >
-                                <img src={Material1} className="materialImg2Dimension" alt="material"></img>
-                                <p className="text-center materialTextDimension ">Self-adhesive 3mm sunboard (premium)</p>
+                                <img src={matNew[2].material_img? matNew[2].material_img: ""} className="materialImg2Dimension" alt="material"></img>
+                                <p className="text-center materialTextDimension ">{matNew[2].material_title ? matNew[2].material_title: "No Material"}</p>
                             </div>
+                        </div>
+                        ) : "" */}
+                        <div className="d-flex justify-content-between mr-0  ">
+                        {
+                            matNew ? matNew.map((val,i)=>{
+                                return(
+                                    <div className="posterMaterialDimension mat"  role="button" onClick={(e)=>changeMaterial(e)} >
+                                        <img src={val.material_img? val.material_img: ""} className="materialImg2Dimension  " alt="material"></img>
+                                        <p className="text-center materialTextDimension">{ val.material_title ? val.material_title: "No Material"}</p>
+                                    </div>
+                                )
+                            }): ""
+                        }
                         </div>
                     </div>
                     <div className=" d-flex flex-sm-column flex-row justify-content-between" style={{
@@ -739,19 +800,30 @@ const changeDimensionToL = () =>{
                     }}>
                         <p className=" align-self-sm-start align-self-center selectHead">Select Dimensions</p>
                         <div className="d-flex justify-content-between">
-                            <div className=" ml-sm-0 posterMaterialDimension selected" id="d1" role="button" onClick={changeDimensionToS} >
-                                <img src={dimension1} className="posterDimension1 mt-2" alt="dimension" ></img>
-                                <p className="text-center posterDimensionText ">16” x 24”</p>
+                            {/* <div className=" ml-sm-0 posterMaterialDimension selected" id="d1" role="button" onClick={changeDimensionToS} >
+                                <img src={dimNew? dimNew[0].dimension_img: ""} className="posterDimension1 mt-2" alt="dimension" ></img>
+                                <p className="text-center posterDimensionText ">{dimNew? dimNew[0].dimension_title: "No Dimension"}</p>
                             </div>
                             <div className=" posterMaterialDimension" role="button" id="d2" onClick={changeDimensionToM} >
-                                <img src={dimension1} className="posterDimension2 mt-2 " alt="dimension"></img>
-                                <p className="text-center posterDimensionText  ">19” x 27”</p>
+                                <img src={dimNew? dimNew[1].dimension_img: ""} className="posterDimension2 mt-2 " alt="dimension"></img>
+                                <p className="text-center posterDimensionText  ">{dimNew? dimNew[1].dimension_title: "No Dimension"}</p>
                             </div>
                             <div className=" posterMaterialDimension" role="button" id="d3" onClick={changeDimensionToL} >
-                                <img src={dimension1} className="posterDimension3 mt-2 " alt="dimension"></img>
-                                <p className="text-center posterDimensionText">24” x 36”</p>
-                            </div>
+                                <img src={dimNew? dimNew[2].dimension_img: ""} className="posterDimension3 mt-2 " alt="dimension"></img>
+                                <p className="text-center posterDimensionText">{dimNew? dimNew[2].dimension_title: "No Dimension"}</p>
+                            </div> */}
+                            {
+                                dimNew ? dimNew.map((val,i)=>{
+                                    return(
+                                        <div className="posterMaterialDimension dim" role="button" id="d2" onClick={(e)=>changeDimension(e)} >
+                                            <img src={val.dimension_img? val.dimension_img: ""} className="posterDimension2 mt-2 " alt="dimension"></img>
+                                            <p className="text-center posterDimensionText  ">{val.dimension_title ? val.dimension_title: "No Dimension"}</p>
+                                        </div>
+                                    )
+                                }): ""
+                            }
                         </div>
+
                     </div>
                     <div className="d-flex flex-row flex-sm-column  align-items-sm-start align-items-center ">
                     <p className=" mr-5  mr-sm-0 d-inline-block d-sm-block my-auto mb-sm-2" style={{fontWeight: "500"}}>Quantity</p>
@@ -1165,7 +1237,7 @@ const changeDimensionToL = () =>{
                         {similarItems.map((ncard,i)=>{
                             return(
                             <ProductCard 
-                            product={ncard}
+                                    product={ncard}
                                     src={ncard.imgUrl[0]} 
                                     name={ncard.name} 
                                     slug={ncard.slug} 

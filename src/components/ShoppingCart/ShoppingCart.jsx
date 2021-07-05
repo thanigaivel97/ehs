@@ -95,7 +95,7 @@ const Tables = (props) => {
       setWishlist(res.data.data[0].wishList);
      setLoading(false);
      // console.log(res.data.data[0].wishlist);
-      console.log(res.data.data[0].cart)
+     // console.log(res.data.data[0].cart)
     }).catch((err)=>{ 
       console.log(err);
     })
