@@ -1236,22 +1236,23 @@ const changeDimension = (e) => {
                     <ArrowBackIosRoundedIcon onClick={() => similarCarousel.current.slidePrev()} role="button" id="prevBtn" className="my-auto d-none d-sm-block" />
                     <Carousel className="d-flex justify-content-around" breakPoints={breakPoints}  pagination={false} showArrows={false} ref={similarCarousel} style={{opacity: "1!important"}}>
                         {similarItems.map((ncard,i)=>{
+                            console.log(ncard);
                             return(
                             <ProductCard 
                                     product={ncard}
-                                    src={ncard.imgUrl[0]} 
-                                    name={ncard.name} 
-                                    slug={ncard.slug} 
-                                    startPrice={ncard.originalPrice} 
-                                    rating={ncard.average_rating} 
-                                    itemBought={ncard.bought} 
-                                    catName={catName} 
-                                    subCatName={subCatName} 
-                                    catId= {ncard.category[0]._id} 
-                                    subCatId={ncard.subCategory[0]._id}
-                                    catSlug = {ncard.category[0].cat_slug}
-                                    subCatSlug = {ncard.subCategory[0].sub_cat_slug}
-                                    id={ncard._id} 
+                                    src={ncard.imgUrl[0] ? ncard.imgUrl[0] : ""} 
+                                    name={ncard.name ? ncard.name : ""} 
+                                    slug={ncard.slug ? ncard.slug : ""} 
+                                    startPrice={ ncard.originalPrice ? ncard.originalPrice : ""} 
+                                    rating={ncard.average_rating ? ncard.average_rating : ""} 
+                                    itemBought={ncard.bought ? ncard.bought : ""} 
+                                    catName={catName ? catName : ""} 
+                                    subCatName={subCatName ? subCatName : ""}  
+                                    catId= { ncard.category.length>0 ? ncard.category[0]._id : "" } 
+                                    subCatId={ ncard.subCategory.lenght>0 ? ncard.subCategory[0]._id : ""}
+                                    catSlug = { ncard.category.length>0 ? ncard.category[0].cat_slug : "" }
+                                    subCatSlug = {ncard.subCategory.lenght>0 ? ncard.subCategory[0].sub_cat_slug : ""}
+                                    id={ncard._id ? ncard._id : ""} 
                                     key={i} 
                                 />
                             )
