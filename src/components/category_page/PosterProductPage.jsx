@@ -203,7 +203,7 @@ const PosterProductPage = (props) => {
             setRatingTotal(res.data.data.ratingTotalWise);
             setTotalNoOfRating(res.data.data.totalNoOfRating);
             setMatDim(res.data.data.posterDetails[0].materialDimension);
-            //console.log(res.data.data.posterDetails[0])
+            console.log(res.data.data.posterDetails[0])
             filterMatDim(res.data.data.posterDetails[0].materialDimension);
             setYouMayLike(res.data.data.youMayAlsoLike);
             setSimilarItems(res.data.data.realtedPosters);
@@ -229,10 +229,10 @@ const PosterProductPage = (props) => {
             const foundD= dimNew ? dimNew.find(title => val.dimension_title===title.dimension_title ): "";
             // console.log(foundM);
             if(!foundM){
-                matNew.push({material_title: val.material_title,material_img: ""});
+                matNew.push({material_title: val.material_title,material_img: val.material_imgUrl});
             }
             if(!foundD){
-                dimNew.push({dimension_title: val.dimension_title,dimension_img: ""});
+                dimNew.push({dimension_title: val.dimension_title,dimension_img: val.dimension_imgUrl});
             }
         }):"";
 
@@ -785,8 +785,8 @@ const changeDimension = (e) => {
                             matNew ? matNew.map((val,i)=>{
                                 return(
                                     <div className="posterMaterialDimension mat"  role="button" onClick={(e)=>changeMaterial(e)} >
-                                        <img src={val.material_img? val.material_img: ""} className="materialImg2Dimension  " alt="material"></img>
-                                        <p className="text-center materialTextDimension">{ val.material_title ? val.material_title: "No Material"}</p>
+                                        <img src={val.material_img? val.material_img: ""} className="materialImg2Dimension " alt="material"></img>
+                                        <p className="text-center materialTextDimension  mt-auto ">{ val.material_title ? val.material_title: "No Material"}</p>
                                     </div>
                                 )
                             }): ""
@@ -817,7 +817,7 @@ const changeDimension = (e) => {
                                         <div className="posterMaterialDimension dim" role="button" id="d2" onClick={(e)=>changeDimension(e)} >
                                             <img src={val.dimension_img? val.dimension_img: ""} className="posterDimension2 mt-2 " alt="dimension"></img>
                                             <p className="text-center posterDimensionText  ">{val.dimension_title ? val.dimension_title: "No Dimension"}</p>
-                                        </div>
+                                       </div>
                                     )
                                 }): ""
                             }
@@ -977,13 +977,14 @@ const changeDimension = (e) => {
                             fontWeight: "600",
                             color: "#000000",
                         }}>Product Details</p>
-                        {
+                        <ul>                        {
                             desc ? desc.map((val, i) => {
                                 return (
-                                    <li key={i}>{val}</li>
+                                    <li className="" key={i}>{val}</li>
                                 )
                             }) : ""
-                        }
+                        }</ul>
+
                     </div>
                     <div className=" pt-4 pt-sm-0   catTagSKU ">
                         <p><span style={{ fontWeight: "600" }}>Category: </span>{product.category[0].title}, {product.subCategory[0].title}</p>
@@ -1236,7 +1237,7 @@ const changeDimension = (e) => {
                     <ArrowBackIosRoundedIcon onClick={() => similarCarousel.current.slidePrev()} role="button" id="prevBtn" className="my-auto d-none d-sm-block" />
                     <Carousel className="d-flex justify-content-around" breakPoints={breakPoints}  pagination={false} showArrows={false} ref={similarCarousel} style={{opacity: "1!important"}}>
                         {similarItems.map((ncard,i)=>{
-                            console.log(ncard);
+                           // console.log(ncard);
                             return(
                             <ProductCard 
                                     product={ncard}

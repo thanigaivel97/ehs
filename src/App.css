@@ -1683,6 +1683,7 @@ margin-top: 10px;
 .posterMaterialDimension{
   width: 85px;
   height: 130px;
+  padding-top: 1px;
   border: 2px solid #D2D2D2;
   border-radius: 6px;
   box-sizing: border-box;
@@ -1704,14 +1705,15 @@ margin-top: 10px;
   transform: scale(0.8,0.9);
 }
 .materialImg2Dimension{
-  transform: scale(0.8,0.8);
-  margin-left: 11px;
+  width: 81px;
+  
 }
 .materialTextDimension{
   font-size: 11px;
   line-height: 14px;
   font-weight: 500;
-  margin-top: 5px;
+  position: absolute;
+  bottom: 0;
 }
 .posterDimension1{
   width: 40px;
@@ -1727,10 +1729,10 @@ margin-top: 10px;
 }
 .posterDimensionText{
   font-size: 12px;
+  line-height: 14px;
   font-weight: 500;
   position: absolute;
-  bottom: -12px;
-  left: 15px;
+  bottom: 0;
 }
 .paginationActive{
   opacity: 1;
@@ -1791,15 +1793,21 @@ margin-bottom: 54px;
 .productInfo{
   font-family: "Source Sans Pro";
   font-weight: normal;
-  font-weight: 600;
   font-size: 16px;
   margin-top: 100px;
+  margin-bottom: 5px;
+  margin-top: 0px;
+  width: 100%;
+  height: auto;
+ 
+}
+.productInfo ul{
+  list-style-position: outside;
+  padding-left: 20px;
+  font-family: "Source Sans Pro";
   font-weight: 500;
-margin-bottom: 5px;
-margin-top: 0px;
-line-height: 28px;
-width: 100%;
-height: 255px;
+  font-size: 16px;
+  line-height: 18px;
 }
 .poweredBy{
   
@@ -1870,9 +1878,8 @@ line-height: 18px;
   }
   .productInfo{
     font-size: 14px;
-    margin-top: 0px;
     line-height: 24px;
-    height: 125px;
+    height: auto;
   }
   .catTagSKU{
     margin-top: 10px;
@@ -1924,15 +1931,13 @@ line-height: 23px;
     margin-top: 0px;
   }
   .materialImg2Dimension{
-    width: 40px;
-    margin-left: 5px;
+    width: 50px;
   }
   .materialTextDimension{
     font-size: 7px;
     line-height: 8px;
     font-weight: 600;
-    position: relative;
-    bottom: 6px;
+    
   }
   .posterDimension1{
       width: 27px;
@@ -1949,8 +1954,6 @@ line-height: 23px;
   .posterDimensionText{
     font-size: 8px;
     line-height: 8px;
-    left: 10px;
-    bottom: -16px;
   }
 }
 
@@ -2305,6 +2308,7 @@ color: #000000;
   border: 1px solid #D2D2D2;
   box-sizing: border-box;
   border-radius: 6px;
+  padding-top: 1px;
 }
 .popupMaterialDimension > *{
   pointer-events: none;
@@ -2327,16 +2331,15 @@ color: #000000;
   height: 75px;
 }
 .popupMaterialImg2{
-  width: 45px;
-  height: 70px;
+  width: 92px;
 }
 .popupDimensionImg1{
   width: 52px;
   height: 65px;
 }
 .popupDimensionImg2{
-  width: 62px;
-  height: 80px;
+  width: 60px;
+  margin-top: 10px;
 }
 .popupDimensionImg3{
   width: 72px;
@@ -2423,6 +2426,9 @@ line-height: 20px;
   .popupMaterialDimension{
     width: 80px;
     height: 130px;
+  }
+  .popupMaterialImg2{
+    width: 76px;
   }
   .popupHead{
     font-size: 14px;

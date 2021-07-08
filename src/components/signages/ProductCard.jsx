@@ -277,10 +277,10 @@ const ProductCard = (props) =>{
         const foundD= dimNew ? dimNew.find(title => val.dimension_title===title.dimension_title ): "";
         // console.log(foundM);
         if(!foundM){
-            matNew.push({material_title: val.material_title,material_img: ""});
+            matNew.push({material_title: val.material_title,material_img: val.material_imgUrl});
         }
         if(!foundD){
-            dimNew.push({dimension_title: val.dimension_title,dimension_img: ""});
+            dimNew.push({dimension_title: val.dimension_title,dimension_img: val.dimension_imgUrl});
         }
         
     }):"";
@@ -438,8 +438,8 @@ const dimensionSelectNew = (e,mat) => {
                             matNew ? matNew.map((val,i)=>{
                                 return(
                                     <div className="popupMaterialDimension mat" role="button"    onClick={(e)=>MaterialSelectNew(e)} >
-                                        <img src={val.material_img? val.material_img: ""} className="popupMaterialImg2 mt-2" alt="material"></img>
-                                        <p className="text-center popupMaterialText mt-sm-3 mt-2">{val.material_title? val.material_title: ""}</p>
+                                        <img src={val.material_img? val.material_img: ""} className="popupMaterialImg2 " alt="material"></img>
+                                        <p className="text-center popupMaterialText">{val.material_title? val.material_title: ""}</p>
                                     </div>
                                 )
                             }): ""
@@ -495,8 +495,8 @@ const dimensionSelectNew = (e,mat) => {
                                 dimNew ? dimNew.map((val,i)=> {
                                     return(
                                         <div className="popupMaterialDimension " id="m2" role="button"  onClick={(e)=>dimensionSelectNew(e,mat)}  >
-                                            <img src={val.dimension_img? val.dimension_img: ""} className="popupDimensionImg2 mt-3 mb-1 mb-sm-0" alt="dim"></img>
-                                            <p className="text-center popupMaterialText mt-sm-4 mt-2">{val.dimension_title? val.dimension_title: ""}</p>
+                                            <img src={val.dimension_img? val.dimension_img: ""} className="popupDimensionImg2" alt="dim"></img>
+                                            <p className="text-center popupMaterialText">{val.dimension_title? val.dimension_title: ""}</p>
                                         </div>
                                     )
                                 }): ""
