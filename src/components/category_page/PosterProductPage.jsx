@@ -564,7 +564,7 @@ const changeDimension = (e) => {
         { width: 780, itemsToShow: 4 }
     ];
 
-    let name = product.name ? product.name.split("|") : "";
+    
     let desc = product.description ? product.description.split("|") : "";
     const likecarousel = useRef(null);
     const similarCarousel = useRef(null);
@@ -602,6 +602,7 @@ const changeDimension = (e) => {
                         return (
                             <div className="d-flex justify-content-around mt-4 " >
                                 {pages.map(page => {
+                                   
                                     const isActivePage = activePage === page
                                     return (
                                         <div role="button" key={page} onClick={() => onClick(page)} active={isActivePage} className={isActivePage ? "paginationActive productIndicators" : "paginationInactive productIndicators"} >
@@ -619,10 +620,18 @@ const changeDimension = (e) => {
                             </div>
                         );
                     }}>
-                        <img src={product.imgUrl[0]} alt="preprinted sign" className="productCarouselImg " />
+                        {
+                            product.imgUrl.length>1 ? product.imgUrl.map((prod,i)=>{
+                                console.log(prod);
+                                return(
+                                    <img src={prod} alt="preprinted sign" className="productCarouselImg " key={i} />
+                                )
+                            }):  <img src={product.imgUrl[0]} alt="preprinted sign" className="productCarouselImg " />
+                        }
+                        {/* <img src={product.imgUrl[0]} alt="preprinted sign" className="productCarouselImg " />
                         <img src={product.imgUrl[1]} alt="preprinted sign" className="productCarouselImg " />
                         <img src={product.imgUrl[2]} alt="preprinted sign" className="productCarouselImg " />
-                        <img src={product.imgUrl[3]} alt="preprinted sign" className="productCarouselImg " />
+                        <img src={product.imgUrl[3]} alt="preprinted sign" className="productCarouselImg " /> */}
                     </Carousel>
 
                     {
@@ -718,7 +727,7 @@ const changeDimension = (e) => {
                             fontSize: "28px",
                             lineHeight: "35px",
                             color: "#000000",
-                        }}>{name[0]}</h2>
+                        }}>{product.name ? product.name : ""}</h2>
                         <div className="d-flex align-items-center " style={{ marginTop: "5px" }}>
                             <span className=" " style={{
                                 fontWeight: "600",
@@ -780,11 +789,11 @@ const changeDimension = (e) => {
                             </div>
                         </div>
                         ) : "" */}
-                        <div className="d-flex justify-content-between mr-0  ">
+                        <div className="d-flex justify-content-start mr-0  ">
                         {
                             matNew ? matNew.map((val,i)=>{
                                 return(
-                                    <div className="posterMaterialDimension mat"  role="button" onClick={(e)=>changeMaterial(e)} >
+                                    <div className="posterMaterialDimension mx-2 mat"  role="button" onClick={(e)=>changeMaterial(e)} >
                                         <img src={val.material_img? val.material_img: ""} className="materialImg2Dimension " alt="material"></img>
                                         <p className="text-center materialTextDimension  mt-auto ">{ val.material_title ? val.material_title: "No Material"}</p>
                                     </div>
@@ -798,7 +807,7 @@ const changeDimension = (e) => {
                         marginBottom: "77px"
                     }}>
                         <p className=" align-self-sm-start align-self-center selectHead">Select Dimensions</p>
-                        <div className="d-flex justify-content-between">
+                        <div className="d-flex justify-content-start">
                             {/* <div className=" ml-sm-0 posterMaterialDimension selected" id="d1" role="button" onClick={changeDimensionToS} >
                                 <img src={dimNew? dimNew[0].dimension_img: ""} className="posterDimension1 mt-2" alt="dimension" ></img>
                                 <p className="text-center posterDimensionText ">{dimNew? dimNew[0].dimension_title: "No Dimension"}</p>
@@ -814,7 +823,7 @@ const changeDimension = (e) => {
                             {
                                 dimNew ? dimNew.map((val,i)=>{
                                     return(
-                                        <div className="posterMaterialDimension dim" role="button" id="d2" onClick={(e)=>changeDimension(e)} >
+                                        <div className="posterMaterialDimension mx-2 dim" role="button" id="d2" onClick={(e)=>changeDimension(e)} >
                                             <img src={val.dimension_img? val.dimension_img: ""} className="posterDimension2 mt-2 " alt="dimension"></img>
                                             <p className="text-center posterDimensionText  ">{val.dimension_title ? val.dimension_title: "No Dimension"}</p>
                                        </div>
@@ -988,13 +997,15 @@ const changeDimension = (e) => {
                     </div>
                     <div className=" pt-4 pt-sm-0   catTagSKU ">
                         <p><span style={{ fontWeight: "600" }}>Category: </span>{product.category[0].title}, {product.subCategory[0].title}</p>
-                        <p><span style={{ fontWeight: "600" }}>Tags: </span>{
+                        {
+                            product.tags.length>0 ?  <p><span style={{ fontWeight: "600" }}>Tags: </span>{
                             product.tags.map((val, i) => {
                                 return (
                                     <span key={i}>{val}...</span>
                                 )
                             })
-                        }</p>
+                        }</p> : ""
+                        }
                         <p><span style={{ fontWeight: "600" }}>SKU: </span>{product.sku}</p>
                     </div>
                     <div className=" d-none d-sm-block">
