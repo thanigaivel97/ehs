@@ -385,6 +385,7 @@ const PosterProductPage = (props) => {
         }
     }
 
+
     const calculateAmount = () => {
         let flag = true;
         product.materialDimension.map((val, i) => {
