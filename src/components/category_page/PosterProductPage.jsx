@@ -580,7 +580,7 @@ const changeDimension = (e) => {
                 <span className="font-weight-bold" > {product.name}</span>
             </div>
             <div className="row  padding-10 mt-4 " >
-                <div className="col-lg-5 pl-auto pr-auto ">
+                <div className="col-lg-5 pl-auto pr-auto border ">
                     <div className="d-block d-sm-none mb-4">
                         <h2 style={{
                             fontStyle: "normal",
@@ -599,7 +599,9 @@ const changeDimension = (e) => {
                         </div>
                     </div>
 
-                    <Carousel className=" " showArrows={false} renderPagination={({ pages, activePage, onClick }) => {
+                    <img src={product.imgUrl[0] ? product.imgUrl[0] : "https://dummyimage.com/400x400/003459/fff.png&text=No+Image+Available"} alt="preprinted sign" className="productCarouselImg " />
+
+                   {/* <Carousel className=" " showArrows={false} renderPagination={({ pages, activePage, onClick }) => {
                         return (
                             <div className="d-flex justify-content-around mt-4 " >
                                 {pages.map(page => {
@@ -627,13 +629,13 @@ const changeDimension = (e) => {
                                 return(
                                     <img src={prod} alt="preprinted sign" className="productCarouselImg " key={i} />
                                 )
-                            }):  <img src={product.imgUrl[0]} alt="preprinted sign" className="productCarouselImg " />
+                            }):  <img src={product.imgUrl[0] ? product.imgUrl[0] : "https://dummyimage.com/400x400/003459/fff.png&text=No+Image+Available"} alt="preprinted sign" className="productCarouselImg " />
                         }
                         {/* <img src={product.imgUrl[0]} alt="preprinted sign" className="productCarouselImg " />
                         <img src={product.imgUrl[1]} alt="preprinted sign" className="productCarouselImg " />
                         <img src={product.imgUrl[2]} alt="preprinted sign" className="productCarouselImg " />
-                        <img src={product.imgUrl[3]} alt="preprinted sign" className="productCarouselImg " /> */}
-                    </Carousel>
+                        <img src={product.imgUrl[3]} alt="preprinted sign" className="productCarouselImg " /> 
+                    </Carousel>*/}
 
                     {
                         parseInt(product.discountValue) > 0 && product.discount_type === 1 ?
@@ -675,11 +677,13 @@ const changeDimension = (e) => {
                             Limited time offer: {product.discountValue}% Off
                         </div> : ""
                     }
-                    <hr className="mt-5 mb-4 d-none d-sm-block " style={{ borderTop: "1px solid rgba(130, 130, 130, 0.5)" }} />
+                    <hr className="mt-5 mb-4 d-none  " style={{ borderTop: "1px solid rgba(130, 130, 130, 0.5)" }} />
                     {
                         author ?
-                            <div className="d-none d-sm-block ">
-                                <img src={author.auth_image ? author.auth_image : designerProfile} alt="profile" />
+                            <div className="d-none d-sm-block  mt-3">
+                                <img src={author.auth_image ? author.auth_image : designerProfile} alt="profile" style={{
+                                    borderRadius: "50%",
+                                }} />
                                 <span style={{
                                     fontStyle: "normal",
                                     fontWeight: "600",
@@ -718,8 +722,8 @@ const changeDimension = (e) => {
                             </div> : ""
                     }
                 </div>
-                <div className="col-lg-3  ">
-                    <div className="d-none d-sm-block " style={{
+                <div className="col-lg-3 border px-0">
+                   {/* <div className="d-none d-sm-block " style={{
                         marginBottom: "49px"
                     }} >
                         <h2 style={{
@@ -771,8 +775,8 @@ const changeDimension = (e) => {
                             {product.bought} bought this
                         </p>
                     </div>
-
-                    <div className="mb-4 mt-5 mt-sm-0 d-flex flex-sm-column flex-row justify-content-between ">
+                    */}
+                    <div className=" mt-5 mt-sm-0 d-flex flex-sm-column flex-row justify-content-between ">
                         <p className="mt-sm-0 mb-2  align-self-sm-start align-self-center selectHead  ">Select Material</p>
                         {/* product.materialDimension ? (
                             <div className="d-flex justify-content-between mr-0  ">
@@ -790,11 +794,11 @@ const changeDimension = (e) => {
                             </div>
                         </div>
                         ) : "" */}
-                        <div className="d-flex justify-content-start mr-0  ">
+                        <div className="d-flex justify-content-between mr-0   ">
                         {
                             matNew ? matNew.map((val,i)=>{
                                 return(
-                                    <div className="posterMaterialDimension mx-2 mat"  role="button" onClick={(e)=>changeMaterial(e)} >
+                                    <div className="posterMaterialDimension  mat"  role="button" onClick={(e)=>changeMaterial(e)} >
                                         <img src={val.material_img? val.material_img: ""} className="materialImg2Dimension " alt="material"></img>
                                         <p className="text-center materialTextDimension  mt-auto ">{ val.material_title ? val.material_title: "No Material"}</p>
                                     </div>
@@ -803,12 +807,9 @@ const changeDimension = (e) => {
                         }
                         </div>
                     </div>
-                    <div className=" d-flex flex-sm-column flex-row justify-content-between" style={{
-                        marginTop: "56px",
-                        marginBottom: "77px"
-                    }}>
+                    <div className=" d-flex flex-sm-column flex-row justify-content-between my-3" >
                         <p className=" align-self-sm-start align-self-center selectHead">Select Dimensions</p>
-                        <div className="d-flex justify-content-start">
+                        <div className="d-flex justify-content-between">
                             {/* <div className=" ml-sm-0 posterMaterialDimension selected" id="d1" role="button" onClick={changeDimensionToS} >
                                 <img src={dimNew? dimNew[0].dimension_img: ""} className="posterDimension1 mt-2" alt="dimension" ></img>
                                 <p className="text-center posterDimensionText ">{dimNew? dimNew[0].dimension_title: "No Dimension"}</p>
@@ -824,7 +825,7 @@ const changeDimension = (e) => {
                             {
                                 dimNew ? dimNew.map((val,i)=>{
                                     return(
-                                        <div className="posterMaterialDimension mx-2 dim" role="button" id="d2" onClick={(e)=>changeDimension(e)} >
+                                        <div className="posterMaterialDimension   dim" role="button" id="d2" onClick={(e)=>changeDimension(e)} >
                                             <img src={val.dimension_img? val.dimension_img: ""} className="posterDimension2 mt-2 " alt="dimension"></img>
                                             <p className="text-center posterDimensionText  ">{val.dimension_title ? val.dimension_title: "No Dimension"}</p>
                                        </div>
@@ -898,7 +899,60 @@ const changeDimension = (e) => {
                         <Link className="text-dark ml-5" style={{ textDecoration: "underline", fontSize: "0.9rem" }}>Share<ShareOutlinedIcon className="ml-1" style={{ transform: "scale(0.7)" }} /></Link>
                     </div>
                 </div>
-                <div className="col-lg-4 ">
+                <div className="col-lg-4 border ">
+                    <div className="d-none d-sm-block " style={{
+                    
+                    }} >
+                        <h2 style={{
+                            fontStyle: "normal",
+                            fontWeight: "normal",
+                            fontSize: "28px",
+                            lineHeight: "35px",
+                            color: "#000000",
+                        }}>{product.name ? product.name : ""}</h2>
+                        <div className="d-flex align-items-center " style={{ marginTop: "5px" }}>
+                            <span className=" " style={{
+                                fontWeight: "600",
+                                fontSize: "16px",
+                                lineHeight: "20px",
+                                color: "#000"
+                            }}>{product.average_rating}</span>
+                            <Rating name="product-rating" value={rating} precision={0.1} size="small" readOnly />
+                            <span className="" style={{
+                                fontWeight: "600",
+                                fontSize: "14px",
+                                lineHeight: "18px",
+                                color: "#000",
+                            }}>({totalNoOfRating})</span>
+                            {(product.stocks) ? (
+                                <span className=" ml-4" style={{
+                                    fontWeight: "600",
+                                    fontSize: "14px",
+                                    lineHeight: "18px",
+                                    color: "#27AE60",
+                                }}>In Stock</span>
+
+                            ) : (
+                                <span className="text-danger ml-4" style={{
+                                    fontWeight: "600",
+                                    fontSize: "14px",
+                                    lineHeight: "18px",
+                                }}>Out of Stock</span>
+
+                            )}
+                        </div>
+                        <p className="" style={{
+                            marginTop: "7px",
+                            marginBottom: "0px",
+                            fontWeight: "normal",
+                            fontSize: "14px",
+                            lineHeight: "18px",
+                            color: "#757575"
+                        }}>
+                            {product.bought} bought this
+                        </p>
+                    </div>
+
                     <div className="d-none " style={{
                         fontFamily: "Lato",
                         fontStyle: "normal",
@@ -980,7 +1034,7 @@ const changeDimension = (e) => {
                         }
 
                     </div>
-                    <div className="productInfo " >
+                    <div className="productInfo mt-3" >
                         <p className=" d-none d-sm-block" style={{
                             fontSize: "16px", lineHeight: "19px", fontFamily: "Lato",
                             fontStyle: "normal",

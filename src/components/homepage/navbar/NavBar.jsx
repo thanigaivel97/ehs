@@ -615,7 +615,8 @@ const NavBar = (props) => {
                 Resources
               </Link>
             </li>
-            <li className="nav-item mb-0">
+            <div className='d-flex '>
+            <li className="nav-item mb-0 mr-3">
               <Link
                 to="/about"
                 className="nav-link text-white textColorAndWeight btn shadow-none border-0" onClick={hamburger}
@@ -633,6 +634,8 @@ const NavBar = (props) => {
                 Contact
               </Link>
               </li>
+            </div>
+           
             <div className="nav-item mt-auto d-block d-sm-none" >
             <li
               className="nav-item ml-4 mt-5 menuRemove"

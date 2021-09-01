@@ -5,61 +5,59 @@
     justify-content: space-between;
 }
 .promoCard{
-    width: 270px;
-    
+    width: 240px;
+    height: 348px;
     border: none;
 }
 .promoCardImg{
-        width: 270px;
-        height: 270px;
+        width: 240px;
+        height: 243px;
+}
+.cardBody{
+    height: 89px;
 }
 .cardTitle{
-    width: 270px;
-    height: 70px;
-    font-family: "Source Sans Pro";
-    font-style: normal;
+    font-family: "Open Sans";
     font-weight: bold;
     font-size: 24px;
     line-height: 34px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-    margin: 0;
+    text-align: left;
+    color: #000;    
 }
 .cardText{
-    font-family: "Source Sans Pro";
-    font-style: normal;
+    font-family: "Open Sans";
     font-weight: normal;
-    font-size: 18px;
-
+    font-size: 14px;
+    line-height: 16px;
+    text-align: left;
     color: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0;
 }
 @media (max-width: 480px){
     .cardTitle{
-        width: 162px;
-        height: 42px;
+        width: 152px;
+        height: 39px;
         font-size: 14px;
         line-height: 20px;
     }
     .cardText{
-        font-size: 11px;
+        font-size: 10px;
+        line-height: 19px;
     }
     .promoCard{
-        width: 162px;
+        width: 150px;
+        height: 220px;
     }
     .promoCardImg{
-        width: 162px;
-        height: 162px;
+        width: 150px;
+        height: 151px;
+    }
+    .cardBody{
+        height: 53px;
     }
     .promo{
         margin-bottom: 28px;
         grid-template-columns: auto auto;
-        grid-gap: 42px 19px;
+        justify-content: space-around;
+        grid-row-gap: 20px;
     }
 }

@@ -1521,7 +1521,9 @@ text-align: left;
   height: 165px;
 }
 
-
+.br-22{
+  border-radius: 22px;
+}
 
 .productIndicators{
   width: 50px;
@@ -1681,8 +1683,8 @@ margin-top: 10px;
 /* Poster Product Page CSS */
 
 .posterMaterialDimension{
-  width: 85px;
-  height: 130px;
+  width: 95px;
+  height: 140px;
   padding-top: 1px;
   border: 2px solid #D2D2D2;
   border-radius: 6px;
@@ -1828,7 +1830,7 @@ height: 25px;
   margin-bottom: 26px;
 }
 .offerBox{
-  height: 145px;
+  height: auto;
 }
 .languageBtn{
   width: 74px;

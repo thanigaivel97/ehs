@@ -2,7 +2,7 @@
 import React, { useState ,useEffect, useLayoutEffect} from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
-import HomePage from "./components/homepage/HomePage.jsx";
+import HomePage from "./components/homepage/HomePageNew.jsx";
 import Search from "./components/Search/Search";
 import Category from "./components/category_page/CategoryPage.jsx";
 import ProductList2 from "./components/product_list2/ProductList2.jsx";
@@ -27,7 +27,7 @@ import Faq from "./components/Faq/Faq";
 import Quotation from "./components/Quotation/Quotation";
 import TrackOrder from "./components/TrackOrder/TrackOrder";
 import SignageProductPage from "./components/signages/SignageProductPage";
-import Footer from "./components/homepage/Footer";
+import Footer from "./components/homepage/FooterNew";
 import PosterProductPage from "./components/category_page/PosterProductPage";
 import Contact from "./components/contact/Contact";
 import Checkout from "./components/ShoppingCart/Checkout";
