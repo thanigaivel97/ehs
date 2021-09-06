@@ -13,6 +13,7 @@ import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounde
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import MenuIcon from '@material-ui/icons/Menu';
+import { Person, PersonOutline } from "@material-ui/icons";
 
 const NavBar = (props) => {
   const [authUser, setAuthUser] = React.useState("");
@@ -361,7 +362,11 @@ const NavBar = (props) => {
               className="nav-item d-none d-lg-block  mx-auto "
               style={{
                 display: "inline-block",
-                color: "#F2994A",
+                color: "#ffffff",
+                backgroundColor:'#F2994A',
+                padding: '6px 18px',
+                height: 35,
+                borderRadius:4,
               }}
             >
               {authUser ? (
@@ -369,18 +374,24 @@ const NavBar = (props) => {
                 
               ) : (
                 <>
-                  <Link
+                  {/* <Link
                     to="/login"
                     className=" textColorAndWeight text-decoration-none"
                   >
                     Login
                   </Link>{" "}
-                  |{" "}
+                  |{" "} */}
                   <Link
                     to="/signup"
                     className=" textColorAndWeight text-decoration-none"
+                    style={{
+                      display: 'flex',
+                      alignItems:'center',
+                      color: "#ffffff",
+                    
+                    }}
                   >
-                    Register
+                    <PersonOutline /> SignUp
                   </Link>
                 </>
               )}

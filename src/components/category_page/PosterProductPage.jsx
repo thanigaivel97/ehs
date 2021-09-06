@@ -28,7 +28,7 @@ import Swal from "sweetalert2";
 import withReactContent from 'sweetalert2-react-content';
 import Spinner from "react-loading";
 import CartContext from "../../helper/cartContext";
-import { ControlCamera } from "@material-ui/icons";
+import { ControlCamera, ShoppingBasketOutlined, ShoppingCartOutlined, StarBorderOutlined, StarOutlined, StarRateOutlined } from "@material-ui/icons";
 const MySwal = withReactContent(Swal);
 
 const theme = createMuiTheme({
@@ -73,34 +73,50 @@ const ReviewCard = (props) => {
 })*/
 
     return (
-        <div className="border p-2  mr-2" style={{
-            width: "200px",
-            height: "113px",
-            position: "relative"
+        <div className="border p-2  mr-0" style={{
+            width: "100%",
+            minHeight: "100px",
+            position: "relative",
+            borderRadius:'6px',
+            marginBottom:'15px'
         }}>
-            <div className="row ">
-                <p className="col-6 " style={{
-                    fontStyle: "normal",
-                    fontWeight: "normal",
-                    fontSize: "12px",
-                    lineHeight: "18px"
-                }}>User Name</p>
-                <div className="col-2"></div>
-                <span className="  mr-0 col-4 float-right " style={{
+            <div className=" " style={{display:'flex',}} >
+                
+                <div className=""></div>
+                <span className="  mr-0  float-right " style={{
                     fontStyle: "normal",
                     fontWeight: "normal",
                     fontSize: "11px",
                     lineHeight: "18px",
-                    color: "#757575",
+                    color: "#fcfcfc",
+                    display: 'flex',
+                    alignItems:'center',
+                    backgroundColor:`${props.rating>2?'green':props.rating>1?'orange':'red'}`,
+                    borderRadius:4,
+                    padding: '0px 6px',
+                    height:'18px',
 
-                }}>{props.rating} <StarIcon style={{ width: "13px", color: "#F2C94C" }} /></span>
+                }}>{props.rating} <StarIcon style={{ width: "13px", color: "#ffffff" }} /></span>
+                <p className=" " style={{
+                    fontStyle: "normal",
+                    fontWeight: "normal",
+                    fontSize: "12px",
+                    lineHeight: "18px",
+                    marginBottom:'0',
+                    display: 'flex',
+                    alignSelf:'center',
+                    marginLeft:'8px',
+                    fontWeight:'bold'
+                    
+                }}>User Name</p>
             </div>
 
             <p className="" style={{
                 fontStyle: "normal",
                 fontWeight: "normal",
-                fontSize: "10px",
+                fontSize: "13px",
                 lineHeight: "15px",
+                marginTop:'10px'
 
 
             }}>{props.feedback}</p>
@@ -580,8 +596,8 @@ const changeDimension = (e) => {
                 <span className="font-weight-bold" > {product.name}</span>
             </div>
             <div className="row  padding-10 mt-4 " >
-                <div className="col-lg-5 pl-auto pr-auto border ">
-                    <div className="d-block d-sm-none mb-4">
+                <div className="col-lg-5 pl-auto pr-auto flex-column-reverse flex-sm-column " style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
+                    <div className="d-block d-sm-none mb-4" >
                         <h2 style={{
                             fontStyle: "normal",
                             fontWeight: "normal",
@@ -599,7 +615,13 @@ const changeDimension = (e) => {
                         </div>
                     </div>
 
-                    <img src={product.imgUrl[0] ? product.imgUrl[0] : "https://dummyimage.com/400x400/003459/fff.png&text=No+Image+Available"} alt="preprinted sign" className="productCarouselImg " />
+                    <img src={product.imgUrl[0] ? product.imgUrl[0] : "https://dummyimage.com/400x400/003459/fff.png&text=No+Image+Available"} alt="preprinted sign" className="productCarouselImg " 
+                    style={{
+                        width:' 100%',
+                        objectFit:'cover'
+                    }}
+                    
+                    />
 
                    {/* <Carousel className=" " showArrows={false} renderPagination={({ pages, activePage, onClick }) => {
                         return (
@@ -680,7 +702,9 @@ const changeDimension = (e) => {
                     <hr className="mt-5 mb-4 d-none  " style={{ borderTop: "1px solid rgba(130, 130, 130, 0.5)" }} />
                     {
                         author ?
-                            <div className="d-none d-sm-block  mt-3">
+                            <div className="d-none d-sm-block  mt-3" style={{
+                                width: '100%',
+                            }}>
                                 <img src={author.auth_image ? author.auth_image : designerProfile} alt="profile" style={{
                                     borderRadius: "50%",
                                 }} />
@@ -712,6 +736,7 @@ const changeDimension = (e) => {
                                                         width: "100px",
                                                         height: "100px",
                                                         background: "#D2D2D2",
+                                                       
                                                     }} />
                                             )
                                         })
@@ -722,7 +747,7 @@ const changeDimension = (e) => {
                             </div> : ""
                     }
                 </div>
-                <div className="col-lg-3 border px-0">
+                <div className="col-lg-3  " style={{padding:'12px'}} >
                    {/* <div className="d-none d-sm-block " style={{
                         marginBottom: "49px"
                     }} >
@@ -776,8 +801,8 @@ const changeDimension = (e) => {
                         </p>
                     </div>
                     */}
-                    <div className=" mt-5 mt-sm-0 d-flex flex-sm-column flex-row justify-content-between ">
-                        <p className="mt-sm-0 mb-2  align-self-sm-start align-self-center selectHead  ">Select Material</p>
+                    <div className=" mt-0 mt-sm-0 d-flex flex-column coflex-row justify-content-between" >
+                        <p className="mt-sm-0 mb-2  align-self-sm-start align-self-start selectHead  ">Select Maaterial</p>
                         {/* product.materialDimension ? (
                             <div className="d-flex justify-content-between mr-0  ">
                             <div className="posterMaterialDimension selected" id="m1" role="button" onClick={changeMaterialTo1} >
@@ -807,9 +832,9 @@ const changeDimension = (e) => {
                         }
                         </div>
                     </div>
-                    <div className=" d-flex flex-sm-column flex-row justify-content-between my-3" >
-                        <p className=" align-self-sm-start align-self-center selectHead">Select Dimensions</p>
-                        <div className="d-flex justify-content-between">
+                    <div className=" d-flex flex-column flex-row justify-content-between my-3" >
+                        <p className=" align-self-sm-start align-self-start selectHead">Select Dimensions</p>
+                        <div className="d-flex justify-content-start">
                             {/* <div className=" ml-sm-0 posterMaterialDimension selected" id="d1" role="button" onClick={changeDimensionToS} >
                                 <img src={dimNew? dimNew[0].dimension_img: ""} className="posterDimension1 mt-2" alt="dimension" ></img>
                                 <p className="text-center posterDimensionText ">{dimNew? dimNew[0].dimension_title: "No Dimension"}</p>
@@ -825,7 +850,9 @@ const changeDimension = (e) => {
                             {
                                 dimNew ? dimNew.map((val,i)=>{
                                     return(
-                                        <div className="posterMaterialDimension   dim" role="button" id="d2" onClick={(e)=>changeDimension(e)} >
+                                        <div className="posterMaterialDimension   dim" role="button" id="d2" onClick={(e)=>changeDimension(e)} style={{
+                                            marginLeft:4
+                                        }}>
                                             <img src={val.dimension_img? val.dimension_img: ""} className="posterDimension2 mt-2 " alt="dimension"></img>
                                             <p className="text-center posterDimensionText  ">{val.dimension_title ? val.dimension_title: "No Dimension"}</p>
                                        </div>
@@ -835,11 +862,11 @@ const changeDimension = (e) => {
                         </div>
 
                     </div>
-                    <div className="d-flex flex-row flex-sm-column  align-items-sm-start align-items-center ">
+                    <div className="d-flex flex-column flex-sm-column  align-items-sm-start align-items-start ">
                         <p className=" mr-5  mr-sm-0 d-inline-block d-sm-block my-auto mb-sm-2" style={{ fontWeight: "500" }}>Quantity</p>
                         <ButtonGroup
                             size="small"
-                            className="ml-5 ml-sm-0 "
+                            className="ml-0 ml-sm-0 "
                             aria-label="small outlined button group"
                             style={{ width: "30px", height: "30px", }}
                         >
@@ -889,17 +916,44 @@ const changeDimension = (e) => {
                     <button
                         onClick={addToCart}
                         className="d-block d-sm-none w-100 p-2 mt-4" style={{
+                            border: "2px solid #003459",
+                            background: "white",
+                            borderRadius: "3px",
+                            color: "#003459",
+                        }}>Add To Cart<FavoriteBorderIcon className="ml-1" style={{ transform: "scale(0.8)" }} /></button>
+                    <div className="mt-sm-4 " style={{display:'flex',flexDirection:'column',alignItems:'center',width:'100%'}}>
+                        {/* <Link onClick={addToWishlist} className="text-dark " style={{ textDecoration: "none", fontSize: "0.9rem",border:'2px solid #003459',padding:'6px 12px',borderRadius:4,width:'100%',textAlign:'center'}}>Add to Wishlist<FavoriteBorderIcon className="ml-1" style={{ transform: "scale(0.8)" }} /></Link>
+                        <Link className=" " style={{ textDecoration: "none", fontSize: "0.9rem",backgroundColor:'green', width:'100%',padding:'6px 12px',marginTop:'12px',borderRadius:'4px',textAlign:'center',color:'white'}}>Share<ShareOutlinedIcon className="ml-1" style={{ transform: "scale(0.7)" }} /></Link> */}
+                        <button
+                        onClick={addToCart}
+                        className=" d-none d-sm-block w-100  mt-2"
+                        style={{
+                            padding: 5,
+                            border: "none",
+                            background: "#ffffff",
+                            borderRadius: "3px",
+                            color: "white",
+                            color:'#003459' ,
+                            border:'2px solid #003459',
+                        }}>Add To Cart<FavoriteBorderIcon className="ml-1" style={{ transform: "scale(0.8)" }} /></button>
+
+                        <button 
+                        style={{
+                            width: '100%',
                             border: "none",
                             background: "#003459",
-                            borderRadius: "6px",
+                            borderRadius: "3px",
                             color: "white",
-                        }}>Add To Cart</button>
-                    <div className="mt-4 pl-3 pl-sm-0">
-                        <Link onClick={addToWishlist} className="text-dark " style={{ textDecoration: "underline", fontSize: "0.9rem" }}>Add to Wishlist<FavoriteBorderIcon className="ml-1" style={{ transform: "scale(0.8)" }} /></Link>
-                        <Link className="text-dark ml-5" style={{ textDecoration: "underline", fontSize: "0.9rem" }}>Share<ShareOutlinedIcon className="ml-1" style={{ transform: "scale(0.7)" }} /></Link>
+                            padding: 7,
+                            marginTop:10,
+                        }}>
+                            Buy now<ShoppingCartOutlined />
+                        </button>
+
+
                     </div>
                 </div>
-                <div className="col-lg-4 border ">
+                <div className="col-lg-4  ">
                     <div className="d-none d-sm-block " style={{
                     
                     }} >
@@ -1102,7 +1156,7 @@ const changeDimension = (e) => {
                         }
 
                     </div>
-                    <button
+                    {/* <button
                         onClick={addToCart}
                         className=" d-none d-sm-block w-100 p-2 mt-2"
                         style={{
@@ -1110,7 +1164,7 @@ const changeDimension = (e) => {
                             background: "#003459",
                             borderRadius: "6px",
                             color: "white",
-                        }}>Add To Cart</button>
+                        }}>Add To Cart</button> */}
 
                     {
                         author ?
@@ -1152,12 +1206,18 @@ const changeDimension = (e) => {
                 </div>
             </div>
 
+            {/*rating and review*/}
+
             {
-                product.average_rating > 0 ?
+                // product.average_rating > 0 ?
+                true?
 
                     <>
                         <div className="separator"></div>
-                        <div className="row padding-10 ">
+                        <div className="row padding-10 " style={{
+                            display: "flex",
+                            flexDirection:'column',
+                        }} >
                             <div className="col-4  d-none d-sm-block">
                                 <h2 style={{
                                     fontStyle: "normal",
@@ -1213,7 +1273,10 @@ const changeDimension = (e) => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-8 d-none d-sm-block ">
+                            <div className=" d-none d-sm-block " style={{
+                                marginTop:'50px',
+                                width: '100%',
+                            }}>
                                 <h2 className="d-inline-block" style={{
                                     fontStyle: "normal",
                                     fontWeight: "600",
@@ -1223,20 +1286,30 @@ const changeDimension = (e) => {
 
                                 <p className="d-none float-right viewAll" >View All</p>
 
-                                <div className="d-flex  col-12 pl-0 pr-0">
+                                <div className="d-flex  col-12 pl-0 pr-0" style={{flexDirection:'column',width:'100%'}}>
                                     {
-                                        (product.rating && product.rating.length > 0) ? (
+                                        // (product.rating && product.rating.length > 0) ? (
+                                            true?(
                                             <>
-                                                {
+                                                {/* {
                                                     product.rating.map((val, i) => {
                                                         return (
                                                             <ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />
                                                         )
                                                     })
-                                                }
+                                                } */}
+                                                <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={3} userId={123} />
+                                            <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={1} userId={123} />
+                                            <ReviewCard feedback='Hey all, in this article I won’t try to explain the TLS itself, I assume if you are here, you already know the TLS. This article is specific to enabling TLS 1.2 only in Node JS. If you really don’t know what is TLS so please watch the video below.' rating={4} userId={123} />
+                                            <ReviewCard feedback='I also assume you already have obtained the certificates (private key and public key). If you don’t you can google how to create certificates for your web server and you will find plenty of ways to do that. You could use let’s encrypt to create certificates as it is a very popular tool.I also assume you already have obtained the certificates (private key and public key). If you don’t you can google how to create certificates for your web server and you will find plenty of ways to do that. You could use let’s encrypt to create certificates as it is a very popular tool.' rating={2} userId={123} />
+                                            <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={5} userId={123} />
+                                            <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={3} userId={123} />
+                                            
                                             </>
                                         ) : (
+                                            <>
                                             <div>No Reviews</div>
+                                            </>
                                         )
                                     }
                                 </div>
@@ -1244,9 +1317,10 @@ const changeDimension = (e) => {
                             <div className="d-block d-sm-none  col-12">
                                 <h2 className="d-inline-block otherCarouselHead" >Reviews</h2>
                                 <p className="d-inline-block float-right  viewAll" >View All</p>
-                                <div className="d-flex justify-content-between  ">
-                                    <div className=" d-block d-sm-none mt-auto">
-                                        <Box position="relative" display="inline-flex">
+                                <div className=" ">
+                                    <div className=" d-flex d-sm-none mt-auto" >
+                                        <div style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
+                                            <Box position="relative" display="inline-flex">
                                             <CircularProgress size="50px" variant="determinate" value={rating * 20} style={{ color: "green" }} />
                                             <Box
                                                 top={0}
@@ -1258,15 +1332,55 @@ const changeDimension = (e) => {
                                                 alignItems="center"
                                                 justifyContent="center"
                                             >
-                                                <Typography variant="caption" component="div" color="black">{product.average_rating}</Typography>
+                                                <Typography variant="caption" component="div" color="black" style={{fontSize:'30px',display:'flex',alignItems:'center'}}>{product.average_rating}<StarBorderOutlined /> </Typography>
                                             </Box>
                                         </Box>
-                                        <p className="mb-0 mt-3 " style={{
-                                            fontWeight: "600",
-                                            fontSize: "14px",
-                                            width: "70px"
+                                        <p className="mb-0 mt-0 " style={{
+                                            fontWeight: "400",
+                                            fontSize: "12px",
+                                            width: "70px",
+                                            textAlign:'center'
                                         }}>{totalNoOfRating} ratings</p>
+                                        </div>
+                                        <div style={{paddingLeft:'20px',width:'100%'}}>
+                                             <ThemeProvider theme={theme}>
+                                            {
+                                                ratingTotal.map((val, i) => {
+                                                    if (val.rating === 1) {
+                                                        star1 = val.count * 10;
+                                                    } else if (val.rating === 2) {
+                                                        star2 = val.count * 10;
+                                                    } else if (val.rating === 3) {
+                                                        star3 = val.count * 10;
+                                                    } else if (val.rating === 4) {
+                                                        star4 = val.count * 10;
+                                                    } else if (val.rating === 5) {
+                                                        star5 = val.count * 10;
+                                                    }
+
+                                                })
+                                            }
+                                            <div className="d-flex " style={{fontSize:10,alignItems:'center'}}><p style={{margin:0}}>1</p> <StarOutlined style={{fontSize:10}}/><Box width="80%" display="inline-block" ml={1}><LinearProgress color="primary" variant="determinate" value={star1} /></Box> </div>
+                                            <div className="d-flex " style={{fontSize:10,alignItems:'center'}}><p style={{margin:0}}  >2</p> <StarOutlined style={{fontSize:10}}/><Box width="80%" display="inline-block" ml={1}><LinearProgress color="primary" variant="determinate" value={star2} /></Box> </div>
+                                            <div className="d-flex " style={{fontSize:10,alignItems:'center'}}><p style={{margin:0}}>3</p> <StarOutlined style={{fontSize:10}}/><Box width="80%" display="inline-block" ml={1}><LinearProgress color="primary" variant="determinate" value={star3} /></Box> </div>
+                                            <div className="d-flex " style={{fontSize:10,alignItems:'center'}}><p style={{margin:0}}>4</p> <StarOutlined style={{fontSize:10}}/><Box width="80%" display="inline-block" ml={1}><LinearProgress color="primary" variant="determinate" value={star4} /></Box> </div>
+                                            <div className="d-flex " style={{fontSize:10,alignItems:'center'}}><p style={{margin:0}}>5</p> <StarOutlined style={{fontSize:10}}/><Box width="80%" display="inline-block" ml={1}><LinearProgress color="primary" variant="determinate" value={star5} /></Box> </div>
+                                        </ThemeProvider>
+
+                                        </div>
+                                       
                                     </div>
+                                    <div style={{marginTop:'50px'}}>
+                                        <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={3} userId={123} />
+                                            <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={1} userId={123} />
+                                            <ReviewCard feedback='Hey all, in this article I won’t try to explain the TLS itself, I assume if you are here, you already know the TLS. This article is specific to enabling TLS 1.2 only in Node JS. If you really don’t know what is TLS so please watch the video below.' rating={4} userId={123} />
+                                            <ReviewCard feedback='I also assume you already have obtained the certificates (private key and public key). If you don’t you can google how to create certificates for your web server and you will find plenty of ways to do that. You could use let’s encrypt to create certificates as it is a very popular tool.I also assume you already have obtained the certificates (private key and public key). If you don’t you can google how to create certificates for your web server and you will find plenty of ways to do that. You could use let’s encrypt to create certificates as it is a very popular tool.' rating={2} userId={123} />
+                                            <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={5} userId={123} />
+                                            <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={3} userId={123} />
+                                            
+                                    </div>
+                                
+                                   
                                     {
                                         (product.rating) ? (
                                             <>
@@ -1279,7 +1393,9 @@ const changeDimension = (e) => {
                                                 }
                                             </>
                                         ) : (
+                                            <>
                                             <div>No Reviews</div>
+                                            </>
                                         )
                                     }
 
