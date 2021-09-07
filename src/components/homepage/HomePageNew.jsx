@@ -32,6 +32,7 @@ const HomePage = (props) => {
            JSON.parse(localStorage.getItem("userDetails123")).phonenumber
        );
    }, [props.loginResponse]);
+   const screenWidth = window.innerWidth;
   return (
     <>
         <div className="padding-10 d-flex justify-content-between mb-4  mt-4">
@@ -110,75 +111,75 @@ const HomePage = (props) => {
         margin: "20px 0 20px 0"
       }}></div>
       <Bestsellers />
-      <div className="d-none d-sm-flex justify-content-around align-items-center mx-auto mb-4" style={{width: "1200px", height: "140px",marginTop: "30px"}}>
+      <div className=" d-flex justify-content-around align-items-center mx-auto mb-3 mb-sm-4" style={{width: `${screenWidth>480 ? "1200px" : "360px" }`, height: `${screenWidth>480 ? "140px" : "40px" }`,marginTop: "30px"}}>
         <div className="d-flex align-items-center ">
-          <div className="d-flex justify-content-center align-items-center" style={{width: "90px",height: "90px", borderRadius: "50%",background: "#F4F3F4"}}>
+          <div className="d-flex justify-content-center align-items-center" style={{width: `${screenWidth> 480 ? "90px" : "40px"}`,height: `${screenWidth> 480 ? "90px" : "40px"}`, borderRadius: "50%",background: "#F4F3F4"}}>
             {/* <img src={payment} alt="payment" className="" style={{transform: "scale(0.9)"}} /> */}
-            <img src={paymentNew} alt="payment" className="" style={{transform: "scale(1)"}} />
+            <img src={paymentNew} alt="payment" className="" style={{transform: `${screenWidth> 480 ? "scale(1)" : "scale(0.4)"}`}} />
           </div>
-          <div className="d-flex flex-column" style={{marginLeft: "35px"}}>
+          <div className="d-flex flex-column" style={{marginLeft: `${screenWidth > 480 ? "35px" : "5px" }`}}>
             <p className=" mb-0" style={{
               fontFamily: "Source Sans Pro",
               fontStyle: "normal",
               fontWeight: "600",
-              fontSize: "18px",
-              lineHeight: "23px",
+              fontSize: `${screenWidth>480 ? "18px" : "8px" }`,
+              lineHeight: `${screenWidth>480 ? "23px" : "10px" }`,
               color: "#000000",
             }}>Payment</p>
             <p  className=" mb-0" style={{
               fontFamily: "Source Sans Pro",
               fontStyle: "normal",
               fontWeight: "normal",
-              fontSize: "16px",
-              lineHeight: "20px",
+              fontSize: `${screenWidth>480 ? "16px" : "7px" }`,
+              lineHeight: `${screenWidth>480 ? "20px" : "9px" }`,
               color: "#9A999F",
             }}>Secure</p>
           </div>
         </div>
         <div className="d-flex align-items-center ">
-          <div className="d-flex justify-content-center align-items-center" style={{width: "90px",height: "90px", borderRadius: "50%",background: "#F4F3F4"}}>
+          <div className="d-flex justify-content-center align-items-center" style={{width: `${screenWidth> 480 ? "90px" : "40px"}`,height: `${screenWidth> 480 ? "90px" : "40px"}`, borderRadius: "50%",background: "#F4F3F4"}}>
           {/* <img src={customer} alt="customer" className="" style={{transform: "scale(0.9)"}} /> */}
-          <img src={customerNew} alt="customer" className="" style={{transform: "scale(1)"}} />
+          <img src={customerNew} alt="customer" className="" style={{transform: `${screenWidth> 480 ? "scale(1)" : "scale(0.4)"}`}} />
           </div>
-          <div className="d-flex flex-column align-items-start  " style={{marginLeft: "35px"}}>
+          <div className="d-flex flex-column align-items-start  " style={{marginLeft: `${screenWidth > 480 ? "35px" : "5px" }`}}>
             <p className=" mb-0" style={{
               fontFamily: "Source Sans Pro",
               fontStyle: "normal",
               fontWeight: "600",
-              fontSize: "18px",
-              lineHeight: "23px",
+              fontSize: `${screenWidth>480 ? "18px" : "8px" }`,
+              lineHeight: `${screenWidth>480 ? "23px" : "10px" }`,
               color: "#000000",
             }}>24/7 Customer Care</p>
             <p  className=" mb-0" style={{
               fontFamily: "Source Sans Pro",
               fontStyle: "normal",
               fontWeight: "normal",
-              fontSize: "16px",
-              lineHeight: "20px",
+              fontSize: `${screenWidth>480 ? "16px" : "7px" }`,
+              lineHeight: `${screenWidth>480 ? "20px" : "9px" }`,
               color: "#9A999F",
             }}>Mon to Fri (9:00 to 17:00)</p>
           </div>
         </div>
         <div className="d-flex align-items-center ">
-          <div className="d-flex justify-content-center align-items-center" style={{width: "90px",height: "90px", borderRadius: "50%",background: "#F4F3F4"}}>
+          <div className="d-flex justify-content-center align-items-center" style={{width: `${screenWidth> 480 ? "90px" : "40px"}`,height: `${screenWidth> 480 ? "90px" : "40px"}`, borderRadius: "50%",background: "#F4F3F4"}}>
             {/* <img src={satisfaction} alt="satisfaction" className="" style={{transform: "scale(0.9)"}} /> */}
-            <img src={satisfactionNew} alt="satisfaction" className="" style={{transform: "scale(1)"}} />
+            <img src={satisfactionNew} alt="satisfaction" className="" style={{transform: `${screenWidth> 480 ? "scale(1)" : "scale(0.4)"}`}} />
           </div>
-          <div className="d-flex flex-column" style={{marginLeft: "35px"}}>
+          <div className="d-flex flex-column" style={{marginLeft: `${screenWidth > 480 ? "35px" : "5px" }`}}>
             <p className=" mb-0" style={{
               fontFamily: "Source Sans Pro",
               fontStyle: "normal",
               fontWeight: "600",
-              fontSize: "18px",
-              lineHeight: "23px",
+              fontSize: `${screenWidth>480 ? "18px" : "8px" }`,
+              lineHeight: `${screenWidth>480 ? "23px" : "10px" }`,
               color: "#000000",
             }}>100% Satisfaction</p>
             <p  className=" mb-0" style={{
               fontFamily: "Source Sans Pro",
               fontStyle: "normal",
               fontWeight: "normal",
-              fontSize: "16px",
-              lineHeight: "20px",
+              fontSize: `${screenWidth>480 ? "16px" : "7px" }`,
+              lineHeight: `${screenWidth>480 ? "20px" : "9px" }`,
               color: "#9A999F",
             }}>Feedbacks</p>
           </div>

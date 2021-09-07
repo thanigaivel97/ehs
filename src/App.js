@@ -28,7 +28,7 @@ import Quotation from "./components/Quotation/Quotation";
 import TrackOrder from "./components/TrackOrder/TrackOrder";
 import SignageProductPage from "./components/signages/SignageProductPage";
 import Footer from "./components/homepage/FooterNew";
-import PosterProductPage from "./components/category_page/PosterProductPage";
+import PosterProductPage from "./components/category_page/PosterProductPageN";
 import Contact from "./components/contact/Contact";
 import Checkout from "./components/ShoppingCart/Checkout";
 import About from "./components/About/About";

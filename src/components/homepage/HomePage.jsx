@@ -21,6 +21,7 @@ const HomePage = (props) => {
            JSON.parse(localStorage.getItem("userDetails123")).phonenumber
        );
    }, [props.loginResponse]);
+  
   return (
     <>
       <Design />
