@@ -28,7 +28,13 @@ import Swal from "sweetalert2";
 import withReactContent from 'sweetalert2-react-content';
 import Spinner from "react-loading";
 import CartContext from "../../helper/cartContext";
-import { ControlCamera, ShoppingBasketOutlined, ShoppingCartOutlined, StarBorderOutlined, StarOutlined, StarRateOutlined } from "@material-ui/icons";
+import Slider from 'react-slick';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
+
+import { ControlCamera, NavigateBefore, NavigateNext, ShoppingBasketOutlined, ShoppingCartOutlined, StarBorderOutlined, StarOutlined, StarRateOutlined } from "@material-ui/icons";
+import styled from "styled-components";
 const MySwal = withReactContent(Swal);
 
 const theme = createMuiTheme({
@@ -174,6 +180,7 @@ const PosterProductPage = (props) => {
 
     const [loading, setLoading] = useState(false);
     useEffect(() => {
+        console.log(catSlug)
         if (loading) {
             MySwal.fire({
                 html: <div className="d-flex justify-content-around  align-items-center py-3">
@@ -587,6 +594,48 @@ const changeDimension = (e) => {
     const similarCarousel = useRef(null);
     const carousel = useRef(null);
     let star1 = 0, star2 = 0, star3 = 0, star4 = 0, star5 = 0;
+    // let carousel_settings={
+    //     dots:false,
+    //     infinite:true,
+    //     speed:500,
+    //     slidesToShow:4,
+    //     slidesToScroll:1,
+    //     autoplay:false,
+    //     nextArrow: <NavigateNext />,
+    //   prevArrow: <NavigateBefore />
+    // }
+        const[csettings,setCsettings]=useState({
+        dots:false,
+        infinite:true,
+        speed:500,
+        slidesToShow:4,
+        slidesToScroll:1,
+        autoplay:false,
+        nextArrow: <NavigateNext />,
+      prevArrow: <NavigateBefore />
+
+    })
+
+
+    useEffect(()=>{
+        window.addEventListener('resize',()=>{
+            if(window.innerWidth<600){
+            
+            setCsettings({...csettings,slidesToShow:1})
+           
+        }else if(window.innerWidth<1200){
+            setCsettings({...csettings,slidesToShow:2})
+        }else{
+            setCsettings({...csettings,slidesToShow:4})
+        }
+
+        })
+        
+    },[])
+    
+
+
+
     return (
         <div>
             <div className="container-fluid pt-3 pb-3 padding-10 d-none d-sm-block " style={{ background: "#F6F6F6", color: "#333333" }}>
@@ -622,6 +671,9 @@ const changeDimension = (e) => {
                     }}
                     
                     />
+                    
+
+                    
 
                    {/* <Carousel className=" " showArrows={false} renderPagination={({ pages, activePage, onClick }) => {
                         return (
@@ -801,6 +853,7 @@ const changeDimension = (e) => {
                         </p>
                     </div>
                     */}
+                    {catSlug==='posters'?
                     <div className=" mt-0 mt-sm-0 d-flex flex-column coflex-row justify-content-between" >
                         <p className="mt-sm-0 mb-2  align-self-sm-start align-self-start selectHead  ">Select Maaterial</p>
                         {/* product.materialDimension ? (
@@ -819,11 +872,11 @@ const changeDimension = (e) => {
                             </div>
                         </div>
                         ) : "" */}
-                        <div className="d-flex justify-content-between mr-0   ">
+                        <div className="d-flex  mr-0   ">
                         {
                             matNew ? matNew.map((val,i)=>{
                                 return(
-                                    <div className="posterMaterialDimension  mat"  role="button" onClick={(e)=>changeMaterial(e)} >
+                                    <div className="posterMaterialDimension  mat mr-1"  role="button" onClick={(e)=>changeMaterial(e)} >
                                         <img src={val.material_img? val.material_img: ""} className="materialImg2Dimension " alt="material"></img>
                                         <p className="text-center materialTextDimension  mt-auto ">{ val.material_title ? val.material_title: "No Material"}</p>
                                     </div>
@@ -831,7 +884,7 @@ const changeDimension = (e) => {
                             }): ""
                         }
                         </div>
-                    </div>
+                    </div>:null}
                     <div className=" d-flex flex-column flex-row justify-content-between my-3" >
                         <p className=" align-self-sm-start align-self-start selectHead">Select Dimensions</p>
                         <div className="d-flex justify-content-start">
@@ -1205,6 +1258,46 @@ const changeDimension = (e) => {
                     }
                 </div>
             </div>
+            {/* carousel */}
+            {catSlug!=='posters'?
+                    <CarouselWrap>
+                        <Slider className="carousel" {...csettings} >
+                        <div className='carousel-items'>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS040zhYmfZvoJY2zABrdT0FuaUUsLGI3ZKIA&usqp=CAU" alt="" />
+                            
+                        </div>
+                        <div className='carousel-items'>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS040zhYmfZvoJY2zABrdT0FuaUUsLGI3ZKIA&usqp=CAU" alt="" />
+                            
+                        </div>
+                        <div className='carousel-items'>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS040zhYmfZvoJY2zABrdT0FuaUUsLGI3ZKIA&usqp=CAU" alt="" />
+                            
+                        </div>
+                        <div className='carousel-items'>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS040zhYmfZvoJY2zABrdT0FuaUUsLGI3ZKIA&usqp=CAU" alt="" />
+                            
+                        </div>
+                        <div className='carousel-items'>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS040zhYmfZvoJY2zABrdT0FuaUUsLGI3ZKIA&usqp=CAU" alt="" />
+                            
+                        </div>
+                        <div className='carousel-items'>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS040zhYmfZvoJY2zABrdT0FuaUUsLGI3ZKIA&usqp=CAU" alt="" />
+                            
+                        </div>
+                        <div className='carousel-items'>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS040zhYmfZvoJY2zABrdT0FuaUUsLGI3ZKIA&usqp=CAU" alt="" />
+                            
+                        </div>
+                        <div className='carousel-items'>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS040zhYmfZvoJY2zABrdT0FuaUUsLGI3ZKIA&usqp=CAU" alt="" />
+                            
+                        </div>
+
+                    </Slider>
+
+                    </CarouselWrap>:null}
 
             {/*rating and review*/}
 
@@ -1228,7 +1321,7 @@ const changeDimension = (e) => {
                                 <div className="row">
                                     <div className="col-3 mt-auto mb-0">
                                         <Box position="relative" display="inline-flex">
-                                            <CircularProgress size="50px" variant="determinate" value={87} style={{ color: "green" }} />
+                                           <CircularProgress size="50px" variant="determinate" value={rating * 20} style={{ color: "green" }} />
                                             <Box
                                                 top={0}
                                                 left={0}
@@ -1239,9 +1332,9 @@ const changeDimension = (e) => {
                                                 alignItems="center"
                                                 justifyContent="center"
                                             >
-                                                <Typography variant="caption" component="div" color="black">{product.average_rating}</Typography>
+                                                <Typography variant="caption" component="div" color="black" style={{fontSize:'30px',display:'flex',alignItems:'center'}}>{product.average_rating}<StarBorderOutlined /> </Typography>
                                             </Box>
-                                        </Box>
+                                            </Box>
                                         <p className="mb-0" style={{
                                             fontSize: "14px"
                                         }}>{totalNoOfRating} ratings</p>
@@ -1549,3 +1642,58 @@ const changeDimension = (e) => {
 };
 
 export default PosterProductPage;
+
+
+const CarouselWrap=styled.div`
+margin-top: 30px;
+width: 100vw;
+
+
+position: relative;
+left: 0;
+display: flex;
+justify-content: center;
+
+.carousel{
+    height: 250px;
+    width: 100vw;
+    .carousel-items{
+        
+        padding: 4px;
+        overflow: hidden;
+        height: 250px;
+        img{
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+
+    }
+    
+}
+.slick-slider{
+     height: 250px ;
+    width: 80% ;
+    
+}
+.slick-prev{
+    color:black;
+    background-color: white;
+    transform: translate(50px,-10px) scale(1.6);
+    z-index:10;
+    border-radius: 50%;
+    box-shadow: 0 3px 12px #0000005a;
+    
+}
+.slick-next{
+    
+     color:black;
+    background-color: white;
+    transform: translate(-50px,-10px) scale(1.6);
+    z-index:10;
+    border-radius: 50%;
+    box-shadow: 0 3px 12px #0000005a;
+}
+
+`

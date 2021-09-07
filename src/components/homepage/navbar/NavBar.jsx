@@ -28,9 +28,12 @@ const NavBar = (props) => {
       //console.log(res.data.data)
     }).catch((err)=> {
         console.log(err);
+
+
+        
     },[]);
     
-    
+    console.log('categories',categories)
 
     if (JSON.parse(localStorage.getItem("userDetails123"))){
           Axios.get(`${API}auth/get_user_details_by_id`,
