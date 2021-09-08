@@ -630,6 +630,7 @@ const changeDimension = (e) => {
         }
 
         })
+        console.log(catSlug)
         
     },[])
     
@@ -885,6 +886,7 @@ const changeDimension = (e) => {
                         }
                         </div>
                     </div>:null}
+                    
                     <div className=" d-flex flex-column flex-row justify-content-between my-3" >
                         <p className=" align-self-sm-start align-self-start selectHead">Select Dimensions</p>
                         <div className="d-flex justify-content-start">
@@ -915,6 +917,25 @@ const changeDimension = (e) => {
                         </div>
 
                     </div>
+                    {catSlug==='asset-marking'?<div>
+                        <p style={{fontWeight:'bold'}}>Select Colour</p>
+                        <div className='d-flex'>
+                            <div style={{height:'80px',width:'100%',maxWidth:'60px',margin:3,border:'2px solid lightgray',display:'flex',flexDirection:"column",padding:5,borderRadius:5}}>
+                                <div style={{backgroundColor:'red',height:'100%',width:'100%'}}></div>
+                                <p className='mb-0' style={{textAlign:'center',fontSize:13}}>Red</p>
+                            </div>
+                            <div style={{height:'80px',width:'100%',maxWidth:'60px',margin:3,border:'2px solid lightgray',display:'flex',flexDirection:"column",padding:5,borderRadius:5}}>
+                                <div style={{backgroundColor:'red',height:'100%',width:'100%'}}></div>
+                                <p className='mb-0' style={{textAlign:'center',fontSize:13}}>Red</p>
+                            </div><div style={{height:'80px',width:'100%',maxWidth:'60px',margin:3,border:'2px solid lightgray',display:'flex',flexDirection:"column",padding:5,borderRadius:5}}>
+                                <div style={{backgroundColor:'red',height:'100%',width:'100%'}}></div>
+                                <p className='mb-0' style={{textAlign:'center',fontSize:13}}>Red</p>
+                            </div><div style={{height:'80px',width:'100%',maxWidth:'60px',margin:3,border:'2px solid lightgray',display:'flex',flexDirection:"column",padding:5,borderRadius:5}}>
+                                <div style={{backgroundColor:'red',height:'100%',width:'100%'}}></div>
+                                <p className='mb-0' style={{textAlign:'center',fontSize:13}}>Red</p>
+                            </div>
+                        </div>
+                    </div>:null}
                     <div className="d-flex flex-column flex-sm-column  align-items-sm-start align-items-start ">
                         <p className=" mr-5  mr-sm-0 d-inline-block d-sm-block my-auto mb-sm-2" style={{ fontWeight: "500" }}>Quantity</p>
                         <ButtonGroup
