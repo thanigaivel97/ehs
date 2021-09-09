@@ -647,7 +647,7 @@ const changeDimension = (e) => {
             </div>
             <div className="row  padding-10 mt-4 " >
                 <div className="col-lg-5 pl-auto pr-auto flex-column-reverse flex-sm-column " style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-                    <div className="d-block d-sm-none mb-4" >
+                    <div className="d-block d-sm-none mb-0" >
                         <h2 style={{
                             fontStyle: "normal",
                             fontWeight: "normal",
@@ -800,6 +800,120 @@ const changeDimension = (e) => {
                             </div> : ""
                     }
                 </div>
+                {/*price details mobile*/}
+                <div className="ml-4 d-flex d-sm-none float-right ">
+                        {/* <p className="d-inline-block mt-4" style={{
+                            fontFamily: "Source Sans Pro",
+                            fontStyle: "normal",
+                            fontWeight: "bold",
+                            fontSize: "24px",
+                            lineHeight: "29px",
+                            color: "#003459",
+                        }}>&#8377;{amount}</p>
+                        <span className="ml-2" style={{
+                            fontFamily: "Source Sans Pro",
+                            fontStyle: "normal",
+                            fontWeight: "500",
+                            fontSize: "12px",
+                            color: "#757575",
+                            lineHeight: "15px"
+                        }}>(Inclusive of All Taxes)</span> */}
+                        <div className=" d-block">
+                        {
+                            (isNaN(amount)) ? (
+                                
+                                
+                                <p className="mt-0 text-danger" style={{
+                                    fontFamily: "Source Sans Pro",
+                                    fontStyle: "normal",
+                                    fontWeight: "normal",
+                                    fontSize: "16px",
+                                    lineHeight: "45px",
+                                    color: "#003459",
+                                }}>
+                                    Please select Material & Dimension.....
+                                </p>
+                            ) : (
+                                <>
+
+                                    <p className="d-inline-block mt-0" style={{
+                                        fontFamily: "Source Sans Pro",
+                                        fontStyle: "normal",
+                                        fontWeight: "bold",
+                                        fontSize: "26px",
+                                        lineHeight: "45px",
+                                        color: "#003459",
+                                        margin:0,
+                                    }}>
+                                         &#8377;{amount} 
+                                   
+                                    </p>
+                                    <span className="ml-3" style={{
+                                        fontFamily: "Source Sans Pro",
+                                        fontStyle: "normal",
+                                        fontWeight: "500",
+                                        fontSize: "12px",
+                                        color: "#757575",
+                                        lineHeight: "15px"
+                                    }}></span>
+                                </>
+                            )
+                        }
+
+                    </div>
+                        {
+                            parseInt(product.discountValue) > 0 && product.discount_type === 1 ?
+                           
+
+                                <div className=" d-flex justify-content-center align-items-center" style={{
+                                   color:'gray',
+                                   display: 'flex',
+                                  
+                                   
+                                }}>
+                                    {/* Limited time offer: Flat Rs {product.discountValue} off */}
+                                    <p style={{
+                                        color: '#df5505',
+                                         margin: 0,
+                                         fontSize:'12px'
+                                    }}><span style={{
+                                        color: "GrayText",
+                                        textDecoration:'line-through',
+                                        marginRight:'6px'
+
+                                    }}>&#8377;{amount+product.discountValue}</span> 
+                                    
+                                        
+                                    {(amount/(amount+product.discountValue)*100)}% off</p>
+                                </div> : ""}
+
+                        {parseInt(product.discountValue) > 0 && product.discount_type === 2 ?  
+                
+                        <div className=" d-flex justify-content-center align-items-center" style={{
+                                   color:'gray',
+                                   display: 'flex',
+                                  
+                                   
+                                }}>
+                                    {/* Limited time offer: Flat Rs {product.discountValue} off */}
+                                    <p style={{
+                                        color: '#df5505',
+                                         margin: 0,
+                                         fontSize:'12px'
+                                    }}><span style={{
+                                        color: "GrayText",
+                                        textDecoration:'line-through',
+                                        marginRight:'6px'
+
+                                    }}>&#8377;{(amount*100)/product.discountValue}</span> 
+                                    
+                                        
+                                    {product.discountValue}% off</p>
+                                </div> : ""}
+
+                    
+                    </div>
+                
                 <div className="col-lg-3  " style={{padding:'12px'}} >
                    {/* <div className="d-none d-sm-block " style={{
                         marginBottom: "49px"
@@ -969,24 +1083,7 @@ const changeDimension = (e) => {
                             </Button>
                         </ButtonGroup>
                     </div>
-                    <div className="mt-2 d-block d-sm-none float-right ">
-                        <p className="d-inline-block mt-4" style={{
-                            fontFamily: "Source Sans Pro",
-                            fontStyle: "normal",
-                            fontWeight: "bold",
-                            fontSize: "24px",
-                            lineHeight: "29px",
-                            color: "#003459",
-                        }}>&#8377;{amount}</p>
-                        <span className="ml-2" style={{
-                            fontFamily: "Source Sans Pro",
-                            fontStyle: "normal",
-                            fontWeight: "500",
-                            fontSize: "12px",
-                            color: "#757575",
-                            lineHeight: "15px"
-                        }}>(Inclusive of All Taxes)</span>
-                    </div>
+                    
                     <button
                         onClick={addToCart}
                         className="d-block d-sm-none w-100 p-2 mt-4" style={{
@@ -1120,48 +1217,105 @@ const changeDimension = (e) => {
                             }
 
                         </div>
+                        {/*price details section */}
+                        <div className="pricedetails" style={{
+                            display: "flex",
+                            alignItems:'center',
+                            marginTop:'10px'
+                        }}>
+                            <div className=" d-none d-sm-block">
                         {
-                            parseInt(product.discountValue) > 0 && product.discount_type === 1 ?
-                                <div className="d-none d-sm-flex justify-content-center align-items-center" style={{
-                                    marginTop: "30px",
-                                    width: "222px",
-                                    height: "30px",
-                                    background: "rgba(247, 204, 127, 0.7)",
-                                    border: "2px dashed #FEA100",
-                                    boxSizing: "border-box",
+                             (isNaN(amount)) ? (
+                                
+                                <p className="mt-0 text-danger" style={{
                                     fontFamily: "Source Sans Pro",
                                     fontStyle: "normal",
                                     fontWeight: "normal",
-                                    fontSize: "14px",
-                                    lineHeight: "21px",
-                                    textAlign: "center",
-                                    letterSpacing: "0.2px",
+                                    fontSize: "16px",
+                                    lineHeight: "45px",
                                     color: "#003459",
                                 }}>
-                                    Limited time offer: Flat Rs {product.discountValue} off
-                                </div> : ""}
+                                    Please select Material & Dimension.....
+                                </p>
+                            ) : (
+                                <>
 
-                        {parseInt(product.discountValue) > 0 && product.discount_type === 2 ? <div className="d-none d-sm-flex justify-content-center align-items-center" style={{
-                            marginTop: "30px",
-                            width: "222px",
-                            height: "30px",
-                            background: "rgba(247, 204, 127, 0.7)",
-                            border: "2px dashed #FEA100",
-                            boxSizing: "border-box",
-                            fontFamily: "Source Sans Pro",
-                            fontStyle: "normal",
-                            fontWeight: "normal",
-                            fontSize: "14px",
-                            lineHeight: "21px",
-                            textAlign: "center",
-                            letterSpacing: "0.2px",
-                            color: "#003459",
-                        }}>
-                            Limited time offer: {product.discountValue}% Off
-                        </div> : ""
+                                    <p className="d-inline-block mt-0" style={{
+                                        fontFamily: "Source Sans Pro",
+                                        fontStyle: "normal",
+                                        fontWeight: "bold",
+                                        fontSize: "36px",
+                                        lineHeight: "45px",
+                                        color: "#003459",
+                                        margin:0,
+                                    }}>
+                                         &#8377;{amount} 
+                                   
+                                    </p>
+                                    <span className="ml-3" style={{
+                                        fontFamily: "Source Sans Pro",
+                                        fontStyle: "normal",
+                                        fontWeight: "500",
+                                        fontSize: "12px",
+                                        color: "#757575",
+                                        lineHeight: "15px"
+                                    }}></span>
+                                </>
+                            )
                         }
 
                     </div>
+                        {
+                            parseInt(product.discountValue) > 0 && product.discount_type === 1 ?
+
+                                <div className="d-none d-sm-flex justify-content-center align-items-center" style={{
+                                   color:'gray',
+                                   display: 'flex',
+                                  
+                                   
+                                }}>
+                                    {/* Limited time offer: Flat Rs {product.discountValue} off */}
+                                    <p style={{
+                                        color: '#df5505',
+                                         margin: 0,
+                                    }}><span style={{
+                                        color: "GrayText",
+                                        textDecoration:'line-through',
+                                        marginRight:'6px'
+
+                                    }}>&#8377;{amount+product.discountValue}</span> 
+                                    
+                                        
+                                    {(amount/(amount+product.discountValue)*100)}% off</p>
+                                </div> : ""}
+
+                        {parseInt(product.discountValue) > 0 && product.discount_type === 2 ?  
+                
+                        <div className="d-none d-sm-flex justify-content-center align-items-center" style={{
+                                   color:'gray',
+                                   display: 'flex',
+                                  
+                                   
+                                }}>
+                                    {/* Limited time offer: Flat Rs {product.discountValue} off */}
+                                    <p style={{
+                                        color: '#df5505',
+                                         margin: 0,
+                                    }}><span style={{
+                                        color: "GrayText",
+                                        textDecoration:'line-through',
+                                        marginRight:'6px'
+
+                                    }}>&#8377;{(amount*100)/product.discountValue}</span> 
+                                    
+                                        
+                                    {product.discountValue}% off</p>
+                                </div> : ""}
+
+                    </div>
+
+                        </div>
+                        
                     <div className="productInfo mt-3" >
                         <p className=" d-none d-sm-block" style={{
                             fontSize: "16px", lineHeight: "19px", fontFamily: "Lato",
@@ -1191,45 +1345,7 @@ const changeDimension = (e) => {
                         }
                         <p><span style={{ fontWeight: "600" }}>SKU: </span>{product.sku}</p>
                     </div>
-                    <div className=" d-none d-sm-block">
-                        {
-                            (isNaN(amount)) ? (
-                                <p className="mt-4 text-danger" style={{
-                                    fontFamily: "Source Sans Pro",
-                                    fontStyle: "normal",
-                                    fontWeight: "normal",
-                                    fontSize: "16px",
-                                    lineHeight: "45px",
-                                    color: "#003459",
-                                }}>
-                                    Please select Material & Dimension.....
-                                </p>
-                            ) : (
-                                <>
 
-                                    <p className="d-inline-block mt-4" style={{
-                                        fontFamily: "Source Sans Pro",
-                                        fontStyle: "normal",
-                                        fontWeight: "bold",
-                                        fontSize: "36px",
-                                        lineHeight: "45px",
-                                        color: "#003459",
-                                    }}>
-                                        &#8377;{amount}
-                                    </p>
-                                    <span className="ml-3" style={{
-                                        fontFamily: "Source Sans Pro",
-                                        fontStyle: "normal",
-                                        fontWeight: "500",
-                                        fontSize: "12px",
-                                        color: "#757575",
-                                        lineHeight: "15px"
-                                    }}>(Inclusive of All Taxes)</span>
-                                </>
-                            )
-                        }
-
-                    </div>
                     {/* <button
                         onClick={addToCart}
                         className=" d-none d-sm-block w-100 p-2 mt-2"
