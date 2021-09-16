@@ -1,8 +1,10 @@
-import React from 'react';
+import React,{useState, useEffect} from 'react';
 import "./bestsellersNew.css"
 import imgDummy from "../../../images/BeforeStart.png";
 import Fade from "react-reveal/Fade";
 import Zoom from "react-reveal/Zoom";
+import Axios from "axios";
+import {API} from "../../../backend";
 
 const Card = (props) => {
     return(
@@ -14,6 +16,41 @@ const Card = (props) => {
 };
 
 const  BestsellersNew = () =>  {
+
+    const [category,setCategory] = useState('posters');
+  const [postersBestselller,setPostersBestseller] = useState([]);
+  const [signagesBestselller,setSignagesBestseller] = useState([]);
+  const [floorgraphicsBestselller,setFloorgraphicsBestseller] = useState([]);
+  const [assetmarkingsBestselller,setAssetmarkingsBestseller] = useState([]);
+
+    useEffect(()=>{
+      
+      Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: "posters", bestseller: 1}}).then((res)=>{
+        setPostersBestseller(res.data.data.postersExists);
+       console.log("bestseller",res);
+      }).catch((err)=> {
+        console.log(err);
+      });
+      Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: "signages", bestseller: 1}}).then((res)=>{
+       setSignagesBestseller(res.data.data.postersExists);
+      console.log("bestseller",res);
+      }).catch((err)=> {
+        console.log(err);
+      });
+      Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: "floor-graphics", bestseller: 1}}).then((res)=>{
+        setFloorgraphicsBestseller(res.data.data.postersExists);
+       //console.log("bestseller",res);
+      }).catch((err)=> {
+        //console.log(err);
+      });
+      Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: "asset-markings", bestseller: 1}}).then((res)=>{
+        setAssetmarkingsBestseller(res.data.data.postersExists);
+      // console.log("bestseller",res);
+      }).catch((err)=> {
+       // console.log(err);
+      });
+    },[])
+
     return (
         <div className="padding-10">
             <p className="bestsellerTitle">Our Bestsellers</p> 
@@ -21,10 +58,13 @@ const  BestsellersNew = () =>  {
                 <p className="bestsellerSubHead">Posters</p>
                 <div className="bestsellerContainer">
                     <Zoom>
-                    <Card title="Floor Graphics | Printable Catalog | PRD-FG0009" imgUrl={imgDummy} />
-                    <Card title="Floor Graphics | Printable Catalog | PRD-FG0009" imgUrl={imgDummy} />
-                    <Card title="Floor Graphics | Printable Catalog | PRD-FG0009" imgUrl={imgDummy} />
-                    <Card title="Floor Graphics | Printable Catalog | PRD-FG0009" imgUrl={imgDummy} />
+                    {/*
+                        postersBestselller && postersBestselller.slice(0,4).map((val,i)=>{
+                            return(
+                                <Card title={val.name ? val.name : "-"} imgUrl={val.imgUrl.length>0 ? val.imgUrl[0] : ""} />
+                            )
+                        })
+                    */}
                     </Zoom>
                 </div> 
             </div>
@@ -32,10 +72,13 @@ const  BestsellersNew = () =>  {
                 <p className="bestsellerSubHead">Signages</p>
                 <div className="bestsellerContainer">
                     <Zoom>
-                        <Card title="Floor Graphics | Printable Catalog | PRD-FG0009" imgUrl={imgDummy} />
-                        <Card title="Floor Graphics | Printable Catalog | PRD-FG0009" imgUrl={imgDummy} />
-                        <Card title="Floor Graphics | Printable Catalog | PRD-FG0009" imgUrl={imgDummy} />
-                        <Card title="Floor Graphics | Printable Catalog | PRD-FG0009" imgUrl={imgDummy} />
+                    {/*
+                        signagesBestselller && signagesBestselller.slice(0,4).map((val,i)=>{
+                            return(
+                                <Card title={val.name ? val.name : "-"} imgUrl={val.imgUrl.length>0 ? val.imgUrl[0] : ""} />
+                            )
+                        })
+                    */}
                     </Zoom>
                 </div>
             </div>
@@ -43,10 +86,13 @@ const  BestsellersNew = () =>  {
                 <p className="bestsellerSubHead">Floor Graphics</p>
                 <div className="bestsellerContainer">
                     <Zoom>
-                    <Card title="Floor Graphics | Printable Catalog | PRD-FG0009" imgUrl={imgDummy} />
-                    <Card title="Floor Graphics | Printable Catalog | PRD-FG0009" imgUrl={imgDummy} />
-                    <Card title="Floor Graphics | Printable Catalog | PRD-FG0009" imgUrl={imgDummy} />
-                    <Card title="Floor Graphics | Printable Catalog | PRD-FG0009" imgUrl={imgDummy} />
+                    {/*
+                        floorgraphicsBestselller && floorgraphicsBestselller.slice(0,4).map((val,i)=>{
+                            return(
+                                <Card title={val.name ? val.name : "-"} imgUrl={val.imgUrl.length>0 ? val.imgUrl[0] : ""} />
+                            )
+                        })
+                    */}
                     </Zoom>
                 </div> 
             </div>
@@ -54,10 +100,13 @@ const  BestsellersNew = () =>  {
                 <p className="bestsellerSubHead">Asset Markings</p>
                 <div className="bestsellerContainer">
                     <Zoom >
-                    <Card title="Floor Graphics | Printable Catalog | PRD-FG0009" imgUrl={imgDummy} />
-                    <Card title="Floor Graphics | Printable Catalog | PRD-FG0009" imgUrl={imgDummy} />
-                    <Card title="Floor Graphics | Printable Catalog | PRD-FG0009" imgUrl={imgDummy} />
-                    <Card title="Floor Graphics | Printable Catalog | PRD-FG0009" imgUrl={imgDummy} />
+                    {/*
+                        assetmarkingsBestselller && assetmarkingsBestselller.slice(0,4).map((val,i)=>{
+                            return(
+                                <Card title={val.name ? val.name : "-"} imgUrl={val.imgUrl.length>0 ? val.imgUrl[0] : ""} />
+                            )
+                        })
+                    */}
                     </Zoom>
                 </div> 
             </div>
