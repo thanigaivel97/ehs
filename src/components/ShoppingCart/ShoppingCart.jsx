@@ -367,7 +367,7 @@ const Tables = (props) => {
               <Link to="/" className="text-dark "><ArrowBackIosRoundedIcon  style={{width: "12px",marginBottom: "2px" }} /> Back to Shopping </Link>
           </div>
           <div className="d-flex justify-content-between mt-lg-2">
-            <h1 className="mt-2 catHead text-capitalize" >
+            <h1 className="mt-2 catHead text-capitalize"  >
             Shopping Cart
             </h1>
             {
@@ -436,16 +436,16 @@ const Tables = (props) => {
                        <td className="mr-0 px-0 d-flex justify-content-between border-none shoppingCartProduct" >
                               <div>
                                 <img
-                                  src={v.poster_details.imgUrl[0]}
+                                  src={v.poster_details.imgUrl ? v.poster_details.imgUrl[0] : "https://dummyimage.com/400x400/003459/fff.png&text=No+Image+Available"}
                                   className="productImgInCart"
-                                  alt={v.poster_details.slug}
+                                  alt={v.poster_details.slug ? v.poster_details.slug : "-"}
                                 />
                               </div>
                               <div className="ml-2  ml-sm-3  shoppingCartItemDetail" >
                                 <p
                                   className="tabletitle p-0 mb-0 mb-sm-1 "
                                 >
-                                  {v.poster_details.name}
+                                  {v.poster_details.name ? v.poster_details.name : ""}
                                 </p>
                                 <p
                                   className="tabledata p-0 m-0"
