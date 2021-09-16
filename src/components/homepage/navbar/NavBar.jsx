@@ -362,14 +362,14 @@ const NavBar = (props) => {
             onClick={searchIcon}
              >Search</button>
          <div
-              className="nav-item d-none d-lg-block  mx-auto "
+              className="nav-item d-none d-lg-flex  mx-auto "
               style={{
-                display: "inline-block",
+                display: "flex",
                 color: "#ffffff",
-                backgroundColor:'#F2994A',
-                padding: '6px 18px',
-                height: 35,
-                borderRadius:4,
+                alignItems:'center',
+                
+               
+                
               }}
             >
               {authUser ? (
@@ -377,13 +377,17 @@ const NavBar = (props) => {
                 
               ) : (
                 <>
-                  {/* <Link
+                   <Link
                     to="/login"
                     className=" textColorAndWeight text-decoration-none"
+                    style={{
+                      color: 'white',
+                      padding: '2px',
+                    }}
                   >
                     Login
                   </Link>{" "}
-                  |{" "} */}
+                  |{" "} 
                   <Link
                     to="/signup"
                     className=" textColorAndWeight text-decoration-none"
@@ -391,10 +395,11 @@ const NavBar = (props) => {
                       display: 'flex',
                       alignItems:'center',
                       color: "#ffffff",
+                      padding: '2px',
                     
                     }}
                   >
-                    <PersonOutline /> SignUp
+                  Register
                   </Link>
                 </>
               )}
