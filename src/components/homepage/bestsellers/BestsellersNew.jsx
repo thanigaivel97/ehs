@@ -39,17 +39,17 @@ const  BestsellersNew = () =>  {
       });
       Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: "floor-graphics", bestseller: 1}}).then((res)=>{
         setFloorgraphicsBestseller(res.data.data.postersExists);
-       //console.log("bestseller",res);
+       console.log("bestseller",res);
       }).catch((err)=> {
-        //console.log(err);
+        console.log(err);
       });
       Axios.get(`${API}posters/getPosterByCatSubCat`, {params: {category_slug: "asset-markings", bestseller: 1}}).then((res)=>{
         setAssetmarkingsBestseller(res.data.data.postersExists);
-      // console.log("bestseller",res);
+      console.log("bestseller",res);
       }).catch((err)=> {
-       // console.log(err);
+       console.log(err);
       });
-    },[])
+    },[postersBestselller,signagesBestselller,floorgraphicsBestselller,assetmarkingsBestselller]);
 
     return (
         <div className="padding-10">
@@ -57,57 +57,53 @@ const  BestsellersNew = () =>  {
             <div className="my-3">
                 <p className="bestsellerSubHead">Posters</p>
                 <div className="bestsellerContainer">
-                    <Zoom>
-                    {/*
-                        postersBestselller && postersBestselller.slice(0,4).map((val,i)=>{
+                    
+                    {
+                        postersBestselller.length>0 &&  postersBestselller.slice(0,4).map((val,i)=>{
                             return(
-                                <Card title={val.name ? val.name : "-"} imgUrl={val.imgUrl.length>0 ? val.imgUrl[0] : ""} />
+                                <Card title={val.name ? val.name : "-"} imgUrl={val.imgUrl.length>0 ? val.imgUrl[0] : ""} ></Card>
                             )
                         })
-                    */}
-                    </Zoom>
+                    }
                 </div> 
             </div>
             <div className="my-3">
                 <p className="bestsellerSubHead">Signages</p>
                 <div className="bestsellerContainer">
-                    <Zoom>
-                    {/*
-                        signagesBestselller && signagesBestselller.slice(0,4).map((val,i)=>{
+                    
+                    {
+                        signagesBestselller.length>0  && signagesBestselller.slice(0,4).map((val,i)=>{
                             return(
                                 <Card title={val.name ? val.name : "-"} imgUrl={val.imgUrl.length>0 ? val.imgUrl[0] : ""} />
                             )
-                        })
-                    */}
-                    </Zoom>
+                        }) 
+                    }
                 </div>
             </div>
             <div className="my-3">
                 <p className="bestsellerSubHead">Floor Graphics</p>
                 <div className="bestsellerContainer">
-                    <Zoom>
-                    {/*
+                    
+                    {
                         floorgraphicsBestselller && floorgraphicsBestselller.slice(0,4).map((val,i)=>{
                             return(
                                 <Card title={val.name ? val.name : "-"} imgUrl={val.imgUrl.length>0 ? val.imgUrl[0] : ""} />
                             )
                         })
-                    */}
-                    </Zoom>
+                    }
                 </div> 
             </div>
             <div className="my-3">
                 <p className="bestsellerSubHead">Asset Markings</p>
                 <div className="bestsellerContainer">
-                    <Zoom >
-                    {/*
+                    
+                    {
                         assetmarkingsBestselller && assetmarkingsBestselller.slice(0,4).map((val,i)=>{
                             return(
                                 <Card title={val.name ? val.name : "-"} imgUrl={val.imgUrl.length>0 ? val.imgUrl[0] : ""} />
                             )
                         })
-                    */}
-                    </Zoom>
+                    }
                 </div> 
             </div>
         </div>
