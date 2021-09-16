@@ -6,7 +6,7 @@ import "bootstrap";
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import ShareOutlinedIcon from '@material-ui/icons/ShareOutlined';
 import $ from "jquery";
-import { LinearProgress, CircularProgress, Box, Typography } from "@material-ui/core";
+import { LinearProgress, CircularProgress, Box, Typography, Hidden } from "@material-ui/core";
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import StarIcon from '@material-ui/icons/Star';
 import ProductCard from "../signages/ProductCard";
@@ -84,7 +84,8 @@ const ReviewCard = (props) => {
             minHeight: "100px",
             position: "relative",
             borderRadius:'6px',
-            marginBottom:'15px'
+            marginBottom:'8px',
+            marginTop:'8px'
         }}>
             <div className=" " style={{display:'flex',}} >
                 
@@ -176,6 +177,18 @@ const PosterProductPage = (props) => {
     const [otherLanguagePoster, setOtherLanguagePoster] = useState([]);
     const [cartCountN, setCartCountN] = useContext(CartContext);
     let history = useHistory();
+
+//setting default dimension and material
+
+// useEffect(()=>{
+//     setDim(product?.materialDimension[0]?.dimension_title)
+    
+//     setMaterial(product?.materialDimension[0]?.material_title)
+//     console.log(document.querySelector(".mat"))
+    
+    
+// },[product,matNew])
+
 
 
     const [loading, setLoading] = useState(false);
@@ -283,6 +296,7 @@ const PosterProductPage = (props) => {
 
     useEffect(() => {
         calculateAmount();
+        
     }, [material, dim, quantity]);
 
     const addToCartConfirmPopup = () => {
@@ -411,6 +425,7 @@ const PosterProductPage = (props) => {
 
     const calculateAmount = () => {
         let flag = true;
+        console.log(product)
         product.materialDimension.map((val, i) => {
             if (dim === val.dimension_title && material === val.material_title) {
                 setAmount(val.price * quantity);
@@ -618,6 +633,11 @@ const changeDimension = (e) => {
 
 
     useEffect(()=>{
+        if(window.innerWidth<600){
+             setCsettings({...csettings,slidesToShow:1})
+        }
+
+
         window.addEventListener('resize',()=>{
             if(window.innerWidth<600){
             
@@ -646,12 +666,13 @@ const changeDimension = (e) => {
                 <span className="font-weight-bold" > {product.name}</span>
             </div>
             <div className="row  padding-10 mt-4 " >
-                <div className="col-lg-5 pl-auto pr-auto flex-column-reverse flex-sm-column " style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-                    <div className="d-block d-sm-none mb-0" >
+                <div className="col-lg-5 pl-auto pr-auto flex-column-reverse flex-sm-column " style={{display:'flex',flexDirection:'column',alignItems:'flex-start'}}>
+                    <div className="d-block d-sm-none mb-0" style={{width:'100%'}}>
                         <h2 style={{
                             fontStyle: "normal",
                             fontWeight: "normal",
-                            fontSize: "22px",
+                            fontSize: "18px",
+                            width: '100%',
                             lineHeight: "27px",
                             color: "#000000",
                         }}>{product.name}</h2>
@@ -712,7 +733,7 @@ const changeDimension = (e) => {
                         <img src={product.imgUrl[3]} alt="preprinted sign" className="productCarouselImg " /> 
                     </Carousel>*/}
 
-                    {
+                    {/* {
                         parseInt(product.discountValue) > 0 && product.discount_type === 1 ?
                             <div className="d-flex d-sm-none mx-auto justify-content-center align-items-center" style={{
                                 marginTop: "25px",
@@ -751,7 +772,7 @@ const changeDimension = (e) => {
                         }}>
                             Limited time offer: {product.discountValue}% Off
                         </div> : ""
-                    }
+                    } */}
                     <hr className="mt-5 mb-4 d-none  " style={{ borderTop: "1px solid rgba(130, 130, 130, 0.5)" }} />
                     {
                         author ?
@@ -872,7 +893,7 @@ const changeDimension = (e) => {
                                    
                                 }}>
                                     {/* Limited time offer: Flat Rs {product.discountValue} off */}
-                                    <p style={{
+                                    {amount?<p style={{
                                         color: '#df5505',
                                          margin: 0,
                                          fontSize:'12px'
@@ -881,10 +902,10 @@ const changeDimension = (e) => {
                                         textDecoration:'line-through',
                                         marginRight:'6px'
 
-                                    }}>&#8377;{amount+product.discountValue}</span> 
+                                    }}>&#8377;{amount+Number(product.discountValue)}</span> 
                                     
                                         
-                                    {(amount/(amount+product.discountValue)*100)}% off</p>
+                                    {(amount/(amount+Number(product.discountValue))*100)}% off</p>:null}
                                 </div> : ""}
 
                         {parseInt(product.discountValue) > 0 && product.discount_type === 2 ?  
@@ -896,7 +917,7 @@ const changeDimension = (e) => {
                                    
                                 }}>
                                     {/* Limited time offer: Flat Rs {product.discountValue} off */}
-                                    <p style={{
+                                    {amount?<p style={{
                                         color: '#df5505',
                                          margin: 0,
                                          fontSize:'12px'
@@ -905,10 +926,10 @@ const changeDimension = (e) => {
                                         textDecoration:'line-through',
                                         marginRight:'6px'
 
-                                    }}>&#8377;{(amount*100)/product.discountValue}</span> 
+                                    }}>&#8377;{(amount*(100+Number(product.discountValue)))/100}</span> 
                                     
                                         
-                                    {product.discountValue}% off</p>
+                                    {product.discountValue}% off</p>:null}
                                 </div> : ""}
 
                     
@@ -991,9 +1012,14 @@ const changeDimension = (e) => {
                         {
                             matNew ? matNew.map((val,i)=>{
                                 return(
-                                    <div className="posterMaterialDimension  mat mr-1"  role="button" onClick={(e)=>changeMaterial(e)} >
+                                    <div className="posterMaterialDimension  mat mr-1"  role="button" onClick={(e)=>changeMaterial(e)} style={{
+                                        minHeight: '160px'
+                                    }} >
                                         <img src={val.material_img? val.material_img: ""} className="materialImg2Dimension " alt="material"></img>
-                                        <p className="text-center materialTextDimension  mt-auto ">{ val.material_title ? val.material_title: "No Material"}</p>
+                                        <p className="text-center materialTextDimension  mt-auto " style={{
+                                           
+
+                                        }}>{ val.material_title ? val.material_title: "No Material"}</p>
                                     </div>
                                 )
                             }): ""
@@ -1020,10 +1046,22 @@ const changeDimension = (e) => {
                                 dimNew ? dimNew.map((val,i)=>{
                                     return(
                                         <div className="posterMaterialDimension   dim" role="button" id="d2" onClick={(e)=>changeDimension(e)} style={{
-                                            marginLeft:4
+                                            display: "flex",
+                                            flexDirection:'column',
+                                            justifyContent:'space-between',
+                                            alignItems:'center',
+                                            marginLeft:3,
                                         }}>
-                                            <img src={val.dimension_img? val.dimension_img: ""} className="posterDimension2 mt-2 " alt="dimension"></img>
-                                            <p className="text-center posterDimensionText  ">{val.dimension_title ? val.dimension_title: "No Dimension"}</p>
+                                            <img src={val.dimension_img? val.dimension_img: ""} className="posterDimension2 mt-2 " alt="dimension" style={{
+                                                marginLeft:0,
+                                            }}></img>
+                                            <p className="text-center posterDimensionText  " style={{
+                                                
+                                                textOverflow:"ellipsis",
+                                                width: '60px',
+                                                overflow: 'hidden',
+                                                textAlign:'center'
+                                            }}>{val.dimension_title ? val.dimension_title: "No Dimension"}</p>
                                        </div>
                                     )
                                 }): ""
@@ -1031,7 +1069,7 @@ const changeDimension = (e) => {
                         </div>
 
                     </div>
-                    {catSlug==='asset-marking'?<div>
+                    {catSlug==='asset-markings'?<div>
                         <p style={{fontWeight:'bold'}}>Select Colour</p>
                         <div className='d-flex'>
                             <div style={{height:'80px',width:'100%',maxWidth:'60px',margin:3,border:'2px solid lightgray',display:'flex',flexDirection:"column",padding:5,borderRadius:5}}>
@@ -1275,7 +1313,7 @@ const changeDimension = (e) => {
                                    
                                 }}>
                                     {/* Limited time offer: Flat Rs {product.discountValue} off */}
-                                    <p style={{
+                                    {amount?<p style={{
                                         color: '#df5505',
                                          margin: 0,
                                     }}><span style={{
@@ -1283,10 +1321,10 @@ const changeDimension = (e) => {
                                         textDecoration:'line-through',
                                         marginRight:'6px'
 
-                                    }}>&#8377;{amount+product.discountValue}</span> 
+                                    }}>&#8377;{amount+Number(product.discountValue)}</span> 
                                     
                                         
-                                    {(amount/(amount+product.discountValue)*100)}% off</p>
+                                    {(amount/(amount+Number(product.discountValue))*100)}% off</p>:null}
                                 </div> : ""}
 
                         {parseInt(product.discountValue) > 0 && product.discount_type === 2 ?  
@@ -1298,7 +1336,7 @@ const changeDimension = (e) => {
                                    
                                 }}>
                                     {/* Limited time offer: Flat Rs {product.discountValue} off */}
-                                    <p style={{
+                                    {amount?<p style={{
                                         color: '#df5505',
                                          margin: 0,
                                     }}><span style={{
@@ -1306,10 +1344,10 @@ const changeDimension = (e) => {
                                         textDecoration:'line-through',
                                         marginRight:'6px'
 
-                                    }}>&#8377;{(amount*100)/product.discountValue}</span> 
+                                    }}>&#8377;{(amount*(100+Number(product.discountValue)))/100}</span> 
                                     
                                         
-                                    {product.discountValue}% off</p>
+                                    {product.discountValue}% off</p>:null}
                                 </div> : ""}
 
                     </div>
@@ -1343,7 +1381,8 @@ const changeDimension = (e) => {
                             })
                         }</p> : ""
                         }
-                        <p><span style={{ fontWeight: "600" }}>SKU: </span>{product.sku}</p>
+                        <p style={{display:'flex'}}><span style={{ fontWeight: "600" }}>SKU: </span>{product.sku}</p>
+                        
                     </div>
 
                     {/* <button
@@ -1439,8 +1478,8 @@ const changeDimension = (e) => {
             {/*rating and review*/}
 
             {
-                // product.average_rating > 0 ?
-                true?
+             product.average_rating > 0 ?
+                
 
                     <>
                         <div className="separator"></div>
@@ -1456,22 +1495,24 @@ const changeDimension = (e) => {
                                     lineHeight: "30px",
                                 }}>Ratings</h2>
                                 <div className="row">
-                                    <div className="col-3 mt-auto mb-0">
-                                        <Box position="relative" display="inline-flex">
-                                           <CircularProgress size="50px" variant="determinate" value={rating * 20} style={{ color: "green" }} />
+                                    <div className="col-3 " style={{
+                                        display: "flex",
+                                        flexDirection:'column',
+                                        justifyContent:'center',
+                                        alignItems:'center'
+                                    }}>
+                                        
+                                           {/* <CircularProgress size="50px" variant="determinate" value={rating * 20} style={{ color: "green" }} /> */}
                                             <Box
-                                                top={0}
-                                                left={0}
-                                                bottom={0}
-                                                right={0}
-                                                position="absolute"
+                                                
+                                                
                                                 display="flex"
                                                 alignItems="center"
                                                 justifyContent="center"
                                             >
                                                 <Typography variant="caption" component="div" color="black" style={{fontSize:'30px',display:'flex',alignItems:'center'}}>{product.average_rating}<StarBorderOutlined /> </Typography>
                                             </Box>
-                                            </Box>
+                                         
                                         <p className="mb-0" style={{
                                             fontSize: "14px"
                                         }}>{totalNoOfRating} ratings</p>
@@ -1518,24 +1559,24 @@ const changeDimension = (e) => {
 
                                 <div className="d-flex  col-12 pl-0 pr-0" style={{flexDirection:'column',width:'100%'}}>
                                     {
-                                        // (product.rating && product.rating.length > 0) ? (
-                                            true?(
+                                         (product.rating && product.rating.length > 0) ? (
+                                          
                                             <>
-                                                {/* {
+                                                 {
                                                     product.rating.map((val, i) => {
                                                         return (
                                                             <ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />
                                                         )
                                                     })
-                                                } */}
-                                                <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={3} userId={123} />
+                                                } 
+                                                {/* <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={3} userId={123} />
                                             <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={1} userId={123} />
                                             <ReviewCard feedback='Hey all, in this article I won’t try to explain the TLS itself, I assume if you are here, you already know the TLS. This article is specific to enabling TLS 1.2 only in Node JS. If you really don’t know what is TLS so please watch the video below.' rating={4} userId={123} />
                                             <ReviewCard feedback='I also assume you already have obtained the certificates (private key and public key). If you don’t you can google how to create certificates for your web server and you will find plenty of ways to do that. You could use let’s encrypt to create certificates as it is a very popular tool.I also assume you already have obtained the certificates (private key and public key). If you don’t you can google how to create certificates for your web server and you will find plenty of ways to do that. You could use let’s encrypt to create certificates as it is a very popular tool.' rating={2} userId={123} />
                                             <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={5} userId={123} />
                                             <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={3} userId={123} />
-                                            
-                                            </>
+                                            */ }
+                                            </> 
                                         ) : (
                                             <>
                                             <div>No Reviews</div>
@@ -1551,8 +1592,8 @@ const changeDimension = (e) => {
                                     <div className=" d-flex d-sm-none mt-auto" >
                                         <div style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
                                             <Box position="relative" display="inline-flex">
-                                            <CircularProgress size="50px" variant="determinate" value={rating * 20} style={{ color: "green" }} />
-                                            <Box
+                                            {/* <CircularProgress size="50px" variant="determinate" value={rating * 20} style={{ color: "green" }} /> */}
+                                            <Box 
                                                 top={0}
                                                 left={0}
                                                 bottom={0}
@@ -1565,7 +1606,7 @@ const changeDimension = (e) => {
                                                 <Typography variant="caption" component="div" color="black" style={{fontSize:'30px',display:'flex',alignItems:'center'}}>{product.average_rating}<StarBorderOutlined /> </Typography>
                                             </Box>
                                         </Box>
-                                        <p className="mb-0 mt-0 " style={{
+                                        <p className="mb-0 mt-2 " style={{
                                             fontWeight: "400",
                                             fontSize: "12px",
                                             width: "70px",
@@ -1600,7 +1641,7 @@ const changeDimension = (e) => {
                                         </div>
                                        
                                     </div>
-                                    <div style={{marginTop:'50px'}}>
+                                    {/* <div style={{marginTop:'50px'}}>
                                         <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={3} userId={123} />
                                             <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={1} userId={123} />
                                             <ReviewCard feedback='Hey all, in this article I won’t try to explain the TLS itself, I assume if you are here, you already know the TLS. This article is specific to enabling TLS 1.2 only in Node JS. If you really don’t know what is TLS so please watch the video below.' rating={4} userId={123} />
@@ -1608,7 +1649,7 @@ const changeDimension = (e) => {
                                             <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={5} userId={123} />
                                             <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={3} userId={123} />
                                             
-                                    </div>
+                                    </div> */}
                                 
                                    
                                     {
@@ -1617,7 +1658,7 @@ const changeDimension = (e) => {
                                                 {
                                                     product.rating.slice(0, 1).map((val, i) => {
                                                         return (
-                                                            <ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />
+                                                            <ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId}  />
                                                         )
                                                     })
                                                 }
@@ -1818,7 +1859,7 @@ justify-content: center;
     color:black;
     background-color: white;
     transform: translate(50px,-10px) scale(1.6);
-    z-index:10;
+    z-index:1;
     border-radius: 50%;
     box-shadow: 0 3px 12px #0000005a;
     
@@ -1828,7 +1869,7 @@ justify-content: center;
      color:black;
     background-color: white;
     transform: translate(-50px,-10px) scale(1.6);
-    z-index:10;
+    z-index:1;
     border-radius: 50%;
     box-shadow: 0 3px 12px #0000005a;
 }
