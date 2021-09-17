@@ -13,6 +13,7 @@ import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounde
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import MenuIcon from '@material-ui/icons/Menu';
+import { Person, PersonOutline } from "@material-ui/icons";
 
 const NavBar = (props) => {
   const [authUser, setAuthUser] = React.useState("");
@@ -27,9 +28,12 @@ const NavBar = (props) => {
       //console.log(res.data.data)
     }).catch((err)=> {
         console.log(err);
+
+
+        
     },[]);
     
-    
+    console.log('categories',categories)
 
     if (JSON.parse(localStorage.getItem("userDetails123"))){
           Axios.get(`${API}auth/get_user_details_by_id`,
@@ -358,10 +362,14 @@ const NavBar = (props) => {
             onClick={searchIcon}
              >Search</button>
          <div
-              className="nav-item d-none d-lg-block  mx-auto "
+              className="nav-item d-none d-lg-flex  mx-auto "
               style={{
-                display: "inline-block",
-                color: "#F2994A",
+                display: "flex",
+                color: "#ffffff",
+                alignItems:'center',
+                
+               
+                
               }}
             >
               {authUser ? (
@@ -369,18 +377,29 @@ const NavBar = (props) => {
                 
               ) : (
                 <>
-                  <Link
+                   <Link
                     to="/login"
                     className=" textColorAndWeight text-decoration-none"
+                    style={{
+                      color: 'white',
+                      padding: '2px',
+                    }}
                   >
                     Login
                   </Link>{" "}
-                  |{" "}
+                  |{" "} 
                   <Link
                     to="/signup"
                     className=" textColorAndWeight text-decoration-none"
+                    style={{
+                      display: 'flex',
+                      alignItems:'center',
+                      color: "#ffffff",
+                      padding: '2px',
+                    
+                    }}
                   >
-                    Register
+                  Register
                   </Link>
                 </>
               )}
