@@ -6,7 +6,7 @@ import "bootstrap";
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import ShareOutlinedIcon from '@material-ui/icons/ShareOutlined';
 import $ from "jquery";
-import { LinearProgress, CircularProgress, Box, Typography } from "@material-ui/core";
+import { LinearProgress, CircularProgress, Box, Typography, Hidden } from "@material-ui/core";
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import StarIcon from '@material-ui/icons/Star';
 import ProductCard from "../signages/ProductCard";
@@ -28,7 +28,13 @@ import Swal from "sweetalert2";
 import withReactContent from 'sweetalert2-react-content';
 import Spinner from "react-loading";
 import CartContext from "../../helper/cartContext";
-import { ControlCamera, ShoppingBasketOutlined, ShoppingCartOutlined, StarBorderOutlined, StarOutlined, StarRateOutlined } from "@material-ui/icons";
+import Slider from 'react-slick';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
+
+import { ControlCamera, NavigateBefore, NavigateNext, ShoppingBasketOutlined, ShoppingCartOutlined, StarBorderOutlined, StarOutlined, StarRateOutlined } from "@material-ui/icons";
+import styled from "styled-components";
 const MySwal = withReactContent(Swal);
 
 const theme = createMuiTheme({
@@ -78,7 +84,8 @@ const ReviewCard = (props) => {
             minHeight: "100px",
             position: "relative",
             borderRadius:'6px',
-            marginBottom:'15px'
+            marginBottom:'8px',
+            marginTop:'8px'
         }}>
             <div className=" " style={{display:'flex',}} >
                 
@@ -171,9 +178,22 @@ const PosterProductPage = (props) => {
     const [cartCountN, setCartCountN] = useContext(CartContext);
     let history = useHistory();
 
+//setting default dimension and material
+
+// useEffect(()=>{
+//     setDim(product?.materialDimension[0]?.dimension_title)
+    
+//     setMaterial(product?.materialDimension[0]?.material_title)
+//     console.log(document.querySelector(".mat"))
+    
+    
+// },[product,matNew])
+
+
 
     const [loading, setLoading] = useState(false);
     useEffect(() => {
+        console.log(catSlug)
         if (loading) {
             MySwal.fire({
                 html: <div className="d-flex justify-content-around  align-items-center py-3">
@@ -276,6 +296,7 @@ const PosterProductPage = (props) => {
 
     useEffect(() => {
         calculateAmount();
+        
     }, [material, dim, quantity]);
 
     const addToCartConfirmPopup = () => {
@@ -404,6 +425,7 @@ const PosterProductPage = (props) => {
 
     const calculateAmount = () => {
         let flag = true;
+        console.log(product)
         product.materialDimension.map((val, i) => {
             if (dim === val.dimension_title && material === val.material_title) {
                 setAmount(val.price * quantity);
@@ -587,6 +609,54 @@ const changeDimension = (e) => {
     const similarCarousel = useRef(null);
     const carousel = useRef(null);
     let star1 = 0, star2 = 0, star3 = 0, star4 = 0, star5 = 0;
+    // let carousel_settings={
+    //     dots:false,
+    //     infinite:true,
+    //     speed:500,
+    //     slidesToShow:4,
+    //     slidesToScroll:1,
+    //     autoplay:false,
+    //     nextArrow: <NavigateNext />,
+    //   prevArrow: <NavigateBefore />
+    // }
+        const[csettings,setCsettings]=useState({
+        dots:false,
+        infinite:true,
+        speed:500,
+        slidesToShow:4,
+        slidesToScroll:1,
+        autoplay:false,
+        nextArrow: <NavigateNext />,
+      prevArrow: <NavigateBefore />
+
+    })
+
+
+    useEffect(()=>{
+        if(window.innerWidth<600){
+             setCsettings({...csettings,slidesToShow:1})
+        }
+
+
+        window.addEventListener('resize',()=>{
+            if(window.innerWidth<600){
+            
+            setCsettings({...csettings,slidesToShow:1})
+           
+        }else if(window.innerWidth<1200){
+            setCsettings({...csettings,slidesToShow:2})
+        }else{
+            setCsettings({...csettings,slidesToShow:4})
+        }
+
+        })
+        console.log(catSlug)
+        
+    },[])
+    
+
+
+
     return (
         <div>
             <div className="container-fluid pt-3 pb-3 padding-10 d-none d-sm-block " style={{ background: "#F6F6F6", color: "#333333" }}>
@@ -596,12 +666,13 @@ const changeDimension = (e) => {
                 <span className="font-weight-bold" > {product.name}</span>
             </div>
             <div className="row  padding-10 mt-4 " >
-                <div className="col-lg-5 pl-auto pr-auto flex-column-reverse flex-sm-column " style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-                    <div className="d-block d-sm-none mb-4" >
+                <div className="col-lg-5 pl-auto pr-auto flex-column-reverse flex-sm-column " style={{display:'flex',flexDirection:'column',alignItems:'flex-start'}}>
+                    <div className="d-block d-sm-none mb-0" style={{width:'100%'}}>
                         <h2 style={{
                             fontStyle: "normal",
                             fontWeight: "normal",
-                            fontSize: "22px",
+                            fontSize: "18px",
+                            width: '100%',
                             lineHeight: "27px",
                             color: "#000000",
                         }}>{product.name}</h2>
@@ -622,6 +693,9 @@ const changeDimension = (e) => {
                     }}
                     
                     />
+                    
+
+                    
 
                    {/* <Carousel className=" " showArrows={false} renderPagination={({ pages, activePage, onClick }) => {
                         return (
@@ -638,6 +712,7 @@ const changeDimension = (e) => {
                                                     : (page === 2) ? (<img className="d-none d-sm-block" src={product.imgUrl[2]} alt="preprinted sign" style={{ width: "50px", height: "50px" }} />)
                                                         : (<img className="d-none d-sm-block" src={product.imgUrl[3]} alt="preprinted sign" style={{ width: "50px", height: "50px" }} />)
                                             }
+
                                         </div>
                                     )
                                 })}
@@ -658,7 +733,7 @@ const changeDimension = (e) => {
                         <img src={product.imgUrl[3]} alt="preprinted sign" className="productCarouselImg " /> 
                     </Carousel>*/}
 
-                    {
+                    {/* {
                         parseInt(product.discountValue) > 0 && product.discount_type === 1 ?
                             <div className="d-flex d-sm-none mx-auto justify-content-center align-items-center" style={{
                                 marginTop: "25px",
@@ -697,7 +772,7 @@ const changeDimension = (e) => {
                         }}>
                             Limited time offer: {product.discountValue}% Off
                         </div> : ""
-                    }
+                    } */}
                     <hr className="mt-5 mb-4 d-none  " style={{ borderTop: "1px solid rgba(130, 130, 130, 0.5)" }} />
                     {
                         author ?
@@ -746,6 +821,120 @@ const changeDimension = (e) => {
                             </div> : ""
                     }
                 </div>
+                {/*price details mobile*/}
+                <div className="ml-4 d-flex d-sm-none float-right ">
+                        {/* <p className="d-inline-block mt-4" style={{
+                            fontFamily: "Source Sans Pro",
+                            fontStyle: "normal",
+                            fontWeight: "bold",
+                            fontSize: "24px",
+                            lineHeight: "29px",
+                            color: "#003459",
+                        }}>&#8377;{amount}</p>
+                        <span className="ml-2" style={{
+                            fontFamily: "Source Sans Pro",
+                            fontStyle: "normal",
+                            fontWeight: "500",
+                            fontSize: "12px",
+                            color: "#757575",
+                            lineHeight: "15px"
+                        }}>(Inclusive of All Taxes)</span> */}
+                        <div className=" d-block">
+                        {
+                            (isNaN(amount)) ? (
+                                
+                                
+                                <p className="mt-0 text-danger" style={{
+                                    fontFamily: "Source Sans Pro",
+                                    fontStyle: "normal",
+                                    fontWeight: "normal",
+                                    fontSize: "16px",
+                                    lineHeight: "45px",
+                                    color: "#003459",
+                                }}>
+                                    Please select Material & Dimension.....
+                                </p>
+                            ) : (
+                                <>
+
+                                    <p className="d-inline-block mt-0" style={{
+                                        fontFamily: "Source Sans Pro",
+                                        fontStyle: "normal",
+                                        fontWeight: "bold",
+                                        fontSize: "26px",
+                                        lineHeight: "45px",
+                                        color: "#003459",
+                                        margin:0,
+                                    }}>
+                                         &#8377;{amount} 
+                                   
+                                    </p>
+                                    <span className="ml-3" style={{
+                                        fontFamily: "Source Sans Pro",
+                                        fontStyle: "normal",
+                                        fontWeight: "500",
+                                        fontSize: "12px",
+                                        color: "#757575",
+                                        lineHeight: "15px"
+                                    }}></span>
+                                </>
+                            )
+                        }
+
+                    </div>
+                        {
+                            parseInt(product.discountValue) > 0 && product.discount_type === 1 ?
+                           
+
+                                <div className=" d-flex justify-content-center align-items-center" style={{
+                                   color:'gray',
+                                   display: 'flex',
+                                  
+                                   
+                                }}>
+                                    {/* Limited time offer: Flat Rs {product.discountValue} off */}
+                                    {amount?<p style={{
+                                        color: '#df5505',
+                                         margin: 0,
+                                         fontSize:'12px'
+                                    }}><span style={{
+                                        color: "GrayText",
+                                        textDecoration:'line-through',
+                                        marginRight:'6px'
+
+                                    }}>&#8377;{amount+Number(product.discountValue)}</span> 
+                                    
+                                        
+                                    {(amount/(amount+Number(product.discountValue))*100)}% off</p>:null}
+                                </div> : ""}
+
+                        {parseInt(product.discountValue) > 0 && product.discount_type === 2 ?  
+                
+                        <div className=" d-flex justify-content-center align-items-center" style={{
+                                   color:'gray',
+                                   display: 'flex',
+                                  
+                                   
+                                }}>
+                                    {/* Limited time offer: Flat Rs {product.discountValue} off */}
+                                    {amount?<p style={{
+                                        color: '#df5505',
+                                         margin: 0,
+                                         fontSize:'12px'
+                                    }}><span style={{
+                                        color: "GrayText",
+                                        textDecoration:'line-through',
+                                        marginRight:'6px'
+
+                                    }}>&#8377;{(amount*(100+Number(product.discountValue)))/100}</span> 
+                                    
+                                        
+                                    {product.discountValue}% off</p>:null}
+                                </div> : ""}
+
+                    
+                    </div>
+                
                 <div className="col-lg-3  " style={{padding:'12px'}} >
                    {/* <div className="d-none d-sm-block " style={{
                         marginBottom: "49px"
@@ -778,12 +967,14 @@ const changeDimension = (e) => {
                                     lineHeight: "18px",
                                     color: "#27AE60",
                                 }}>In Stock</span>
+
                             ) : (
                                 <span className="text-danger ml-4" style={{
                                     fontWeight: "600",
                                     fontSize: "14px",
                                     lineHeight: "18px",
                                 }}>Out of Stock</span>
+
                             )}
                         </div>
                         <p className="" style={{
@@ -798,6 +989,7 @@ const changeDimension = (e) => {
                         </p>
                     </div>
                     */}
+                    {catSlug==='posters'?
                     <div className=" mt-0 mt-sm-0 d-flex flex-column coflex-row justify-content-between" >
                         <p className="mt-sm-0 mb-2  align-self-sm-start align-self-start selectHead  ">Select Maaterial</p>
                         {/* product.materialDimension ? (
@@ -816,19 +1008,25 @@ const changeDimension = (e) => {
                             </div>
                         </div>
                         ) : "" */}
-                        <div className="d-flex justify-content-between mr-0   ">
+                        <div className="d-flex  mr-0   ">
                         {
                             matNew ? matNew.map((val,i)=>{
                                 return(
-                                    <div className="posterMaterialDimension  mat"  role="button" onClick={(e)=>changeMaterial(e)} >
+                                    <div className="posterMaterialDimension  mat mr-1"  role="button" onClick={(e)=>changeMaterial(e)} style={{
+                                        minHeight: '160px'
+                                    }} >
                                         <img src={val.material_img? val.material_img: ""} className="materialImg2Dimension " alt="material"></img>
-                                        <p className="text-center materialTextDimension  mt-auto ">{ val.material_title ? val.material_title: "No Material"}</p>
+                                        <p className="text-center materialTextDimension  mt-auto " style={{
+                                           
+
+                                        }}>{ val.material_title ? val.material_title: "No Material"}</p>
                                     </div>
                                 )
                             }): ""
                         }
                         </div>
-                    </div>
+                    </div>:null}
+                    
                     <div className=" d-flex flex-column flex-row justify-content-between my-3" >
                         <p className=" align-self-sm-start align-self-start selectHead">Select Dimensions</p>
                         <div className="d-flex justify-content-start">
@@ -848,10 +1046,22 @@ const changeDimension = (e) => {
                                 dimNew ? dimNew.map((val,i)=>{
                                     return(
                                         <div className="posterMaterialDimension   dim" role="button" id="d2" onClick={(e)=>changeDimension(e)} style={{
-                                            marginLeft:4
+                                            display: "flex",
+                                            flexDirection:'column',
+                                            justifyContent:'space-between',
+                                            alignItems:'center',
+                                            marginLeft:3,
                                         }}>
-                                            <img src={val.dimension_img? val.dimension_img: ""} className="posterDimension2 mt-2 " alt="dimension"></img>
-                                            <p className="text-center posterDimensionText  ">{val.dimension_title ? val.dimension_title: "No Dimension"}</p>
+                                            <img src={val.dimension_img? val.dimension_img: ""} className="posterDimension2 mt-2 " alt="dimension" style={{
+                                                marginLeft:0,
+                                            }}></img>
+                                            <p className="text-center posterDimensionText  " style={{
+                                                
+                                                textOverflow:"ellipsis",
+                                                width: '60px',
+                                                overflow: 'hidden',
+                                                textAlign:'center'
+                                            }}>{val.dimension_title ? val.dimension_title: "No Dimension"}</p>
                                        </div>
                                     )
                                 }): ""
@@ -859,6 +1069,25 @@ const changeDimension = (e) => {
                         </div>
 
                     </div>
+                    {catSlug==='asset-markings'?<div>
+                        <p style={{fontWeight:'bold'}}>Select Colour</p>
+                        <div className='d-flex'>
+                            <div style={{height:'80px',width:'100%',maxWidth:'60px',margin:3,border:'2px solid lightgray',display:'flex',flexDirection:"column",padding:5,borderRadius:5}}>
+                                <div style={{backgroundColor:'red',height:'100%',width:'100%'}}></div>
+                                <p className='mb-0' style={{textAlign:'center',fontSize:13}}>Red</p>
+                            </div>
+                            <div style={{height:'80px',width:'100%',maxWidth:'60px',margin:3,border:'2px solid lightgray',display:'flex',flexDirection:"column",padding:5,borderRadius:5}}>
+                                <div style={{backgroundColor:'red',height:'100%',width:'100%'}}></div>
+                                <p className='mb-0' style={{textAlign:'center',fontSize:13}}>Red</p>
+                            </div><div style={{height:'80px',width:'100%',maxWidth:'60px',margin:3,border:'2px solid lightgray',display:'flex',flexDirection:"column",padding:5,borderRadius:5}}>
+                                <div style={{backgroundColor:'red',height:'100%',width:'100%'}}></div>
+                                <p className='mb-0' style={{textAlign:'center',fontSize:13}}>Red</p>
+                            </div><div style={{height:'80px',width:'100%',maxWidth:'60px',margin:3,border:'2px solid lightgray',display:'flex',flexDirection:"column",padding:5,borderRadius:5}}>
+                                <div style={{backgroundColor:'red',height:'100%',width:'100%'}}></div>
+                                <p className='mb-0' style={{textAlign:'center',fontSize:13}}>Red</p>
+                            </div>
+                        </div>
+                    </div>:null}
                     <div className="d-flex flex-column flex-sm-column  align-items-sm-start align-items-start ">
                         <p className=" mr-5  mr-sm-0 d-inline-block d-sm-block my-auto mb-sm-2" style={{ fontWeight: "500" }}>Quantity</p>
                         <ButtonGroup
@@ -892,24 +1121,7 @@ const changeDimension = (e) => {
                             </Button>
                         </ButtonGroup>
                     </div>
-                    <div className="mt-2 d-block d-sm-none float-right ">
-                        <p className="d-inline-block mt-4" style={{
-                            fontFamily: "Source Sans Pro",
-                            fontStyle: "normal",
-                            fontWeight: "bold",
-                            fontSize: "24px",
-                            lineHeight: "29px",
-                            color: "#003459",
-                        }}>&#8377;{amount}</p>
-                        <span className="ml-2" style={{
-                            fontFamily: "Source Sans Pro",
-                            fontStyle: "normal",
-                            fontWeight: "500",
-                            fontSize: "12px",
-                            color: "#757575",
-                            lineHeight: "15px"
-                        }}>(Inclusive of All Taxes)</span>
-                    </div>
+                    
                     <button
                         onClick={addToCart}
                         className="d-block d-sm-none w-100 p-2 mt-4" style={{
@@ -1043,48 +1255,105 @@ const changeDimension = (e) => {
                             }
 
                         </div>
+                        {/*price details section */}
+                        <div className="pricedetails" style={{
+                            display: "flex",
+                            alignItems:'center',
+                            marginTop:'10px'
+                        }}>
+                            <div className=" d-none d-sm-block">
                         {
-                            parseInt(product.discountValue) > 0 && product.discount_type === 1 ?
-                                <div className="d-none d-sm-flex justify-content-center align-items-center" style={{
-                                    marginTop: "30px",
-                                    width: "222px",
-                                    height: "30px",
-                                    background: "rgba(247, 204, 127, 0.7)",
-                                    border: "2px dashed #FEA100",
-                                    boxSizing: "border-box",
+                             (isNaN(amount)) ? (
+                                
+                                <p className="mt-0 text-danger" style={{
                                     fontFamily: "Source Sans Pro",
                                     fontStyle: "normal",
                                     fontWeight: "normal",
-                                    fontSize: "14px",
-                                    lineHeight: "21px",
-                                    textAlign: "center",
-                                    letterSpacing: "0.2px",
+                                    fontSize: "16px",
+                                    lineHeight: "45px",
                                     color: "#003459",
                                 }}>
-                                    Limited time offer: Flat Rs {product.discountValue} off
-                                </div> : ""}
+                                    Please select Material & Dimension.....
+                                </p>
+                            ) : (
+                                <>
 
-                        {parseInt(product.discountValue) > 0 && product.discount_type === 2 ? <div className="d-none d-sm-flex justify-content-center align-items-center" style={{
-                            marginTop: "30px",
-                            width: "222px",
-                            height: "30px",
-                            background: "rgba(247, 204, 127, 0.7)",
-                            border: "2px dashed #FEA100",
-                            boxSizing: "border-box",
-                            fontFamily: "Source Sans Pro",
-                            fontStyle: "normal",
-                            fontWeight: "normal",
-                            fontSize: "14px",
-                            lineHeight: "21px",
-                            textAlign: "center",
-                            letterSpacing: "0.2px",
-                            color: "#003459",
-                        }}>
-                            Limited time offer: {product.discountValue}% Off
-                        </div> : ""
+                                    <p className="d-inline-block mt-0" style={{
+                                        fontFamily: "Source Sans Pro",
+                                        fontStyle: "normal",
+                                        fontWeight: "bold",
+                                        fontSize: "36px",
+                                        lineHeight: "45px",
+                                        color: "#003459",
+                                        margin:0,
+                                    }}>
+                                         &#8377;{amount} 
+                                   
+                                    </p>
+                                    <span className="ml-3" style={{
+                                        fontFamily: "Source Sans Pro",
+                                        fontStyle: "normal",
+                                        fontWeight: "500",
+                                        fontSize: "12px",
+                                        color: "#757575",
+                                        lineHeight: "15px"
+                                    }}></span>
+                                </>
+                            )
                         }
 
                     </div>
+                        {
+                            parseInt(product.discountValue) > 0 && product.discount_type === 1 ?
+
+                                <div className="d-none d-sm-flex justify-content-center align-items-center" style={{
+                                   color:'gray',
+                                   display: 'flex',
+                                  
+                                   
+                                }}>
+                                    {/* Limited time offer: Flat Rs {product.discountValue} off */}
+                                    {amount?<p style={{
+                                        color: '#df5505',
+                                         margin: 0,
+                                    }}><span style={{
+                                        color: "GrayText",
+                                        textDecoration:'line-through',
+                                        marginRight:'6px'
+
+                                    }}>&#8377;{amount+Number(product.discountValue)}</span> 
+                                    
+                                        
+                                    {(amount/(amount+Number(product.discountValue))*100)}% off</p>:null}
+                                </div> : ""}
+
+                        {parseInt(product.discountValue) > 0 && product.discount_type === 2 ?  
+                
+                        <div className="d-none d-sm-flex justify-content-center align-items-center" style={{
+                                   color:'gray',
+                                   display: 'flex',
+                                  
+                                   
+                                }}>
+                                    {/* Limited time offer: Flat Rs {product.discountValue} off */}
+                                    {amount?<p style={{
+                                        color: '#df5505',
+                                         margin: 0,
+                                    }}><span style={{
+                                        color: "GrayText",
+                                        textDecoration:'line-through',
+                                        marginRight:'6px'
+
+                                    }}>&#8377;{(amount*(100+Number(product.discountValue)))/100}</span> 
+                                    
+                                        
+                                    {product.discountValue}% off</p>:null}
+                                </div> : ""}
+
+                    </div>
+
+                        </div>
+                        
                     <div className="productInfo mt-3" >
                         <p className=" d-none d-sm-block" style={{
                             fontSize: "16px", lineHeight: "19px", fontFamily: "Lato",
@@ -1112,47 +1381,10 @@ const changeDimension = (e) => {
                             })
                         }</p> : ""
                         }
-                        <p><span style={{ fontWeight: "600" }}>SKU: </span>{product.sku}</p>
+                        <p style={{display:'flex'}}><span style={{ fontWeight: "600" }}>SKU: </span>{product.sku}</p>
+                        
                     </div>
-                    <div className=" d-none d-sm-block">
-                        {
-                            (isNaN(amount)) ? (
-                                <p className="mt-4 text-danger" style={{
-                                    fontFamily: "Source Sans Pro",
-                                    fontStyle: "normal",
-                                    fontWeight: "normal",
-                                    fontSize: "16px",
-                                    lineHeight: "45px",
-                                    color: "#003459",
-                                }}>
-                                    Please select Material & Dimension.....
-                                </p>
-                            ) : (
-                                <>
 
-                                    <p className="d-inline-block mt-4" style={{
-                                        fontFamily: "Source Sans Pro",
-                                        fontStyle: "normal",
-                                        fontWeight: "bold",
-                                        fontSize: "36px",
-                                        lineHeight: "45px",
-                                        color: "#003459",
-                                    }}>
-                                        &#8377;{amount}
-                                    </p>
-                                    <span className="ml-3" style={{
-                                        fontFamily: "Source Sans Pro",
-                                        fontStyle: "normal",
-                                        fontWeight: "500",
-                                        fontSize: "12px",
-                                        color: "#757575",
-                                        lineHeight: "15px"
-                                    }}>(Inclusive of All Taxes)</span>
-                                </>
-                            )
-                        }
-
-                    </div>
                     {/* <button
                         onClick={addToCart}
                         className=" d-none d-sm-block w-100 p-2 mt-2"
@@ -1202,12 +1434,52 @@ const changeDimension = (e) => {
                     }
                 </div>
             </div>
+            {/* carousel */}
+            {catSlug!=='posters'?
+                    <CarouselWrap>
+                        <Slider className="carousel" {...csettings} >
+                        <div className='carousel-items'>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS040zhYmfZvoJY2zABrdT0FuaUUsLGI3ZKIA&usqp=CAU" alt="" />
+                            
+                        </div>
+                        <div className='carousel-items'>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS040zhYmfZvoJY2zABrdT0FuaUUsLGI3ZKIA&usqp=CAU" alt="" />
+                            
+                        </div>
+                        <div className='carousel-items'>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS040zhYmfZvoJY2zABrdT0FuaUUsLGI3ZKIA&usqp=CAU" alt="" />
+                            
+                        </div>
+                        <div className='carousel-items'>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS040zhYmfZvoJY2zABrdT0FuaUUsLGI3ZKIA&usqp=CAU" alt="" />
+                            
+                        </div>
+                        <div className='carousel-items'>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS040zhYmfZvoJY2zABrdT0FuaUUsLGI3ZKIA&usqp=CAU" alt="" />
+                            
+                        </div>
+                        <div className='carousel-items'>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS040zhYmfZvoJY2zABrdT0FuaUUsLGI3ZKIA&usqp=CAU" alt="" />
+                            
+                        </div>
+                        <div className='carousel-items'>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS040zhYmfZvoJY2zABrdT0FuaUUsLGI3ZKIA&usqp=CAU" alt="" />
+                            
+                        </div>
+                        <div className='carousel-items'>
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS040zhYmfZvoJY2zABrdT0FuaUUsLGI3ZKIA&usqp=CAU" alt="" />
+                            
+                        </div>
+
+                    </Slider>
+
+                    </CarouselWrap>:null}
 
             {/*rating and review*/}
 
             {
-                // product.average_rating > 0 ?
-                true?
+             product.average_rating > 0 ?
+                
 
                     <>
                         <div className="separator"></div>
@@ -1223,22 +1495,24 @@ const changeDimension = (e) => {
                                     lineHeight: "30px",
                                 }}>Ratings</h2>
                                 <div className="row">
-                                    <div className="col-3 mt-auto mb-0">
-                                        <Box position="relative" display="inline-flex">
-                                            <CircularProgress size="50px" variant="determinate" value={87} style={{ color: "green" }} />
+                                    <div className="col-3 " style={{
+                                        display: "flex",
+                                        flexDirection:'column',
+                                        justifyContent:'center',
+                                        alignItems:'center'
+                                    }}>
+                                        
+                                           {/* <CircularProgress size="50px" variant="determinate" value={rating * 20} style={{ color: "green" }} /> */}
                                             <Box
-                                                top={0}
-                                                left={0}
-                                                bottom={0}
-                                                right={0}
-                                                position="absolute"
+                                                
+                                                
                                                 display="flex"
                                                 alignItems="center"
                                                 justifyContent="center"
                                             >
-                                                <Typography variant="caption" component="div" color="black">{product.average_rating}</Typography>
+                                                <Typography variant="caption" component="div" color="black" style={{fontSize:'30px',display:'flex',alignItems:'center'}}>{product.average_rating}<StarBorderOutlined /> </Typography>
                                             </Box>
-                                        </Box>
+                                         
                                         <p className="mb-0" style={{
                                             fontSize: "14px"
                                         }}>{totalNoOfRating} ratings</p>
@@ -1285,24 +1559,24 @@ const changeDimension = (e) => {
 
                                 <div className="d-flex  col-12 pl-0 pr-0" style={{flexDirection:'column',width:'100%'}}>
                                     {
-                                        // (product.rating && product.rating.length > 0) ? (
-                                            true?(
+                                         (product.rating && product.rating.length > 0) ? (
+                                          
                                             <>
-                                                {/* {
+                                                 {
                                                     product.rating.map((val, i) => {
                                                         return (
                                                             <ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />
                                                         )
                                                     })
-                                                } */}
-                                                <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={3} userId={123} />
+                                                } 
+                                                {/* <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={3} userId={123} />
                                             <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={1} userId={123} />
                                             <ReviewCard feedback='Hey all, in this article I won’t try to explain the TLS itself, I assume if you are here, you already know the TLS. This article is specific to enabling TLS 1.2 only in Node JS. If you really don’t know what is TLS so please watch the video below.' rating={4} userId={123} />
                                             <ReviewCard feedback='I also assume you already have obtained the certificates (private key and public key). If you don’t you can google how to create certificates for your web server and you will find plenty of ways to do that. You could use let’s encrypt to create certificates as it is a very popular tool.I also assume you already have obtained the certificates (private key and public key). If you don’t you can google how to create certificates for your web server and you will find plenty of ways to do that. You could use let’s encrypt to create certificates as it is a very popular tool.' rating={2} userId={123} />
                                             <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={5} userId={123} />
                                             <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={3} userId={123} />
-                                            
-                                            </>
+                                            */ }
+                                            </> 
                                         ) : (
                                             <>
                                             <div>No Reviews</div>
@@ -1318,8 +1592,8 @@ const changeDimension = (e) => {
                                     <div className=" d-flex d-sm-none mt-auto" >
                                         <div style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
                                             <Box position="relative" display="inline-flex">
-                                            <CircularProgress size="50px" variant="determinate" value={rating * 20} style={{ color: "green" }} />
-                                            <Box
+                                            {/* <CircularProgress size="50px" variant="determinate" value={rating * 20} style={{ color: "green" }} /> */}
+                                            <Box 
                                                 top={0}
                                                 left={0}
                                                 bottom={0}
@@ -1332,7 +1606,7 @@ const changeDimension = (e) => {
                                                 <Typography variant="caption" component="div" color="black" style={{fontSize:'30px',display:'flex',alignItems:'center'}}>{product.average_rating}<StarBorderOutlined /> </Typography>
                                             </Box>
                                         </Box>
-                                        <p className="mb-0 mt-0 " style={{
+                                        <p className="mb-0 mt-2 " style={{
                                             fontWeight: "400",
                                             fontSize: "12px",
                                             width: "70px",
@@ -1367,7 +1641,7 @@ const changeDimension = (e) => {
                                         </div>
                                        
                                     </div>
-                                    <div style={{marginTop:'50px'}}>
+                                    {/* <div style={{marginTop:'50px'}}>
                                         <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={3} userId={123} />
                                             <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={1} userId={123} />
                                             <ReviewCard feedback='Hey all, in this article I won’t try to explain the TLS itself, I assume if you are here, you already know the TLS. This article is specific to enabling TLS 1.2 only in Node JS. If you really don’t know what is TLS so please watch the video below.' rating={4} userId={123} />
@@ -1375,7 +1649,7 @@ const changeDimension = (e) => {
                                             <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={5} userId={123} />
                                             <ReviewCard feedback='<ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />' rating={3} userId={123} />
                                             
-                                    </div>
+                                    </div> */}
                                 
                                    
                                     {
@@ -1384,7 +1658,7 @@ const changeDimension = (e) => {
                                                 {
                                                     product.rating.slice(0, 1).map((val, i) => {
                                                         return (
-                                                            <ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId} />
+                                                            <ReviewCard feedback={val.feedback} rating={val.rating} userId={val.userId}  />
                                                         )
                                                     })
                                                 }
@@ -1546,3 +1820,58 @@ const changeDimension = (e) => {
 };
 
 export default PosterProductPage;
+
+
+const CarouselWrap=styled.div`
+margin-top: 30px;
+width: 100vw;
+
+
+position: relative;
+left: 0;
+display: flex;
+justify-content: center;
+
+.carousel{
+    height: 250px;
+    width: 100vw;
+    .carousel-items{
+        
+        padding: 4px;
+        overflow: hidden;
+        height: 250px;
+        img{
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+
+    }
+    
+}
+.slick-slider{
+     height: 250px ;
+    width: 80% ;
+    
+}
+.slick-prev{
+    color:black;
+    background-color: white;
+    transform: translate(50px,-10px) scale(1.6);
+    z-index:1;
+    border-radius: 50%;
+    box-shadow: 0 3px 12px #0000005a;
+    
+}
+.slick-next{
+    
+     color:black;
+    background-color: white;
+    transform: translate(-50px,-10px) scale(1.6);
+    z-index:1;
+    border-radius: 50%;
+    box-shadow: 0 3px 12px #0000005a;
+}
+
+`
